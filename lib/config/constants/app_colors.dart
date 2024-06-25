@@ -11,3 +11,16 @@ enum AppColors {
 
   const AppColors({required this.color});
 }
+
+TextStyle appTextStyle(
+    {Color color = Colors.black,
+    double size = 16,
+    FontWeight fontWeight = FontWeight.normal,
+    FontStyle fontStyle = FontStyle.normal}) {
+  return TextStyle(
+      fontFamily: 'Poppins',
+      color: color,
+      fontSize: size,
+      fontWeight: fontWeight,
+      fontStyle: fontStyle);
+}
