@@ -24,31 +24,34 @@ class _PenguniFormState extends State<PenguniForm> {
               const BorderRadius.vertical(bottom: Radius.circular(10))),
       child: Scaffold(
         backgroundColor: Colors.white.withOpacity(0.5),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const KadPengenalanTile(),
-              GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8.0,
-                    childAspectRatio: 16 / 8),
-                padding: const EdgeInsets.all(8.0),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                    width: size.width * 0.4,
-                    child: CustomUnderlineField(
-                      title: "Nama",
-                      canEdit: true,
-                      onEdit: () {},
-                    ),
-                  );
-                },
-              )
-            ],
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const KadPengenalanTile(),
+                GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8.0,
+                      childAspectRatio: 16 / 8),
+                  padding: const EdgeInsets.all(8.0),
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: size.width * 0.4,
+                      child: const CustomUnderlineField(
+                        title: "Nama",
+                        showEditIcon: true,
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
           ),
         ),
       ),

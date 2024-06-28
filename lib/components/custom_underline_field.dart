@@ -29,7 +29,7 @@ class CustomUnderlineField extends StatelessWidget {
   final bool? enabled;
   final bool addBorder;
   final bool isMandatory;
-  final bool canEdit;
+  final bool showEditIcon;
   final void Function()? onEdit;
   const CustomUnderlineField({
     super.key,
@@ -60,7 +60,7 @@ class CustomUnderlineField extends StatelessWidget {
     this.enabled = true,
     this.addBorder = true,
     this.isMandatory = false,
-    this.canEdit = true,
+    this.showEditIcon = true,
     this.onEdit,
   });
 
@@ -105,12 +105,16 @@ class CustomUnderlineField extends StatelessWidget {
               hintText: hintText,
               fillColor: fillColor,
               enabledBorder: addBorder
-                  ? const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFA4A8AD)),
+                  ? UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: readOnly
+                              ? Colors.transparent
+                              : const Color(0xFFA4A8AD)),
                     )
                   : null,
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    color: readOnly ? Colors.transparent : Colors.black),
               ),
               contentPadding: contentPadding ??
                   const EdgeInsets.only(left: 0.0, right: 12.0, top: 5),
@@ -120,7 +124,7 @@ class CustomUnderlineField extends StatelessWidget {
                   (prefixIcon != null
                       ? Icon(prefixIcon, color: Colors.grey)
                       : null),
-              suffixIcon: (canEdit)
+              suffixIcon: (showEditIcon)
                   ? GestureDetector(
                       onTap: onEdit, child: const Icon(Icons.edit_note))
                   : suffixWidget ??
