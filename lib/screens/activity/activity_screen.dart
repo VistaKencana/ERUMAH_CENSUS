@@ -2,6 +2,7 @@ import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/custom_textfield.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/activity/activity_search_screen.dart';
+import 'package:eperumahan_bancian/services/qr_code_scanner_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/search_textfield.dart';
@@ -47,7 +48,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     child: const Text("Carian")),
                 _divider(),
                 ElevatedButton(
-                    onPressed: () {}, child: const Text("QR Scan Code")),
+                    onPressed: () {
+                      _go(const QrCodeScannerWidget());
+                    },
+                    child: const Text("QR Scan Code")),
               ],
             ),
           ),

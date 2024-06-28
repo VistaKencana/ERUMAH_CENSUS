@@ -30,9 +30,9 @@ class KadPengenalanTile extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _cameraContainer(title: "Kad Pengenalan Depan"),
+                  _cameraContainer(context, title: "Kad Pengenalan Depan"),
                   const SizedBox(width: 10),
-                  _cameraContainer(title: "Kad Pengenalan Belakang"),
+                  _cameraContainer(context, title: "Kad Pengenalan Belakang"),
                 ],
               ),
             ),
@@ -42,11 +42,12 @@ class KadPengenalanTile extends StatelessWidget {
     );
   }
 
-  _cameraContainer({required String title}) {
+  _cameraContainer(BuildContext context, {required String title}) {
     return Column(
       children: [
         Container(
-          width: 300,
+          // width: MediaQuery.sizeOf(context).width * .4,
+          width: 250,
           height: 150,
           decoration: BoxDecoration(
             color: Colors.grey.shade200,
@@ -60,6 +61,7 @@ class KadPengenalanTile extends StatelessWidget {
           child: const Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(
                   Icons.camera_alt,
@@ -67,11 +69,14 @@ class KadPengenalanTile extends StatelessWidget {
                   color: Colors.grey,
                 ),
                 SizedBox(height: 10),
-                Text(
-                  'Buka kamera & Ambil Gambar',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
+                Center(
+                  child: Text(
+                    'Buka kamera & Ambil Gambar',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ],
