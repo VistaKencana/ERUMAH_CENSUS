@@ -1,5 +1,6 @@
 import 'package:eperumahan_bancian/config/routes/routes_error.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
+import 'package:eperumahan_bancian/screens/activity/activity_search_screen.dart';
 import 'package:eperumahan_bancian/screens/home_screen.dart';
 import 'package:eperumahan_bancian/screens/login/login_screen.dart';
 import 'package:eperumahan_bancian/screens/splash/splash_screen.dart';
@@ -24,6 +25,11 @@ class RoutesGenerator {
             type: PageTransitionType.rightToLeft,
             settings: const RouteSettings(name: RoutesName.home),
             child: const HomeScreen());
+      case RoutesName.activitySearch:
+        return PageTransition(
+            type: PageTransitionType.bottomToTop,
+            settings: const RouteSettings(name: RoutesName.activitySearch),
+            child: const ActivitySearchScreen());
       default:
         return RoutesError.errorRoute();
     }

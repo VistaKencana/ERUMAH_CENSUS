@@ -6,7 +6,10 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrCodeScannerWidget extends StatefulWidget {
   final bool showHelper;
-  const QrCodeScannerWidget({super.key, this.showHelper = false});
+  final void Function()? onNext;
+  final void Function(String data) onScan;
+  const QrCodeScannerWidget(
+      {super.key, this.showHelper = false, this.onNext, required this.onScan});
 
   @override
   State<QrCodeScannerWidget> createState() => _QrCodeScannerWidgetState();
@@ -43,8 +46,14 @@ class _QrCodeScannerWidgetState extends State<QrCodeScannerWidget> {
           Positioned(
               bottom: 200,
               child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
+                onTap: () async {
+                  await controller!.pauseCamera();
+                  if (widget.onNext != null) {
+                    widget.onNext!();
+                  } else {
+                    if (!context.mounted) return;
+                    Navigator.pop(context);
+                  }
                 },
                 child: Container(
                   padding:
@@ -181,6 +190,7 @@ class _QrCodeScannerWidgetState extends State<QrCodeScannerWidget> {
         result = scanData;
       });
       await controller.pauseCamera();
+      widget.onScan(result?.code ?? "");
       dev.log("dapat data:${result?.code}");
     });
   }

@@ -72,12 +72,15 @@ class CustomUnderlineField extends StatelessWidget {
         if (title != null)
           Row(
             children: [
-              Text(title!,
-                  style: titleStyle ??
-                      const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF7E7E7E))),
+              Expanded(
+                child: Text(title!,
+                    overflow: TextOverflow.ellipsis,
+                    style: titleStyle ??
+                        const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF7E7E7E))),
+              ),
               if (isMandatory)
                 const Text(
                   "*",
@@ -86,9 +89,10 @@ class CustomUnderlineField extends StatelessWidget {
             ],
           ),
         SizedBox(
-          height: 40,
+          height: maxLines == 1 ? 40 : null,
           child: TextFormField(
             enabled: enabled,
+            initialValue: initialValue,
             controller: controller,
             obscureText: obscureText,
             keyboardType: keyboardType,

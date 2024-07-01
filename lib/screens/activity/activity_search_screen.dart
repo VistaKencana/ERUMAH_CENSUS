@@ -1,9 +1,9 @@
 import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bancian_qrscan.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import '../bancian-forms/bancian_main_screen.dart';
 import 'model/bancian_info.dart';
 
 class ActivitySearchScreen extends StatefulWidget {
@@ -178,7 +178,8 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
 
   _newInfoTile() {
     return ListTile(
-      onTap: () => _go(const BancianMainScreen()),
+      onTap: () => _go(const BancianQrscan()),
+      // onTap: () => _go(const BancianMainScreen()),
       minLeadingWidth: 0,
       leading: Container(
         decoration: BoxDecoration(
@@ -199,6 +200,16 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
           Text("01-01-01"),
           Text("Kota Damansara • Lawatan 4"),
         ],
+      ),
+      trailing: Chip(
+        color: const WidgetStatePropertyAll(Colors.green),
+        label: Text(
+          "SELESAI",
+          style: appTextStyle(
+              size: 10, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        shape: const StadiumBorder(),
+        side: BorderSide.none,
       ),
     );
   }

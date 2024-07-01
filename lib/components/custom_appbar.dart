@@ -8,6 +8,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool automaticallyImplyLeading;
   final List<Widget>? actions;
   final double height;
+  final void Function()? onPressedBack;
   const CustomAppBar({
     super.key,
     this.centerTitle = true,
@@ -17,6 +18,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.gradientBg = false,
     this.actions,
     this.height = 60,
+    this.onPressedBack,
   });
 
   @override
@@ -42,7 +44,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             automaticallyImplyLeading: false,
             leading: automaticallyImplyLeading
                 ? IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      if (onPressedBack != null) {
+                        onPressedBack!();
+                        return;
+                      }
+                      Navigator.pop(context);
+                    },
                     icon: const Icon(Icons.chevron_left))
                 : null,
             backgroundColor: Colors.transparent,
