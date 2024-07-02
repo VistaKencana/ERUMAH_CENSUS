@@ -3,10 +3,11 @@ import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:flutter/material.dart';
 
-import '../../components/custom_underline_field.dart';
+import '../../../components/custom_underline_field.dart';
 
 class PasanganModal extends StatefulWidget {
-  const PasanganModal({super.key});
+  final bool? isEdit;
+  const PasanganModal({super.key, this.isEdit});
 
   Future<T?> show<T>(BuildContext context) {
     return showModalBottomSheet<T>(
@@ -24,6 +25,9 @@ class PasanganModal extends StatefulWidget {
 }
 
 class _PasanganModalState extends State<PasanganModal> {
+  _isEdit() => (widget.isEdit != null && widget.isEdit == true);
+  _isReadOnly() => _isEdit() ? false : true;
+
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -59,16 +63,21 @@ class _PasanganModalState extends State<PasanganModal> {
                               _textField(
                                   initialValue: "",
                                   title: 'Nama Penuh',
-                                  readOnly: true),
+                                  readOnly: _isReadOnly()),
                               _textField(title: 'Emel'),
                               _textField(
-                                  title: 'No. Kad Pengenalan', readOnly: true),
+                                  title: 'No. Kad Pengenalan',
+                                  readOnly: _isReadOnly()),
                               _textField(title: 'No Telefon'),
-                              _textField(title: 'Umur(Tahun)', readOnly: true),
+                              _textField(
+                                  title: 'Umur(Tahun)',
+                                  readOnly: _isReadOnly()),
                               _textField(title: 'Tahap Kesihatan'),
-                              _textField(title: 'Jantina', readOnly: true),
+                              _textField(
+                                  title: 'Jantina', readOnly: _isReadOnly()),
                               _textField(title: 'Kecacatan (OKU)'),
-                              _textField(title: 'Bangsa', readOnly: true),
+                              _textField(
+                                  title: 'Bangsa', readOnly: _isReadOnly()),
                               _textField(title: 'Hidup'),
                               _textField(title: 'Jenis Pekerjaan'),
                             ],

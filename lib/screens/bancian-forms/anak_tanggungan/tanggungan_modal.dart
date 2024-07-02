@@ -1,12 +1,13 @@
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
+import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:flutter/material.dart';
 
-import '../../components/custom_underline_field.dart';
+import '../../../components/custom_underline_field.dart';
 
-class PendapatanModal extends StatefulWidget {
-  const PendapatanModal({super.key});
-
+class TanggunganModal extends StatefulWidget {
+  final bool? isEdit;
+  const TanggunganModal({super.key, this.isEdit});
   Future<T?> show<T>(BuildContext context) {
     return showModalBottomSheet<T>(
       context: context,
@@ -19,10 +20,12 @@ class PendapatanModal extends StatefulWidget {
   }
 
   @override
-  State<PendapatanModal> createState() => _PendapatanModalState();
+  State<TanggunganModal> createState() => _TanggunganModalState();
 }
 
-class _PendapatanModalState extends State<PendapatanModal> {
+class _TanggunganModalState extends State<TanggunganModal> {
+  _isEdit() => (widget.isEdit != null && widget.isEdit == true);
+  _isReadOnly() => _isEdit() ? false : true;
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -48,32 +51,34 @@ class _PendapatanModalState extends State<PendapatanModal> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        const KadPengenalanTile(),
                         const SizedBox(height: 10),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Column(
-                            children: [
-                              CustomUnderlineField(
-                                title: "Nama",
-                              ),
-                              SizedBox(height: 16),
-                              CustomUnderlineField(
-                                title: "Alamat Majikan",
-                                maxLines: 2,
-                              ),
-                              SizedBox(height: 12),
-                            ],
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 6, vertical: 14),
                           child: TwoColumnForm(
                             children: [
-                              _textField(title: 'Gaji Pokok (RM)'),
-                              _textField(title: 'Elaun (RM)'),
-                              _textField(title: 'Lain-lain Pendapatan'),
-                              _textField(title: 'Bantuan Kewangan'),
+                              _textField(
+                                  title: 'Nama Tanggungan',
+                                  readOnly: _isReadOnly()),
+                              _textField(
+                                  title: 'Hubungan Dengan Penyewa',
+                                  readOnly: _isReadOnly()),
+                              _textField(
+                                  title: 'No. Kad Pengenalan',
+                                  readOnly: _isReadOnly()),
+                              _textField(title: 'Emel'),
+                              _textField(
+                                  title: 'Umur(Tahun)',
+                                  readOnly: _isReadOnly()),
+                              _textField(title: 'Tahap Kesihatan'),
+                              _textField(
+                                  title: 'No. Telefon',
+                                  readOnly: _isReadOnly()),
+                              _textField(
+                                  title: 'Jantina', readOnly: _isReadOnly()),
+                              _textField(title: 'Kecacatan (OKU)'),
+                              _textField(title: 'Bangsa'),
                             ],
                           ),
                         ),
@@ -97,7 +102,7 @@ class _PendapatanModalState extends State<PendapatanModal> {
       child: Row(
         children: [
           const Text(
-            'Maklumat Pendapatan',
+            'Maklumat Tanggungan',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
           const Spacer(),

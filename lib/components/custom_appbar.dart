@@ -9,6 +9,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final double height;
   final void Function()? onPressedBack;
+  final PreferredSizeWidget? bottom;
   const CustomAppBar({
     super.key,
     this.centerTitle = true,
@@ -19,6 +20,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.height = 60,
     this.onPressedBack,
+    this.bottom,
   });
 
   @override
@@ -62,6 +64,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             centerTitle: centerTitle,
             actions: actions,
+            bottom: bottom,
           )
         ],
       ),

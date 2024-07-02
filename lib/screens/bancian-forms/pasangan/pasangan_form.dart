@@ -1,20 +1,22 @@
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/pasangan_modal.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_modal.dart';
 import 'package:flutter/material.dart';
 
-import 'tanggungan_modal.dart';
+import '../../../components/bottombar_button.dart';
+import '../../../components/custom_appbar.dart';
 
-class TanggunganForm extends StatefulWidget {
-  const TanggunganForm({super.key});
+class PasanganForm extends StatefulWidget {
+  const PasanganForm({super.key});
 
   @override
-  State<TanggunganForm> createState() => _TanggunganFormState();
+  State<PasanganForm> createState() => _PasanganFormState();
 }
 
-class _TanggunganFormState extends State<TanggunganForm> {
+class _PasanganFormState extends State<PasanganForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CustomAppBar(title: "Maklumat Pasangan"),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -22,7 +24,7 @@ class _TanggunganFormState extends State<TanggunganForm> {
             children: [
               ListTile(
                 onTap: () {
-                  const PasanganModal().show(context);
+                  const PasanganModal(isEdit: true).show(context);
                 },
                 contentPadding: const EdgeInsets.all(12),
                 leading: Container(
@@ -35,31 +37,33 @@ class _TanggunganFormState extends State<TanggunganForm> {
                     color: Colors.white,
                   ),
                 ),
-                title: const Text("Tambah tanggungan"),
+                title: const Text("Tambah pasangan"),
               ),
               const Divider(height: 0),
-              _anakTile(name: "Liyana Aina", index: 1),
-              _anakTile(name: "Nur Fatin", index: 2)
+              _pasanganTile(name: "Siti Nabila", index: 1),
+              _pasanganTile(name: "Nur Saleha", index: 2)
             ],
           ),
         ),
       ),
+      bottomNavigationBar:
+          BottomBarButton(onTap: () => Navigator.pop(context), title: "Simpan"),
     );
   }
 
-  _anakTile({required String name, required int index}) {
+  _pasanganTile({required String name, required int index}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         ListTile(
           onTap: () {
-            const TanggunganModal().show(context);
+            const PasanganModal().show(context);
           },
           contentPadding: const EdgeInsets.all(12),
           leading: const CircleAvatar(
             child: Icon(Icons.person),
           ),
-          title: Text("Tanggungan $index"),
+          title: Text("Pasangan $index"),
           subtitle: Text(name),
         ),
         const Divider(

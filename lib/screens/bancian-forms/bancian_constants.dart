@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'tanggungan_form.dart';
-import 'pasangan_form.dart';
-import 'pendapatan_form.dart';
-import 'penghuni_form.dart';
+import 'anak_tanggungan/tanggungan_form.dart';
+import 'pasangan/pasangan_form.dart';
+import 'pendapatan/pendapatan_form.dart';
+import 'penghuni/penghuni_form.dart';
 
 enum BancianForms {
   penghuni(title: "Maklumat Penghuni", screen: PenghuniForm()),

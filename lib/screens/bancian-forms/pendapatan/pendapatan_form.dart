@@ -1,7 +1,10 @@
 import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/pendapatan_modal.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/pendapatan/pendapatan_modal.dart';
 import 'package:flutter/material.dart';
+
+import '../../../components/bottombar_button.dart';
+import '../../../components/custom_appbar.dart';
 
 class PendapatanForm extends StatefulWidget {
   const PendapatanForm({super.key});
@@ -15,6 +18,7 @@ class _PendapatanFormState extends State<PendapatanForm> {
   Widget build(BuildContext context) {
     return BgImage(
       child: Scaffold(
+        appBar: const CustomAppBar(title: "Maklumat Pendapatan"),
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           child: Padding(
@@ -39,6 +43,8 @@ class _PendapatanFormState extends State<PendapatanForm> {
             ),
           ),
         ),
+        bottomNavigationBar: BottomBarButton(
+            onTap: () => Navigator.pop(context), title: "Simpan"),
       ),
     );
   }
