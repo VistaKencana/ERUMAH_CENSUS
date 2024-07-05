@@ -5,17 +5,26 @@ import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/config/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 import 'services/easyloading_config.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLoadingConfig.init();
+  await _requestPermission();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
   ]);
   runApp(const MyApp());
+}
+
+_requestPermission() async {
+  var status = await Permission.camera.status;
+  if (!status.isGranted) {
+    Permission.camera.request();
+  }
 }
 
 class MyApp extends StatelessWidget {

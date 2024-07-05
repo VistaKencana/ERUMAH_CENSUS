@@ -84,6 +84,7 @@ class CustomTextField extends StatelessWidget {
           enabled: enabled,
           controller: controller,
           obscureText: obscureText,
+          initialValue: initialValue,
           keyboardType: keyboardType,
           textCapitalization: textCapitalization,
           autovalidateMode: autovalidateMode,
