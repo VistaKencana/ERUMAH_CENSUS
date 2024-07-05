@@ -3,6 +3,7 @@ import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_textfield.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/tanggungan_form.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bancian_result.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_status_field.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pendapatan/pendapatan_form.dart';
@@ -153,7 +154,9 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
         ),
         bottomNavigationBar: BottomBarButton(
           title: "Selesai Bancian",
-          onTap: () {},
+          onTap: () {
+            _go(const BancianResult());
+          },
         ),
       )),
     );
