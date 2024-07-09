@@ -46,9 +46,9 @@ class KadPengenalanTile extends StatelessWidget {
     return Column(
       children: [
         Container(
-          // width: MediaQuery.sizeOf(context).width * .4,
-          width: 250,
-          height: 150,
+          width: MediaQuery.sizeOf(context).width * .43,
+          // width: 250,
+          height: 130,
           decoration: BoxDecoration(
             color: Colors.grey.shade200,
             border: Border.all(

@@ -74,9 +74,9 @@ class _BancianResultState extends State<BancianResult> {
                         ],
                       ),
                     ),
-                    const Positioned(
-                      top: -90,
-                      child: CheckIcon(),
+                    Positioned(
+                      top: -(constraint.maxHeight * .12),
+                      child: const CheckIcon(),
                     ),
                   ],
                 ),
