@@ -89,7 +89,10 @@ class _TanggunganModalState extends State<TanggunganModal> {
                                   title: 'Jantina',
                                   initialValue: "Perempuan",
                                   readOnly: _isReadOnly()),
-                              _textField(title: 'Bangsa'),
+                              _textField(
+                                title: 'Bangsa',
+                                initialValue: "Melayu",
+                              ),
                             ],
                           ),
                         ),
