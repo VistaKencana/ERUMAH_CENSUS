@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace = "com.example.eperumahan_bancian"
+    namespace = "com.securemetric.myidreader"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -35,7 +35,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.eperumahan_bancian"
+        applicationId = "com.securemetric.myidreader"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = flutter.minSdkVersion
@@ -55,4 +55,19 @@ android {
 
 flutter {
     source = "../.."
+}
+
+repositories {
+    flatDir {
+        dirs 'libs/'
+    }
+}
+
+dependencies {
+    implementation(name: 'myID', ext: 'aar') {
+        exclude group: 'com.morpho.morphosmart.sdk', module: 'libc++_shared-armeabi-v7a'
+        exclude group: 'com.morpho.morphosmart.sdk', module: 'libc++_shared-arm64-v8a'
+    }
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
 }
