@@ -4,6 +4,7 @@ import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/custom_underline_field.dart';
+import '../../../components/disability_checkbox.dart';
 
 class TanggunganModal extends StatefulWidget {
   final bool? isEdit;
@@ -55,33 +56,54 @@ class _TanggunganModalState extends State<TanggunganModal> {
                         const SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 14),
+                              horizontal: 12, vertical: 14),
                           child: TwoColumnForm(
                             children: [
                               _textField(
                                   title: 'Nama Tanggungan',
+                                  initialValue: "Nur Fatin",
                                   readOnly: _isReadOnly()),
                               _textField(
                                   title: 'Hubungan Dengan Penyewa',
+                                  initialValue: "Anak",
                                   readOnly: _isReadOnly()),
                               _textField(
                                   title: 'No. Kad Pengenalan',
+                                  initialValue: "9512345145678",
                                   readOnly: _isReadOnly()),
-                              _textField(title: 'Emel'),
+                              _textField(
+                                  title: 'Emel',
+                                  initialValue: "nurfatin@gmail.com"),
                               _textField(
                                   title: 'Umur(Tahun)',
+                                  initialValue: "26",
                                   readOnly: _isReadOnly()),
-                              _textField(title: 'Tahap Kesihatan'),
+                              _textField(
+                                  title: 'Tahap Kesihatan',
+                                  initialValue: "Sihat"),
                               _textField(
                                   title: 'No. Telefon',
+                                  initialValue: "01645678642",
                                   readOnly: _isReadOnly()),
                               _textField(
-                                  title: 'Jantina', readOnly: _isReadOnly()),
-                              _textField(title: 'Kecacatan (OKU)'),
+                                  title: 'Jantina',
+                                  initialValue: "Perempuan",
+                                  readOnly: _isReadOnly()),
                               _textField(title: 'Bangsa'),
                             ],
                           ),
                         ),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                DisabilityCheckbox(
+                                    initVal: false, onCheck: (val) {}),
+                                _kadOKU(),
+                              ],
+                            )),
+                        const SizedBox(height: 10)
                       ],
                     ),
                   ),
@@ -124,6 +146,47 @@ class _TanggunganModalState extends State<TanggunganModal> {
         showEditIcon: !readOnly,
         readOnly: readOnly,
         initialValue: initialValue,
+      ),
+    );
+  }
+
+  _kadOKU() {
+    return Container(
+      width: MediaQuery.sizeOf(context).width * .43,
+      // width: 250,
+      height: 130,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        border: Border.all(
+          color: Colors.grey,
+          style: BorderStyle.solid,
+          width: 2.0,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: const Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.camera_alt,
+              size: 40,
+              color: Colors.grey,
+            ),
+            SizedBox(height: 10),
+            Center(
+              child: Text(
+                'Buka kamera & Ambil Gambar',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

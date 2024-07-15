@@ -4,6 +4,7 @@ import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/custom_underline_field.dart';
+import '../../../components/disability_checkbox.dart';
 
 class PasanganModal extends StatefulWidget {
   final bool? isEdit;
@@ -52,37 +53,67 @@ class _PasanganModalState extends State<PasanganModal> {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const KadPengenalanTile(),
                         const SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 14),
+                              horizontal: 12, vertical: 14),
                           child: TwoColumnForm(
                             children: [
                               _textField(
-                                  initialValue: "",
+                                  initialValue: _isEdit() ? "" : "Siti Nabila",
                                   title: 'Nama Penuh',
                                   readOnly: _isReadOnly()),
-                              _textField(title: 'Emel'),
+                              _textField(
+                                  title: 'Emel',
+                                  initialValue:
+                                      _isEdit() ? "" : "sitinabila@gmail.com"),
                               _textField(
                                   title: 'No. Kad Pengenalan',
+                                  initialValue: _isEdit() ? "" : "697870984456",
                                   readOnly: _isReadOnly()),
-                              _textField(title: 'No Telefon'),
+                              _textField(
+                                  title: 'No Telefon',
+                                  initialValue: _isEdit() ? "" : "0198765654"),
                               _textField(
                                   title: 'Umur(Tahun)',
+                                  initialValue: _isEdit() ? "" : "50",
                                   readOnly: _isReadOnly()),
-                              _textField(title: 'Tahap Kesihatan'),
                               _textField(
-                                  title: 'Jantina', readOnly: _isReadOnly()),
-                              _textField(title: 'Kecacatan (OKU)'),
+                                  title: 'Tahap Kesihatan',
+                                  initialValue: _isEdit() ? "" : "Sihat"),
                               _textField(
-                                  title: 'Bangsa', readOnly: _isReadOnly()),
-                              _textField(title: 'Hidup'),
-                              _textField(title: 'Jenis Pekerjaan'),
+                                  title: 'Jantina',
+                                  initialValue: _isEdit() ? "" : "Perempuan",
+                                  readOnly: _isReadOnly()),
+                              _textField(
+                                  title: 'Bangsa',
+                                  initialValue: _isEdit() ? "" : "Melayu",
+                                  readOnly: _isReadOnly()),
+                              _textField(
+                                title: 'Hidup',
+                                initialValue: _isEdit() ? "" : "Ya",
+                              ),
+                              _textField(
+                                title: 'Jenis Pekerjaan',
+                                initialValue: _isEdit() ? "" : "Suri RUmah",
+                              ),
                             ],
                           ),
                         ),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                DisabilityCheckbox(
+                                    initVal: false, onCheck: (val) {}),
+                                _kadOKU(),
+                              ],
+                            )),
+                        const SizedBox(height: 10)
                       ],
                     ),
                   ),
@@ -125,6 +156,47 @@ class _PasanganModalState extends State<PasanganModal> {
         showEditIcon: !readOnly,
         readOnly: readOnly,
         initialValue: initialValue,
+      ),
+    );
+  }
+
+  _kadOKU() {
+    return Container(
+      width: MediaQuery.sizeOf(context).width * .43,
+      // width: 250,
+      height: 130,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        border: Border.all(
+          color: Colors.grey,
+          style: BorderStyle.solid,
+          width: 2.0,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: const Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.camera_alt,
+              size: 40,
+              color: Colors.grey,
+            ),
+            SizedBox(height: 10),
+            Center(
+              child: Text(
+                'Buka kamera & Ambil Gambar',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

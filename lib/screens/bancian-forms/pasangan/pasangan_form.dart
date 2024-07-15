@@ -57,7 +57,9 @@ class _PasanganFormState extends State<PasanganForm> {
       children: [
         ListTile(
           onTap: () {
-            const PasanganModal().show(context);
+            const PasanganModal(
+              isEdit: false,
+            ).show(context);
           },
           contentPadding: const EdgeInsets.all(12),
           leading: const CircleAvatar(

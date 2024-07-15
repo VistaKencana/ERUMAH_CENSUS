@@ -1,5 +1,6 @@
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/components/custom_underline_field.dart';
+import 'package:eperumahan_bancian/components/disability_checkbox.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_main_screen.dart';
@@ -63,6 +64,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const KadPengenalanTile(),
               Padding(
@@ -71,23 +73,39 @@ class _PenghuniFormState extends State<PenghuniForm> {
                 child: TwoColumnForm(
                   children: [
                     _textField(
-                        initialValue: "",
                         title: 'Nama Penuh',
+                        initialValue: "Arif Aiman",
                         readOnly: _isReadOnly()),
-                    _textField(title: 'Bilangan Isi Rumah'),
+                    _textField(title: 'Bilangan Isi Rumah', initialValue: "2"),
                     _textField(
-                        title: 'No. Kad Pengenalan', readOnly: _isReadOnly()),
-                    _textField(title: 'Emel'),
-                    _textField(title: 'Umur(Tahun)', readOnly: _isReadOnly()),
-                    _textField(title: 'No Telefon'),
-                    _textField(title: 'Jantina', readOnly: _isReadOnly()),
-                    _textField(title: 'Bangsa', readOnly: _isReadOnly()),
-                    _textField(title: 'Kecacatan (OKU)'),
-                    _textField(title: 'Jenis Pekerjaan'),
-                    _textField(title: 'Status Perkahwinan'),
+                        title: 'No. Kad Pengenalan',
+                        initialValue: "7056448140568",
+                        readOnly: _isReadOnly()),
+                    _textField(
+                        title: 'Emel', initialValue: "arifaiman@gmail.com"),
+                    _textField(
+                        title: 'Umur(Tahun)',
+                        initialValue: "50",
+                        readOnly: _isReadOnly()),
+                    _textField(title: 'No Telefon', initialValue: "0186456762"),
+                    _textField(
+                        title: 'Jantina',
+                        readOnly: _isReadOnly(),
+                        initialValue: "Lelaki"),
+                    _textField(
+                        title: 'Bangsa',
+                        readOnly: _isReadOnly(),
+                        initialValue: "Melayu"),
+                    _textField(
+                        title: 'Jenis Pekerjaan', initialValue: "Persendirian"),
+                    _textField(
+                        title: 'Status Perkahwinan', initialValue: "Berkahwin"),
+                    // _textField(title: 'Kecacatan (OKU)'),
                   ],
                 ),
               ),
+              DisabilityCheckbox(initVal: false, onCheck: (val) {}),
+              _kadOKU(),
               const SizedBox(height: 10),
             ],
           ),
@@ -107,6 +125,47 @@ class _PenghuniFormState extends State<PenghuniForm> {
         showEditIcon: !readOnly,
         readOnly: readOnly,
         initialValue: initialValue,
+      ),
+    );
+  }
+
+  _kadOKU() {
+    return Container(
+      width: MediaQuery.sizeOf(context).width * .43,
+      // width: 250,
+      height: 130,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        border: Border.all(
+          color: Colors.grey,
+          style: BorderStyle.solid,
+          width: 2.0,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: const Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.camera_alt,
+              size: 40,
+              color: Colors.grey,
+            ),
+            SizedBox(height: 10),
+            Center(
+              child: Text(
+                'Buka kamera & Ambil Gambar',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

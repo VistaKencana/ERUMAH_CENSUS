@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import '../../../components/custom_underline_field.dart';
 
 class PendapatanModal extends StatefulWidget {
-  const PendapatanModal({super.key});
+  final bool? isEdit;
+  const PendapatanModal({super.key, this.isEdit});
 
   Future<T?> show<T>(BuildContext context) {
     return showModalBottomSheet<T>(
@@ -23,6 +24,7 @@ class PendapatanModal extends StatefulWidget {
 }
 
 class _PendapatanModalState extends State<PendapatanModal> {
+  _isEdit() => (widget.isEdit != null && widget.isEdit == true);
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -49,19 +51,23 @@ class _PendapatanModalState extends State<PendapatanModal> {
                     child: Column(
                       children: [
                         const SizedBox(height: 10),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Column(
                             children: [
                               CustomUnderlineField(
                                 title: "Nama",
+                                initialValue: _isEdit() ? "" : "Arif Aiman",
                               ),
-                              SizedBox(height: 16),
+                              const SizedBox(height: 16),
                               CustomUnderlineField(
                                 title: "Alamat Majikan",
+                                initialValue: _isEdit()
+                                    ? ""
+                                    : "No. 1 Jalan 2 Taman Perindustrian, 50300 Kuala Lumpur",
                                 maxLines: 2,
                               ),
-                              SizedBox(height: 12),
+                              const SizedBox(height: 12),
                             ],
                           ),
                         ),
@@ -70,10 +76,18 @@ class _PendapatanModalState extends State<PendapatanModal> {
                               horizontal: 6, vertical: 14),
                           child: TwoColumnForm(
                             children: [
-                              _textField(title: 'Gaji Pokok (RM)'),
-                              _textField(title: 'Elaun (RM)'),
-                              _textField(title: 'Lain-lain Pendapatan'),
-                              _textField(title: 'Bantuan Kewangan'),
+                              _textField(
+                                  title: 'Gaji Pokok (RM)',
+                                  initialValue: _isEdit() ? "" : "1800"),
+                              _textField(
+                                  title: 'Elaun (RM)',
+                                  initialValue: _isEdit() ? "" : "0.00"),
+                              _textField(
+                                  title: 'Lain-lain Pendapatan',
+                                  initialValue: _isEdit() ? "" : "Tiada"),
+                              _textField(
+                                  title: 'Bantuan Kewangan',
+                                  initialValue: _isEdit() ? "" : "Tiada"),
                             ],
                           ),
                         ),

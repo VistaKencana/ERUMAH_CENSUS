@@ -126,7 +126,9 @@ class _PendapatanFormState extends State<PendapatanForm> {
             visible: showBtn,
             child: GestureDetector(
               onTap: () {
-                const PendapatanModal().show(context);
+                const PendapatanModal(
+                  isEdit: true,
+                ).show(context);
               },
               child: Container(
                 decoration: BoxDecoration(
