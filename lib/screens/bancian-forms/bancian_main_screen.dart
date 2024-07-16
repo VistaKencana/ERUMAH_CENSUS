@@ -8,7 +8,7 @@ import 'package:eperumahan_bancian/screens/bancian-forms/bancian_result.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_status_field.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pendapatan/pendapatan_form.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -115,7 +115,8 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                 ),
                 _borangTile(
                     label: "Maklumat Penghuni",
-                    screen: PenghuniForm(isEdit: widget.isEdit)),
+                    screen: PenghuniFormV2(isEdit: widget.isEdit)),
+                // screen: PenghuniForm(isEdit: widget.isEdit)),
                 _borangTile(
                     label: "Maklumat Pasangan", screen: const PasanganForm()),
                 _borangTile(

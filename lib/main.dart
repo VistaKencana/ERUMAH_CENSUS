@@ -6,6 +6,7 @@ import 'package:eperumahan_bancian/config/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'config/constants/app_size.dart';
 import 'services/easyloading_config.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppSize().initialize(context);
     return MaterialApp(
       title: 'ePerumahan Bancian',
       debugShowCheckedModeBanner: false,

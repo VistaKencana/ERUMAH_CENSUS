@@ -1,3 +1,4 @@
+import 'package:eperumahan_bancian/config/constants/app_size.dart';
 import 'package:flutter/material.dart';
 
 class TwoColumnForm extends StatelessWidget {
@@ -9,9 +10,10 @@ class TwoColumnForm extends StatelessWidget {
     return GridView(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // Number of items per row
-        childAspectRatio: 16 / 8, // Aspect ratio of each item
+        childAspectRatio:
+            AppSize().getGridAspectRatio(), // Aspect ratio of each item
         mainAxisSpacing: 10.0, // Spacing between rows
         crossAxisSpacing: 10.0, // Spacing between columns
       ),

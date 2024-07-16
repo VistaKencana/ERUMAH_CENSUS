@@ -43,12 +43,12 @@ class DisabilityCheckboxState extends State<DisabilityCheckbox> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Kecacatan (OKU)',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Colors.grey[600],
+            color: Colors.black,
           ),
         ),
         Row(

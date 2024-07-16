@@ -1,3 +1,4 @@
+import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class KadPengenalanTile extends StatelessWidget {
@@ -5,39 +6,49 @@ class KadPengenalanTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      child: ExpansionTile(
-        initiallyExpanded: true,
-        backgroundColor: Colors.white,
-        shape: const Border(),
-        title: const Row(
-          children: [
-            Text("Kad Pengenalan"),
-            SizedBox(width: 4),
-            Text(
-              "*",
-              style: TextStyle(color: Colors.red),
-            )
-          ],
-        ),
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 12, right: 12, bottom: 20),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  _cameraContainer(context, title: "Kad Pengenalan Depan"),
-                  const SizedBox(width: 10),
-                  _cameraContainer(context, title: "Kad Pengenalan Belakang"),
-                ],
-              ),
+    return ClipRRect(
+      child: Card(
+        color: Colors.white,
+        elevation: 0,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8, bottom: 8),
+          child: ExpansionTile(
+            initiallyExpanded: true,
+            backgroundColor: Colors.white,
+            shape: const Border(),
+            title: Row(
+              children: [
+                Text(
+                  "Kad Pengenalan",
+                  style: appTextStyle(size: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 4),
+                const Text(
+                  "*",
+                  style: TextStyle(color: Colors.red),
+                )
+              ],
             ),
-          )
-        ],
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 12, right: 12, bottom: 20),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _cameraContainer(context, title: "Kad Pengenalan Depan"),
+                      const SizedBox(width: 10),
+                      _cameraContainer(context,
+                          title: "Kad Pengenalan Belakang"),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -35,10 +35,11 @@ class BancianStatusModal extends StatefulWidget {
 }
 
 class _BancianStatusModalState extends State<BancianStatusModal> {
-  String currValue = "Bancian Biasa";
+  String currValue = "Bancian Berjaya";
   List<String> statusFilter = [
-    "Bancian Biasa",
-    "Tiada Penghuni",
+    "Bancian Berjaya",
+    "Bancian Gagal (Tiada Penghuni)",
+    "Bancian Gagal (Lain-lain)",
   ];
 
   @override
