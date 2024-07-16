@@ -57,6 +57,7 @@ flutter {
     source = "../.."
 }
 
+<<<<<<< HEAD
 configurations.all {
     resolutionStrategy {
         eachDependency {
@@ -66,6 +67,8 @@ configurations.all {
         }
     }
 }
+=======
+>>>>>>> fddb770 (add sdk library)
 repositories {
     flatDir {
         dirs 'libs/'
