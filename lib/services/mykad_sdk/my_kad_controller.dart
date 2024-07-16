@@ -50,11 +50,11 @@ class MyKadController {
           setMessage(msg: "Read card successful", data: data);
           if (verifyFP) {
             await MyKadReader.turnOnFP();
-            setMessage(msg: "Please place your fingerprint at the scanner");
-            await addDelay(milisec: 2500);
+            await addDelay(milisec: 3000);
             await MyKadReader.getFPDeviceList();
             await addDelay(milisec: 2000);
             await connectAndScanFP();
+            setMessage(msg: "Please place your fingerprint at the scanner");
           }
         },
         onErrorCard: () {
@@ -71,9 +71,9 @@ class MyKadController {
         },
         onErrorFP: () async {
           //Please try again in 3 second
-          setMessage(msg: "Error: Please try again in 3 second");
           await addDelay(milisec: 3000);
           await connectAndScanFP();
+          setMessage(msg: "Error: Please try again in 3 second");
         },
       );
     }
