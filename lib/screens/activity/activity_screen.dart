@@ -12,7 +12,7 @@ class ActivityScreen extends StatefulWidget {
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
-  final dropdown = ["Zon", "Kawasan", "Blok", "Tingkat"];
+  final dropdown = ["Zon", "Kawasan", "Blok" /*, "Tingkat"*/];
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);

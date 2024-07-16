@@ -4,6 +4,15 @@ enum AppImages {
   icLock(path: "assets/images/icon_lock.png"),
   icLogMasuk(path: "assets/images/log_masuk.png"),
   bg(path: "assets/images/background.png"),
+  //
+  insertCard(path: "assets/images/inseert_card.png"),
+  successCard(path: "assets/images/success_card.png"),
+  failedCard(path: "assets/images/failed_card.png"),
+  removeCard(path: "assets/images/remove_card.png"),
+  //
+  scanFP(path: "assets/images/fp_scan.png"),
+  successFP(path: "assets/images/fp_success.png"),
+  failedFP(path: "assets/images/fp_failed.png"),
   ;
 
   final String path;

@@ -1,5 +1,5 @@
+import 'package:eperumahan_bancian/components/activity_appbar.dart';
 import 'package:eperumahan_bancian/components/bg_image.dart';
-import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/activity/bancian_info_modal.dart';
 import 'package:flutter/material.dart';
@@ -21,54 +21,69 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
     return BgImage(
         child: Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: CustomAppBar(
-        title: "Carian",
+      appBar: ActivityAppbar(
+        title: info[1].value,
         centerTitle: false,
         foregroundColor: AppColors.primary.color,
       ),
       body: ListView(
         children: [
-          Container(
-            margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Info Kawasan Bancian",
-                  style: appTextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.dimmedPurple.color),
-                ),
-                Text(
-                  info[1].value,
-                  style: appTextStyle(fontWeight: FontWeight.bold, size: 25),
-                ),
-                Text(
-                  "${info[0].value} • ${info[2].title} ${info[2].value} • ${info[3].title} ${info[3].value}",
-                  style: appTextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                        child: Text(
-                      "${info[4].title} ${info[4].value}",
-                      style: appTextStyle(fontWeight: FontWeight.bold),
-                    )),
-                    Expanded(
-                        child: Text(
-                      "${info[5].title} ${info[5].value}",
-                      style: appTextStyle(fontWeight: FontWeight.bold),
-                    )),
-                  ],
-                )
-              ],
+          Padding(
+            padding: const EdgeInsets.only(left: 12, top: 20),
+            child: Text(
+              "Info Kawasan Bancian",
+              style: appTextStyle(
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
+          Row(
+            children: [
+              _infoContainer(val: info[4].value, title: info[4].title),
+              _infoContainer(val: info[5].value, title: info[5].title),
+            ],
+          ),
+          // Container(
+          //   margin: const EdgeInsets.all(10),
+          //   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
+          //   decoration: BoxDecoration(
+          //       color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       Text(
+          //         "Info Kawasan Bancian",
+          //         style: appTextStyle(
+          //             fontWeight: FontWeight.w400,
+          //             color: AppColors.dimmedPurple.color),
+          //       ),
+          //       Text(
+          //         info[1].value,
+          //         style: appTextStyle(fontWeight: FontWeight.bold, size: 25),
+          //       ),
+          //       Text(
+          //         "${info[0].value} • ${info[2].title} ${info[2].value} • ${info[3].title} ${info[3].value}",
+          //         style: appTextStyle(fontWeight: FontWeight.bold),
+          //       ),
+          //       const SizedBox(height: 20),
+          //       Row(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Expanded(
+          //               child: Text(
+          //             "${info[4].title} ${info[4].value}",
+          //             style: appTextStyle(fontWeight: FontWeight.bold),
+          //           )),
+          //           Expanded(
+          //               child: Text(
+          //             "${info[5].title} ${info[5].value}",
+          //             style: appTextStyle(fontWeight: FontWeight.bold),
+          //           )),
+          //         ],
+          //       )
+          //     ],
+          //   ),
+          // ),
           Container(
             height: size.height * 0.55,
             margin: const EdgeInsets.all(10),
@@ -121,11 +136,28 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
     ));
   }
 
+  _infoContainer({required String val, required String title}) {
+    return Container(
+      width: MediaQuery.sizeOf(context).width * .44,
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        children: [
+          Text(
+            val,
+            style: appTextStyle(size: 22, fontWeight: FontWeight.bold),
+          ),
+          Text(title),
+        ],
+      ),
+    );
+  }
+
   _newInfoTile({required int lawatan, bool isComplete = true}) {
     return ListTile(
       onTap: () => const BancianInfosModal().show(context),
-      // onTap: () => _go(const BancianQrscan()),
-      // onTap: () => _go(const BancianMainScreen()),
       minLeadingWidth: 0,
       leading: Container(
         decoration: BoxDecoration(
@@ -159,7 +191,4 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
       ),
     );
   }
-
-  // _go(Widget screen) => Navigator.push(context,
-  //     PageTransition(child: screen, type: PageTransitionType.rightToLeft));
 }

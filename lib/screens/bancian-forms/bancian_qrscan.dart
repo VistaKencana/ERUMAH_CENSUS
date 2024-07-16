@@ -1,4 +1,3 @@
-import 'package:eperumahan_bancian/screens/bancian-forms/bancian_form_screen.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_proof_camera.dart';
 import 'package:eperumahan_bancian/services/qr_code_scanner_widget.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +23,7 @@ class _BancianQrscanState extends State<BancianQrscan> {
       ),
       body: QrCodeScannerWidget(
         onScan: (data) {
-          _goReplace(const BancianFormScreen());
+          _goReplace(const BancianProofCamera());
         },
         onNext: () {
           _goReplace(const BancianProofCamera());

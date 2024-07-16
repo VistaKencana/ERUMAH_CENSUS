@@ -3,6 +3,7 @@ import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_textfield.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/tanggungan_form.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_result.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_status_field.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.dart';
@@ -62,6 +63,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
           onPressedBack: _onPop,
         ),
         body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
@@ -128,10 +130,11 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all()),
-                  child: const ListTile(
+                  child: ListTile(
                     tileColor: Colors.white,
-                    leading: Icon(Icons.fingerprint),
-                    title: Text("Sahkan Cap Jari"),
+                    leading: const Icon(Icons.fingerprint),
+                    title: const Text("Sahkan Cap Jari"),
+                    onTap: () => _go(const BancianFingerprint()),
                   ),
                 ),
                 _gap(),
