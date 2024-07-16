@@ -1,9 +1,22 @@
+import 'dart:typed_data';
+
+import 'package:eperumahan_bancian/components/card_display.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class KadPengenalanTile extends StatelessWidget {
-  const KadPengenalanTile({super.key});
+class KadPengenalanTile extends StatefulWidget {
+  final void Function(Uint8List bytes) onFrontCard;
+  final void Function(Uint8List bytes) onBackCard;
+  const KadPengenalanTile(
+      {super.key, required this.onFrontCard, required this.onBackCard});
 
+  @override
+  State<KadPengenalanTile> createState() => _KadPengenalanTileState();
+}
+
+class _KadPengenalanTileState extends State<KadPengenalanTile> {
+  Uint8List? frontCard;
+  Uint8List? backCard;
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -38,10 +51,23 @@ class KadPengenalanTile extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      _cameraContainer(context, title: "Kad Pengenalan Depan"),
+                      CardDisplay(
+                        title: "Kad Pengenalan Depan",
+                        img: frontCard,
+                        onPicture: (bytes) {
+                          setState(() => frontCard = bytes);
+                          widget.onFrontCard(bytes);
+                        },
+                      ),
                       const SizedBox(width: 10),
-                      _cameraContainer(context,
-                          title: "Kad Pengenalan Belakang"),
+                      CardDisplay(
+                        title: "Kad Pengenalan Belakang",
+                        img: backCard,
+                        onPicture: (bytes) {
+                          setState(() => backCard = bytes);
+                          widget.onBackCard(bytes);
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -50,53 +76,6 @@ class KadPengenalanTile extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  _cameraContainer(BuildContext context, {required String title}) {
-    return Column(
-      children: [
-        Container(
-          width: MediaQuery.sizeOf(context).width * .43,
-          // width: 250,
-          height: 130,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            border: Border.all(
-              color: Colors.grey,
-              style: BorderStyle.solid,
-              width: 2.0,
-            ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.camera_alt,
-                  size: 40,
-                  color: Colors.grey,
-                ),
-                SizedBox(height: 10),
-                Center(
-                  child: Text(
-                    'Buka kamera & Ambil Gambar',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Text(title),
-      ],
     );
   }
 }

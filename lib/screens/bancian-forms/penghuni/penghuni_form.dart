@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/components/custom_underline_field.dart';
 import 'package:eperumahan_bancian/components/disability_checkbox.dart';
@@ -6,6 +8,7 @@ import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_main_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../../../components/card_display.dart';
 import '../../../components/custom_appbar.dart';
 
 class PenghuniForm extends StatefulWidget {
@@ -19,6 +22,9 @@ class PenghuniForm extends StatefulWidget {
 class _PenghuniFormState extends State<PenghuniForm> {
   _isEdit() => (widget.isEdit != null && widget.isEdit == true);
   _isReadOnly() => _isEdit() ? false : true;
+  Uint8List? frontCard;
+  Uint8List? backCard;
+  Uint8List? okuCard;
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.sizeOf(context);
@@ -66,7 +72,14 @@ class _PenghuniFormState extends State<PenghuniForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const KadPengenalanTile(),
+              KadPengenalanTile(
+                onFrontCard: (bytes) {
+                  setState(() => frontCard = bytes);
+                },
+                onBackCard: (bytes) {
+                  setState(() => backCard = bytes);
+                },
+              ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 4, vertical: 14),
@@ -105,7 +118,11 @@ class _PenghuniFormState extends State<PenghuniForm> {
                 ),
               ),
               DisabilityCheckbox(initVal: false, onCheck: (val) {}),
-              _kadOKU(),
+              CardDisplay(
+                title: "",
+                img: okuCard,
+                onPicture: (bytes) => setState(() => okuCard = bytes),
+              ),
               const SizedBox(height: 10),
             ],
           ),
@@ -125,47 +142,6 @@ class _PenghuniFormState extends State<PenghuniForm> {
         showEditIcon: !readOnly,
         readOnly: readOnly,
         initialValue: initialValue,
-      ),
-    );
-  }
-
-  _kadOKU() {
-    return Container(
-      width: MediaQuery.sizeOf(context).width * .43,
-      // width: 250,
-      height: 130,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        border: Border.all(
-          color: Colors.grey,
-          style: BorderStyle.solid,
-          width: 2.0,
-        ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: const Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.camera_alt,
-              size: 40,
-              color: Colors.grey,
-            ),
-            SizedBox(height: 10),
-            Center(
-              child: Text(
-                'Buka kamera & Ambil Gambar',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

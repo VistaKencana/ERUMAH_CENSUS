@@ -141,7 +141,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                 _gap(),
                 _section("Status Bancian"),
                 const BancianStatusField(
-                  initialVal: "Bancian Biasa",
+                  initialVal: "Bancian Berjaya",
                 ),
                 _gap(),
                 _section("Catatan"),

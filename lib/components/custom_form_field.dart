@@ -68,10 +68,13 @@ class CustomFormField extends StatelessWidget {
         if (title != null)
           Row(
             children: [
-              Text(title!,
-                  style: titleStyle ??
-                      const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w500)),
+              Expanded(
+                child: Text(title!,
+                    overflow: TextOverflow.ellipsis,
+                    style: titleStyle ??
+                        const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
+              ),
               if (isMandatory)
                 const Text(
                   "*",
@@ -98,7 +101,7 @@ class CustomFormField extends StatelessWidget {
           decoration: InputDecoration(
             filled: true,
             hintText: hintText,
-            fillColor: readOnly ? null : Colors.white,
+            fillColor: fillColor ?? (readOnly ? null : Colors.white),
             // fillColor: fillColor,
             enabledBorder: addBorder
                 ? OutlineInputBorder(

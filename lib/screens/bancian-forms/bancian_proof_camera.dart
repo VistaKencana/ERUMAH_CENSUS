@@ -17,7 +17,7 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
   double initSize = 0.26;
   double maxSize = 0.26;
   double minSize = 0.08;
-  int maxImage = 2;
+  int maxImage = 3;
   final DraggableScrollableController _controller =
       DraggableScrollableController();
   List<Uint8List> imgs = [];
@@ -60,7 +60,7 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     ElevatedButton(
-                        onPressed: imgs.length < maxImage
+                        onPressed: imgs.length < (maxImage - 1)
                             ? null
                             : () {
                                 _goReplace(const BancianMainScreen());
