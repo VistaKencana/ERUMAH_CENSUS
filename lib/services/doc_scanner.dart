@@ -1,7 +1,9 @@
+import 'dart:io';
+
+import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_document_scanner/flutter_document_scanner.dart';
 
 class DocScanner extends StatefulWidget {
   final void Function(Uint8List bytes) onPicture;
@@ -12,41 +14,49 @@ class DocScanner extends StatefulWidget {
 }
 
 class _DocScannerState extends State<DocScanner> {
-  final _controller = DocumentScannerController();
+  @override
+  void initState() {
+    super.initState();
+    _openCamera();
+  }
 
   @override
   void dispose() {
-    _controller.dispose();
-    enforcePortraitMode();
     super.dispose();
   }
 
-  void enforcePortraitMode() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+  _openCamera() async {
+    List<String> pictures;
+    try {
+      pictures = await CunningDocumentScanner.getPictures() ?? [];
+      final img = await convertUint8List(pictures.first);
+      if (!mounted) return;
+      widget.onPicture(img);
+      Navigator.pop(context);
+    } catch (exception) {
+      // Handle exception here
+    }
+  }
+
+  Future<Uint8List> convertUint8List(String imagePath) async {
+    File imageFile = File(imagePath);
+    Uint8List imageBytes = await imageFile.readAsBytes();
+    return imageBytes;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(
-        title: "Gambar Kad",
-        foregroundColor: Colors.white,
-      ),
-      extendBodyBehindAppBar: true,
-      body: DocumentScanner(
-        controller: _controller,
-        cropPhotoDocumentStyle: CropPhotoDocumentStyle(
-          top: MediaQuery.of(context).padding.top,
+    return const Scaffold(
+        appBar: CustomAppBar(
+          title: "Gambar Kad",
+          foregroundColor: Colors.white,
         ),
-        onSave: (Uint8List bytes) {
-          // ? Bytes of the document/image already processed
-          Navigator.pop(context);
-          widget.onPicture(bytes);
-        },
-      ),
-    );
+        extendBodyBehindAppBar: true,
+        body: Center(
+            child: Column(
+          children: [
+            Text("Document SCanner"),
+          ],
+        )));
   }
 }
