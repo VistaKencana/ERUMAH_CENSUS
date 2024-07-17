@@ -4,6 +4,7 @@ enum AppImages {
   icLock(path: "assets/images/icon_lock.png"),
   icLogMasuk(path: "assets/images/log_masuk.png"),
   bg(path: "assets/images/background.png"),
+  apartment(path: "assets/images/apartment.png"),
   //
   insertCard(path: "assets/images/inseert_card.png"),
   successCard(path: "assets/images/success_card.png"),

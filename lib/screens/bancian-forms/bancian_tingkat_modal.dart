@@ -35,7 +35,7 @@ class _BancianTingkatModalState extends State<BancianTingkatModal> {
             const Padding(
               padding: EdgeInsets.only(left: 12, top: 28, bottom: 18),
               child: Text(
-                'Status kompaun',
+                'Pilih Tingkat',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
               ),
             ),

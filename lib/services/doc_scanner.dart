@@ -1,7 +1,6 @@
-import 'dart:typed_data';
-
 import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_document_scanner/flutter_document_scanner.dart';
 
 class DocScanner extends StatefulWidget {
@@ -18,7 +17,15 @@ class _DocScannerState extends State<DocScanner> {
   @override
   void dispose() {
     _controller.dispose();
+    enforcePortraitMode();
     super.dispose();
+  }
+
+  void enforcePortraitMode() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
   }
 
   @override

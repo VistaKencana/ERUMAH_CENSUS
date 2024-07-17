@@ -21,7 +21,13 @@ class AppSize {
 
   double getGridAspectRatio() {
     final isMobile = screenWidth! < 400;
+    final isBigTablet = screenWidth! > 490;
     const mRatio = 16 / 8;
-    return isMobile ? mRatio : 16 / 4.2;
+    const smallTabRatio = 16 / 4.2;
+    return isMobile
+        ? mRatio
+        : isBigTablet
+            ? 16 / 6
+            : smallTabRatio;
   }
 }
