@@ -4,15 +4,17 @@ import 'my_kad_controller.dart';
 
 class MyKadWidget extends StatefulWidget {
   final MyKadController controller;
-  final Widget Function(BuildContext context, String msg) builder;
+  final Widget Function(BuildContext context, String msg)? builder;
+  final void Function(String msg)? onListen;
   final void Function(bool val) onCardSuccess;
   final void Function(bool val) onVerifyFP;
   const MyKadWidget(
       {super.key,
       required this.controller,
-      required this.builder,
+      this.builder,
       required this.onCardSuccess,
-      required this.onVerifyFP});
+      required this.onVerifyFP,
+      this.onListen});
 
   @override
   State<MyKadWidget> createState() => _MyKadWidgetState();
@@ -30,8 +32,11 @@ class _MyKadWidgetState extends State<MyKadWidget> {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
           final msg = snapshot.data?.message ?? "";
-          setFunction(msg.toLowerCase());
-          return widget.builder(context, msg);
+          setListener(msg);
+          setFunction(msg);
+          return widget.builder != null
+              ? widget.builder!(context, msg)
+              : const SizedBox();
         } else {
           return const Text('No device found');
         }
@@ -39,17 +44,24 @@ class _MyKadWidgetState extends State<MyKadWidget> {
     );
   }
 
+  setListener(String msg) {
+    if (widget.onListen != null) {
+      widget.onListen!(msg);
+    }
+  }
+
   setFunction(String msg) {
-    if (msg.contains("remove card") || msg.contains("insert card")) {
+    final lowerMsg = msg.toLowerCase();
+    if (lowerMsg.contains("remove card") || lowerMsg.contains("insert card")) {
       widget.onCardSuccess(false);
       widget.onVerifyFP(false);
-    } else if (msg.contains("read card successful")) {
+    } else if (lowerMsg.contains("read card successful")) {
       widget.onCardSuccess(true);
     }
 
-    if (msg.contains("verification successful")) {
+    if (lowerMsg.contains("verification successful")) {
       widget.onVerifyFP(true);
-    } else if (msg.contains("try again")) {
+    } else if (lowerMsg.contains("try again")) {
       widget.onVerifyFP(false);
     }
   }

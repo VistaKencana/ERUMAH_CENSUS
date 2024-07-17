@@ -45,6 +45,8 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
     ).show(context);
   }
 
+  bool isVerifyFP = false;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
@@ -134,8 +136,16 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                   child: ListTile(
                     tileColor: Colors.white,
                     leading: const Icon(Icons.fingerprint),
+                    trailing: Icon(
+                      isVerifyFP ? Icons.check_circle : Icons.warning,
+                      color: isVerifyFP ? Colors.green : Colors.amber,
+                    ),
                     title: const Text("Sahkan Cap Jari"),
-                    onTap: () => _go(const BancianFingerprint()),
+                    onTap: () => _go(BancianFingerprint(
+                      onVerifyFP: (val) {
+                        setState(() => isVerifyFP = val);
+                      },
+                    )),
                   ),
                 ),
                 _gap(),
