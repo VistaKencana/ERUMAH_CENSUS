@@ -46,16 +46,22 @@ class _DocScannerState extends State<DocScanner> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        appBar: CustomAppBar(
+    return Scaffold(
+        appBar: const CustomAppBar(
           title: "Gambar Kad",
-          foregroundColor: Colors.white,
         ),
-        extendBodyBehindAppBar: true,
         body: Center(
             child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Document SCanner"),
+            const CircularProgressIndicator(),
+            const Text("Document Scanner"),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("Exit"))
           ],
         )));
   }
