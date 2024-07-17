@@ -70,6 +70,7 @@ flutter {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 configurations.all {
     resolutionStrategy {
         eachDependency {
@@ -81,6 +82,8 @@ configurations.all {
 }
 =======
 >>>>>>> fddb770 (add sdk library)
+=======
+>>>>>>> 0f477cc (add sdk library)
 repositories {
     flatDir {
         dirs 'libs/'
