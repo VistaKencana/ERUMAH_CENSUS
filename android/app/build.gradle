@@ -69,15 +69,6 @@ flutter {
     source = "../.."
 }
 
-configurations.all {
-    resolutionStrategy {
-        eachDependency {
-            if ((requested.group == "org.jetbrains.kotlin") && (requested.name.startsWith("kotlin-stdlib"))) {
-                useVersion("1.8.0")
-            }
-        }
-    }
-}
 repositories {
     flatDir {
         dirs 'libs/'
@@ -91,4 +82,14 @@ dependencies {
     }
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
     implementation 'com.google.code.gson:gson:2.10.1'
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency {
+            if ((requested.group == "org.jetbrains.kotlin") && (requested.name.startsWith("kotlin-stdlib"))) {
+                useVersion("1.8.0")
+            }
+        }
+    }
 }
