@@ -30,7 +30,7 @@ enum ReaderStatus {
   cardFailed(
       title: "Remove card and try again",
       imgSrc: "assets/images/failed_card.png",
-      query: "try again"),
+      query: "and try again"),
   remove(
       title: "Remove card",
       imgSrc: "assets/images/remove_card.png",
@@ -46,7 +46,7 @@ enum ReaderStatus {
   failedFP(
       title: "Error: Please try again in 3 second",
       imgSrc: "assets/images/fp_failed.png",
-      query: "3 second"),
+      query: "Error: Please"),
   loading(title: "Loading ...", imgSrc: "", query: "loading"),
   loadingFP(
       title: "Verifying Fingerprint...",
@@ -63,6 +63,13 @@ enum ReaderStatus {
 
   bool get isNotBlink =>
       this == ReaderStatus.cardSuccess || this == ReaderStatus.successFP;
+
+  static ReaderStatus queryStatus(String query) {
+    final result = ReaderStatus.values
+        .where((stat) => query.toLowerCase().contains(stat.query.toLowerCase()))
+        .toList();
+    return result.isNotEmpty ? result.first : ReaderStatus.loading;
+  }
 
   const ReaderStatus(
       {required this.title, required this.imgSrc, required this.query});
