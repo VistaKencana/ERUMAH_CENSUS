@@ -12,14 +12,19 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+PageController homePageController = PageController();
+
+moveScreenTo(int index) {
+  homePageController.animateToPage(index,
+      duration: const Duration(milliseconds: 300), curve: Curves.linear);
+}
+
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
   }
 
   void _onPageChanged(int page) {
@@ -29,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onItemTapped(int index) {
-    _pageController.animateToPage(
+    homePageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -46,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
         body: PageView(
-          controller: _pageController,
+          controller: homePageController,
           onPageChanged: _onPageChanged,
           children: List.generate(BottomNavItem.values.length,
               (index) => BottomNavItem.values[index].screen),
