@@ -50,8 +50,8 @@ class MyKadController {
           setMessage(msg: "Read card successful", data: data);
           if (verifyFP) {
             await MyKadReader.turnOnFP();
-            setMessage(msg: "Please place your fingerprint at the scanner");
             await addDelay(milisec: 2500);
+            setMessage(msg: "Initialize Fingerprint Hardware...");
             await MyKadReader.getFPDeviceList();
             await addDelay(milisec: 2000);
             await connectAndScanFP();
@@ -63,17 +63,15 @@ class MyKadController {
         },
         onVerifyFP: () {
           //Verifying Fingerprint
-          setMessage(msg: "Verifying Fingerprint...");
+          setMessage(msg: "Please place your fingerprint at the scanner");
         },
         onSuccessFP: () {
           //Success verify fingerprint
           setMessage(msg: "User verification successful");
         },
         onErrorFP: () async {
-          //Please try again in 3 second
-          setMessage(msg: "Error: Please try again in 3 second");
-          await addDelay(milisec: 3000);
-          await connectAndScanFP();
+          //Please try again
+          setMessage(msg: "Error: Please try again");
         },
       );
     }
@@ -85,6 +83,15 @@ class MyKadController {
   void addData(ReaderResponse data) => controller?.sink.add(data);
 
   Future connectAndScanFP() async {
+    await MyKadReader.disconnectFPScanner();
+    await addDelay();
+    await MyKadReader.connectFPScanner();
+    await addDelay();
+    await MyKadReader.readFingerprint();
+  }
+
+  Future tryAgain() async {
+    setMessage(msg: "Initialize Fingerprint Hardware...");
     await MyKadReader.disconnectFPScanner();
     await addDelay();
     await MyKadReader.connectFPScanner();

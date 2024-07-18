@@ -142,16 +142,17 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                       color: isVerifyFP ? Colors.green : Colors.amber,
                     ),
                     title: const Text("Sahkan Cap Jari"),
-                    onTap: () => _go(BancianFingerprint(
-                      onVerifyFP: (val) {
-                        if (isVerifyFP) {
-                          Fluttertoast.showToast(
-                              msg: "Cap jari sudah disahkan");
-                          return;
-                        }
-                        setState(() => isVerifyFP = val);
-                      },
-                    )),
+                    onTap: () {
+                      if (isVerifyFP) {
+                        Fluttertoast.showToast(msg: "Cap jari sudah disahkan");
+                        return;
+                      }
+                      _go(BancianFingerprint(
+                        onVerifyFP: (val) {
+                          setState(() => isVerifyFP = val);
+                        },
+                      ));
+                    },
                   ),
                 ),
                 _gap(),
@@ -175,7 +176,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
         bottomNavigationBar: BottomBarButton(
           title: "Selesai Bancian",
           onTap: () {
-            _go(const BancianResult());
+            _go(BancianResult(isVerify: isVerifyFP));
           },
         ),
       )),
