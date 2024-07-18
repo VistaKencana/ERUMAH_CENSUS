@@ -10,6 +10,7 @@ import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.
 import 'package:eperumahan_bancian/screens/bancian-forms/pendapatan/pendapatan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form_v2.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../components/borang_listtile.dart';
@@ -143,6 +144,11 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                     title: const Text("Sahkan Cap Jari"),
                     onTap: () => _go(BancianFingerprint(
                       onVerifyFP: (val) {
+                        if (isVerifyFP) {
+                          Fluttertoast.showToast(
+                              msg: "Cap jari sudah disahkan");
+                          return;
+                        }
                         setState(() => isVerifyFP = val);
                       },
                     )),
