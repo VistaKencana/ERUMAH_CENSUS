@@ -44,14 +44,14 @@ enum ReaderStatus {
       imgSrc: "assets/images/fp_success.png",
       query: "verification successful"),
   failedFP(
-      title: "Error: Please try again in 3 second",
+      title: "Error: Please try again",
       imgSrc: "assets/images/fp_failed.png",
-      query: "Error: Please"),
+      query: "error: please"),
   loading(title: "Loading ...", imgSrc: "", query: "loading"),
   loadingFP(
-      title: "Verifying Fingerprint...",
+      title: "Initialize Fingerprint Hardware...",
       imgSrc: "",
-      query: "verifying fingerprint"),
+      query: "initialize fingerprint"),
   ;
 
   final String title;
@@ -63,6 +63,8 @@ enum ReaderStatus {
 
   bool get isNotBlink =>
       this == ReaderStatus.cardSuccess || this == ReaderStatus.successFP;
+
+  bool get showTryAgain => this == ReaderStatus.failedFP;
 
   static ReaderStatus queryStatus(String query) {
     final result = ReaderStatus.values

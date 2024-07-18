@@ -6,7 +6,8 @@ import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 
 class BancianResult extends StatefulWidget {
-  const BancianResult({super.key});
+  final bool isVerify;
+  const BancianResult({super.key, required this.isVerify});
 
   @override
   State<BancianResult> createState() => _BancianResultState();
@@ -62,7 +63,7 @@ class _BancianResultState extends State<BancianResult> {
                           _listileWidget(
                               icon: Icons.fingerprint,
                               title: "Cap jari",
-                              isChecked: false),
+                              isChecked: widget.isVerify),
                           SizedBox(height: constraint.maxHeight * .04),
                           SizedBox(
                               height: 48,

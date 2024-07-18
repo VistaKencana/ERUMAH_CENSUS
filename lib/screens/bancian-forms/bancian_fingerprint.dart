@@ -100,6 +100,11 @@ class _BancianFingerprintState extends State<BancianFingerprint>
                                 style: const TextStyle(
                                     fontSize: 24, fontWeight: FontWeight.w700),
                               ),
+                        Visibility(
+                            visible: readerStatus.showTryAgain,
+                            child: ElevatedButton(
+                                onPressed: myKadController.tryAgain,
+                                child: const Text("Try Again")))
                       ],
                     ),
                   );
