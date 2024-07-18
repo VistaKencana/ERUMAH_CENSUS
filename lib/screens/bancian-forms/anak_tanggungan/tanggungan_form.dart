@@ -48,6 +48,7 @@ class _TanggunganFormState extends State<TanggunganForm> {
               onTap: () {
                 const TanggunganModal(
                   isEdit: true,
+                  isAnak: true,
                 ).show(context);
               },
               contentPadding: const EdgeInsets.all(12),
@@ -82,6 +83,7 @@ class _TanggunganFormState extends State<TanggunganForm> {
               onTap: () {
                 const TanggunganModal(
                   isEdit: true,
+                  isAnak: false,
                 ).show(context);
               },
               contentPadding: const EdgeInsets.all(12),
@@ -98,21 +100,23 @@ class _TanggunganFormState extends State<TanggunganForm> {
               title: const Text("Tambah tanggungan"),
             ),
             const Divider(height: 0),
-            _customTile(title: "Tanggungan 1", name: "Liyana Aina"),
-            _customTile(title: "Tanggungan 2", name: "Nur Fatin")
+            _customTile(
+                title: "Tanggungan 1", name: "Liyana Aina", isAnak: false),
+            _customTile(title: "Tanggungan 2", name: "Nur Fatin", isAnak: false)
           ],
         ),
       ),
     );
   }
 
-  _customTile({required String title, required String name}) {
+  _customTile(
+      {required String title, required String name, bool isAnak = true}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         ListTile(
           onTap: () {
-            const TanggunganModal().show(context);
+            TanggunganModal(isAnak: isAnak).show(context);
           },
           contentPadding: const EdgeInsets.all(12),
           leading: const CircleAvatar(

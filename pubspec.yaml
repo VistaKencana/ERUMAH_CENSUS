@@ -40,8 +40,9 @@ dependencies:
   qr_code_scanner: ^1.0.1
   permission_handler: ^11.3.1
   image: ^4.2.0
-  camera: ^0.11.0+1
-
+  camera: ^0.10.6
+  cunning_document_scanner: ^1.2.3
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

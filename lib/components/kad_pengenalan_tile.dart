@@ -1,91 +1,81 @@
+import 'dart:typed_data';
+
+import 'package:eperumahan_bancian/components/card_display.dart';
+import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class KadPengenalanTile extends StatelessWidget {
-  const KadPengenalanTile({super.key});
+class KadPengenalanTile extends StatefulWidget {
+  final void Function(Uint8List bytes) onFrontCard;
+  final void Function(Uint8List bytes) onBackCard;
+  const KadPengenalanTile(
+      {super.key, required this.onFrontCard, required this.onBackCard});
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      child: ExpansionTile(
-        initiallyExpanded: true,
-        backgroundColor: Colors.white,
-        shape: const Border(),
-        title: const Row(
-          children: [
-            Text("Kad Pengenalan"),
-            SizedBox(width: 4),
-            Text(
-              "*",
-              style: TextStyle(color: Colors.red),
-            )
-          ],
-        ),
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 12, right: 12, bottom: 20),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  _cameraContainer(context, title: "Kad Pengenalan Depan"),
-                  const SizedBox(width: 10),
-                  _cameraContainer(context, title: "Kad Pengenalan Belakang"),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  State<KadPengenalanTile> createState() => _KadPengenalanTileState();
+}
 
-  _cameraContainer(BuildContext context, {required String title}) {
-    return Column(
-      children: [
-        Container(
-          // width: MediaQuery.sizeOf(context).width * .4,
-          width: 250,
-          height: 150,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            border: Border.all(
-              color: Colors.grey,
-              style: BorderStyle.solid,
-              width: 2.0,
-            ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
+class _KadPengenalanTileState extends State<KadPengenalanTile> {
+  Uint8List? frontCard;
+  Uint8List? backCard;
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      child: Card(
+        color: Colors.white,
+        elevation: 0,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8, bottom: 8),
+          child: ExpansionTile(
+            initiallyExpanded: true,
+            backgroundColor: Colors.white,
+            shape: const Border(),
+            title: Row(
               children: [
-                Icon(
-                  Icons.camera_alt,
-                  size: 40,
-                  color: Colors.grey,
+                Text(
+                  "Kad Pengenalan",
+                  style: appTextStyle(size: 20, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10),
-                Center(
-                  child: Text(
-                    'Buka kamera & Ambil Gambar',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
+                const SizedBox(width: 4),
+                const Text(
+                  "*",
+                  style: TextStyle(color: Colors.red),
+                )
               ],
             ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 12, right: 12, bottom: 20),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      CardDisplay(
+                        title: "Kad Pengenalan Depan",
+                        img: frontCard,
+                        onPicture: (bytes) {
+                          setState(() => frontCard = bytes);
+                          widget.onFrontCard(bytes);
+                        },
+                      ),
+                      const SizedBox(width: 10),
+                      CardDisplay(
+                        title: "Kad Pengenalan Belakang",
+                        img: backCard,
+                        onPicture: (bytes) {
+                          setState(() => backCard = bytes);
+                          widget.onBackCard(bytes);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
           ),
         ),
-        const SizedBox(height: 10),
-        Text(title),
-      ],
+      ),
     );
   }
 }

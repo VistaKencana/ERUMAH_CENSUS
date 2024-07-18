@@ -1,9 +1,8 @@
+import 'package:eperumahan_bancian/components/activity_appbar.dart';
 import 'package:eperumahan_bancian/components/bg_image.dart';
-import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/bancian_qrscan.dart';
+import 'package:eperumahan_bancian/screens/activity/bancian_info_modal.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'model/bancian_info.dart';
 
 class ActivitySearchScreen extends StatefulWidget {
@@ -22,54 +21,69 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
     return BgImage(
         child: Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: CustomAppBar(
-        title: "Carian",
+      appBar: ActivityAppbar(
+        title: info[1].value,
         centerTitle: false,
         foregroundColor: AppColors.primary.color,
       ),
       body: ListView(
         children: [
-          Container(
-            margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Info Kawasan Bancian",
-                  style: appTextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.dimmedPurple.color),
-                ),
-                Text(
-                  info[1].value,
-                  style: appTextStyle(fontWeight: FontWeight.bold, size: 25),
-                ),
-                Text(
-                  "${info[0].value} • ${info[2].title} ${info[2].value} • ${info[3].title} ${info[3].value}",
-                  style: appTextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                        child: Text(
-                      "${info[4].title} ${info[4].value}",
-                      style: appTextStyle(fontWeight: FontWeight.bold),
-                    )),
-                    Expanded(
-                        child: Text(
-                      "${info[5].title} ${info[5].value}",
-                      style: appTextStyle(fontWeight: FontWeight.bold),
-                    )),
-                  ],
-                )
-              ],
+          Padding(
+            padding: const EdgeInsets.only(left: 12, top: 20),
+            child: Text(
+              "Info Kawasan Bancian",
+              style: appTextStyle(
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
+          Row(
+            children: [
+              _infoContainer(val: info[4].value, title: info[4].title),
+              _infoContainer(val: info[5].value, title: info[5].title),
+            ],
+          ),
+          // Container(
+          //   margin: const EdgeInsets.all(10),
+          //   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
+          //   decoration: BoxDecoration(
+          //       color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       Text(
+          //         "Info Kawasan Bancian",
+          //         style: appTextStyle(
+          //             fontWeight: FontWeight.w400,
+          //             color: AppColors.dimmedPurple.color),
+          //       ),
+          //       Text(
+          //         info[1].value,
+          //         style: appTextStyle(fontWeight: FontWeight.bold, size: 25),
+          //       ),
+          //       Text(
+          //         "${info[0].value} • ${info[2].title} ${info[2].value} • ${info[3].title} ${info[3].value}",
+          //         style: appTextStyle(fontWeight: FontWeight.bold),
+          //       ),
+          //       const SizedBox(height: 20),
+          //       Row(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Expanded(
+          //               child: Text(
+          //             "${info[4].title} ${info[4].value}",
+          //             style: appTextStyle(fontWeight: FontWeight.bold),
+          //           )),
+          //           Expanded(
+          //               child: Text(
+          //             "${info[5].title} ${info[5].value}",
+          //             style: appTextStyle(fontWeight: FontWeight.bold),
+          //           )),
+          //         ],
+          //       )
+          //     ],
+          //   ),
+          // ),
           Container(
             height: size.height * 0.55,
             margin: const EdgeInsets.all(10),
@@ -102,57 +116,18 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
                 ),
                 const SizedBox(height: 12),
                 Expanded(
-                    child: Scrollbar(
-                  child: ListView.separated(
-                    itemCount: 10,
-                    itemBuilder: (context, index) => _newInfoTile(),
-                    separatorBuilder: (context, index) =>
-                        const Divider(height: 0),
-                    // children: List.generate(
-                    //     10,
-                    //     (index) => ),
-                  ),
-                )),
-                // ...List.generate(
-                //     info.length,
-                //     (index) => _infoTile(
-                //         title: info[index].title, val: info[index].value)),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: List.generate(
-                //       carianFilter.length,
-                //       (index) => SizedBox(
-                //             width: (size.width / carianFilter.length) - 16,
-                //             child: CustomTextField(
-                //               title: carianFilter[index],
-                //               hintText: "Tulis ${carianFilter[index]}",
-                //             ),
-                //           )),
-                // ),
-                // Align(
-                //   alignment: Alignment.centerRight,
-                //   child: ElevatedButton(
-                //     onPressed: () {},
-                //     child: const Text("Carian"),
-                //   ),
-                // ),
-                // SizedBox(
-                //   width: double.infinity,
-                //   child: FittedBox(
-                //     child: DataTableWidget(
-                //       columns: const ["Bil.", "No Unit", "Status", "Tindakan"],
-                //       rowLength: 7,
-                //       rowGenerator: (index) {
-                //         return DataTableWidget.dataRow(
-                //           bil: "${index + 1}.",
-                //           unit: "0$index-0$index-0$index",
-                //           bilstatus: "Belum Selesai",
-                //           onPressed: () => _go(const BancianMainScreen()),
-                //         );
-                //       },
-                //     ),
-                //   ),
-                // )
+                  child: Scrollbar(
+                      child: ListView(
+                    children: [
+                      _newInfoTile(lawatan: 1, isComplete: false),
+                      _newInfoTile(lawatan: 2, isComplete: true),
+                      _newInfoTile(lawatan: 3, isComplete: true),
+                      _newInfoTile(lawatan: 1, isComplete: false),
+                      _newInfoTile(lawatan: 2, isComplete: true),
+                      _newInfoTile(lawatan: 2, isComplete: true),
+                    ],
+                  )),
+                ),
               ],
             ),
           )
@@ -161,29 +136,32 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
     ));
   }
 
-  // _infoTile({required String title, required String val}) {
-  //   return ListTile(
-  //     contentPadding: EdgeInsets.zero,
-  //     dense: true,
-  //     title: Text(
-  //       title,
-  //       style: const TextStyle(fontSize: 14),
-  //     ),
-  //     trailing: Text(
-  //       val,
-  //       style: const TextStyle(fontSize: 14),
-  //     ),
-  //   );
-  // }
+  _infoContainer({required String val, required String title}) {
+    return Container(
+      width: MediaQuery.sizeOf(context).width * .44,
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        children: [
+          Text(
+            val,
+            style: appTextStyle(size: 22, fontWeight: FontWeight.bold),
+          ),
+          Text(title),
+        ],
+      ),
+    );
+  }
 
-  _newInfoTile() {
+  _newInfoTile({required int lawatan, bool isComplete = true}) {
     return ListTile(
-      onTap: () => _go(const BancianQrscan()),
-      // onTap: () => _go(const BancianMainScreen()),
+      onTap: () => const BancianInfosModal().show(context),
       minLeadingWidth: 0,
       leading: Container(
         decoration: BoxDecoration(
-          color: AppColors.lightGrey.color,
+          color: AppColors.midGrey.color,
           shape: BoxShape.circle,
         ),
         padding: const EdgeInsets.all(10),
@@ -194,17 +172,17 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
       isThreeLine: true,
       dense: true,
       title: const Text("NOMBOR UNIT"),
-      subtitle: const Column(
+      subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("01-01-01"),
-          Text("Kota Damansara • Lawatan 4"),
+          const Text("01-01-01"),
+          Text("Kota Damansara • Lawatan $lawatan"),
         ],
       ),
       trailing: Chip(
-        color: const WidgetStatePropertyAll(Colors.green),
+        color: WidgetStatePropertyAll(isComplete ? Colors.green : Colors.amber),
         label: Text(
-          "SELESAI",
+          isComplete ? "SELESAI" : "BELUM DIBANCI",
           style: appTextStyle(
               size: 10, fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -213,7 +191,4 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
       ),
     );
   }
-
-  _go(Widget screen) => Navigator.push(context,
-      PageTransition(child: screen, type: PageTransitionType.rightToLeft));
 }

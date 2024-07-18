@@ -1,10 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/components/custom_underline_field.dart';
+import 'package:eperumahan_bancian/components/disability_checkbox.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_main_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../../../components/card_display.dart';
 import '../../../components/custom_appbar.dart';
 
 class PenghuniForm extends StatefulWidget {
@@ -18,6 +22,9 @@ class PenghuniForm extends StatefulWidget {
 class _PenghuniFormState extends State<PenghuniForm> {
   _isEdit() => (widget.isEdit != null && widget.isEdit == true);
   _isReadOnly() => _isEdit() ? false : true;
+  Uint8List? frontCard;
+  Uint8List? backCard;
+  Uint8List? okuCard;
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.sizeOf(context);
@@ -63,30 +70,58 @@ class _PenghuniFormState extends State<PenghuniForm> {
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const KadPengenalanTile(),
+              KadPengenalanTile(
+                onFrontCard: (bytes) {
+                  setState(() => frontCard = bytes);
+                },
+                onBackCard: (bytes) {
+                  setState(() => backCard = bytes);
+                },
+              ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 4, vertical: 14),
                 child: TwoColumnForm(
                   children: [
                     _textField(
-                        initialValue: "",
                         title: 'Nama Penuh',
+                        initialValue: "Arif Aiman",
                         readOnly: _isReadOnly()),
-                    _textField(title: 'Bilangan Isi Rumah'),
+                    _textField(title: 'Bilangan Isi Rumah', initialValue: "2"),
                     _textField(
-                        title: 'No. Kad Pengenalan', readOnly: _isReadOnly()),
-                    _textField(title: 'Emel'),
-                    _textField(title: 'Umur(Tahun)', readOnly: _isReadOnly()),
-                    _textField(title: 'No Telefon'),
-                    _textField(title: 'Jantina', readOnly: _isReadOnly()),
-                    _textField(title: 'Bangsa', readOnly: _isReadOnly()),
-                    _textField(title: 'Kecacatan (OKU)'),
-                    _textField(title: 'Jenis Pekerjaan'),
-                    _textField(title: 'Status Perkahwinan'),
+                        title: 'No. Kad Pengenalan',
+                        initialValue: "7056448140568",
+                        readOnly: _isReadOnly()),
+                    _textField(
+                        title: 'Emel', initialValue: "arifaiman@gmail.com"),
+                    _textField(
+                        title: 'Umur(Tahun)',
+                        initialValue: "50",
+                        readOnly: _isReadOnly()),
+                    _textField(title: 'No Telefon', initialValue: "0186456762"),
+                    _textField(
+                        title: 'Jantina',
+                        readOnly: _isReadOnly(),
+                        initialValue: "Lelaki"),
+                    _textField(
+                        title: 'Bangsa',
+                        readOnly: _isReadOnly(),
+                        initialValue: "Melayu"),
+                    _textField(
+                        title: 'Jenis Pekerjaan', initialValue: "Persendirian"),
+                    _textField(
+                        title: 'Status Perkahwinan', initialValue: "Berkahwin"),
+                    // _textField(title: 'Kecacatan (OKU)'),
                   ],
                 ),
+              ),
+              DisabilityCheckbox(initVal: false, onCheck: (val) {}),
+              CardDisplay(
+                title: "",
+                img: okuCard,
+                onPicture: (bytes) => setState(() => okuCard = bytes),
               ),
               const SizedBox(height: 10),
             ],

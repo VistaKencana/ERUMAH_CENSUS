@@ -27,7 +27,7 @@ class RoutesGenerator {
             child: const HomeScreen());
       case RoutesName.activitySearch:
         return PageTransition(
-            type: PageTransitionType.bottomToTop,
+            type: PageTransitionType.rightToLeft,
             settings: const RouteSettings(name: RoutesName.activitySearch),
             child: const ActivitySearchScreen());
       default:

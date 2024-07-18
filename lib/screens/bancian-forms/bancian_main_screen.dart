@@ -3,11 +3,12 @@ import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_textfield.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/tanggungan_form.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_result.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_status_field.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pendapatan/pendapatan_form.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -62,6 +63,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
           onPressedBack: _onPop,
         ),
         body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
@@ -113,7 +115,8 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                 ),
                 _borangTile(
                     label: "Maklumat Penghuni",
-                    screen: PenghuniForm(isEdit: widget.isEdit)),
+                    screen: PenghuniFormV2(isEdit: widget.isEdit)),
+                // screen: PenghuniForm(isEdit: widget.isEdit)),
                 _borangTile(
                     label: "Maklumat Pasangan", screen: const PasanganForm()),
                 _borangTile(
@@ -128,16 +131,17 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all()),
-                  child: const ListTile(
+                  child: ListTile(
                     tileColor: Colors.white,
-                    leading: Icon(Icons.fingerprint),
-                    title: Text("Sahkan Cap Jari"),
+                    leading: const Icon(Icons.fingerprint),
+                    title: const Text("Sahkan Cap Jari"),
+                    onTap: () => _go(const BancianFingerprint()),
                   ),
                 ),
                 _gap(),
                 _section("Status Bancian"),
                 const BancianStatusField(
-                  initialVal: "Bancian Biasa",
+                  initialVal: "Bancian Berjaya",
                 ),
                 _gap(),
                 _section("Catatan"),
