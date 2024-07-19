@@ -1,6 +1,7 @@
 import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/config/constants/app_size.dart';
+import 'package:eperumahan_bancian/screens/dashboard/kawasan_modal.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -78,7 +79,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _title(title: "PPR Sri Selangor", padding: EdgeInsets.zero),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _title(
+                            title: "PPR Sri Selangor",
+                            padding: EdgeInsets.zero),
+                        IconButton(
+                            onPressed: () {
+                              const KawasanModal().show(context);
+                            },
+                            icon: const Icon(Icons.keyboard_arrow_down_rounded))
+                      ],
+                    ),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 2),
@@ -123,6 +136,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ],
                 ),
               ),
+              const SizedBox(height: 30),
             ],
           ),
         ),
@@ -131,24 +145,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   _title(
-      {required String title, String? subtitle, EdgeInsetsGeometry? padding}) {
-    return Padding(
-      padding: padding ?? const EdgeInsets.only(left: 16, bottom: 12),
-      child: Row(
-        children: [
-          Text(
-            title,
-            style: appTextStyle(
-                color: AppColors.primary.color,
-                size: 22,
-                fontWeight: FontWeight.bold),
-          ),
-          Text(subtitle ?? "",
+      {required String title,
+      String? subtitle,
+      EdgeInsetsGeometry? padding,
+      void Function()? onTap,
+      Color? color}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        color: color,
+        padding: padding ?? const EdgeInsets.only(left: 16, bottom: 12),
+        child: Row(
+          children: [
+            Text(
+              title,
               style: appTextStyle(
-                color: AppColors.primary.color,
-                size: 14,
-              )),
-        ],
+                  color: AppColors.primary.color,
+                  size: 22,
+                  fontWeight: FontWeight.bold),
+            ),
+            Text(subtitle ?? "",
+                style: appTextStyle(
+                  color: AppColors.primary.color,
+                  size: 14,
+                )),
+          ],
+        ),
       ),
     );
   }
