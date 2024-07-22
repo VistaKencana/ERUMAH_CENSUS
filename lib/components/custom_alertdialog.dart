@@ -33,25 +33,32 @@ class CustomAlertDialog extends StatefulWidget {
 class _CustomAlertDialogState extends State<CustomAlertDialog> {
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      title: Text(widget.title),
-      content: widget.position == AlertBtnPosition.topDown
-          ? Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [_subtitle(), gapHeight(), ..._listButton()],
-            )
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _subtitle(),
-                gapHeight(height: 20),
-                Row(
-                  children: _listButton().reversed.toList(),
-                )
-              ],
-            ),
+    return ScaleTransition(
+      scale: CurvedAnimation(
+        parent: ModalRoute.of(context)!.animation!,
+        curve: Curves.easeOut,
+        reverseCurve: Curves.easeIn,
+      ),
+      child: AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        title: Text(widget.title),
+        content: widget.position == AlertBtnPosition.topDown
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [_subtitle(), gapHeight(), ..._listButton()],
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _subtitle(),
+                  gapHeight(height: 20),
+                  Row(
+                    children: _listButton().reversed.toList(),
+                  )
+                ],
+              ),
+      ),
     );
   }
 
