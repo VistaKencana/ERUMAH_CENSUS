@@ -1,3 +1,4 @@
+import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -36,12 +37,14 @@ class DashboardHeader extends StatelessWidget {
                           children: [
                             IconButton(
                                 onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          child: const BancianQrscan(),
-                                          type:
-                                              PageTransitionType.leftToRight));
+                                  QrNavigationPref.setFromHome(val: true).then(
+                                    (val) => Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            child: const BancianQrscan(),
+                                            type: PageTransitionType
+                                                .leftToRight)),
+                                  );
                                 },
                                 icon: const Icon(Icons.qr_code_scanner)),
                             VerticalDivider(
