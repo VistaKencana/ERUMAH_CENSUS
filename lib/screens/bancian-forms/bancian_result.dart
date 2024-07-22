@@ -3,6 +3,7 @@ import 'package:eperumahan_bancian/components/check_icon.dart';
 import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
+import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:flutter/material.dart';
 
 class BancianResult extends StatefulWidget {
@@ -89,7 +90,13 @@ class _BancianResultState extends State<BancianResult> {
     );
   }
 
-  _goToSearch() {
+  _goToSearch() async {
+    final isFromHome = await QrNavigationPref.isFromHome();
+    if (!mounted) return;
+    if (isFromHome) {
+      Navigator.popUntil(context, ModalRoute.withName(RoutesName.home));
+      return;
+    }
     Navigator.popUntil(context, ModalRoute.withName(RoutesName.activitySearch));
   }
 
