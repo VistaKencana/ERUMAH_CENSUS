@@ -223,13 +223,13 @@ class _CameraWidgetState extends State<CameraWidget> {
                   showLoading(context);
                   await controller!.setFocusMode(FocusMode.locked);
                   await controller!.setExposureMode(ExposureMode.locked);
-                  controller!.pausePreview();
+                  // controller!.pausePreview();
                   final rawImg = await controller!.takePicture();
 
                   final uintImg = await rawImg.readAsBytes();
                   closeLoading();
                   widget.onTakePicture(uintImg);
-                  controller!.resumePreview();
+                  // controller!.resumePreview();
                   await controller!.setFocusMode(FocusMode.auto);
                   await controller!.setExposureMode(ExposureMode.auto);
                 },

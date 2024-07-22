@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../config/constants/app_colors.dart';
+import '../../data/hive-manager/repository/qr_navigation_pref.dart';
 
 class BancianInfosModal extends StatefulWidget {
   const BancianInfosModal({super.key});
@@ -87,11 +88,15 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
             ),
           ),
           bottomNavigationBar: BottomBarButton(
-              onTap: () => Navigator.push(
-                  context,
-                  PageTransition(
-                      child: const BancianQrscan(),
-                      type: PageTransitionType.rightToLeft)),
+              onTap: () {
+                QrNavigationPref.setFromHome(val: false).then(
+                  (val) => Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const BancianQrscan(),
+                          type: PageTransitionType.rightToLeft)),
+                );
+              },
               title: "Teruskan Bancian"),
         ),
       ),

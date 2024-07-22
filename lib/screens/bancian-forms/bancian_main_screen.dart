@@ -2,6 +2,7 @@ import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_textfield.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
+import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/tanggungan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_result.dart';
@@ -27,16 +28,23 @@ class BancianMainScreen extends StatefulWidget {
 
 class _BancianMainScreenState extends State<BancianMainScreen> {
   _isEdit() => (widget.isEdit != null && widget.isEdit == true);
-  _onPop() {
+  _onPop() async {
     if (_isEdit()) {
       Navigator.pop(context);
       return;
     }
+    final isFromHome = await QrNavigationPref.isFromHome();
+
+    if (!mounted) return;
     CustomAlertDialog(
       title: "Berhenti banci",
       subtitle: "Adakah anda akan berhenti membuat bancian?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
+        if (isFromHome) {
+          Navigator.popUntil(context, ModalRoute.withName(RoutesName.home));
+          return;
+        }
         Navigator.popUntil(
             context, ModalRoute.withName(RoutesName.activitySearch));
       },
