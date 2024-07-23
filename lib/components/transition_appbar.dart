@@ -9,9 +9,11 @@ class TransitionAppBar extends SliverPersistentHeader {
   final Color? backgroundColor;
   final Color? foregroundColor;
   final String name;
+  final void Function() onEdit;
   const TransitionAppBar(
       {super.key,
       required this.leading,
+      required this.onEdit,
       this.trailing,
       this.title,
       required this.name,
@@ -29,6 +31,7 @@ class TransitionAppBar extends SliverPersistentHeader {
           leading: leading,
           title: title,
           name: name,
+          onEdit: onEdit,
           backgroundColor: backgroundColor ?? Colors.white,
           foregroundColor: foregroundColor ?? Colors.black,
           extent: extent > 200 ? extent : 200,
@@ -66,8 +69,10 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
   final Color foregroundColor;
   final Widget? trailing;
   final String name;
+  final void Function() onEdit;
   _TransitionAppBarDelegate(
       {required this.leading,
+      required this.onEdit,
       this.title,
       this.trailing,
       required this.backgroundColor,
@@ -168,7 +173,7 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
                             fontWeight: FontWeight.bold),
                       ),
                       GestureDetector(
-                          onTap: () {},
+                          onTap: onEdit,
                           child: LayoutBuilder(builder: (context, cnstrnt) {
                             return Container(
                               margin: EdgeInsets.only(

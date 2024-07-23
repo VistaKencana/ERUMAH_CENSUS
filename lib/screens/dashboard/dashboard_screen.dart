@@ -6,6 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../components/indicator.dart';
+import '../../config/constants/app_images.dart';
 import 'dashboard_header.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return BgImage(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,9 +37,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade400)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -70,12 +71,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               _title(title: "Carta kawasan"),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 14),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                padding: const EdgeInsets.only(
+                    left: 16, right: 16, top: 20, bottom: 28),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade400)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -132,7 +133,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           isSquare: true,
                         ),
                       ],
-                    )
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 22),
+                color: Colors.grey.shade300,
+                height: 8,
+                width: double.infinity,
+              ),
+              const SizedBox(height: 4),
+              _title(title: 'Makmulat Telefon'),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade400)),
+                child: Column(
+                  children: [
+                    listTile(title: "Admin", phoneNo: "+6034865745614"),
+                    listTile(
+                        title: "Pejabat Zon 1 ",
+                        phoneNo: "+6034865745614",
+                        addDivider: false),
                   ],
                 ),
               ),
@@ -192,6 +218,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         Text(title),
       ],
+    );
+  }
+
+  listTile(
+      {required String title,
+      required String phoneNo,
+      bool addDivider = true}) {
+    return Column(
+      children: [
+        ListTile(
+          contentPadding: const EdgeInsets.all(8),
+          tileColor: Colors.white,
+          leading: Image.asset(
+            AppImages.custService.path,
+            height: 45,
+          ),
+          title: Text(title),
+          subtitle: Text(phoneNo),
+          trailing: const Icon(Icons.chevron_right),
+        ),
+        Visibility(
+          visible: addDivider,
+          child: _divider(),
+        ),
+      ],
+    );
+  }
+
+  _divider() {
+    return const Divider(
+      height: 0,
+      indent: 16,
+      endIndent: 14,
     );
   }
 }
