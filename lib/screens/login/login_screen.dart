@@ -1,4 +1,5 @@
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/screens/password/forget_password_screen.dart';
 import 'package:eperumahan_bancian/screens/register/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -92,7 +93,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: const ForgetPasswordScreen(),
+                                  type: PageTransitionType.rightToLeft));
+                        },
                         style: TextButton.styleFrom(
                           alignment: Alignment.centerLeft,
                           padding: EdgeInsets.zero,

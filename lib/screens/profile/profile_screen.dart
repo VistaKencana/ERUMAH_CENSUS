@@ -1,5 +1,8 @@
 import 'package:eperumahan_bancian/components/transition_appbar.dart';
+import 'package:eperumahan_bancian/screens/profile/profile_change_pwd_screen.dart';
+import 'package:eperumahan_bancian/screens/profile/profile_update_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../components/custom_alertdialog.dart';
 import '../../config/routes/routes_name.dart';
@@ -21,6 +24,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             //To avoid extra scrolling Absorber & Injector
             handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
             sliver: TransitionAppBar(
+              onEdit: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: const ProfileUpdateScreen(),
+                        type: PageTransitionType.rightToLeft));
+              },
               delegate: TemparoryDelegate(),
               leading: Container(
                 padding: const EdgeInsets.all(10),
@@ -32,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Icons.person,
                 ),
               ),
-              name: "Ahmad Muizzuddin",
+              name: "Ahmad Hazim",
             ),
           ),
         ];
@@ -52,6 +62,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const Text(
                     "Tetapan",
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  _profileTile(
+                    icon: Icons.lock_outline_rounded,
+                    title: "Ubah Kata Laluan",
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              child: const ProfileChangePwdScreen(),
+                              type: PageTransitionType.rightToLeft));
+                    },
                   ),
                   const SizedBox(height: 10),
                   _profileTile(
