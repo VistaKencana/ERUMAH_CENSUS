@@ -49,6 +49,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   another_flushbar: ^1.12.30
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
