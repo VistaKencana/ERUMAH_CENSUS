@@ -8,9 +8,9 @@ import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:flutter/material.dart';
 import '../../../components/disability_checkbox.dart';
 
-class TanggunganModal extends StatefulWidget {
+class AnakModal extends StatefulWidget {
   final bool? isEdit;
-  const TanggunganModal({super.key, this.isEdit});
+  const AnakModal({super.key, this.isEdit});
   Future<T?> show<T>(BuildContext context) {
     return showModalBottomSheet<T>(
       context: context,
@@ -23,10 +23,10 @@ class TanggunganModal extends StatefulWidget {
   }
 
   @override
-  State<TanggunganModal> createState() => _TanggunganModalState();
+  State<AnakModal> createState() => _AnakModalState();
 }
 
-class _TanggunganModalState extends State<TanggunganModal> {
+class _AnakModalState extends State<AnakModal> {
   _isEdit() => (widget.isEdit != null && widget.isEdit == true);
   _isReadOnly() => _isEdit() ? false : true;
   Uint8List? frontCard;
@@ -74,7 +74,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _textField(
-                                  title: 'Nama Tanggungan',
+                                  title: 'Nama Anak',
                                   initialValue: "Nur Fatin",
                                   width: double.infinity,
                                   readOnly: _isReadOnly()),
@@ -164,7 +164,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
 
   String _getHeaderTitle() {
     String prefix = _isEdit() ? "Tambah " : "Maklumat ";
-    String title = 'Tanggungan';
+    String title = 'Anak';
     return prefix + title;
   }
 

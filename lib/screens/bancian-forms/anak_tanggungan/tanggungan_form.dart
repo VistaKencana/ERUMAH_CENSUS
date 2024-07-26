@@ -1,5 +1,6 @@
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/anak_modal.dart';
 import 'package:flutter/material.dart';
 
 import 'tanggungan_modal.dart';
@@ -46,9 +47,8 @@ class _TanggunganFormState extends State<TanggunganForm> {
           children: [
             ListTile(
               onTap: () {
-                const TanggunganModal(
+                const AnakModal(
                   isEdit: true,
-                  isAnak: true,
                 ).show(context);
               },
               contentPadding: const EdgeInsets.all(12),
@@ -83,7 +83,6 @@ class _TanggunganFormState extends State<TanggunganForm> {
               onTap: () {
                 const TanggunganModal(
                   isEdit: true,
-                  isAnak: false,
                 ).show(context);
               },
               contentPadding: const EdgeInsets.all(12),
@@ -116,7 +115,9 @@ class _TanggunganFormState extends State<TanggunganForm> {
       children: [
         ListTile(
           onTap: () {
-            TanggunganModal(isAnak: isAnak).show(context);
+            isAnak
+                ? const AnakModal().show(context)
+                : const TanggunganModal().show(context);
           },
           contentPadding: const EdgeInsets.all(12),
           leading: const CircleAvatar(
