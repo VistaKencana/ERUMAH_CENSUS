@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
+import 'package:eperumahan_bancian/screens/activity/bancian_info_modal.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/qr/bancian_register_qr.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -38,59 +39,83 @@ class _QrScanScreenState extends State<QrScanScreen> {
         centerTitle: true,
         backgroundColor: Colors.transparent,
       ),
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Column(
-            children: <Widget>[
-              Expanded(
-                child: _buildQrView(context),
-              ),
-            ],
-          ),
-          Positioned(
-              bottom: 200,
-              child: GestureDetector(
-                onTap: () async {
-                  controller?.pauseCamera();
-                  CustomAlertDialog(
-                    title: "QR tidak berdaftar!",
-                    subtitle: "QR perlu di daftar sebelum digunakan.",
-                    colorBtnLabel: "Daftar QR",
-                    onColorBtn: () async {
-                      Navigator.pop(context);
-                      Future.delayed(const Duration(milliseconds: 150), () {
+      body: LayoutBuilder(builder: (context, constaint) {
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            Column(
+              children: <Widget>[
+                Expanded(
+                  child: _buildQrView(context),
+                ),
+              ],
+            ),
+            Positioned(
+                bottom: constaint.maxHeight * 0.2,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _roundedButton(
+                      title: "Daftar QR",
+                      onTap: () async {
                         controller?.pauseCamera();
-                        const BancianRegisterQr()
+                        CustomAlertDialog(
+                          title: "QR tidak berdaftar!",
+                          subtitle: "QR perlu di daftar sebelum digunakan.",
+                          colorBtnLabel: "Daftar QR",
+                          onColorBtn: () async {
+                            Navigator.pop(context);
+                            Future.delayed(const Duration(milliseconds: 150),
+                                () {
+                              controller?.pauseCamera();
+                              const BancianRegisterQr()
+                                  .show(context)
+                                  .then((val) => controller?.resumeCamera());
+                            });
+                          },
+                          dimmedBtnLabel: "Kembali",
+                          onDimmedBtn: () => Navigator.pop(context),
+                        )
                             .show(context)
                             .then((val) => controller?.resumeCamera());
-                      });
-                    },
-                    dimmedBtnLabel: "Kembali",
-                    onDimmedBtn: () => Navigator.pop(context),
-                  ).show(context).then((val) => controller?.resumeCamera());
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                  decoration: const ShapeDecoration(
-                      shape: StadiumBorder(), color: Colors.black26),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Seterusnya",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Icon(
-                        Icons.chevron_right,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
-                ),
-              ))
-        ],
+                      },
+                    ),
+                    _roundedButton(
+                      title: "Teruskan",
+                      onTap: () async {
+                        controller?.pauseCamera();
+                        BancianInfosModal.show(context)
+                            .then((val) => controller?.resumeCamera());
+                      },
+                    )
+                  ],
+                ))
+          ],
+        );
+      }),
+    );
+  }
+
+  _roundedButton({required String title, required void Function() onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: const ShapeDecoration(
+            shape: StadiumBorder(), color: Colors.black26),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(color: Colors.white),
+            ),
+            const Icon(
+              Icons.chevron_right,
+              color: Colors.white,
+            )
+          ],
+        ),
       ),
     );
   }

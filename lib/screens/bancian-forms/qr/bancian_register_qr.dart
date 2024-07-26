@@ -1,3 +1,4 @@
+import 'package:eperumahan_bancian/components/custom_dialog_loading.dart';
 import 'package:eperumahan_bancian/components/custom_textfield.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/qr/bancian_ppr_search.dart';
@@ -77,14 +78,32 @@ class _BancianRegisterQrState extends State<BancianRegisterQr> {
             ),
             _gap(height: 40),
             SizedBox(
-                height: 50,
-                width: double.maxFinite,
-                child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50))),
-                    child: const Text("Daftar QR")))
+              height: 50,
+              width: double.maxFinite,
+              child: ElevatedButton(
+                  onPressed: () {
+                    final dialogController = LoadingDialogController();
+                    CustomDialogLoading.show(
+                      context,
+                      controller: dialogController,
+                      succesMsg: "QR Berjaya Didaftar",
+                      isDissmissable: false,
+                      onFinish: (state) {
+                        Navigator.pop(context);
+                        Future.delayed(const Duration(milliseconds: 180), () {
+                          Navigator.pop(context);
+                        });
+                      },
+                    );
+                    Future.delayed(const Duration(seconds: 2), () {
+                      dialogController.updateState(DialogState.success);
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50))),
+                  child: const Text("Daftar QR")),
+            )
           ],
         ),
       );

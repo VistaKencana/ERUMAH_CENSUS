@@ -34,14 +34,6 @@ class DashboardHeader extends StatelessWidget {
                             IconButton(
                                 onPressed: () {
                                   moveScreenTo(1);
-                                  // QrNavigationPref.setFromHome(val: true).then(
-                                  //   (val) => Navigator.push(
-                                  //       context,
-                                  //       PageTransition(
-                                  //           child: const BancianQrscan(),
-                                  //           type: PageTransitionType
-                                  //               .leftToRight)),
-                                  // );
                                 },
                                 icon: const Icon(Icons.qr_code_scanner)),
                             VerticalDivider(
