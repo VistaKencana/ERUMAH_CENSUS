@@ -24,7 +24,7 @@ class _PasanganFormState extends State<PasanganForm> {
             children: [
               ListTile(
                 onTap: () {
-                  const PasanganModal(isEdit: true).show(context);
+                  const PasanganModal(isNewForm: true).show(context);
                 },
                 contentPadding: const EdgeInsets.all(12),
                 leading: Container(
@@ -58,7 +58,7 @@ class _PasanganFormState extends State<PasanganForm> {
         ListTile(
           onTap: () {
             const PasanganModal(
-              isEdit: false,
+              isNewForm: false,
             ).show(context);
           },
           contentPadding: const EdgeInsets.all(12),
