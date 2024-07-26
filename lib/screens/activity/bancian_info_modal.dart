@@ -1,5 +1,5 @@
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/bancian_qrscan.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/qr/bancian_qrscan.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 

@@ -1,8 +1,10 @@
 import 'package:eperumahan_bancian/components/activity_appbar.dart';
 import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
-import 'package:eperumahan_bancian/screens/activity/bancian_info_modal.dart';
+import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
+import 'package:eperumahan_bancian/screens/qr-home/qrscan_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'model/bancian_info.dart';
 
 class ActivitySearchScreen extends StatefulWidget {
@@ -43,47 +45,6 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
               _infoContainer(val: info[5].value, title: info[5].title),
             ],
           ),
-          // Container(
-          //   margin: const EdgeInsets.all(10),
-          //   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
-          //   decoration: BoxDecoration(
-          //       color: Colors.white, borderRadius: BorderRadius.circular(10)),
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       Text(
-          //         "Info Kawasan Bancian",
-          //         style: appTextStyle(
-          //             fontWeight: FontWeight.w400,
-          //             color: AppColors.dimmedPurple.color),
-          //       ),
-          //       Text(
-          //         info[1].value,
-          //         style: appTextStyle(fontWeight: FontWeight.bold, size: 25),
-          //       ),
-          //       Text(
-          //         "${info[0].value} • ${info[2].title} ${info[2].value} • ${info[3].title} ${info[3].value}",
-          //         style: appTextStyle(fontWeight: FontWeight.bold),
-          //       ),
-          //       const SizedBox(height: 20),
-          //       Row(
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           Expanded(
-          //               child: Text(
-          //             "${info[4].title} ${info[4].value}",
-          //             style: appTextStyle(fontWeight: FontWeight.bold),
-          //           )),
-          //           Expanded(
-          //               child: Text(
-          //             "${info[5].title} ${info[5].value}",
-          //             style: appTextStyle(fontWeight: FontWeight.bold),
-          //           )),
-          //         ],
-          //       )
-          //     ],
-          //   ),
-          // ),
           Container(
             height: size.height * 0.55,
             margin: const EdgeInsets.all(10),
@@ -157,7 +118,11 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
 
   _newInfoTile({required int lawatan, bool isComplete = true}) {
     return ListTile(
-      onTap: () => const BancianInfosModal().show(context),
+      onTap: () {
+        QrNavigationPref.setFromHome(val: false)
+            .then((val) => _goTo(const QrScanScreen(isFromHome: false)));
+      },
+      // onTap: () => const BancianInfosModal().show(context),
       minLeadingWidth: 0,
       leading: Container(
         decoration: BoxDecoration(
@@ -191,4 +156,7 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
       ),
     );
   }
+
+  _goTo(Widget screen) => Navigator.push(context,
+      PageTransition(child: screen, type: PageTransitionType.rightToLeft));
 }

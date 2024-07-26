@@ -1,8 +1,7 @@
 import 'package:eperumahan_bancian/data/hive-manager/hive_manager.dart';
 
 class QrNavigationPref {
-  static const String _qrNavKey = "QrNav";
-  static final qrNavPref = HiveBoxPreference<bool>(key: _qrNavKey);
+  static final qrNavPref = HiveBoxPreference<bool>(key: "QrNav");
 
   static Future<bool> isFromHome() async {
     final data = qrNavPref.getData();

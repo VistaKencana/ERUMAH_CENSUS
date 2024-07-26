@@ -187,10 +187,10 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(Icons.edit),
+                                  const Icon(Icons.remove_red_eye),
                                   const SizedBox(width: 6),
                                   Text(
-                                    "Ubah Profil",
+                                    "Lihat Profil",
                                     style: TextStyle(
                                       fontSize: 12 + (5 * (1 - progress)),
                                     ),
