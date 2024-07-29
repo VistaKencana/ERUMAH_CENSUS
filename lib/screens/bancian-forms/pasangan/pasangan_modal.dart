@@ -8,6 +8,7 @@ import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../components/disability_checkbox.dart';
+import '../../../components/file_display.dart';
 
 class PasanganModal extends StatefulWidget {
   final bool? isNewForm;
@@ -34,6 +35,7 @@ class _PasanganModalState extends State<PasanganModal> {
   Uint8List? frontCard;
   Uint8List? backCard;
   Uint8List? okuCard;
+  Uint8List? slipGajiImg;
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -221,6 +223,13 @@ class _PasanganModalState extends State<PasanganModal> {
               _textField(title: 'Bantuan Kewangan', initialValue: "Tiada"),
             ],
           ),
+          const SizedBox(height: 10),
+          FileDisplay(
+            title: "Slip Gaji / Penyata KWSP",
+            isMandatory: true,
+            img: slipGajiImg,
+            onPicture: (bytes) => setState(() => slipGajiImg = bytes),
+          )
         ],
       ),
     );

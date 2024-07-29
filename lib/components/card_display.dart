@@ -1,14 +1,20 @@
 import 'dart:typed_data';
 
+import 'package:dotted_border/dotted_border.dart';
 import 'package:eperumahan_bancian/services/doc_scanner.dart';
 import 'package:flutter/material.dart';
 
 class CardDisplay extends StatefulWidget {
   final String title;
   final Uint8List? img;
-  final void Function(Uint8List) onPicture;
+  final IconData? icon;
+  final void Function(Uint8List? img) onPicture;
   const CardDisplay(
-      {super.key, required this.title, required this.onPicture, this.img});
+      {super.key,
+      required this.title,
+      required this.onPicture,
+      this.img,
+      this.icon});
 
   @override
   State<CardDisplay> createState() => _CardDisplayState();
@@ -20,54 +26,56 @@ class _CardDisplayState extends State<CardDisplay> {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => DocScanner(onPicture: widget.onPicture)));
+          onTap: () async {
+            final img = await DocScanner.openScanner();
+            widget.onPicture(img);
           },
-          child: Container(
-            clipBehavior: Clip.antiAlias,
-            width: MediaQuery.sizeOf(context).width * .43,
-            height: MediaQuery.sizeOf(context).height * .15,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              border: Border.all(
-                color: Colors.grey,
-                style: BorderStyle.solid,
-                width: 2.0,
+          child: DottedBorder(
+            color: Colors.grey,
+            padding: const EdgeInsets.all(4),
+            dashPattern: const [8, 4],
+            radius: const Radius.circular(14),
+            borderType: BorderType.RRect,
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              width: MediaQuery.sizeOf(context).width * .43,
+              height: MediaQuery.sizeOf(context).height * .15,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF7F6FB),
+                borderRadius: BorderRadius.circular(12),
               ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: widget.img == null
-                ? const Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.camera_alt,
-                          size: 40,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(height: 10),
-                        Center(
-                          child: Text(
-                            'Buka kamera & Ambil Gambar',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16,
+              child: widget.img == null
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 10),
+                          Icon(
+                            widget.icon ?? Icons.camera_alt_rounded,
+                            size: 35,
+                            color: Colors.black45,
+                          ),
+                          const SizedBox(height: 4),
+                          const Center(
+                            child: Text(
+                              'Buka kamera & Ambil Gambar',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                    )
+                  : Image.memory(
+                      widget.img!,
+                      fit: BoxFit.fill,
                     ),
-                  )
-                : Image.memory(
-                    widget.img!,
-                    fit: BoxFit.fill,
-                  ),
+            ),
           ),
         ),
         const SizedBox(height: 10),

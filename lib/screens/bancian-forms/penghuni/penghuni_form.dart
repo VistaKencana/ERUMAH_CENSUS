@@ -5,6 +5,7 @@ import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/components/card_display.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/disability_checkbox.dart';
+import 'package:eperumahan_bancian/components/file_display.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
@@ -28,6 +29,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
   Uint8List? frontCard;
   Uint8List? backCard;
   Uint8List? okuCard;
+  Uint8List? slipGajiImg;
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.sizeOf(context);
@@ -149,7 +151,10 @@ class _PenghuniFormState extends State<PenghuniForm> {
                 ),
                 SectionContainer(
                   child: Column(
-                    children: [_header(), formV2()],
+                    children: [
+                      _headerTitle(),
+                      maklumatPendapatan(),
+                    ],
                   ),
                 )
               ],
@@ -166,18 +171,20 @@ class _PenghuniFormState extends State<PenghuniForm> {
       {required String title,
       String? initialValue,
       bool readOnly = false,
+      String? hintText,
       double? width}) {
     return SizedBox(
       width: width ?? MediaQuery.sizeOf(context).width * 0.4,
       child: CustomFormField(
         title: title,
         readOnly: readOnly,
-        initialValue: initialValue,
+        hintText: hintText,
+        initialValue: _isNewForm() ? "" : initialValue,
       ),
     );
   }
 
-  _header() {
+  _headerTitle() {
     return const Padding(
       padding: EdgeInsets.only(top: 12, bottom: 6),
       child: Row(
@@ -192,24 +199,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     );
   }
 
-  _textFieldV2(
-      {required String title,
-      String? initialValue,
-      bool readOnly = false,
-      String? hintText,
-      double? width}) {
-    return SizedBox(
-      width: width ?? MediaQuery.sizeOf(context).width * 0.4,
-      child: CustomFormField(
-        title: title,
-        readOnly: readOnly,
-        hintText: hintText,
-        initialValue: _isNewForm() ? "" : initialValue,
-      ),
-    );
-  }
-
-  formV2() {
+  maklumatPendapatan() {
     return Column(
       children: [
         const SizedBox(height: 10),
@@ -228,16 +218,23 @@ class _PenghuniFormState extends State<PenghuniForm> {
         ),
         TwoColumnForm(
           children: [
-            _textFieldV2(
+            _textField(
                 title: 'Gaji Pokok (RM)',
                 hintText: "0.00",
                 initialValue: "1800"),
-            _textFieldV2(
+            _textField(
                 title: 'Elaun (RM)', hintText: "0.00", initialValue: "0.00"),
-            _textFieldV2(title: 'Lain-lain Pendapatan', initialValue: "Tiada"),
-            _textFieldV2(title: 'Bantuan Kewangan', initialValue: "Tiada"),
+            _textField(title: 'Lain-lain Pendapatan', initialValue: "Tiada"),
+            _textField(title: 'Bantuan Kewangan', initialValue: "Tiada"),
           ],
         ),
+        const SizedBox(height: 10),
+        FileDisplay(
+          title: "Slip Gaji / Penyata KWSP",
+          isMandatory: true,
+          img: slipGajiImg,
+          onPicture: (bytes) => setState(() => slipGajiImg = bytes),
+        )
       ],
     );
   }

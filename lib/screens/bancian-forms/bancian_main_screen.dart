@@ -1,6 +1,6 @@
 import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
-import 'package:eperumahan_bancian/components/custom_textfield.dart';
+import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/tanggungan_form.dart';
@@ -136,6 +136,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                 _section("Cap Jari"),
                 Container(
                   decoration: BoxDecoration(
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all()),
                   child: ListTile(
@@ -152,7 +153,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                 ),
                 _gap(),
                 _section("Catatan"),
-                const CustomTextField(
+                const CustomFormField(
                   maxLines: 3,
                   hintText: "Sila tulis catatan",
                   contentPadding:
