@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'anak_tanggungan/tanggungan_form.dart';
 import 'pasangan/pasangan_form.dart';
 import 'pendapatan/pendapatan_form.dart';
-import 'penghuni/penghuni_form.dart';
+import 'penghuni/penghuni_form_old.dart';
 
 enum BancianForms {
-  penghuni(title: "Maklumat Penghuni", screen: PenghuniForm()),
+  penghuni(
+      title: "Maklumat Penghuni",
+      screen: PenghuniFormOld(
+        imgs: [],
+      )),
   pasangan(title: "Maklumat Pasangan", screen: PasanganForm()),
   pendapatan(title: "Maklumat Pendapatan", screen: PendapatanForm()),
   anak(title: "Maklumat Anak & Tanggungan", screen: TanggunganForm()),

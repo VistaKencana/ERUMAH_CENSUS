@@ -63,7 +63,7 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
                         onPressed: imgs.length < (maxImage - 1)
                             ? null
                             : () {
-                                _goReplace(const BancianMainScreen());
+                                _goReplace(BancianMainScreen(imgs: imgs));
                               },
                         child: const Text("Seterusnya")),
                   ],
@@ -93,6 +93,7 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
                     return GestureDetector(
                       onTap: () {
                         BancianImagePreview(
+                          canDelete: true,
                           title: "Gambar ${index + 1}",
                           image: imgs[index],
                           onDelete: () {

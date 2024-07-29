@@ -55,6 +55,7 @@ class _KadPengenalanTileState extends State<KadPengenalanTile> {
                         title: "Kad Pengenalan Depan",
                         img: frontCard,
                         onPicture: (bytes) {
+                          if (bytes == null) return;
                           setState(() => frontCard = bytes);
                           widget.onFrontCard(bytes);
                         },
@@ -64,6 +65,7 @@ class _KadPengenalanTileState extends State<KadPengenalanTile> {
                         title: "Kad Pengenalan Belakang",
                         img: backCard,
                         onPicture: (bytes) {
+                          if (bytes == null) return;
                           setState(() => backCard = bytes);
                           widget.onBackCard(bytes);
                         },

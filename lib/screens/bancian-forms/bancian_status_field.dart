@@ -10,6 +10,7 @@ class BancianStatusField extends StatelessWidget {
     return CustomTextField(
       readOnly: true,
       initialValue: initialVal,
+      fillColor: Colors.white,
       onTap: () {
         const BancianStatusModal().show(context);
       },

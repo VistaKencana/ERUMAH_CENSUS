@@ -5,14 +5,14 @@ import 'package:eperumahan_bancian/components/card_display.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
+import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:flutter/material.dart';
-
-import '../../../components/custom_underline_field.dart';
 import '../../../components/disability_checkbox.dart';
+import '../../../components/file_display.dart';
 
 class PasanganModal extends StatefulWidget {
-  final bool? isEdit;
-  const PasanganModal({super.key, this.isEdit});
+  final bool? isNewForm;
+  const PasanganModal({super.key, this.isNewForm});
 
   Future<T?> show<T>(BuildContext context) {
     return showModalBottomSheet<T>(
@@ -30,17 +30,18 @@ class PasanganModal extends StatefulWidget {
 }
 
 class _PasanganModalState extends State<PasanganModal> {
-  _isEdit() => (widget.isEdit != null && widget.isEdit == true);
-  _isReadOnly() => _isEdit() ? false : true;
+  _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
+  _isReadOnly() => _isNewForm() ? false : true;
   Uint8List? frontCard;
   Uint8List? backCard;
   Uint8List? okuCard;
+  Uint8List? slipGajiImg;
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.9,
-      maxChildSize: 0.9,
+      initialChildSize: 0.94,
+      maxChildSize: 0.94,
       builder: (context, sc) {
         return Container(
           clipBehavior: Clip.antiAlias,
@@ -54,7 +55,7 @@ class _PasanganModalState extends State<PasanganModal> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
-              children: [_header(), formV2()],
+              children: [_header(), _form()],
             ),
             bottomNavigationBar: BottomBarButton(
                 onTap: () => Navigator.pop(context), title: "Simpan"),
@@ -83,81 +84,7 @@ class _PasanganModalState extends State<PasanganModal> {
     );
   }
 
-  formV1() {
-    return Expanded(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            KadPengenalanTile(
-              onFrontCard: (bytes) {
-                setState(() => frontCard = bytes);
-              },
-              onBackCard: (bytes) {
-                setState(() => backCard = bytes);
-              },
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-              child: TwoColumnForm(
-                children: [
-                  _textField(
-                      initialValue: "Siti Nabila",
-                      title: 'Nama Penuh',
-                      readOnly: _isReadOnly()),
-                  _textField(
-                      title: 'Emel', initialValue: "sitinabila@gmail.com"),
-                  _textField(
-                      title: 'No. Kad Pengenalan',
-                      initialValue: "697870984456",
-                      readOnly: _isReadOnly()),
-                  _textField(title: 'No Telefon', initialValue: "0198765654"),
-                  _textField(
-                      title: 'Umur(Tahun)',
-                      initialValue: "50",
-                      readOnly: _isReadOnly()),
-                  _textField(title: 'Tahap Kesihatan', initialValue: "Sihat"),
-                  _textField(
-                      title: 'Jantina',
-                      initialValue: "Perempuan",
-                      readOnly: _isReadOnly()),
-                  _textField(
-                      title: 'Bangsa',
-                      initialValue: "Melayu",
-                      readOnly: _isReadOnly()),
-                  _textField(
-                    title: 'Hidup',
-                    initialValue: "Ya",
-                  ),
-                  _textField(
-                    title: 'Jenis Pekerjaan',
-                    initialValue: "Suri RUmah",
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DisabilityCheckbox(initVal: false, onCheck: (val) {}),
-                    CardDisplay(
-                      title: "",
-                      img: okuCard,
-                      onPicture: (bytes) => setState(() => okuCard = bytes),
-                    ),
-                  ],
-                )),
-            const SizedBox(height: 10)
-          ],
-        ),
-      ),
-    );
-  }
-
-  formV2() {
+  _form() {
     return Expanded(
       child: SingleChildScrollView(
         child: Column(
@@ -177,7 +104,7 @@ class _PasanganModalState extends State<PasanganModal> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
               child: Column(
                 children: [
-                  _textFieldV2(
+                  _textField(
                       initialValue: "Siti Nabila",
                       title: 'Nama Penuh',
                       width: double.infinity,
@@ -185,33 +112,33 @@ class _PasanganModalState extends State<PasanganModal> {
                   _gap(height: 14),
                   TwoColumnForm(
                     children: [
-                      _textFieldV2(
+                      _textField(
                           title: 'Emel', initialValue: "sitinabila@gmail.com"),
-                      _textFieldV2(
+                      _textField(
                           title: 'No. Kad Pengenalan',
                           initialValue: "697870984456",
                           readOnly: _isReadOnly()),
-                      _textFieldV2(
+                      _textField(
                           title: 'No Telefon', initialValue: "0198765654"),
-                      _textFieldV2(
+                      _textField(
                           title: 'Umur(Tahun)',
                           initialValue: "50",
                           readOnly: _isReadOnly()),
-                      _textFieldV2(
+                      _textField(
                           title: 'Tahap Kesihatan', initialValue: "Sihat"),
-                      _textFieldV2(
+                      _textField(
                           title: 'Jantina',
                           initialValue: "Perempuan",
                           readOnly: _isReadOnly()),
-                      _textFieldV2(
+                      _textField(
                           title: 'Bangsa',
                           initialValue: "Melayu",
                           readOnly: _isReadOnly()),
-                      _textFieldV2(
+                      _textField(
                         title: 'Hidup',
                         initialValue: "Ya",
                       ),
-                      _textFieldV2(
+                      _textField(
                         title: 'Jenis Pekerjaan',
                         initialValue: "Suri Rumah",
                       ),
@@ -233,7 +160,10 @@ class _PasanganModalState extends State<PasanganModal> {
                     ),
                   ],
                 )),
-            const SizedBox(height: 10)
+            const SizedBox(height: 10),
+            const Divider(height: 0, indent: 20, endIndent: 20),
+            _gap(height: 14),
+            _formPenadapatan()
           ],
         ),
       ),
@@ -241,29 +171,66 @@ class _PasanganModalState extends State<PasanganModal> {
   }
 
   _textField(
-      {required String title, String? initialValue, bool readOnly = false}) {
-    return SizedBox(
-      width: MediaQuery.sizeOf(context).width * 0.4,
-      child: CustomUnderlineField(
-        title: title,
-        showEditIcon: !readOnly,
-        readOnly: readOnly,
-        initialValue: _isEdit() ? "" : initialValue,
-      ),
-    );
-  }
-
-  _textFieldV2(
       {required String title,
       String? initialValue,
       bool readOnly = false,
+      String? hintText,
       double? width}) {
     return SizedBox(
       width: width ?? MediaQuery.sizeOf(context).width * 0.4,
       child: CustomFormField(
         title: title,
         readOnly: readOnly,
-        initialValue: _isEdit() ? "" : initialValue,
+        hintText: hintText,
+        initialValue: _isNewForm() ? "" : initialValue,
+      ),
+    );
+  }
+
+  _formPenadapatan() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Maklumat Pendapatan",
+            style: appTextStyle(size: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 14),
+          Column(
+            children: [
+              CustomFormField(
+                title: "Alamat Majikan",
+                initialValue: _isNewForm()
+                    ? ""
+                    : "No. 1 Jalan 2 Taman Perindustrian, 50300 Kuala Lumpur",
+                maxLines: 3,
+                contentPadding: const EdgeInsets.all(8),
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
+          TwoColumnForm(
+            children: [
+              _textField(
+                  title: 'Gaji Pokok (RM)',
+                  hintText: "0.00",
+                  initialValue: "1800"),
+              _textField(
+                  title: 'Elaun (RM)', hintText: "0.00", initialValue: "0.00"),
+              _textField(title: 'Lain-lain Pendapatan', initialValue: "Tiada"),
+              _textField(title: 'Bantuan Kewangan', initialValue: "Tiada"),
+            ],
+          ),
+          const SizedBox(height: 10),
+          FileDisplay(
+            title: "Slip Gaji / Penyata KWSP",
+            isMandatory: true,
+            img: slipGajiImg,
+            onPicture: (bytes) => setState(() => slipGajiImg = bytes),
+          )
+        ],
       ),
     );
   }

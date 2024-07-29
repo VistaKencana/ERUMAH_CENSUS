@@ -36,13 +36,13 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                   const CustomFormField(
                     title: "Nama",
                     initialValue: "Ahmad Hazim",
-                    isMandatory: true,
+                    readOnly: true,
                   ),
                   _gap(),
                   const CustomFormField(
                     title: "No Kad Pengenalan",
                     initialValue: "904678455",
-                    isMandatory: true,
+                    readOnly: true,
                   ),
                   _gap(),
                   const TwoColumnForm(
@@ -50,21 +50,21 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                       CustomFormField(
                         title: "No Telefon",
                         initialValue: "0157486456",
-                        isMandatory: true,
+                        readOnly: true,
                       ),
                       CustomFormField(
                         title: "Emel",
                         initialValue: "ahmadhazim@gmail.com",
-                        isMandatory: true,
+                        readOnly: true,
                       ),
                     ],
                   ),
                   _gap(height: 24),
-                  SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                          onPressed: () {}, child: const Text("Simpan")))
+                  // SizedBox(
+                  //     width: double.infinity,
+                  //     height: 50,
+                  //     child: ElevatedButton(
+                  //         onPressed: () {}, child: const Text("Simpan")))
                 ],
               ),
             )

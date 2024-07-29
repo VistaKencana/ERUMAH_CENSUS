@@ -1,4 +1,5 @@
 import 'package:eperumahan_bancian/components/custom_navbar.dart';
+import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:flutter/material.dart';
 
 import '../components/custom_alertdialog.dart';
@@ -29,16 +30,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onPageChanged(int page) {
     setState(() {
+      setQRScannerFromHome(page);
       _selectedIndex = page;
     });
   }
 
+  void setQRScannerFromHome(int page) {
+    if (page != 1) return;
+    QrNavigationPref.setFromHome(val: true);
+  }
+
   void _onItemTapped(int index) {
-    homePageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+    homePageController.jumpToPage(index);
+    // homePageController.animateToPage(
+    //   index,
+    //   duration: const Duration(milliseconds: 300),
+    //   curve: Curves.easeInOut,
+    // );
   }
 
   @override
@@ -56,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
           children: List.generate(BottomNavItem.values.length,
               (index) => BottomNavItem.values[index].screen),
         ),
-        bottomNavigationBar: CustomBottomNav(itemCount: 3, (index) {
+        bottomNavigationBar:
+            CustomBottomNav(itemCount: BottomNavItem.values.length, (index) {
           final data = BottomNavItem.values[index];
           return NavItem(
             itemCount: BottomNavItem.values.length,

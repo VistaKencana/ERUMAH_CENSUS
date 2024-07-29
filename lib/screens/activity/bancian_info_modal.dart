@@ -1,20 +1,18 @@
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/bancian_qrscan.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bancian_proof_camera.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-
 import '../../config/constants/app_colors.dart';
-import '../../data/hive-manager/repository/qr_navigation_pref.dart';
 
 class BancianInfosModal extends StatefulWidget {
   const BancianInfosModal({super.key});
 
-  Future<T?> show<T>(BuildContext context) {
+  static Future<T?> show<T>(BuildContext context) {
     return showModalBottomSheet<T>(
       context: context,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       isScrollControlled: true,
-      builder: (_) => this,
+      builder: (_) => const BancianInfosModal(),
     );
   }
 
@@ -89,13 +87,11 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
           ),
           bottomNavigationBar: BottomBarButton(
               onTap: () {
-                QrNavigationPref.setFromHome(val: false).then(
-                  (val) => Navigator.push(
-                      context,
-                      PageTransition(
-                          child: const BancianQrscan(),
-                          type: PageTransitionType.rightToLeft)),
-                );
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: const BancianProofCamera(),
+                        type: PageTransitionType.rightToLeft));
               },
               title: "Teruskan Bancian"),
         ),

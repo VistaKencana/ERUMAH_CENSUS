@@ -1,10 +1,6 @@
-import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-
 import '../../config/constants/app_colors.dart';
 import '../../config/constants/app_size.dart';
-import '../bancian-forms/bancian_qrscan.dart';
 import '../home_screen.dart';
 
 class DashboardHeader extends StatelessWidget {
@@ -37,14 +33,7 @@ class DashboardHeader extends StatelessWidget {
                           children: [
                             IconButton(
                                 onPressed: () {
-                                  QrNavigationPref.setFromHome(val: true).then(
-                                    (val) => Navigator.push(
-                                        context,
-                                        PageTransition(
-                                            child: const BancianQrscan(),
-                                            type: PageTransitionType
-                                                .leftToRight)),
-                                  );
+                                  moveScreenTo(1);
                                 },
                                 icon: const Icon(Icons.qr_code_scanner)),
                             VerticalDivider(
@@ -55,7 +44,7 @@ class DashboardHeader extends StatelessWidget {
                             Expanded(
                               child: TextFormField(
                                 readOnly: true,
-                                onTap: () => moveScreenTo(1),
+                                onTap: () => homePageController.jumpToPage(2),
                                 decoration: const InputDecoration(
                                     fillColor: Colors.white,
                                     hintText: "Carian kawasan",

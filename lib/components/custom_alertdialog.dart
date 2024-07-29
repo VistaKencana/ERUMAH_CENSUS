@@ -75,7 +75,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
       _button(onPressed: widget.onColorBtn, title: widget.colorBtnLabel),
       if (widget.dimmedBtnLabel != null)
         _button(
-            color: Colors.grey,
+            color: Colors.grey.shade500,
             onPressed: widget.onDimmedBtn,
             title: widget.dimmedBtnLabel ?? "-"),
     ];

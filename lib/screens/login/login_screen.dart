@@ -1,6 +1,5 @@
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/password/forget_password_screen.dart';
-import 'package:eperumahan_bancian/screens/register/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:page_transition/page_transition.dart';
@@ -132,26 +131,26 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontWeight: FontWeight.w500, color: Colors.white),
                         )),
                   ),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                child: const RegisterScreen(),
-                                type: PageTransitionType.rightToLeft));
-                      },
-                      style: TextButton.styleFrom(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.zero,
-                      ),
-                      child: Text(
-                        'Daftar Akaun',
-                        textAlign: TextAlign.left,
-                        style: appTextStyle(
-                            size: 15,
-                            fontWeight: FontWeight.w500,
-                            color: const Color(0XFF1488CC)),
-                      )),
+                  // TextButton(
+                  //     onPressed: () {
+                  //       Navigator.push(
+                  //           context,
+                  //           PageTransition(
+                  //               child: const RegisterScreen(),
+                  //               type: PageTransitionType.rightToLeft));
+                  //     },
+                  //     style: TextButton.styleFrom(
+                  //       alignment: Alignment.centerLeft,
+                  //       padding: EdgeInsets.zero,
+                  //     ),
+                  //     child: Text(
+                  //       'Daftar Akaun',
+                  //       textAlign: TextAlign.left,
+                  //       style: appTextStyle(
+                  //           size: 15,
+                  //           fontWeight: FontWeight.w500,
+                  //           color: const Color(0XFF1488CC)),
+                  //     )),
                 ],
               ),
             );
