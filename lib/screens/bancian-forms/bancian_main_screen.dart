@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
+import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/tanggungan_form.dart';
@@ -16,10 +19,12 @@ import '../../components/borang_listtile.dart';
 import '../../components/bottombar_button.dart';
 import '../../components/custom_appbar.dart';
 import '../../config/constants/app_colors.dart';
+import 'bancian_image_preview.dart';
 
 class BancianMainScreen extends StatefulWidget {
   final bool? isNewForm;
-  const BancianMainScreen({super.key, this.isNewForm});
+  final List<Uint8List> imgs;
+  const BancianMainScreen({super.key, this.isNewForm, required this.imgs});
 
   @override
   State<BancianMainScreen> createState() => _BancianMainScreenState();
@@ -122,7 +127,8 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                 ),
                 _borangTile(
                     label: "Maklumat Penghuni",
-                    screen: PenghuniForm(isNewForm: widget.isNewForm)),
+                    screen: PenghuniForm(
+                        isNewForm: widget.isNewForm, imgs: widget.imgs)),
                 // screen: PenghuniForm(isEdit: widget.isEdit)),
                 _borangTile(
                     label: "Maklumat Pasangan", screen: const PasanganForm()),
@@ -134,11 +140,10 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                     screen: const TanggunganForm()),
                 _gap(size: 20),
                 _section("Cap Jari"),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all()),
+                SectionContainer(
+                  border: Border.all(color: Colors.grey),
+                  padding: EdgeInsets.zero,
+                  margin: EdgeInsets.zero,
                   child: ListTile(
                     tileColor: Colors.white,
                     leading: const Icon(Icons.fingerprint),
@@ -150,6 +155,47 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                 _section("Status Bancian"),
                 const BancianStatusField(
                   initialVal: "Bancian Berjaya",
+                ),
+                _gap(),
+                _section("Gambar"),
+                SectionContainer(
+                  border: Border.all(color: Colors.grey),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                  margin: const EdgeInsets.only(top: 5),
+                  child: SizedBox(
+                    height: 100,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: List.generate(widget.imgs.length, (index) {
+                        return GestureDetector(
+                          onTap: () {
+                            BancianImagePreview(
+                              title: "Gambar ${index + 1}",
+                              image: widget.imgs[index],
+                              canDelete: false,
+                              onDelete: () {
+                                setState(() => widget.imgs.removeAt(index));
+                                Navigator.pop(context);
+                              },
+                            ).show(context);
+                          },
+                          child: Container(
+                              width: 120,
+                              height: 100,
+                              margin: const EdgeInsets.only(right: 12),
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Image.memory(
+                                widget.imgs[index],
+                                fit: BoxFit.fill,
+                              )),
+                        );
+                      }),
+                    ),
+                  ),
                 ),
                 _gap(),
                 _section("Catatan"),

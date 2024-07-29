@@ -17,7 +17,8 @@ import '../../../components/custom_appbar.dart';
 
 class PenghuniForm extends StatefulWidget {
   final bool? isNewForm;
-  const PenghuniForm({super.key, this.isNewForm});
+  final List<Uint8List> imgs;
+  const PenghuniForm({super.key, this.isNewForm, required this.imgs});
 
   @override
   State<PenghuniForm> createState() => _PenghuniFormState();
@@ -49,8 +50,9 @@ class _PenghuniFormState extends State<PenghuniForm> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const BancianMainScreen(
+                                  builder: (_) => BancianMainScreen(
                                         isNewForm: true,
+                                        imgs: widget.imgs,
                                       )));
                         },
                         child: const Row(
