@@ -1,11 +1,12 @@
 import 'package:eperumahan_bancian/components/transition_appbar.dart';
+import 'package:eperumahan_bancian/screens/login/bloc/auth_bloc.dart';
 import 'package:eperumahan_bancian/screens/profile/profile_change_pwd_screen.dart';
 import 'package:eperumahan_bancian/screens/profile/profile_update_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../components/custom_alertdialog.dart';
-import '../../config/routes/routes_name.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -115,8 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       colorBtnLabel: "Logout",
       dimmedBtnLabel: "Cancel",
       onDimmedBtn: () => Navigator.pop(context),
-      onColorBtn: () =>
-          Navigator.popUntil(context, ModalRoute.withName(RoutesName.login)),
+      onColorBtn: () => context.read<AuthBloc>().add(UserLogout()),
     ).show(context);
   }
 }
