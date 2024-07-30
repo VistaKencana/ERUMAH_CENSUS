@@ -1,7 +1,7 @@
 class LoginModel {
   String? status;
   String? message;
-  Data? data;
+  LoginData? data;
 
   LoginModel({
     this.status,
@@ -12,7 +12,7 @@ class LoginModel {
   LoginModel copyWith({
     String? status,
     String? message,
-    Data? data,
+    LoginData? data,
   }) =>
       LoginModel(
         status: status ?? this.status,
@@ -23,7 +23,7 @@ class LoginModel {
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null ? null : LoginData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -33,14 +33,14 @@ class LoginModel {
       };
 }
 
-class Data {
+class LoginData {
   String? accessToken;
   String? tokenType;
   DateTime? expiresAt;
   String? userCode;
   String? userName;
 
-  Data({
+  LoginData({
     this.accessToken,
     this.tokenType,
     this.expiresAt,
@@ -48,14 +48,14 @@ class Data {
     this.userName,
   });
 
-  Data copyWith({
+  LoginData copyWith({
     String? accessToken,
     String? tokenType,
     DateTime? expiresAt,
     String? userCode,
     String? userName,
   }) =>
-      Data(
+      LoginData(
         accessToken: accessToken ?? this.accessToken,
         tokenType: tokenType ?? this.tokenType,
         expiresAt: expiresAt ?? this.expiresAt,
@@ -63,7 +63,7 @@ class Data {
         userName: userName ?? this.userName,
       );
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory LoginData.fromJson(Map<String, dynamic> json) => LoginData(
         accessToken: json["access_token"],
         tokenType: json["token_type"],
         expiresAt: json["expires_at"] == null
