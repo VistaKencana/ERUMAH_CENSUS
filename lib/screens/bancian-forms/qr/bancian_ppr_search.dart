@@ -162,7 +162,7 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text("01-01-01"),
-            Text("Kota Damansara • Lawatan $lawatan"),
+            Text("PPR Desa Tun Razak • Lawatan $lawatan"),
           ],
         ),
         trailing: const Padding(

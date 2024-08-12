@@ -32,7 +32,8 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
         backgroundColor: Colors.transparent,
       ),
       body: CameraWidget(
-        onTakePicture: (Uint8List uintImg) {
+        addWatermark: true,
+        onTakePicture: (Uint8List uintImg) async {
           _controller.jumpTo(maxSize);
           if (imgs.length >= maxImage) return;
           setState(() => imgs.add(uintImg));

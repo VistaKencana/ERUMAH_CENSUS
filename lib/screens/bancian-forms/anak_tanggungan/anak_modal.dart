@@ -32,6 +32,7 @@ class _AnakModalState extends State<AnakModal> {
   Uint8List? frontCard;
   Uint8List? backCard;
   Uint8List? okuCard;
+  bool isOKU = false;
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -118,12 +119,18 @@ class _AnakModalState extends State<AnakModal> {
                               ),
                               _gap(height: 14),
                               DisabilityCheckbox(
-                                  initVal: false, onCheck: (val) {}),
-                              CardDisplay(
-                                title: "",
-                                img: okuCard,
-                                onPicture: (bytes) =>
-                                    setState(() => okuCard = bytes),
+                                  initVal: isOKU,
+                                  onCheck: (val) {
+                                    setState(() => isOKU = val);
+                                  }),
+                              Visibility(
+                                visible: isOKU,
+                                child: CardDisplay(
+                                  title: "",
+                                  img: okuCard,
+                                  onPicture: (bytes) =>
+                                      setState(() => okuCard = bytes),
+                                ),
                               ),
                               const SizedBox(height: 10)
                             ],

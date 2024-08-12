@@ -57,10 +57,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             icon: Icons.check_circle_outline,
                             color: Colors.green),
                         _item(
-                            title: "Gagal",
+                            title: "KIV",
                             val: "28",
-                            icon: Icons.cancel_outlined,
-                            color: Colors.red),
+                            icon: Icons.error_outline,
+                            color: Colors.amber),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -68,7 +68,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               const SizedBox(height: 28),
-              _title(title: "Carta kawasan"),
+              _title(title: "Carta perumahan"),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 14),
                 padding: const EdgeInsets.only(
@@ -84,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _title(
-                            title: "PPR Sri Selangor",
+                            title: "PPR Desa Tun Razak",
                             padding: EdgeInsets.zero),
                         IconButton(
                             onPressed: () {

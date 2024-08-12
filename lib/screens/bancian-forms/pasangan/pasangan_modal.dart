@@ -36,6 +36,7 @@ class _PasanganModalState extends State<PasanganModal> {
   Uint8List? backCard;
   Uint8List? okuCard;
   Uint8List? slipGajiImg;
+  bool isOKU = false;
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -152,11 +153,18 @@ class _PasanganModalState extends State<PasanganModal> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    DisabilityCheckbox(initVal: false, onCheck: (val) {}),
-                    CardDisplay(
-                      title: "",
-                      img: okuCard,
-                      onPicture: (bytes) => setState(() => okuCard = bytes),
+                    DisabilityCheckbox(
+                        initVal: isOKU,
+                        onCheck: (val) {
+                          setState(() => isOKU = val);
+                        }),
+                    Visibility(
+                      visible: isOKU,
+                      child: CardDisplay(
+                        title: "",
+                        img: okuCard,
+                        onPicture: (bytes) => setState(() => okuCard = bytes),
+                      ),
                     ),
                   ],
                 )),

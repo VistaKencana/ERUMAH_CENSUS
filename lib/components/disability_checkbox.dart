@@ -13,17 +13,17 @@ class DisabilityCheckboxState extends State<DisabilityCheckbox> {
   bool _isYesChecked = false;
   bool _isNoChecked = false;
 
-  void _onYesChanged(bool? value) {
+  void _onYesChanged(bool? value, [bool isInit = false]) {
     setState(() {
-      widget.onCheck(true);
+      if (!isInit) widget.onCheck(true);
       _isYesChecked = value!;
       if (_isYesChecked) _isNoChecked = false;
     });
   }
 
-  void _onNoChanged(bool? value) {
+  void _onNoChanged(bool? value, [bool isInit = false]) {
     setState(() {
-      widget.onCheck(false);
+      if (!isInit) widget.onCheck(false);
       _isNoChecked = value!;
       if (_isNoChecked) _isYesChecked = false;
     });
@@ -34,7 +34,7 @@ class DisabilityCheckboxState extends State<DisabilityCheckbox> {
     super.initState();
     final initial = widget.initVal;
     if (initial != null) {
-      (initial) ? _onYesChanged(true) : _onNoChanged(true);
+      (initial) ? _onYesChanged(true, true) : _onNoChanged(true, true);
     }
   }
 

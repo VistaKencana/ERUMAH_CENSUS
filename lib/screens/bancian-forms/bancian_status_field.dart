@@ -39,8 +39,9 @@ class _BancianStatusModalState extends State<BancianStatusModal> {
   String currValue = "Bancian Berjaya";
   List<String> statusFilter = [
     "Bancian Berjaya",
-    "Bancian Gagal (Tiada Penghuni)",
-    "Bancian Gagal (Lain-lain)",
+    "Bancian Berjaya (Unit Kosong)",
+    "Bancian Tidak Lengkap (Tiada Penghuni)",
+    "Bancian Tidak Lengkap (Lain-lain)",
   ];
 
   @override

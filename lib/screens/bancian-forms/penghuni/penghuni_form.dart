@@ -11,6 +11,8 @@ import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_main_screen.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/jenis_pekerjaan_modal.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/status_kahwin_modal.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/custom_appbar.dart';
@@ -31,6 +33,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
   Uint8List? backCard;
   Uint8List? okuCard;
   Uint8List? slipGajiImg;
+  bool isOKU = false;
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.sizeOf(context);
@@ -133,19 +136,34 @@ class _PenghuniFormState extends State<PenghuniForm> {
                               initialValue: _isNewForm() ? "" : "Melayu"),
                           _textField(
                               title: 'Jenis Pekerjaan',
-                              initialValue: _isNewForm() ? "" : "Persendirian"),
+                              isDropdown: true,
+                              onTap: () =>
+                                  const JenisPekerjaanModal().show(context),
+                              initialValue: _isNewForm() ? "" : "Swasta"),
                           _textField(
                               title: 'Status Perkahwinan',
-                              initialValue: _isNewForm() ? "" : "Berkahwin"),
+                              isDropdown: true,
+                              onTap: () =>
+                                  const StatusKahwinModal().show(context),
+                              initialValue: _isNewForm()
+                                  ? ""
+                                  : "Berkahwin dan Tiada Anak"),
                           // _textField(title: 'Kecacatan (OKU)'),
                         ],
                       ),
                       _gap(),
-                      DisabilityCheckbox(initVal: false, onCheck: (val) {}),
-                      CardDisplay(
-                        title: "",
-                        img: okuCard,
-                        onPicture: (bytes) => setState(() => okuCard = bytes),
+                      DisabilityCheckbox(
+                          initVal: isOKU,
+                          onCheck: (val) {
+                            setState(() => isOKU = val);
+                          }),
+                      Visibility(
+                        visible: isOKU,
+                        child: CardDisplay(
+                          title: "",
+                          img: okuCard,
+                          onPicture: (bytes) => setState(() => okuCard = bytes),
+                        ),
                       ),
                       const SizedBox(height: 10),
                     ],
@@ -174,11 +192,27 @@ class _PenghuniFormState extends State<PenghuniForm> {
       String? initialValue,
       bool readOnly = false,
       String? hintText,
-      double? width}) {
+      double? width,
+      void Function()? onTap,
+      bool isDropdown = false}) {
+    if (isDropdown) {
+      return SizedBox(
+          width: width ?? MediaQuery.sizeOf(context).width * 0.4,
+          child: CustomFormField(
+            title: title,
+            onTap: onTap,
+            readOnly: true,
+            fillColor: Colors.white,
+            hintText: hintText,
+            initialValue: _isNewForm() ? "" : initialValue,
+            suffixIcon: isDropdown ? Icons.arrow_drop_down : null,
+          ));
+    }
     return SizedBox(
       width: width ?? MediaQuery.sizeOf(context).width * 0.4,
       child: CustomFormField(
         title: title,
+        onTap: onTap,
         readOnly: readOnly,
         hintText: hintText,
         initialValue: _isNewForm() ? "" : initialValue,

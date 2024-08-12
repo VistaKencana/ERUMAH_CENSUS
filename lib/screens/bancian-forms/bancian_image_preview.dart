@@ -53,10 +53,12 @@ class _BancianImagePreviewState extends State<BancianImagePreview> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      AspectRatio(
-                        aspectRatio: 10 / 10,
-                        child: Image.memory(widget.image),
-                      )
+                      InteractiveViewer(
+                        child: AspectRatio(
+                          aspectRatio: 10 / 10,
+                          child: Image.memory(widget.image),
+                        ),
+                      ),
                     ],
                   ),
                 ),
