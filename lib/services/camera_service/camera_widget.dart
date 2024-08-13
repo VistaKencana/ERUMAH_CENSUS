@@ -1,7 +1,7 @@
-import 'dart:typed_data';
-
 import 'package:camera/camera.dart';
 import 'package:eperumahan_bancian/services/camera_service/camera_overlay.dart';
+import 'package:eperumahan_bancian/services/draw_watermark.dart';
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image/image.dart' as imag;
 import 'package:flutter/material.dart';
@@ -181,24 +181,6 @@ class _CameraWidgetState extends State<CameraWidget> {
         x: 0, y: height, width: image.width, height: 460);
   }
 
-  Uint8List addWaterMark(Uint8List bytes) {
-    imag.Image imgs = imag.decodeImage(bytes)!;
-    final text = DateTime.now().toString();
-    final imgWidth = imgs.width;
-    final imgHeight = imgs.height;
-
-    final x = (imgWidth ~/ 3);
-    final y = imgHeight - 100;
-    final drawImg = imag.drawString(imgs, text,
-        font: imag.arial48, color: _getColor(), x: x, y: y);
-    final bmp = imag.encodeBmp(drawImg);
-
-    return Uint8List.fromList(bmp);
-  }
-
-  static imag.Color _getColor([Color color = Colors.black]) =>
-      imag.ColorRgba8(color.red, color.green, color.blue, color.alpha);
-
   void closeLoading() => Navigator.pop(context);
 
   Future<dynamic> showLoading(BuildContext context) {
@@ -251,8 +233,9 @@ class _CameraWidgetState extends State<CameraWidget> {
 
                   Uint8List uintImg = await rawImg.readAsBytes();
                   if (widget.addWatermark) {
-                    uintImg = addWaterMark(uintImg);
+                    uintImg = await DrawWatermark.onRunDraw(bytes: uintImg);
                   }
+
                   closeLoading();
                   widget.onTakePicture(uintImg);
                   // controller!.resumePreview();

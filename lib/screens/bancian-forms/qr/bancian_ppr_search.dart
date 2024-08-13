@@ -85,11 +85,13 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
                   ),
                 ),
                 Expanded(
-                    child: ListView(
-                  children: [
-                    _newInfoTile(lawatan: 1),
-                  ],
-                ))
+                    child: ListView(children: [
+                  const SizedBox(height: 10),
+                  ...List.generate(
+                    10,
+                    (index) => _newInfoTile(lawatan: 1, index: index),
+                  ),
+                ]))
               ],
             ),
             bottomNavigationBar: Container(
@@ -134,7 +136,7 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
         ));
   }
 
-  _newInfoTile({required int lawatan}) {
+  _newInfoTile({required int lawatan, required int index}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
@@ -161,7 +163,7 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("01-01-01"),
+            Text("01-01-${index.toString().padLeft(2, '0')}"),
             Text("PPR Desa Tun Razak • Lawatan $lawatan"),
           ],
         ),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:eperumahan_bancian/data/api/api_client.dart';
 import 'package:eperumahan_bancian/data/api/repositories/auth_repository.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/login_pref.dart';
 import 'package:equatable/equatable.dart';
@@ -41,6 +42,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLogoutSuccess());
     } on SocketException {
       emit(const AuthLogoutError(msg: "No internet connection"));
+    } on TokenExpiredException {
+      emit(AuthLogoutSuccess());
     } catch (e) {
       emit(AuthLogoutError(msg: e.toString()));
     }

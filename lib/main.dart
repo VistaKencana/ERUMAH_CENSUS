@@ -3,6 +3,7 @@ import 'package:eperumahan_bancian/config/blocs/app_blocs.dart';
 import 'package:eperumahan_bancian/data/api/api_client.dart';
 import 'package:eperumahan_bancian/data/api/api_env.dart';
 import 'package:eperumahan_bancian/services/app_info.dart';
+import 'package:eperumahan_bancian/services/draw_watermark.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:eperumahan_bancian/config/routes/routes_generator.dart';
@@ -23,6 +24,7 @@ Future<void> main() async {
   await _requestPermission();
   await Future.wait([
     AppInfo.init(),
+    DrawWatermark.initializeFont(),
     HiveBoxPreference.init(),
     EasyLoadingConfig.init(),
     SystemChrome.setPreferredOrientations([
