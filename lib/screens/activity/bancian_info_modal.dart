@@ -3,6 +3,7 @@ import 'package:eperumahan_bancian/screens/bancian-forms/bancian_proof_camera.da
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../config/constants/app_colors.dart';
+import 'package:intl/intl.dart';
 
 class BancianInfosModal extends StatefulWidget {
   const BancianInfosModal({super.key});
@@ -74,9 +75,19 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
                       ),
                       Column(
                         children: [
-                          _newInfoTile(lawatan: 1),
-                          _newInfoTile(lawatan: 2),
-                          _newInfoTile(lawatan: 3, isComplete: false),
+                          _newInfoTile(
+                              lawatan: 1,
+                              date:
+                                  DateTime.now().add(const Duration(days: 3))),
+                          _newInfoTile(
+                              lawatan: 2,
+                              date:
+                                  DateTime.now().add(const Duration(days: 15))),
+                          _newInfoTile(
+                              lawatan: 3,
+                              isComplete: false,
+                              date:
+                                  DateTime.now().add(const Duration(days: 20))),
                         ],
                       ),
                     ],
@@ -99,7 +110,8 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
     );
   }
 
-  _newInfoTile({required int lawatan, bool isComplete = true}) {
+  _newInfoTile(
+      {required int lawatan, bool isComplete = true, required DateTime date}) {
     return ExpansionTile(
       shape: const Border(),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +135,9 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
       // isThreeLine: true,
       dense: true,
       title: Text("LAWATAN $lawatan"),
-      subtitle: Text(!isComplete ? "Status: -" : "Status: Tidak Lengkap"),
+      subtitle: Text(!isComplete
+          ? "Status: -"
+          : "Status: Tidak Lengkap • ${DateFormat.d().format(date)} ${DateFormat.MMMM().format(date)} ${DateFormat.y().format(date)}"),
       trailing: isComplete
           ? null
           : Chip(
