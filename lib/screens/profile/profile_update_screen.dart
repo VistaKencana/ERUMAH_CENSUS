@@ -1,4 +1,6 @@
+import 'package:eperumahan_bancian/screens/profile/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../components/bg_image.dart';
 import '../../components/custom_appbar.dart';
@@ -13,6 +15,18 @@ class ProfileUpdateScreen extends StatefulWidget {
 }
 
 class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
+  late ProfileBloc _profileBloc;
+  late TextEditingController nameCtrl, emailCtrl, phoneCtrl;
+  @override
+  void initState() {
+    super.initState();
+    _profileBloc = BlocProvider.of<ProfileBloc>(context, listen: false);
+    _profileBloc.add(FetchProfile());
+    nameCtrl = TextEditingController(text: "-");
+    emailCtrl = TextEditingController(text: "-");
+    phoneCtrl = TextEditingController(text: "-");
+  }
+
   @override
   Widget build(BuildContext context) {
     return BgImage(
@@ -22,57 +36,66 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
         title: "Maklumat Akaun",
         centerTitle: false,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 30),
-              margin: const EdgeInsets.only(top: 20, left: 12, right: 12),
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(16)),
-              child: Column(
-                children: [
-                  const CustomFormField(
-                    title: "Nama",
-                    initialValue: "Ahmad Hazim",
-                    readOnly: true,
-                  ),
-                  _gap(),
-                  const CustomFormField(
-                    title: "No Kad Pengenalan",
-                    initialValue: "904678455",
-                    readOnly: true,
-                  ),
-                  _gap(),
-                  const TwoColumnForm(
-                    children: [
-                      CustomFormField(
-                        title: "No Telefon",
-                        initialValue: "0157486456",
-                        readOnly: true,
-                      ),
-                      CustomFormField(
-                        title: "Emel",
-                        initialValue: "ahmadhazim@gmail.com",
-                        readOnly: true,
-                      ),
-                    ],
-                  ),
-                  _gap(height: 24),
-                  // SizedBox(
-                  //     width: double.infinity,
-                  //     height: 50,
-                  //     child: ElevatedButton(
-                  //         onPressed: () {}, child: const Text("Simpan")))
-                ],
-              ),
-            )
-          ],
+      body: BlocListener<ProfileBloc, ProfileState>(
+        listener: (context, state) {
+          if (state is ProfileSuccess) {
+            setState(() {
+              nameCtrl.text = _nullConverter(data: state.data.name);
+              phoneCtrl.text = _nullConverter(data: state.data.phoneNo);
+              emailCtrl.text = _nullConverter(data: state.data.email);
+            });
+          }
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 30),
+                margin: const EdgeInsets.only(top: 20, left: 12, right: 12),
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16)),
+                child: Column(
+                  children: [
+                    CustomFormField(
+                      title: "Nama",
+                      readOnly: true,
+                      controller: nameCtrl,
+                    ),
+                    _gap(),
+                    TwoColumnForm(
+                      children: [
+                        CustomFormField(
+                          title: "No Telefon",
+                          controller: phoneCtrl,
+                          readOnly: true,
+                        ),
+                        CustomFormField(
+                          title: "Emel",
+                          readOnly: true,
+                          controller: emailCtrl,
+                        ),
+                      ],
+                    ),
+                    _gap(height: 24),
+                    // SizedBox(
+                    //     width: double.infinity,
+                    //     height: 50,
+                    //     child: ElevatedButton(
+                    //         onPressed: () {}, child: const Text("Simpan")))
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     ));
   }
 
   _gap({double height = 10}) => SizedBox(height: height);
+  String _nullConverter({required String? data, String? placeholder}) =>
+      data ?? (placeholder ?? "-");
 }

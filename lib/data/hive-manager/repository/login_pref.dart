@@ -29,6 +29,13 @@ class LoginPreference {
     return loginData.data?.userCode;
   }
 
+  String? getUsername() {
+    final data = loginPref.getData();
+    if (data == null) return null;
+    final loginData = LoginModel.fromJson(jsonDecode(data));
+    return loginData.data?.userName;
+  }
+
   bool isTokenExist() => loginPref.getData() != null;
 
   static Future<void> clearData() async => await loginPref.deleteData();
