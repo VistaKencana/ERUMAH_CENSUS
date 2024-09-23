@@ -1,6 +1,7 @@
 import 'package:eperumahan_bancian/screens/profile/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../components/bg_image.dart';
 import '../../components/custom_appbar.dart';
@@ -38,12 +39,17 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
       ),
       body: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
-          if (state is ProfileSuccess) {
+          if (state is ProfileLoading) {
+            EasyLoading.show();
+          } else if (state is ProfileSuccess) {
+            EasyLoading.dismiss();
             setState(() {
               nameCtrl.text = _nullConverter(data: state.data.name);
               phoneCtrl.text = _nullConverter(data: state.data.phoneNo);
               emailCtrl.text = _nullConverter(data: state.data.email);
             });
+          } else if (state is ProfileError) {
+            EasyLoading.dismiss();
           }
         },
         child: SingleChildScrollView(

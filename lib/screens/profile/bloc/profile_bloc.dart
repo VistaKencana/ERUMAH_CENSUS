@@ -4,7 +4,6 @@ import 'package:eperumahan_bancian/data/api/repositories/profile_repository.dart
 import 'package:eperumahan_bancian/screens/profile/model/profile_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:developer' as dev;
 
 part 'profile_event.dart';
@@ -18,7 +17,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final repo = ProfileRepository();
   ProfileData profileData = ProfileData();
   _onFetchProfile(FetchProfile event, Emitter<ProfileState> emit) async {
-    EasyLoading.show();
     profileData = ProfileData();
     emit(ProfileLoading());
     try {
@@ -31,8 +29,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     } catch (e) {
       dev.log(e.toString());
       emit(ProfileError(msg: e.toString()));
-    } finally {
-      EasyLoading.dismiss();
     }
   }
 }
