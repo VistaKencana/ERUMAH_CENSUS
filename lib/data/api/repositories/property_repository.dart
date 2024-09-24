@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:eperumahan_bancian/data/api/api_client.dart';
 import 'package:eperumahan_bancian/data/api/repositories/model/area_model.dart';
 import 'package:eperumahan_bancian/data/api/repositories/model/block_model.dart';
 import 'package:eperumahan_bancian/data/api/repositories/model/floor_model.dart';
+import 'package:eperumahan_bancian/data/api/repositories/model/property_model.dart';
 
 import 'model/zone_model.dart';
 import 'response_validator.dart';
@@ -14,13 +16,14 @@ class PropertyRepository {
   Future<List<ZoneData>> fetchZone() async {
     String baseUrl = client.baseUrl;
     final resp = await client.post(
+      //remove  [/censusUser] from baseurl
       baseUrl: baseUrl.replaceAll("/censusUser", ""),
       endpoint: "/listZone",
     );
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
     if (!isValid) throw Exception(RespValidator.getMessage(json));
-    final data = ZoneModel.fromJson(json);
+    final data = await Isolate.run(() => ZoneModel.fromJson(json));
     return data.data ?? [];
   }
 
@@ -42,6 +45,7 @@ class PropertyRepository {
     //Get ALL
     filter = isGetAll ? "?perPage=all" : filter;
     final resp = await client.post(
+      //remove  [/censusUser] from baseurl
       baseUrl: baseUrl.replaceAll("/censusUser", ""),
       endpoint: "/listHousingProject$filter",
       body: body,
@@ -49,7 +53,7 @@ class PropertyRepository {
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
     if (!isValid) throw Exception(RespValidator.getMessage(json));
-    final data = AreaModel.fromJson(json);
+    final data = await Isolate.run(() => AreaModel.fromJson(json));
     return data.data ?? [];
   }
 
@@ -57,6 +61,7 @@ class PropertyRepository {
     final body = {"housingCode": housingCode};
     String baseUrl = client.baseUrl;
     final resp = await client.post(
+      //remove  [/censusUser] from baseurl
       baseUrl: baseUrl.replaceAll("/censusUser", ""),
       endpoint: "/listUnitBlock",
       body: body,
@@ -64,7 +69,7 @@ class PropertyRepository {
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
     if (!isValid) throw Exception(RespValidator.getMessage(json));
-    final data = BlockModel.fromJson(json);
+    final data = await Isolate.run(() => BlockModel.fromJson(json));
     return data.data ?? [];
   }
 
@@ -73,6 +78,7 @@ class PropertyRepository {
     final body = {"housingCode": housingCode, "blockNo": blockNo};
     String baseUrl = client.baseUrl;
     final resp = await client.post(
+      //remove  [/censusUser] from baseurl
       baseUrl: baseUrl.replaceAll("/censusUser", ""),
       endpoint: "/listUnitFloor",
       body: body,
@@ -80,7 +86,30 @@ class PropertyRepository {
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
     if (!isValid) throw Exception(RespValidator.getMessage(json));
-    final data = FloorModel.fromJson(json);
+    final data = await Isolate.run(() => FloorModel.fromJson(json));
+    return data.data ?? [];
+  }
+
+  Future<List<PropertyData>> fetchListProperties(
+      {required String zoneCode,
+      required String housingCode,
+      required String blockNo,
+      required String floor}) async {
+    final body = {
+      "zoneCode": zoneCode,
+      "housingCode": housingCode,
+      "blockNo": blockNo,
+      "floor": floor
+    };
+
+    final resp = await client.post(
+      endpoint: "/app/list?perPage=all",
+      body: body,
+    );
+    final json = jsonDecode(resp.body);
+    final isValid = RespValidator.isSuccess(json);
+    if (!isValid) throw Exception(RespValidator.getMessage(json));
+    final data = await Isolate.run(() => PropertyModel.fromJson(json));
     return data.data ?? [];
   }
 }

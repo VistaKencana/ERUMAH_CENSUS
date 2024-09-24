@@ -5,8 +5,10 @@ import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/config/constants/app_images.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/data/api/repositories/bloc/property_bloc/property_bloc.dart';
+import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({super.key});
@@ -105,6 +107,15 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                         groupValue: propertyWatch.selectedZone,
                                         getTitle: (data) =>
                                             data.zoneCode ?? "-",
+                                        onQuery: (data, query) {
+                                          final result = data.where((zon) {
+                                            String value = (zon.zoneCode ?? "")
+                                                .toLowerCase();
+                                            return value.contains(
+                                                query?.toLowerCase() ?? "");
+                                          }).toList();
+                                          return result;
+                                        },
                                         onChange: (val) {
                                           if (val == null) return;
                                           setState(() {
@@ -125,19 +136,29 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                   fillColor: Colors.white,
                                   onTap: () {
                                     CustomDropdownSheet(
-                                        label: "Pilih Kawasan",
-                                        items: propertyWatch.listArea,
-                                        groupValue: propertyWatch.selectedArea,
-                                        getTitle: (data) => data.code ?? "-",
-                                        onChange: (val) {
-                                          if (val == null) return;
-                                          setState(() {
-                                            areaCtrl.text = val.code!;
-                                            blockCtrl.clear();
-                                          });
-                                          _propertyBloc
-                                              .add(FetchBlock(areaData: val));
-                                        }).show(context);
+                                      label: "Pilih Kawasan",
+                                      items: propertyWatch.listArea,
+                                      groupValue: propertyWatch.selectedArea,
+                                      getTitle: (data) => data.code ?? "-",
+                                      onChange: (val) {
+                                        if (val == null) return;
+                                        setState(() {
+                                          areaCtrl.text = val.code!;
+                                          blockCtrl.clear();
+                                        });
+                                        _propertyBloc
+                                            .add(FetchBlock(areaData: val));
+                                      },
+                                      onQuery: (data, query) {
+                                        final result = data.where((area) {
+                                          String value =
+                                              (area.code ?? "").toLowerCase();
+                                          return value.contains(
+                                              query?.toLowerCase() ?? "");
+                                        }).toList();
+                                        return result;
+                                      },
+                                    ).show(context);
                                   },
                                 ),
                                 CustomTextField(
@@ -148,25 +169,52 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                   fillColor: Colors.white,
                                   onTap: () {
                                     CustomDropdownSheet(
-                                        label: "Pilih Blok",
-                                        items: propertyWatch.listBlock,
-                                        getTitle: (data) => data.blockNo ?? "-",
-                                        onChange: (val) {
-                                          if (val == null) return;
-                                          setState(() =>
-                                              blockCtrl.text = val.blockNo!);
-                                        }).show(context);
+                                      label: "Pilih Blok",
+                                      items: propertyWatch.listBlock,
+                                      getTitle: (data) => data.blockNo ?? "-",
+                                      onChange: (val) {
+                                        if (val == null) return;
+                                        _propertyBloc.add(
+                                            FetchUnitFloor(blockData: val));
+                                        setState(() =>
+                                            blockCtrl.text = val.blockNo!);
+                                      },
+                                      onQuery: (data, query) {
+                                        final result = data.where((blok) {
+                                          String value = (blok.blockNo ?? "")
+                                              .toLowerCase();
+                                          return value.contains(
+                                              query?.toLowerCase() ?? "");
+                                        }).toList();
+                                        return result;
+                                      },
+                                    ).show(context);
                                   },
                                 ),
                               ]),
                             ),
                             const SizedBox(height: 10),
-                            SizedBox(
-                              width: double.maxFinite,
-                              height: 52,
-                              child: ElevatedButton(
-                                  onPressed: () => _goToList(),
-                                  child: const Text("Carian")),
+                            BlocListener<PropertyBloc, PropertyState>(
+                              listener: (context, state) {
+                                if (state is PropertyLoading) {
+                                  EasyLoading.show();
+                                } else if (state is PropertySuccess) {
+                                  EasyLoading.dismiss()
+                                      .then((val) => _goToList());
+                                } else if (state is PropertyError) {
+                                  CustomFlushbar.of(context)
+                                      .showWarning(msg: state.msg);
+                                  EasyLoading.dismiss();
+                                }
+                              },
+                              child: SizedBox(
+                                width: double.maxFinite,
+                                height: 52,
+                                child: ElevatedButton(
+                                    onPressed: () => _propertyBloc
+                                        .add(const FetchListProperties()),
+                                    child: const Text("Carian")),
+                              ),
                             ),
                           ],
                         ),
@@ -190,7 +238,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
   _recentTile() {
     return ListTile(
-        onTap: _goToList,
+        // onTap: _goToList,
         minLeadingWidth: 0,
         leading: Container(
           decoration: BoxDecoration(

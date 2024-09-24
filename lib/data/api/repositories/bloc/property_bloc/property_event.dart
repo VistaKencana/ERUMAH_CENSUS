@@ -26,3 +26,13 @@ class FetchUnitFloor extends PropertyEvent {
 
   const FetchUnitFloor({required this.blockData});
 }
+
+class FetchListProperties extends PropertyEvent {
+  const FetchListProperties();
+}
+
+class ChangePropertyFloor extends PropertyEvent {
+  final FloorData floorData;
+
+  const ChangePropertyFloor({required this.floorData});
+}

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:eperumahan_bancian/data/api/api_client.dart';
 import 'package:eperumahan_bancian/data/api/repositories/model/dropdown_model.dart';
@@ -21,7 +22,7 @@ class DropdownRepository {
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
     if (!isValid) throw Exception(RespValidator.getMessage(json));
-    final model = DropdownModel.fromJson(json);
+    final model = await Isolate.run(() => DropdownModel.fromJson(json));
     return model.data!.dynamicData?[type.name] ?? [];
   }
 }
