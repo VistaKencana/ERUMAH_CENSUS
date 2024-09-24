@@ -1,11 +1,11 @@
-import 'package:eperumahan_bancian/screens/activity/model/bancian_info.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/bancian_tingkat_modal.dart';
 import 'package:flutter/material.dart';
 
 import '../config/constants/app_colors.dart';
 
 class ActivityAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final String subtitle;
+  final String floor;
   final bool centerTitle;
   final Color? foregroundColor;
   final bool gradientBg;
@@ -13,6 +13,7 @@ class ActivityAppbar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final double height;
   final void Function()? onPressedBack;
+  final void Function() onOpenFloor;
   final PreferredSizeWidget? bottom;
   const ActivityAppbar({
     super.key,
@@ -25,11 +26,13 @@ class ActivityAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.height = 105,
     this.onPressedBack,
     this.bottom,
+    required this.subtitle,
+    required this.floor,
+    required this.onOpenFloor,
   });
 
   @override
   Widget build(BuildContext context) {
-    final info = BancianInfo.getExampleData();
     return Container(
       height: 200,
       decoration: BoxDecoration(
@@ -68,20 +71,13 @@ class ActivityAppbar extends StatelessWidget implements PreferredSizeWidget {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Text(
-                //   "Info Kawasan Bancian",
-                //   style: appTextStyle(
-                //       fontWeight: FontWeight.w400,
-                //       color: AppColors.dimmedPurple.color),
-                // ),
-
                 Text(
                   title,
                   overflow: TextOverflow.ellipsis,
                   style: appTextStyle(fontWeight: FontWeight.bold, size: 20),
                 ),
                 Text(
-                  "${info[0].value} • ${info[2].title} ${info[2].value}",
+                  subtitle,
                   style: appTextStyle(fontWeight: FontWeight.normal, size: 14),
                 ),
               ],
@@ -90,18 +86,9 @@ class ActivityAppbar extends StatelessWidget implements PreferredSizeWidget {
             actions: actions,
             bottom: bottom,
           ),
-          // Padding(
-          //   padding: const EdgeInsets.only(left: 20.0),
-          //   child: Text(
-          //     "${info[0].value} • ${info[2].title} ${info[2].value} • ${info[3].title} ${info[3].value}",
-          //     style: appTextStyle(fontWeight: FontWeight.bold),
-          //   ),
-          // ),
           const Spacer(),
           GestureDetector(
-            onTap: () {
-              const BancianTingkatModal().show(context);
-            },
+            onTap: onOpenFloor,
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
@@ -117,7 +104,7 @@ class ActivityAppbar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                   const Spacer(),
                   Text(
-                    "20",
+                    floor,
                     style: appTextStyle(fontWeight: FontWeight.bold, size: 17),
                   ),
                   const SizedBox(width: 10),

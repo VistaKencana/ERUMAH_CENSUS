@@ -108,16 +108,15 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
         return;
       }
 
-      FloorData floor = FloorData();
       if (listFloor.isNotEmpty) {
-        floor = listFloor.first;
+        selectedFloor = listFloor.first;
       }
 
       final resp = await repo.fetchListProperties(
           zoneCode: selectedZone.zoneCode ?? "",
           housingCode: selectedArea.code!,
           blockNo: selectedBlock.blockNo.toString(),
-          floor: floor.floorNo ?? "");
+          floor: selectedFloor.floorNo ?? "");
       listProperty = resp;
       emit(PropertySuccess());
     } catch (e) {
@@ -128,19 +127,19 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
 
   _onChangePropertyFloor(
       ChangePropertyFloor event, Emitter<PropertyState> emit) async {
-    EasyLoading.show();
+    emit(UnitLoading());
     try {
-      var floor = event.floorData;
+      selectedFloor = event.floorData;
       final resp = await repo.fetchListProperties(
           zoneCode: selectedZone.zoneCode ?? "",
           housingCode: selectedArea.code!,
           blockNo: selectedBlock.blockNo.toString(),
-          floor: floor.floorNo.toString());
+          floor: selectedFloor.floorNo.toString());
       listProperty = resp;
+      emit(UnitSuccess());
     } catch (e) {
       applog.log(tag: "fetchListProperties", msg: e.toString());
-    } finally {
-      EasyLoading.dismiss();
+      emit(UnitError(msg: e.toString()));
     }
   }
 

@@ -17,3 +17,12 @@ final class PropertyError extends PropertyState {
   final String msg;
   const PropertyError({required this.msg});
 }
+
+final class UnitLoading extends PropertyState {}
+
+final class UnitSuccess extends PropertyState {}
+
+final class UnitError extends PropertyState {
+  final String msg;
+  const UnitError({required this.msg});
+}

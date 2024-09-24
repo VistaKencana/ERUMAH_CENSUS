@@ -106,10 +106,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                         items: propertyWatch.listZone,
                                         groupValue: propertyWatch.selectedZone,
                                         getTitle: (data) =>
-                                            data.zoneCode ?? "-",
+                                            data.zoneDesc ?? "-",
                                         onQuery: (data, query) {
                                           final result = data.where((zon) {
-                                            String value = (zon.zoneCode ?? "")
+                                            String value = (zon.zoneDesc ?? "")
                                                 .toLowerCase();
                                             return value.contains(
                                                 query?.toLowerCase() ?? "");
@@ -119,7 +119,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                         onChange: (val) {
                                           if (val == null) return;
                                           setState(() {
-                                            zoneCtrl.text = val.zoneCode!;
+                                            zoneCtrl.text = val.zoneDesc!;
                                             areaCtrl.clear();
                                             blockCtrl.clear();
                                           });
@@ -139,11 +139,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                       label: "Pilih Kawasan",
                                       items: propertyWatch.listArea,
                                       groupValue: propertyWatch.selectedArea,
-                                      getTitle: (data) => data.code ?? "-",
+                                      getTitle: (data) => data.desc ?? "-",
                                       onChange: (val) {
                                         if (val == null) return;
                                         setState(() {
-                                          areaCtrl.text = val.code!;
+                                          areaCtrl.text = val.desc!;
                                           blockCtrl.clear();
                                         });
                                         _propertyBloc
@@ -152,7 +152,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                       onQuery: (data, query) {
                                         final result = data.where((area) {
                                           String value =
-                                              (area.code ?? "").toLowerCase();
+                                              (area.desc ?? "").toLowerCase();
                                           return value.contains(
                                               query?.toLowerCase() ?? "");
                                         }).toList();
@@ -172,6 +172,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                       label: "Pilih Blok",
                                       items: propertyWatch.listBlock,
                                       getTitle: (data) => data.blockNo ?? "-",
+                                      groupValue: propertyWatch.selectedBlock,
                                       onChange: (val) {
                                         if (val == null) return;
                                         _propertyBloc.add(

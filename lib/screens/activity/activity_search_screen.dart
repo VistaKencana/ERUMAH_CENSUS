@@ -1,9 +1,13 @@
 import 'package:eperumahan_bancian/components/activity_appbar.dart';
 import 'package:eperumahan_bancian/components/bg_image.dart';
+import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/data/api/repositories/bloc/property_bloc/property_bloc.dart';
+import 'package:eperumahan_bancian/data/api/repositories/model/property_model.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:eperumahan_bancian/screens/qr-home/qrscan_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'model/bancian_info.dart';
 
@@ -16,15 +20,37 @@ class ActivitySearchScreen extends StatefulWidget {
 
 class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
   final info = BancianInfo.getExampleData();
-  final carianFilter = ["Status", "Blok", "Tingkat", "Unit"];
+  late PropertyBloc _propertyBloc;
+  @override
+  void initState() {
+    super.initState();
+    _propertyBloc = BlocProvider.of<PropertyBloc>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final propertyWatch = BlocProvider.of<PropertyBloc>(context);
     Size size = MediaQuery.sizeOf(context);
     return BgImage(
         child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: ActivityAppbar(
-        title: info[1].value,
+        onOpenFloor: () {
+          CustomDropdownSheet(
+              label: "Pilih Tingkat",
+              items: _propertyBloc.listFloor,
+              getTitle: (data) => data.floorNo ?? "",
+              groupValue: propertyWatch.selectedFloor,
+              onChange: (val) {
+                if (val == null) return;
+                _propertyBloc.add(ChangePropertyFloor(floorData: val));
+                setState(() {});
+              }).show(context);
+        },
+        floor: propertyWatch.selectedFloor.floorNo ?? "-",
+        title: _propertyBloc.selectedArea.desc ?? "-",
+        subtitle:
+            "${_propertyBloc.selectedZone.zoneDesc} • Blok : ${_propertyBloc.selectedBlock.blockNo}",
         centerTitle: false,
         foregroundColor: AppColors.primary.color,
       ),
@@ -63,32 +89,54 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
                             appTextStyle(fontWeight: FontWeight.bold, size: 25),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: AppColors.lightGrey.color,
-                            borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.all(10),
-                        child: const Icon(Icons.search),
-                      ),
-                    )
+                    // GestureDetector(
+                    //   onTap: () {},
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //         color: AppColors.lightGrey.color,
+                    //         borderRadius: BorderRadius.circular(10)),
+                    //     padding: const EdgeInsets.all(10),
+                    //     child: const Icon(Icons.search),
+                    //   ),
+                    // )
                   ],
                 ),
                 const SizedBox(height: 12),
-                Expanded(
-                  child: Scrollbar(
-                      child: ListView(
-                    children: [
-                      _newInfoTile(lawatan: 1, isComplete: false),
-                      _newInfoTile(lawatan: 2, isComplete: true),
-                      _newInfoTile(lawatan: 3, isComplete: true),
-                      _newInfoTile(lawatan: 1, isComplete: false),
-                      _newInfoTile(lawatan: 2, isComplete: true),
-                      _newInfoTile(lawatan: 2, isComplete: true),
-                    ],
-                  )),
-                ),
+                BlocConsumer<PropertyBloc, PropertyState>(
+                  listener: (state, context) {},
+                  builder: (context, state) {
+                    if (state is UnitLoading || state is PropertyLoading) {
+                      return const Expanded(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        ],
+                      ));
+                    } else if (state is PropertySuccess ||
+                        state is UnitSuccess) {
+                      return Expanded(
+                        child: Scrollbar(
+                            child: ListView.builder(
+                                itemCount: propertyWatch.listProperty.length,
+                                itemBuilder: (_, index) {
+                                  return _newInfoTile(
+                                      data: propertyWatch.listProperty[index]);
+                                })),
+                      );
+                    } else {
+                      return const Expanded(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [Center(child: Text("Something went wrong"))],
+                      ));
+                    }
+                  },
+                )
               ],
             ),
           )
@@ -116,7 +164,7 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
     );
   }
 
-  _newInfoTile({required int lawatan, bool isComplete = true}) {
+  _newInfoTile({required PropertyData data}) {
     return ListTile(
       onTap: () {
         QrNavigationPref.setFromHome(val: false)
@@ -140,14 +188,16 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("01-01-01"),
-          Text("Kota Damansara • Lawatan $lawatan"),
+          Text(data.unitCode ?? "-"),
+          Text("Lawatan ${data.totalVisit}"),
         ],
       ),
       trailing: Chip(
-        color: WidgetStatePropertyAll(isComplete ? Colors.green : Colors.amber),
+        color: WidgetStatePropertyAll((data.status ?? "").contains("BELUM")
+            ? Colors.amber
+            : Colors.green),
         label: Text(
-          isComplete ? "SELESAI" : "BELUM DIBANCI",
+          data.status ?? "-",
           style: appTextStyle(
               size: 10, fontWeight: FontWeight.bold, color: Colors.white),
         ),

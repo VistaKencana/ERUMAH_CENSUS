@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
+import 'package:eperumahan_bancian/main.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import "dart:developer" as dev;
 
+import '../../config/routes/routes_name.dart';
 import '../hive-manager/repository/login_pref.dart';
 
 class ApiClient {
@@ -140,7 +144,17 @@ class ApiClient {
     final isExist = LoginPreference().isTokenExist();
     if (!isExist) return null;
     final token = LoginPreference().isTokenExpired();
-    if (token == null) throw TokenExpiredException();
+    if (token == null) {
+      CustomAlertDialog(
+        title: 'Session Expired',
+        subtitle: 'Please login again',
+        colorBtnLabel: 'Okay',
+        barrierDismissible: false,
+        onColorBtn: () => Navigator.popUntil(navigatorKey.currentContext!,
+            ModalRoute.withName(RoutesName.login)),
+      ).show(navigatorKey.currentContext!);
+      throw TokenExpiredException();
+    }
     return token;
   }
 }

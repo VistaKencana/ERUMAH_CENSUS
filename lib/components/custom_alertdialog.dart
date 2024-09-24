@@ -10,6 +10,7 @@ class CustomAlertDialog extends StatefulWidget {
   final AlertBtnPosition position;
   final void Function()? onColorBtn;
   final void Function()? onDimmedBtn;
+  final bool barrierDismissible;
   const CustomAlertDialog(
       {super.key,
       required this.title,
@@ -18,10 +19,12 @@ class CustomAlertDialog extends StatefulWidget {
       required this.colorBtnLabel,
       this.dimmedBtnLabel,
       required this.subtitle,
-      this.position = AlertBtnPosition.leftRignt});
+      this.position = AlertBtnPosition.leftRignt,
+      this.barrierDismissible = true});
   Future<T?> show<T>(BuildContext context) {
     return showDialog(
       context: context,
+      barrierDismissible: barrierDismissible,
       builder: (_) => this,
     );
   }
