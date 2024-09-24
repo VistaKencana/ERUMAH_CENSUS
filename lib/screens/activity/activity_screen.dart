@@ -1,9 +1,12 @@
 import 'package:eperumahan_bancian/components/bg_image.dart';
+import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
 import 'package:eperumahan_bancian/components/custom_textfield.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/config/constants/app_images.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
+import 'package:eperumahan_bancian/data/api/repositories/bloc/property_bloc/property_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({super.key});
@@ -13,9 +16,21 @@ class ActivityScreen extends StatefulWidget {
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
-  final dropdown = ["Zon", "Kawasan", "Blok" /*, "Tingkat"*/];
+  late PropertyBloc _propertyBloc;
+  late TextEditingController zoneCtrl, areaCtrl, blockCtrl;
+  @override
+  void initState() {
+    super.initState();
+    _propertyBloc = BlocProvider.of<PropertyBloc>(context, listen: false);
+    _propertyBloc.add(FetchZone());
+    zoneCtrl = TextEditingController();
+    areaCtrl = TextEditingController();
+    blockCtrl = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final propertyWatch = context.watch<PropertyBloc>();
     Size size = MediaQuery.sizeOf(context);
     return BgImage(
       child: Scaffold(
@@ -76,13 +91,74 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(10),
-                              child: Column(
-                                children: List.generate(
-                                    dropdown.length,
-                                    (index) => _dropdownField(
-                                        hintText: dropdown[index],
-                                        onTap: () {})),
-                              ),
+                              child: Column(children: [
+                                CustomTextField(
+                                  suffixIcon: Icons.unfold_more_rounded,
+                                  readOnly: true,
+                                  controller: zoneCtrl,
+                                  hintText: "Zon",
+                                  fillColor: Colors.white,
+                                  onTap: () {
+                                    CustomDropdownSheet(
+                                        label: "Pilih Zon",
+                                        items: propertyWatch.listZone,
+                                        groupValue: propertyWatch.selectedZone,
+                                        getTitle: (data) =>
+                                            data.zoneCode ?? "-",
+                                        onChange: (val) {
+                                          if (val == null) return;
+                                          setState(() {
+                                            zoneCtrl.text = val.zoneCode!;
+                                            areaCtrl.clear();
+                                            blockCtrl.clear();
+                                          });
+                                          _propertyBloc
+                                              .add(FetchArea(zoneData: val));
+                                        }).show(context);
+                                  },
+                                ),
+                                CustomTextField(
+                                  suffixIcon: Icons.unfold_more_rounded,
+                                  controller: areaCtrl,
+                                  readOnly: true,
+                                  hintText: "Kawasan",
+                                  fillColor: Colors.white,
+                                  onTap: () {
+                                    CustomDropdownSheet(
+                                        label: "Pilih Kawasan",
+                                        items: propertyWatch.listArea,
+                                        groupValue: propertyWatch.selectedArea,
+                                        getTitle: (data) => data.code ?? "-",
+                                        onChange: (val) {
+                                          if (val == null) return;
+                                          setState(() {
+                                            areaCtrl.text = val.code!;
+                                            blockCtrl.clear();
+                                          });
+                                          _propertyBloc
+                                              .add(FetchBlock(areaData: val));
+                                        }).show(context);
+                                  },
+                                ),
+                                CustomTextField(
+                                  suffixIcon: Icons.unfold_more_rounded,
+                                  controller: blockCtrl,
+                                  readOnly: true,
+                                  hintText: "Blok",
+                                  fillColor: Colors.white,
+                                  onTap: () {
+                                    CustomDropdownSheet(
+                                        label: "Pilih Blok",
+                                        items: propertyWatch.listBlock,
+                                        getTitle: (data) => data.blockNo ?? "-",
+                                        onChange: (val) {
+                                          if (val == null) return;
+                                          setState(() =>
+                                              blockCtrl.text = val.blockNo!);
+                                        }).show(context);
+                                  },
+                                ),
+                              ]),
                             ),
                             const SizedBox(height: 10),
                             SizedBox(
@@ -110,16 +186,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
   _goToList() {
     Navigator.pushNamed(context, RoutesName.activitySearch);
-  }
-
-  _dropdownField({required String hintText, required void Function() onTap}) {
-    return CustomTextField(
-      suffixIcon: Icons.unfold_more_rounded,
-      readOnly: true,
-      hintText: hintText,
-      fillColor: Colors.white,
-      onTap: onTap,
-    );
   }
 
   _recentTile() {

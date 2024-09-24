@@ -37,7 +37,10 @@ class AreaModel {
             ? []
             : List<AreaData>.from(
                 json["data"]!.map((x) => AreaData.fromJson(x))),
-        pagination: json["pagination"],
+        pagination: json["pagination"] == null ||
+                (json["pagination"] is Map && json["pagination"].isEmpty)
+            ? null
+            : AreaPagination.fromJson(json["pagination"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -205,19 +208,26 @@ class AreaPagination {
         total: total ?? this.total,
       );
 
-  factory AreaPagination.fromJson(Map<String, dynamic> json) => AreaPagination(
-        currentPage: json["CurrentPage"],
-        firstPageUrl: json["FirstPageUrl"],
-        from: json["From"],
-        lastPage: json["LastPage"],
-        lastPageUrl: json["LastPageUrl"],
-        nextPageUrl: json["NextPageUrl"],
-        path: json["Path"],
-        perPage: json["PerPage"],
-        prevPageUrl: json["PrevPageUrl"],
-        to: json["To"],
-        total: json["Total"],
-      );
+  factory AreaPagination.fromJson(Map<String, dynamic> json) {
+    if (json.isEmpty) {
+      // Return a default instance if the JSON is empty
+      return AreaPagination();
+    }
+
+    return AreaPagination(
+      currentPage: json["CurrentPage"],
+      firstPageUrl: json["FirstPageUrl"],
+      from: json["From"],
+      lastPage: json["LastPage"],
+      lastPageUrl: json["LastPageUrl"],
+      nextPageUrl: json["NextPageUrl"],
+      path: json["Path"],
+      perPage: json["PerPage"],
+      prevPageUrl: json["PrevPageUrl"],
+      to: json["To"],
+      total: json["Total"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "CurrentPage": currentPage,
