@@ -42,8 +42,12 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
   final repo = PropertyRepository();
   final applog = const AppLog(classname: "PropertyBloc");
   _onFetchZone(FetchZone event, Emitter<PropertyState> emit) async {
-    EasyLoading.show();
     _clearAllData();
+    if (listZone.isNotEmpty) {
+      return;
+    }
+    EasyLoading.show();
+
     try {
       final resp = await repo.fetchZone();
       listZone = resp;
@@ -144,7 +148,6 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
   }
 
   _clearAllData() {
-    listZone.clear();
     listArea.clear();
     listBlock.clear();
     listFloor.clear();

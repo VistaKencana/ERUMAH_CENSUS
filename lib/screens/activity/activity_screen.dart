@@ -5,6 +5,7 @@ import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/config/constants/app_images.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/data/api/repositories/bloc/property_bloc/property_bloc.dart';
+import 'package:eperumahan_bancian/screens/qr-home/bloc/qr_bloc.dart';
 import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,11 +20,13 @@ class ActivityScreen extends StatefulWidget {
 
 class _ActivityScreenState extends State<ActivityScreen> {
   late PropertyBloc _propertyBloc;
+  late QrBloc _qrBloc;
   late TextEditingController zoneCtrl, areaCtrl, blockCtrl;
   @override
   void initState() {
     super.initState();
     _propertyBloc = BlocProvider.of<PropertyBloc>(context, listen: false);
+    _qrBloc = BlocProvider.of<QrBloc>(context, listen: false);
     _propertyBloc.add(FetchZone());
     zoneCtrl = TextEditingController();
     areaCtrl = TextEditingController();
@@ -212,8 +215,17 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                 width: double.maxFinite,
                                 height: 52,
                                 child: ElevatedButton(
-                                    onPressed: () => _propertyBloc
-                                        .add(const FetchListProperties()),
+                                    onPressed: () {
+                                      _propertyBloc
+                                          .add(const FetchListProperties());
+                                      _qrBloc.setPropertyData(
+                                          selectedZone:
+                                              _propertyBloc.selectedZone,
+                                          selectedArea:
+                                              _propertyBloc.selectedArea,
+                                          selectedBlock:
+                                              _propertyBloc.selectedBlock);
+                                    },
                                     child: const Text("Carian")),
                               ),
                             ),

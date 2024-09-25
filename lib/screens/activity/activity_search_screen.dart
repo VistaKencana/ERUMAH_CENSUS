@@ -5,6 +5,7 @@ import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/data/api/repositories/bloc/property_bloc/property_bloc.dart';
 import 'package:eperumahan_bancian/data/api/repositories/model/property_model.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
+import 'package:eperumahan_bancian/screens/qr-home/bloc/qr_bloc.dart';
 import 'package:eperumahan_bancian/screens/qr-home/qrscan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,10 +22,12 @@ class ActivitySearchScreen extends StatefulWidget {
 class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
   final info = BancianInfo.getExampleData();
   late PropertyBloc _propertyBloc;
+  late QrBloc _qrBloc;
   @override
   void initState() {
     super.initState();
     _propertyBloc = BlocProvider.of<PropertyBloc>(context, listen: false);
+    _qrBloc = BlocProvider.of<QrBloc>(context, listen: false);
   }
 
   @override
@@ -167,6 +170,7 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
   _newInfoTile({required PropertyData data}) {
     return ListTile(
       onTap: () {
+        _qrBloc.setPropertyData(selectedProperty: data);
         QrNavigationPref.setFromHome(val: false)
             .then((val) => _goTo(const QrScanScreen(isFromHome: false)));
       },
@@ -188,7 +192,7 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(data.unitCode ?? "-"),
+          Text(data.unitNo ?? "-"),
           Text("Lawatan ${data.totalVisit}"),
         ],
       ),

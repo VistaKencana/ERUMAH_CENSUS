@@ -2,6 +2,7 @@ import 'package:eperumahan_bancian/data/api/repositories/bloc/dropddown_bloc/dro
 import 'package:eperumahan_bancian/data/api/repositories/bloc/property_bloc/property_bloc.dart';
 import 'package:eperumahan_bancian/screens/login/bloc/auth_bloc.dart';
 import 'package:eperumahan_bancian/screens/profile/bloc/profile_bloc.dart';
+import 'package:eperumahan_bancian/screens/qr-home/bloc/qr_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppBlocs {
@@ -11,5 +12,6 @@ class AppBlocs {
     BlocProvider<ProfileBloc>(create: (context) => ProfileBloc()),
     BlocProvider<DropdownBloc>(create: (context) => DropdownBloc()),
     BlocProvider<PropertyBloc>(create: (context) => PropertyBloc()),
+    BlocProvider<QrBloc>(create: (context) => QrBloc()),
   ];
 }
