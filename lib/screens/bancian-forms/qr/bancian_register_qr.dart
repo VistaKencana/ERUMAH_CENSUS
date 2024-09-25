@@ -88,7 +88,11 @@ class _BancianRegisterQrState extends State<BancianRegisterQr> {
                     context,
                     PageTransition(
                       child: BancianPprSearch(
-                        onSelect: (data) {},
+                        onSelect: (data) {
+                          setState(() {
+                            unitCtrl.text = data.unitNo ?? "";
+                          });
+                        },
                       ),
                       type: PageTransitionType.topToBottom,
                     ));

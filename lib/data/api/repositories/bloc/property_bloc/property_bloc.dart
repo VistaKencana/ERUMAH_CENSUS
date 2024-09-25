@@ -21,6 +21,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
     on<FetchUnitFloor>(_onFetchUnitFloor);
     on<FetchListProperties>(_onFetchListProperties);
     on<ChangePropertyFloor>(_onChangePropertyFloor);
+    on<FetchFloorAndUnit>(_onFetchFloorAndUnit);
   }
 
   //Zone
@@ -42,6 +43,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
   final repo = PropertyRepository();
   final applog = const AppLog(classname: "PropertyBloc");
   _onFetchZone(FetchZone event, Emitter<PropertyState> emit) async {
+    emit(PropertyInitial());
     _clearAllData();
     if (listZone.isNotEmpty) {
       return;
@@ -144,6 +146,46 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
     } catch (e) {
       applog.log(tag: "fetchListProperties", msg: e.toString());
       emit(UnitError(msg: e.toString()));
+    }
+  }
+
+  _onFetchFloorAndUnit(
+      FetchFloorAndUnit event, Emitter<PropertyState> emit) async {
+    emit(PropertyLoading());
+    selectedBlock = event.blockData;
+    try {
+      final resp = await repo.fetchUnitFloor(
+          housingCode: selectedArea.code!,
+          blockNo: selectedBlock.blockNo.toString());
+      listFloor = resp;
+    } catch (e) {
+      applog.log(tag: "onFetchFloorAndUnit 1", msg: e.toString());
+      emit(PropertyError(msg: e.toString()));
+      return;
+    }
+
+    try {
+      if (selectedZone.zoneCode == null ||
+          selectedArea.code == null ||
+          selectedBlock.blockNo == null) {
+        emit(const PropertyError(msg: "Please select all data"));
+        return;
+      }
+
+      if (listFloor.isNotEmpty) {
+        selectedFloor = listFloor.first;
+      }
+
+      final resp = await repo.fetchListProperties(
+          zoneCode: selectedZone.zoneCode ?? "",
+          housingCode: selectedArea.code!,
+          blockNo: selectedBlock.blockNo.toString(),
+          floor: selectedFloor.floorNo ?? "");
+      listProperty = resp;
+      emit(PropertySuccess());
+    } catch (e) {
+      applog.log(tag: "onFetchFloorAndUnit 2", msg: e.toString());
+      emit(PropertyError(msg: e.toString()));
     }
   }
 

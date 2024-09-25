@@ -36,3 +36,9 @@ class ChangePropertyFloor extends PropertyEvent {
 
   const ChangePropertyFloor({required this.floorData});
 }
+
+class FetchFloorAndUnit extends PropertyEvent {
+  final BlockData blockData;
+
+  const FetchFloorAndUnit({required this.blockData});
+}
