@@ -9,33 +9,32 @@ import 'dart:developer' as dev;
 class DropdownRepository {
   final client = ApiClient();
 
-  Future<List<DropdownData?>> getDropdownData(
-      {DdType type = DdType.all}) async {
+  Future<List<DropdownData?>> getDropdownData({required DdType type}) async {
     dev.log(name: "DROPDOWN REPO", "Fetch dropdown for : ${type.name}");
 
-    final filter = type == DdType.all ? "" : "?list=${type.name}";
     String baseUrl = client.baseUrl;
     final resp = await client.get(
       baseUrl: baseUrl.replaceAll("/censusUser", ""),
-      endpoint: "/dropdown/list$filter",
+      endpoint: type.endpoint,
     );
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
     if (!isValid) throw Exception(RespValidator.getMessage(json));
     final model = await Isolate.run(() => DropdownModel.fromJson(json));
-    return model.data!.dynamicData?[type.name] ?? [];
+    return model.data ?? [];
   }
 }
 
 enum DdType {
-  all,
-  zone,
-  parliament,
-  race,
-  gender,
-  maritalStatus,
-  occupationType,
-  censusStatus,
-  relationship,
-  healthLevel
+  gender(endpoint: "/listGender"),
+  race(endpoint: "/listRace"),
+  maritalStatus(endpoint: "/listMaritalStatus"),
+  occupationType(endpoint: "/listOccupationType"),
+  relationship(endpoint: "/listRelationship"),
+  healthLevel(endpoint: "/listHealthLevel"),
+  censusStatus(endpoint: "/censusUser/appl/listStatus");
+
+  final String endpoint;
+
+  const DdType({required this.endpoint});
 }

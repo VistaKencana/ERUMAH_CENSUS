@@ -54,7 +54,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
       final resp = await repo.fetchZone();
       listZone = resp;
     } catch (e) {
-      applog.log(tag: "fetchZone", msg: e.toString());
+      applog.logError(tag: "fetchZone", msg: e.toString());
     } finally {
       EasyLoading.dismiss();
     }
@@ -65,10 +65,10 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
     _clearArea();
     selectedZone = event.zoneData;
     try {
-      final resp = await repo.fetchArea(zoneCode: selectedZone.zoneCode!);
+      final resp = await repo.fetchArea(zoneCode: selectedZone.code!);
       listArea = resp;
     } catch (e) {
-      applog.log(tag: "fetchArea", msg: e.toString());
+      applog.logError(tag: "fetchArea", msg: e.toString());
     } finally {
       EasyLoading.dismiss();
     }
@@ -82,7 +82,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
       final resp = await repo.fetchBlock(housingCode: selectedArea.code!);
       listBlock = resp;
     } catch (e) {
-      applog.log(tag: "fetchBlock", msg: e.toString());
+      applog.logError(tag: "fetchBlock", msg: e.toString());
     } finally {
       EasyLoading.dismiss();
     }
@@ -97,7 +97,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
           blockNo: selectedBlock.blockNo.toString());
       listFloor = resp;
     } catch (e) {
-      applog.log(tag: "fetchUnitFloor", msg: e.toString());
+      applog.logError(tag: "fetchUnitFloor", msg: e.toString());
     } finally {
       EasyLoading.dismiss();
     }
@@ -107,7 +107,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
       FetchListProperties event, Emitter<PropertyState> emit) async {
     emit(PropertyLoading());
     try {
-      if (selectedZone.zoneCode == null ||
+      if (selectedZone.code == null ||
           selectedArea.code == null ||
           selectedBlock.blockNo == null) {
         emit(const PropertyError(msg: "Please select all data"));
@@ -119,14 +119,14 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
       }
 
       final resp = await repo.fetchListProperties(
-          zoneCode: selectedZone.zoneCode ?? "",
+          zoneCode: selectedZone.code ?? "",
           housingCode: selectedArea.code!,
           blockNo: selectedBlock.blockNo.toString(),
           floor: selectedFloor.floorNo ?? "");
       listProperty = resp;
       emit(PropertySuccess());
     } catch (e) {
-      applog.log(tag: "fetchListProperties", msg: e.toString());
+      applog.logError(tag: "fetchListProperties", msg: e.toString());
       emit(PropertyError(msg: e.toString()));
     }
   }
@@ -137,14 +137,14 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
     try {
       selectedFloor = event.floorData;
       final resp = await repo.fetchListProperties(
-          zoneCode: selectedZone.zoneCode ?? "",
+          zoneCode: selectedZone.code ?? "",
           housingCode: selectedArea.code!,
           blockNo: selectedBlock.blockNo.toString(),
           floor: selectedFloor.floorNo.toString());
       listProperty = resp;
       emit(UnitSuccess());
     } catch (e) {
-      applog.log(tag: "fetchListProperties", msg: e.toString());
+      applog.logError(tag: "fetchListProperties", msg: e.toString());
       emit(UnitError(msg: e.toString()));
     }
   }
@@ -159,13 +159,13 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
           blockNo: selectedBlock.blockNo.toString());
       listFloor = resp;
     } catch (e) {
-      applog.log(tag: "onFetchFloorAndUnit 1", msg: e.toString());
+      applog.logError(tag: "onFetchFloorAndUnit 1", msg: e.toString());
       emit(PropertyError(msg: e.toString()));
       return;
     }
 
     try {
-      if (selectedZone.zoneCode == null ||
+      if (selectedZone.code == null ||
           selectedArea.code == null ||
           selectedBlock.blockNo == null) {
         emit(const PropertyError(msg: "Please select all data"));
@@ -177,14 +177,14 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
       }
 
       final resp = await repo.fetchListProperties(
-          zoneCode: selectedZone.zoneCode ?? "",
+          zoneCode: selectedZone.code ?? "",
           housingCode: selectedArea.code!,
           blockNo: selectedBlock.blockNo.toString(),
           floor: selectedFloor.floorNo ?? "");
       listProperty = resp;
       emit(PropertySuccess());
     } catch (e) {
-      applog.log(tag: "onFetchFloorAndUnit 2", msg: e.toString());
+      applog.logError(tag: "onFetchFloorAndUnit 2", msg: e.toString());
       emit(PropertyError(msg: e.toString()));
     }
   }

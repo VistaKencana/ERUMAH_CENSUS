@@ -108,12 +108,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                         label: "Pilih Zon",
                                         items: propertyWatch.listZone,
                                         groupValue: propertyWatch.selectedZone,
-                                        getTitle: (data) =>
-                                            data.zoneDesc ?? "-",
+                                        getTitle: (data) => data.desc ?? "-",
                                         onQuery: (data, query) {
                                           final result = data.where((zon) {
-                                            String value = (zon.zoneDesc ?? "")
-                                                .toLowerCase();
+                                            String value =
+                                                (zon.desc ?? "").toLowerCase();
                                             return value.contains(
                                                 query?.toLowerCase() ?? "");
                                           }).toList();
@@ -122,7 +121,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                         onChange: (val) {
                                           if (val == null) return;
                                           setState(() {
-                                            zoneCtrl.text = val.zoneDesc!;
+                                            zoneCtrl.text = val.desc!;
                                             areaCtrl.clear();
                                             blockCtrl.clear();
                                           });

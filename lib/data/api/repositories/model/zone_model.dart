@@ -39,42 +39,42 @@ class ZoneModel {
 }
 
 class ZoneData {
-  String? zoneCode;
-  String? zoneDesc;
-  String? zonePic;
-  String? zonePhoneNo;
+  String? code;
+  String? desc;
+  String? pic;
+  String? phoneNo;
 
   ZoneData({
-    this.zoneCode,
-    this.zoneDesc,
-    this.zonePic,
-    this.zonePhoneNo,
+    this.code,
+    this.desc,
+    this.pic,
+    this.phoneNo,
   });
 
   ZoneData copyWith({
-    String? zoneCode,
-    String? zoneDesc,
-    String? zonePic,
-    String? zonePhoneNo,
+    String? code,
+    String? desc,
+    String? pic,
+    String? phoneNo,
   }) =>
       ZoneData(
-        zoneCode: zoneCode ?? this.zoneCode,
-        zoneDesc: zoneDesc ?? this.zoneDesc,
-        zonePic: zonePic ?? this.zonePic,
-        zonePhoneNo: zonePhoneNo ?? this.zonePhoneNo,
+        code: code ?? this.code,
+        desc: desc ?? this.desc,
+        pic: pic ?? this.pic,
+        phoneNo: phoneNo ?? this.phoneNo,
       );
 
   factory ZoneData.fromJson(Map<String, dynamic> json) => ZoneData(
-        zoneCode: json["zoneCode"],
-        zoneDesc: json["zoneDesc"],
-        zonePic: json["zonePic"],
-        zonePhoneNo: json["zonePhoneNo"],
+        code: json["code"],
+        desc: json["desc"],
+        pic: json["pic"],
+        phoneNo: json["phoneNo"],
       );
 
   Map<String, dynamic> toJson() => {
-        "zoneCode": zoneCode,
-        "zoneDesc": zoneDesc,
-        "zonePic": zonePic,
-        "zonePhoneNo": zonePhoneNo,
+        "code": code,
+        "desc": desc,
+        "pic": pic,
+        "phoneNo": phoneNo,
       };
 }

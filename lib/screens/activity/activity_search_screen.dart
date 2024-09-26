@@ -53,7 +53,7 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
         floor: propertyWatch.selectedFloor.floorNo ?? "-",
         title: _propertyBloc.selectedArea.desc ?? "-",
         subtitle:
-            "${_propertyBloc.selectedZone.zoneDesc} • Blok : ${_propertyBloc.selectedBlock.blockNo}",
+            "${_propertyBloc.selectedZone.desc} • Blok : ${_propertyBloc.selectedBlock.blockNo}",
         centerTitle: false,
         foregroundColor: AppColors.primary.color,
       ),
@@ -171,8 +171,8 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
     return ListTile(
       onTap: () {
         _qrBloc.setPropertyData(selectedProperty: data);
-        QrNavigationPref.setFromHome(val: false)
-            .then((val) => _goTo(const QrScanScreen(isFromHome: false)));
+        QrNavigationPref.setFromHome(val: false).then((val) =>
+            _goTo(QrScanScreen(isFromHome: false, unitNumber: data.unitNo)));
       },
       // onTap: () => const BancianInfosModal().show(context),
       minLeadingWidth: 0,

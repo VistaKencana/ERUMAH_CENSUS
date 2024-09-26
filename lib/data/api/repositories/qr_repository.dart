@@ -11,7 +11,7 @@ class QrRepository {
 
   Future<ResidentInfoData> scanQrCode({required String qrCode}) async {
     final body = {"qrCode": qrCode};
-    final resp = await client.post(endpoint: "/app/view", body: body);
+    final resp = await client.post(endpoint: "/appl/view", body: body);
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
     if (!isValid) throw Exception(RespValidator.getMessage(json));
@@ -22,7 +22,8 @@ class QrRepository {
   Future<String> registerQrCode(
       {required String qrCode, required String unitCode}) async {
     final body = {"qrCode": qrCode, "unitCode": unitCode};
-    final resp = await client.post(endpoint: "/app/registerQr", body: body);
+    final resp =
+        await client.post(endpoint: "/appl/registerQrCode", body: body);
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
     if (!isValid) throw Exception(RespValidator.getMessage(json));
@@ -32,7 +33,7 @@ class QrRepository {
   Future<void> updateQrCode(
       {required String qrCode, required String unitCode}) async {
     final body = {"qrCode": qrCode, "unitCode": unitCode};
-    final resp = await client.post(endpoint: "/app/updateQr", body: body);
+    final resp = await client.post(endpoint: "/appl/updateQrCode", body: body);
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
     if (!isValid) throw Exception(RespValidator.getMessage(json));

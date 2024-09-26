@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
+import 'package:eperumahan_bancian/components/qr_not_tally_dialog.dart';
 import 'package:eperumahan_bancian/screens/activity/bancian_info_modal.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/qr/bancian_register_qr.dart';
 import 'package:eperumahan_bancian/screens/qr-home/bloc/qr_bloc.dart';
@@ -12,7 +13,8 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrScanScreen extends StatefulWidget {
   final bool isFromHome;
-  const QrScanScreen({super.key, this.isFromHome = true});
+  final String? unitNumber;
+  const QrScanScreen({super.key, this.isFromHome = true, this.unitNumber});
 
   @override
   State<QrScanScreen> createState() => _QrScanScreenState();
@@ -68,6 +70,10 @@ class _QrScanScreenState extends State<QrScanScreen> {
             controller?.resumeCamera();
             CustomFlushbar.of(context).showFailed(msg: state.msg);
             EasyLoading.dismiss();
+          } else if (state is QrNotTally) {
+            controller?.resumeCamera();
+            EasyLoading.dismiss()
+                .then((val) => _notTallyAlertDialog(state.msg));
           }
         },
         child: LayoutBuilder(builder: (context, constaint) {
@@ -81,27 +87,34 @@ class _QrScanScreenState extends State<QrScanScreen> {
                   ),
                 ],
               ),
-              // Positioned(
-              //     bottom: constaint.maxHeight * 0.2,
-              //     child: Column(
-              //       mainAxisSize: MainAxisSize.min,
-              //       children: [
-              //         _roundedButton(
-              //           title: "Daftar QR",
-              //           onTap: () async {
-              //             _registerAlertDialog();
-              //           },
-              //         ),
-              //         _roundedButton(
-              //           title: "Teruskan",
-              //           onTap: () async {
-              //             controller?.pauseCamera();
-              //             BancianInfosModal.show(context)
-              //                 .then((val) => controller?.resumeCamera());
-              //           },
-              //         )
-              //       ],
-              //     ))
+              Visibility(
+                visible: widget.unitNumber != null,
+                child: Positioned(
+                    top: constaint.maxHeight * 0.1,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Unit: ${widget.unitNumber}",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        // _roundedButton(
+                        //   title: "Daftar QR",
+                        //   onTap: () async {
+                        //     _registerAlertDialog();
+                        //   },
+                        // ),
+                        // _roundedButton(
+                        //   title: "Teruskan",
+                        //   onTap: () async {
+                        //     controller?.pauseCamera();
+                        //     BancianInfosModal.show(context)
+                        //         .then((val) => controller?.resumeCamera());
+                        //   },
+                        // )
+                      ],
+                    )),
+              )
             ],
           );
         }),
@@ -138,6 +151,26 @@ class _QrScanScreenState extends State<QrScanScreen> {
     CustomAlertDialog(
       title: "QR tidak berdaftar!",
       subtitle: "QR perlu di daftar sebelum digunakan.",
+      colorBtnLabel: "Daftar QR",
+      onColorBtn: () async {
+        Navigator.pop(context);
+        Future.delayed(const Duration(milliseconds: 150), () {
+          controller?.pauseCamera();
+          const BancianRegisterQr()
+              .show(context)
+              .then((val) => controller?.resumeCamera());
+        });
+      },
+      dimmedBtnLabel: "Kembali",
+      onDimmedBtn: () => Navigator.pop(context),
+    ).show(context).then((val) => controller?.resumeCamera());
+  }
+
+  _notTallyAlertDialog(String msg) {
+    controller?.pauseCamera();
+    QrNotTallyDialog(
+      title: "QR ralat!",
+      subtitle: msg,
       colorBtnLabel: "Daftar QR",
       onColorBtn: () async {
         Navigator.pop(context);

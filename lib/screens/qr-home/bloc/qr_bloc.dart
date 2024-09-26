@@ -42,16 +42,24 @@ class QrBloc extends Bloc<QrEvent, QrState> {
       return;
     }
     isFromHome = event.isFromHome;
-    if (isFromHome) {
-      clearPropertyData();
-    }
+    if (isFromHome) clearPropertyData();
+
     try {
       this.qrCode = qrCode;
       final resp = await repo.scanQrCode(qrCode: event.qrCode);
       residentData = resp;
+      if (!isFromHome) {
+        if (residentData.unitNumber != selectedProperty.unitNo) {
+          String errMsg =
+              "QR diimbas dimiliki oleh unit ${residentData.unitNumber} yang tidak sama seperti yang dipilih";
+          emit(QrNotTally(msg: errMsg));
+          return;
+        }
+      }
+
       emit(QrSuccess(data: residentData));
     } catch (e) {
-      log.log(tag: '_onScanQrcode', msg: e.toString());
+      log.logError(tag: '_onScanQrcode', msg: e.toString());
       if (e.toString().toLowerCase().contains("not found")) {
         emit(QrNotFound(msg: e.toString()));
       } else {
@@ -69,7 +77,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
       //     qrCode: event.qrCode, unitCode: event.unitCode);
       emit(const QrSuccess());
     } catch (e) {
-      log.log(tag: '_onRegisterQrcode', msg: e.toString());
+      log.logError(tag: '_onRegisterQrcode', msg: e.toString());
       emit(QrError(msg: e.toString()));
     }
   }
@@ -81,7 +89,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
       //     await repo.updateQrCode(qrCode: event.qrCode, unitCode: event.unitCode);
       emit(const QrSuccess());
     } catch (e) {
-      log.log(tag: '_onUpdateQrcode', msg: e.toString());
+      log.logError(tag: '_onUpdateQrcode', msg: e.toString());
       emit(QrError(msg: e.toString()));
     }
   }

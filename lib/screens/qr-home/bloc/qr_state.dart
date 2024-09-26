@@ -28,3 +28,9 @@ final class QrNotFound extends QrState {
 
   const QrNotFound({required this.msg});
 }
+
+final class QrNotTally extends QrState {
+  final String msg;
+
+  const QrNotTally({required this.msg});
+}

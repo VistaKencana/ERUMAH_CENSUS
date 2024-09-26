@@ -8,7 +8,7 @@ String dropdownModelToJson(DropdownModel data) => json.encode(data.toJson());
 class DropdownModel {
   String? status;
   String? message;
-  Data? data;
+  List<DropdownData>? data;
 
   DropdownModel({
     this.status,
@@ -19,7 +19,7 @@ class DropdownModel {
   DropdownModel copyWith({
     String? status,
     String? message,
-    Data? data,
+    List<DropdownData>? data,
   }) =>
       DropdownModel(
         status: status ?? this.status,
@@ -30,50 +30,19 @@ class DropdownModel {
   factory DropdownModel.fromJson(Map<String, dynamic> json) => DropdownModel(
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null
+            ? []
+            : List<DropdownData>.from(
+                json["data"]!.map((x) => DropdownData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data?.toJson(),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
-}
-
-class Data {
-  Map<String, List<DropdownData>>? dynamicData;
-
-  Data({
-    this.dynamicData,
-  });
-
-  Data copyWith({
-    Map<String, List<DropdownData>>? dynamicData,
-  }) =>
-      Data(
-        dynamicData: dynamicData ?? this.dynamicData,
-      );
-
-  factory Data.fromJson(Map<String, dynamic> json) {
-    // Parsing the dynamic keys with list of DropdownData
-    Map<String, List<DropdownData>> dynamicData = {};
-    json.forEach((key, value) {
-      dynamicData[key] = value == null
-          ? []
-          : List<DropdownData>.from(value.map((x) => DropdownData.fromJson(x)));
-    });
-
-    return Data(
-      dynamicData: dynamicData,
-    );
-  }
-
-  Map<String, dynamic> toJson() => dynamicData != null
-      ? dynamicData!.map((key, value) => MapEntry(
-            key,
-            List<dynamic>.from(value.map((x) => x.toJson())),
-          ))
-      : {};
 }
 
 class DropdownData {

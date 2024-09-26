@@ -1,4 +1,5 @@
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
+import 'package:eperumahan_bancian/services/app_log.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,9 +14,7 @@ class DropdownBloc extends Bloc<DropdownEvent, DropdownState> {
   }
 
   //Temparory variable
-  List<DropdownData?> allList = [];
-  List<DropdownData?> zoneList = [];
-  List<DropdownData?> parliamentList = [];
+
   List<DropdownData?> raceList = [];
   List<DropdownData?> genderList = [];
   List<DropdownData?> maritalStatusList = [];
@@ -25,7 +24,7 @@ class DropdownBloc extends Bloc<DropdownEvent, DropdownState> {
   List<DropdownData?> healthLevelList = [];
 
   final repo = DropdownRepository();
-
+  final log = const AppLog(classname: "DropdownBloc");
   _onFetchDdData(FetchDdFormData event, Emitter<DropdownState> emit) async {
     final dropdownType = event.type;
     var listData = _getDropdownList(type: dropdownType);
@@ -46,16 +45,13 @@ class DropdownBloc extends Bloc<DropdownEvent, DropdownState> {
 
   List<DropdownData?> _getDropdownList({required DdType type}) {
     final listData = {
-      DdType.all: allList,
-      DdType.zone: zoneList,
-      DdType.parliament: parliamentList,
       DdType.race: raceList,
       DdType.gender: genderList,
       DdType.maritalStatus: maritalStatusList,
       DdType.occupationType: occupationTypeList,
-      DdType.censusStatus: censusStatusList,
       DdType.relationship: relationshipList,
       DdType.healthLevel: healthLevelList,
+      DdType.censusStatus: censusStatusList,
     };
     return listData[type] ?? [];
   }

@@ -98,12 +98,12 @@ class PropertyRepository {
     final body = {
       "zoneCode": zoneCode,
       "housingCode": housingCode,
-      "blockNo": blockNo,
+      "block": blockNo,
       "floor": floor
     };
 
     final resp = await client.post(
-      endpoint: "/app/list?perPage=all",
+      endpoint: "/appl/list?perPage=all",
       body: body,
     );
     final json = jsonDecode(resp.body);
