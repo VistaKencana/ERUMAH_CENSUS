@@ -11,16 +11,26 @@ final class QrInitial extends QrState {}
 
 final class QrLoading extends QrState {}
 
+final class QrRegLoading extends QrState {}
+
 final class QrSuccess extends QrState {
   final ResidentInfoData? data;
 
   const QrSuccess({this.data});
 }
 
+final class QrRegSuccess extends QrState {}
+
 final class QrError extends QrState {
   final String msg;
 
   const QrError({required this.msg});
+}
+
+final class QrRegError extends QrState {
+  final String msg;
+
+  const QrRegError({required this.msg});
 }
 
 final class QrNotFound extends QrState {

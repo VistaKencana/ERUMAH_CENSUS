@@ -141,7 +141,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
             remarks: data[index].remark ?? ""),
       ),
       Visibility(
-        visible: (residentData.visits?.length ?? 0) <= 2,
+        visible: (residentData.visits?.length ?? 0) < 1,
         child: BancianInfoTile(
             status: "BELUM DIBANCI",
             lawatan: (visitsLen + 1).toString(),

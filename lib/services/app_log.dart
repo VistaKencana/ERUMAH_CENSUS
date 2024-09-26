@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'dart:developer' as dev;
+
+import 'package:flutter/material.dart';
 
 class AppLog {
   final String classname;
@@ -44,6 +47,32 @@ class AppLog {
         $cyanAnsi===========   End Log   ==============$resetAnsi
         ''';
     dev.log(name: tag, message);
+  }
+
+  static void prettyPrintJson(
+      {required String tag, required String jsonString}) {
+    const decoder = JsonDecoder();
+    const encoder = JsonEncoder.withIndent('  ');
+    var object = decoder.convert(jsonString);
+    var prettyString = encoder.convert(object);
+    dev.log(
+        name: "", "$cyanAnsi===========  Log :$tag   ==============$resetAnsi");
+    prettyString
+        .split('\n')
+        .forEach((element) => dev.log(name: "", "$greenAnsi$element"));
+  }
+
+  static void prettyPrintJson2(
+      {required String tag, required String jsonString}) {
+    const decoder = JsonDecoder();
+    const encoder = JsonEncoder.withIndent('  ');
+    var object = decoder.convert(jsonString);
+    var prettyString = encoder.convert(object);
+    dev.log(
+        name: "", "$cyanAnsi===========  Log :$tag   ==============$resetAnsi");
+    prettyString
+        .split('\n')
+        .forEach((element) => debugPrint("$greenAnsi$element"));
   }
 
   // ANSI color codes

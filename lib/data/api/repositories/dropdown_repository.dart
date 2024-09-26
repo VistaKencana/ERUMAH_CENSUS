@@ -9,7 +9,7 @@ import 'dart:developer' as dev;
 class DropdownRepository {
   final client = ApiClient();
 
-  Future<List<DropdownData?>> getDropdownData({required DdType type}) async {
+  Future<List<DropdownData>> getDropdownData({required DdType type}) async {
     dev.log(name: "DROPDOWN REPO", "Fetch dropdown for : ${type.name}");
 
     String baseUrl = client.baseUrl;

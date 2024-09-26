@@ -2,9 +2,9 @@ import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dar
 import 'package:eperumahan_bancian/services/app_log.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../model/dropdown_model.dart';
-import 'dart:developer' as dev;
 part 'dropdown_event.dart';
 part 'dropdown_state.dart';
 
@@ -14,14 +14,13 @@ class DropdownBloc extends Bloc<DropdownEvent, DropdownState> {
   }
 
   //Temparory variable
-
-  List<DropdownData?> raceList = [];
-  List<DropdownData?> genderList = [];
-  List<DropdownData?> maritalStatusList = [];
-  List<DropdownData?> occupationTypeList = [];
-  List<DropdownData?> censusStatusList = [];
-  List<DropdownData?> relationshipList = [];
-  List<DropdownData?> healthLevelList = [];
+  List<DropdownData> raceList = [];
+  List<DropdownData> genderList = [];
+  List<DropdownData> maritalStatusList = [];
+  List<DropdownData> occupationTypeList = [];
+  List<DropdownData> censusStatusList = [];
+  List<DropdownData> relationshipList = [];
+  List<DropdownData> healthLevelList = [];
 
   final repo = DropdownRepository();
   final log = const AppLog(classname: "DropdownBloc");
@@ -33,13 +32,16 @@ class DropdownBloc extends Bloc<DropdownEvent, DropdownState> {
       return;
     }
     emit(DropdownLoading());
+    EasyLoading.show();
     try {
       final resp = await repo.getDropdownData(type: dropdownType);
       listData = resp;
       emit(DropdownSuccess(data: listData));
     } catch (e) {
-      dev.log(e.toString());
+      log.logError(tag: "_onFetchDdData", msg: e.toString());
       emit(DropdownError(msg: e.toString()));
+    } finally {
+      EasyLoading.dismiss();
     }
   }
 

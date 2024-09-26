@@ -71,26 +71,50 @@ class QrBloc extends Bloc<QrEvent, QrState> {
   }
 
   _onRegisterQrcode(RegisterQrcode event, Emitter<QrState> emit) async {
-    emit(QrLoading());
+    if (selectedProperty.unitCode == null ||
+        (selectedProperty.unitCode?.isEmpty ?? true)) {
+      emit(const QrRegError(msg: "Sila pilih unit rumah"));
+      return;
+    }
+
+    emit(QrRegLoading());
     try {
-      // final resp = await repo.registerQrCode(
-      //     qrCode: event.qrCode, unitCode: event.unitCode);
-      emit(const QrSuccess());
+      final resp = await repo.registerQrCode(
+          qrCode: qrCode, unitCode: selectedProperty.unitCode ?? "");
+      if (resp) {
+        emit(QrRegSuccess());
+      } else {
+        emit(const QrRegError(msg: "Something went wrong"));
+      }
     } catch (e) {
-      log.logError(tag: '_onRegisterQrcode', msg: e.toString());
-      emit(QrError(msg: e.toString()));
+      String errMsg = e.toString().toLowerCase();
+      log.logError(tag: "QrRegister", msg: errMsg);
+      if (errMsg.contains("true")) {
+        if (errMsg.contains("qrcoderegistered")) {
+          emit(const QrRegError(
+              msg: "Kod QR ini telah didaftarkan ke unit lain"));
+          return;
+        }
+        add(UpdateQrcode());
+      } else {
+        emit(QrRegError(msg: e.toString()));
+      }
     }
   }
 
   _onUpdateQrcode(UpdateQrcode event, Emitter<QrState> emit) async {
-    emit(QrLoading());
+    emit(QrRegLoading());
     try {
-      // final resp =
-      //     await repo.updateQrCode(qrCode: event.qrCode, unitCode: event.unitCode);
-      emit(const QrSuccess());
+      final resp = await repo.updateQrCode(
+          qrCode: qrCode, unitCode: selectedProperty.unitCode ?? "");
+      if (resp) {
+        emit(QrRegSuccess());
+      } else {
+        emit(const QrRegError(msg: "Something went wrong"));
+      }
     } catch (e) {
-      log.logError(tag: '_onUpdateQrcode', msg: e.toString());
-      emit(QrError(msg: e.toString()));
+      log.logError(tag: "QrUpdate", msg: e.toString());
+      emit(QrRegError(msg: e.toString()));
     }
   }
 

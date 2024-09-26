@@ -15,14 +15,7 @@ class ScanQrcode extends QrEvent {
 }
 
 class RegisterQrcode extends QrEvent {
-  final String qrCode;
-  final String unitCode;
-
-  const RegisterQrcode({required this.qrCode, required this.unitCode});
+  const RegisterQrcode();
 }
 
-class UpdateQrcode extends QrEvent {
-  final String qrCode;
-  final String unitCode;
-  const UpdateQrcode({required this.qrCode, required this.unitCode});
-}
+class UpdateQrcode extends QrEvent {}

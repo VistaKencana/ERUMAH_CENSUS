@@ -171,18 +171,11 @@ class _QrScanScreenState extends State<QrScanScreen> {
     QrNotTallyDialog(
       title: "QR ralat!",
       subtitle: msg,
-      colorBtnLabel: "Daftar QR",
+      colorBtnLabel: "Okay",
       onColorBtn: () async {
+        controller?.resumeCamera();
         Navigator.pop(context);
-        Future.delayed(const Duration(milliseconds: 150), () {
-          controller?.pauseCamera();
-          const BancianRegisterQr()
-              .show(context)
-              .then((val) => controller?.resumeCamera());
-        });
       },
-      dimmedBtnLabel: "Kembali",
-      onDimmedBtn: () => Navigator.pop(context),
     ).show(context).then((val) => controller?.resumeCamera());
   }
 
