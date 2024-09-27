@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final residentInfoModel = residentInfoModelFromJson(jsonString);
+
 import 'dart:convert';
 
 ResidentInfoModel residentInfoModelFromJson(String str) =>
@@ -46,27 +50,21 @@ class ResidentInfoModel {
 
 class ResidentInfoData {
   String? qrCode;
+  String? censusCode;
   String? censusStatus;
-  String? housingCode;
-  String? housingDesc;
-  String? unitCode;
-  String? unitNumber;
-  String? unitType;
-  String? unitStatus;
-  ResidentOwner? owner;
-  List<ResidentOwner>? spouse;
-  List<Dependant>? dependants;
-  List<Visit>? visits;
+  String? censusStatusCode;
+  UnitData? unit;
+  OwnerData? owner;
+  List<SpouseData>? spouse;
+  DependantsModel? dependants;
+  List<VisitData>? visits;
 
   ResidentInfoData({
     this.qrCode,
+    this.censusCode,
     this.censusStatus,
-    this.housingCode,
-    this.housingDesc,
-    this.unitCode,
-    this.unitNumber,
-    this.unitType,
-    this.unitStatus,
+    this.censusStatusCode,
+    this.unit,
     this.owner,
     this.spouse,
     this.dependants,
@@ -75,27 +73,21 @@ class ResidentInfoData {
 
   ResidentInfoData copyWith({
     String? qrCode,
+    String? censusCode,
     String? censusStatus,
-    String? housingCode,
-    String? housingDesc,
-    String? unitCode,
-    String? unitNumber,
-    String? unitType,
-    String? unitStatus,
-    ResidentOwner? owner,
-    List<ResidentOwner>? spouse,
-    List<Dependant>? dependants,
-    List<Visit>? visits,
+    String? censusStatusCode,
+    UnitData? unit,
+    OwnerData? owner,
+    List<SpouseData>? spouse,
+    DependantsModel? dependants,
+    List<VisitData>? visits,
   }) =>
       ResidentInfoData(
         qrCode: qrCode ?? this.qrCode,
+        censusCode: censusCode ?? this.censusCode,
         censusStatus: censusStatus ?? this.censusStatus,
-        housingCode: housingCode ?? this.housingCode,
-        housingDesc: housingDesc ?? this.housingDesc,
-        unitCode: unitCode ?? this.unitCode,
-        unitNumber: unitNumber ?? this.unitNumber,
-        unitType: unitType ?? this.unitType,
-        unitStatus: unitStatus ?? this.unitStatus,
+        censusStatusCode: censusStatusCode ?? this.censusStatusCode,
+        unit: unit ?? this.unit,
         owner: owner ?? this.owner,
         spouse: spouse ?? this.spouse,
         dependants: dependants ?? this.dependants,
@@ -105,413 +97,600 @@ class ResidentInfoData {
   factory ResidentInfoData.fromJson(Map<String, dynamic> json) =>
       ResidentInfoData(
         qrCode: json["qrCode"],
+        censusCode: json["censusCode"],
         censusStatus: json["censusStatus"],
-        housingCode: json["housingCode"],
-        housingDesc: json["housingDesc"],
-        unitCode: json["unitCode"],
-        unitNumber: json["unitNumber"],
-        unitType: json["unitType"],
-        unitStatus: json["unitStatus"],
-        owner: json["owner"] == null
-            ? null
-            : ResidentOwner.fromJson(json["owner"]),
+        censusStatusCode: json["censusStatusCode"],
+        unit: json["unit"] == null ? null : UnitData.fromJson(json["unit"]),
+        owner: json["owner"] == null ? null : OwnerData.fromJson(json["owner"]),
         spouse: json["spouse"] == null ||
                 (json["spouse"] is List && json["spouse"].isEmpty)
             ? []
-            : List<ResidentOwner>.from(
-                json["spouse"]!.map((x) => ResidentOwner.fromJson(x))),
-        dependants: json["dependants"] == null ||
-                (json["dependants"] is List && json["dependants"].isEmpty)
-            ? []
-            : List<Dependant>.from(
-                json["dependants"]!.map((x) => Dependant.fromJson(x))),
+            : List<SpouseData>.from(
+                json["spouse"]!.map((x) => SpouseData.fromJson(x))),
+        dependants: json["dependants"] == null
+            ? null
+            : DependantsModel.fromJson(json["dependants"]),
         visits: json["visits"] == null ||
                 (json["visits"] is List && json["visits"].isEmpty)
             ? []
-            : List<Visit>.from(json["visits"]!.map((x) => Visit.fromJson(x))),
+            : List<VisitData>.from(
+                json["visits"]!.map((x) => VisitData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "qrCode": qrCode,
+        "censusCode": censusCode,
         "censusStatus": censusStatus,
-        "housingCode": housingCode,
-        "housingDesc": housingDesc,
-        "unitCode": unitCode,
-        "unitNumber": unitNumber,
-        "unitType": unitType,
-        "unitStatus": unitStatus,
+        "censusStatusCode": censusStatusCode,
+        "unit": unit?.toJson(),
         "owner": owner?.toJson(),
         "spouse": spouse == null
             ? []
             : List<dynamic>.from(spouse!.map((x) => x.toJson())),
-        "dependants": dependants == null
-            ? []
-            : List<dynamic>.from(dependants!.map((x) => x.toJson())),
+        "dependants": dependants?.toJson(),
         "visits": visits == null
             ? []
             : List<dynamic>.from(visits!.map((x) => x.toJson())),
       };
 }
 
-class Dependant {
-  String? relationship;
-  String? name;
-  String? icNo;
-  String? phoneNo;
-  String? gender;
-  String? age;
-  dynamic occupationType;
-  String? disabilities;
-  String? healthLevel;
-  DependantIncome? income;
+class DependantsModel {
+  List<DependantsData>? child;
+  List<DependantsData>? others;
 
-  Dependant({
-    this.relationship,
-    this.name,
-    this.icNo,
-    this.phoneNo,
-    this.gender,
-    this.age,
-    this.occupationType,
-    this.disabilities,
-    this.healthLevel,
-    this.income,
+  DependantsModel({
+    this.child,
+    this.others,
   });
 
-  Dependant copyWith({
-    String? relationship,
-    String? name,
-    String? icNo,
-    String? phoneNo,
-    String? gender,
-    String? age,
-    String? occupationType,
-    String? disabilities,
-    String? healthLevel,
-    DependantIncome? income,
+  DependantsModel copyWith({
+    List<DependantsData>? child,
+    List<DependantsData>? others,
   }) =>
-      Dependant(
-        relationship: relationship ?? this.relationship,
-        name: name ?? this.name,
-        icNo: icNo ?? this.icNo,
-        phoneNo: phoneNo ?? this.phoneNo,
-        gender: gender ?? this.gender,
-        age: age ?? this.age,
-        occupationType: occupationType ?? this.occupationType,
-        disabilities: disabilities ?? this.disabilities,
-        healthLevel: healthLevel ?? this.healthLevel,
-        income: income ?? this.income,
+      DependantsModel(
+        child: child ?? this.child,
+        others: others ?? this.others,
       );
 
-  factory Dependant.fromJson(Map<String, dynamic> json) => Dependant(
-        relationship: json["relationship"],
-        name: json["name"],
-        icNo: json["icNo"],
-        phoneNo: json["phoneNo"],
-        gender: json["gender"],
-        age: json["age"],
-        occupationType: json["occupationType"],
-        disabilities: json["disabilities"],
-        healthLevel: json["healthLevel"],
-        income: json["income"] == null
-            ? null
-            : DependantIncome.fromJson(json["income"]),
+  factory DependantsModel.fromJson(Map<String, dynamic> json) =>
+      DependantsModel(
+        child: json["child"] == null ||
+                (json["child"] is List && json["child"].isEmpty)
+            ? []
+            : List<DependantsData>.from(
+                json["child"]!.map((x) => DependantsData.fromJson(x))),
+        others: json["others"] == null ||
+                (json["others"] is List && json["others"].isEmpty)
+            ? []
+            : List<DependantsData>.from(
+                json["others"]!.map((x) => DependantsData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "relationship": relationship,
-        "name": name,
-        "icNo": icNo,
-        "phoneNo": phoneNo,
-        "gender": gender,
-        "age": age,
-        "occupationType": occupationType,
-        "disabilities": disabilities,
-        "healthLevel": healthLevel,
-        "income": income?.toJson(),
+        "child": child == null
+            ? []
+            : List<dynamic>.from(child!.map((x) => x.toJson())),
+        "others": others == null
+            ? []
+            : List<dynamic>.from(others!.map((x) => x.toJson())),
       };
 }
 
-class DependantIncome {
-  int? basicSalary;
-  int? allowance;
-  int? other;
-  String? address;
-  String? postcode;
-  String? city;
-  String? state;
-
-  DependantIncome({
-    this.basicSalary,
-    this.allowance,
-    this.other,
-    this.address,
-    this.postcode,
-    this.city,
-    this.state,
-  });
-
-  DependantIncome copyWith({
-    int? basicSalary,
-    int? allowance,
-    int? other,
-    String? address,
-    String? postcode,
-    String? city,
-    String? state,
-  }) =>
-      DependantIncome(
-        basicSalary: basicSalary ?? this.basicSalary,
-        allowance: allowance ?? this.allowance,
-        other: other ?? this.other,
-        address: address ?? this.address,
-        postcode: postcode ?? this.postcode,
-        city: city ?? this.city,
-        state: state ?? this.state,
-      );
-
-  factory DependantIncome.fromJson(Map<String, dynamic> json) =>
-      DependantIncome(
-        basicSalary: json["basicSalary"],
-        allowance: json["allowance"],
-        other: json["other"],
-        address: json["address"],
-        postcode: json["postcode"],
-        city: json["city"],
-        state: json["state"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "basicSalary": basicSalary,
-        "allowance": allowance,
-        "other": other,
-        "address": address,
-        "postcode": postcode,
-        "city": city,
-        "state": state,
-      };
-}
-
-class ResidentOwner {
+class SpouseData {
+  String? code;
   String? name;
   String? icNo;
-  String? phoneNo;
   String? email;
-  String? race;
-  String? gender;
   String? age;
-  String? occupationType;
-  String? maritalStatus;
-  String? disabilities;
-  OwnerIncome? income;
-  List<WelfareAid>? welfareAid;
-  String? healthLevel;
+  String? phoneNo;
+  String? isDead;
+  GeneralData? relationship;
+  GeneralData? race;
+  GeneralData? gender;
+  String? isOku;
+  OccupationData? occupation;
+  IncomeData? income;
 
-  ResidentOwner({
+  SpouseData({
+    this.code,
     this.name,
     this.icNo,
-    this.phoneNo,
     this.email,
+    this.age,
+    this.phoneNo,
+    this.isDead,
+    this.relationship,
     this.race,
     this.gender,
-    this.age,
-    this.occupationType,
-    this.maritalStatus,
-    this.disabilities,
+    this.isOku,
+    this.occupation,
     this.income,
-    this.welfareAid,
-    this.healthLevel,
   });
 
-  ResidentOwner copyWith({
+  SpouseData copyWith({
+    String? code,
     String? name,
     String? icNo,
-    String? phoneNo,
     String? email,
-    String? race,
-    String? gender,
     String? age,
-    String? occupationType,
-    String? maritalStatus,
-    String? disabilities,
-    OwnerIncome? income,
-    List<WelfareAid>? welfareAid,
-    String? healthLevel,
+    String? phoneNo,
+    String? isDead,
+    GeneralData? relationship,
+    GeneralData? race,
+    GeneralData? gender,
+    String? isOku,
+    OccupationData? occupation,
+    IncomeData? income,
   }) =>
-      ResidentOwner(
+      SpouseData(
+        code: code ?? this.code,
         name: name ?? this.name,
         icNo: icNo ?? this.icNo,
-        phoneNo: phoneNo ?? this.phoneNo,
         email: email ?? this.email,
+        age: age ?? this.age,
+        phoneNo: phoneNo ?? this.phoneNo,
+        isDead: isDead ?? this.isDead,
+        relationship: relationship ?? this.relationship,
         race: race ?? this.race,
         gender: gender ?? this.gender,
-        age: age ?? this.age,
-        occupationType: occupationType ?? this.occupationType,
-        maritalStatus: maritalStatus ?? this.maritalStatus,
-        disabilities: disabilities ?? this.disabilities,
+        isOku: isOku ?? this.isOku,
+        occupation: occupation ?? this.occupation,
         income: income ?? this.income,
-        welfareAid: welfareAid ?? this.welfareAid,
-        healthLevel: healthLevel ?? this.healthLevel,
       );
 
-  factory ResidentOwner.fromJson(Map<String, dynamic> json) => ResidentOwner(
+  factory SpouseData.fromJson(Map<String, dynamic> json) => SpouseData(
+        code: json["code"],
         name: json["name"],
         icNo: json["icNo"],
-        phoneNo: json["phoneNo"],
         email: json["email"],
-        race: json["race"],
-        gender: json["gender"],
         age: json["age"],
-        occupationType: json["occupationType"],
-        maritalStatus: json["maritalStatus"],
-        disabilities: json["disabilities"],
-        income: json["income"] == null
+        phoneNo: json["phoneNo"],
+        isDead: json["isDead"],
+        relationship: json["relationship"] == null
             ? null
-            : OwnerIncome.fromJson(json["income"]),
-        welfareAid: json["welfareAid"] == null
-            ? []
-            : List<WelfareAid>.from(
-                json["welfareAid"]!.map((x) => WelfareAid.fromJson(x))),
-        healthLevel: json["healthLevel"],
+            : GeneralData.fromJson(json["relationship"]),
+        race: json["race"] == null ? null : GeneralData.fromJson(json["race"]),
+        gender: json["gender"] == null
+            ? null
+            : GeneralData.fromJson(json["gender"]),
+        isOku: json["isOku"],
+        occupation: json["occupation"] == null
+            ? null
+            : OccupationData.fromJson(json["occupation"]),
+        income:
+            json["income"] == null ? null : IncomeData.fromJson(json["income"]),
       );
 
   Map<String, dynamic> toJson() => {
+        "code": code,
         "name": name,
         "icNo": icNo,
-        "phoneNo": phoneNo,
         "email": email,
-        "race": race,
-        "gender": gender,
         "age": age,
-        "occupationType": occupationType,
-        "maritalStatus": maritalStatus,
-        "disabilities": disabilities,
+        "phoneNo": phoneNo,
+        "isDead": isDead,
+        "relationship": relationship?.toJson(),
+        "race": race?.toJson(),
+        "gender": gender?.toJson(),
+        "isOku": isOku,
+        "occupation": occupation?.toJson(),
         "income": income?.toJson(),
-        "welfareAid": welfareAid == null
-            ? []
-            : List<dynamic>.from(welfareAid!.map((x) => x.toJson())),
-        "healthLevel": healthLevel,
       };
 }
 
-class OwnerIncome {
+class DependantsData {
+  String? code;
+  String? name;
+  String? icNo;
+  String? email;
+  String? age;
+  String? phoneNo;
+  GeneralData? relationship;
+  GeneralData? race;
+  GeneralData? gender;
+  String? isOku;
+
+  DependantsData({
+    this.code,
+    this.name,
+    this.icNo,
+    this.email,
+    this.age,
+    this.phoneNo,
+    this.relationship,
+    this.race,
+    this.gender,
+    this.isOku,
+  });
+
+  DependantsData copyWith({
+    String? code,
+    String? name,
+    String? icNo,
+    String? email,
+    String? age,
+    String? phoneNo,
+    GeneralData? relationship,
+    GeneralData? race,
+    GeneralData? gender,
+    String? isOku,
+    OccupationData? occupation,
+    IncomeData? income,
+  }) =>
+      DependantsData(
+        code: code ?? this.code,
+        name: name ?? this.name,
+        icNo: icNo ?? this.icNo,
+        email: email ?? this.email,
+        age: age ?? this.age,
+        phoneNo: phoneNo ?? this.phoneNo,
+        relationship: relationship ?? this.relationship,
+        race: race ?? this.race,
+        gender: gender ?? this.gender,
+        isOku: isOku ?? this.isOku,
+      );
+
+  factory DependantsData.fromJson(Map<String, dynamic> json) => DependantsData(
+        code: json["code"],
+        name: json["name"],
+        icNo: json["icNo"],
+        email: json["email"],
+        age: json["age"],
+        phoneNo: json["phoneNo"],
+        relationship: json["relationship"] == null
+            ? null
+            : GeneralData.fromJson(json["relationship"]),
+        race: json["race"] == null ? null : GeneralData.fromJson(json["race"]),
+        gender: json["gender"] == null
+            ? null
+            : GeneralData.fromJson(json["gender"]),
+        isOku: json["isOku"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "name": name,
+        "icNo": icNo,
+        "email": email,
+        "age": age,
+        "phoneNo": phoneNo,
+        "relationship": relationship?.toJson(),
+        "race": race?.toJson(),
+        "gender": gender?.toJson(),
+        "isOku": isOku,
+      };
+}
+
+class GeneralData {
+  String? code;
+  String? desc;
+
+  GeneralData({
+    this.code,
+    this.desc,
+  });
+
+  GeneralData copyWith({
+    String? code,
+    String? desc,
+  }) =>
+      GeneralData(
+        code: code ?? this.code,
+        desc: desc ?? this.desc,
+      );
+
+  factory GeneralData.fromJson(Map<String, dynamic> json) => GeneralData(
+        code: json["code"],
+        desc: json["desc"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "desc": desc,
+      };
+}
+
+class IncomeData {
   String? basicSalary;
   String? allowance;
   String? other;
-  String? address;
-  String? postcode;
-  String? city;
-  String? state;
+  String? welfareAid;
 
-  OwnerIncome({
+  IncomeData({
     this.basicSalary,
     this.allowance,
     this.other,
-    this.address,
-    this.postcode,
-    this.city,
-    this.state,
+    this.welfareAid,
   });
 
-  OwnerIncome copyWith({
+  IncomeData copyWith({
     String? basicSalary,
     String? allowance,
     String? other,
-    String? address,
-    String? postcode,
-    String? city,
-    String? state,
+    String? welfareAid,
   }) =>
-      OwnerIncome(
+      IncomeData(
         basicSalary: basicSalary ?? this.basicSalary,
         allowance: allowance ?? this.allowance,
         other: other ?? this.other,
-        address: address ?? this.address,
-        postcode: postcode ?? this.postcode,
-        city: city ?? this.city,
-        state: state ?? this.state,
+        welfareAid: welfareAid ?? this.welfareAid,
       );
 
-  factory OwnerIncome.fromJson(Map<String, dynamic> json) => OwnerIncome(
+  factory IncomeData.fromJson(Map<String, dynamic> json) => IncomeData(
         basicSalary: json["basicSalary"],
         allowance: json["allowance"],
         other: json["other"],
-        address: json["address"],
-        postcode: json["postcode"],
-        city: json["city"],
-        state: json["state"],
+        welfareAid: json["welfareAid"],
       );
 
   Map<String, dynamic> toJson() => {
         "basicSalary": basicSalary,
         "allowance": allowance,
         "other": other,
-        "address": address,
-        "postcode": postcode,
-        "city": city,
-        "state": state,
+        "welfareAid": welfareAid,
       };
 }
 
-class WelfareAid {
-  String? desc;
-  String? amount;
+class OccupationData {
+  String? type;
+  WorkplaceData? workplace;
 
-  WelfareAid({
-    this.desc,
-    this.amount,
+  OccupationData({
+    this.type,
+    this.workplace,
   });
 
-  WelfareAid copyWith({
-    String? desc,
-    String? amount,
+  OccupationData copyWith({
+    String? type,
+    WorkplaceData? workplace,
   }) =>
-      WelfareAid(
-        desc: desc ?? this.desc,
-        amount: amount ?? this.amount,
+      OccupationData(
+        type: type ?? this.type,
+        workplace: workplace ?? this.workplace,
       );
 
-  factory WelfareAid.fromJson(Map<String, dynamic> json) => WelfareAid(
-        desc: json["desc"],
-        amount: json["amount"],
+  factory OccupationData.fromJson(Map<String, dynamic> json) => OccupationData(
+        type: json["type"],
+        workplace: json["workplace"] == null
+            ? null
+            : WorkplaceData.fromJson(json["workplace"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "desc": desc,
-        "amount": amount,
+        "type": type,
+        "workplace": workplace?.toJson(),
       };
 }
 
-class Visit {
+class WorkplaceData {
+  String? address;
+
+  WorkplaceData({
+    this.address,
+  });
+
+  WorkplaceData copyWith({
+    String? address,
+  }) =>
+      WorkplaceData(
+        address: address ?? this.address,
+      );
+
+  factory WorkplaceData.fromJson(Map<String, dynamic> json) => WorkplaceData(
+        address: json["address"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "address": address,
+      };
+}
+
+class OwnerData {
+  String? name;
+  String? totalHousehold;
+  String? icNo;
+  String? email;
+  String? age;
+  String? phoneNo;
+  GeneralData? race;
+  GeneralData? gender;
+  OccupationData? occupation;
+  IncomeData? income;
+  GeneralData? maritalStatus;
+  String? isOku;
+
+  OwnerData({
+    this.name,
+    this.totalHousehold,
+    this.icNo,
+    this.email,
+    this.age,
+    this.phoneNo,
+    this.race,
+    this.gender,
+    this.occupation,
+    this.income,
+    this.maritalStatus,
+    this.isOku,
+  });
+
+  OwnerData copyWith({
+    String? name,
+    String? totalHousehold,
+    String? icNo,
+    String? email,
+    String? age,
+    String? phoneNo,
+    GeneralData? race,
+    GeneralData? gender,
+    OccupationData? occupation,
+    IncomeData? income,
+    GeneralData? maritalStatus,
+    String? isOku,
+  }) =>
+      OwnerData(
+        name: name ?? this.name,
+        totalHousehold: totalHousehold ?? this.totalHousehold,
+        icNo: icNo ?? this.icNo,
+        email: email ?? this.email,
+        age: age ?? this.age,
+        phoneNo: phoneNo ?? this.phoneNo,
+        race: race ?? this.race,
+        gender: gender ?? this.gender,
+        occupation: occupation ?? this.occupation,
+        income: income ?? this.income,
+        maritalStatus: maritalStatus ?? this.maritalStatus,
+        isOku: isOku ?? this.isOku,
+      );
+
+  factory OwnerData.fromJson(Map<String, dynamic> json) => OwnerData(
+        name: json["name"],
+        totalHousehold: json["totalHousehold"],
+        icNo: json["icNo"],
+        email: json["email"],
+        age: json["age"],
+        phoneNo: json["phoneNo"],
+        race: json["race"] == null ? null : GeneralData.fromJson(json["race"]),
+        gender: json["gender"] == null
+            ? null
+            : GeneralData.fromJson(json["gender"]),
+        occupation: json["occupation"] == null
+            ? null
+            : OccupationData.fromJson(json["occupation"]),
+        income:
+            json["income"] == null ? null : IncomeData.fromJson(json["income"]),
+        maritalStatus: json["maritalStatus"] == null
+            ? null
+            : GeneralData.fromJson(json["maritalStatus"]),
+        isOku: json["isOku"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "totalHousehold": totalHousehold,
+        "icNo": icNo,
+        "email": email,
+        "age": age,
+        "phoneNo": phoneNo,
+        "race": race?.toJson(),
+        "gender": gender?.toJson(),
+        "occupation": occupation?.toJson(),
+        "income": income?.toJson(),
+        "maritalStatus": maritalStatus?.toJson(),
+        "isOku": isOku,
+      };
+}
+
+class UnitData {
+  String? code;
+  String? no;
+  String? block;
+  String? floor;
+  String? type;
   String? status;
+  String? statusCode;
+  GeneralData? housingProject;
+
+  UnitData({
+    this.code,
+    this.no,
+    this.block,
+    this.floor,
+    this.type,
+    this.status,
+    this.statusCode,
+    this.housingProject,
+  });
+
+  UnitData copyWith({
+    String? code,
+    String? no,
+    String? block,
+    String? floor,
+    String? type,
+    String? status,
+    String? statusCode,
+    GeneralData? housingProject,
+  }) =>
+      UnitData(
+        code: code ?? this.code,
+        no: no ?? this.no,
+        block: block ?? this.block,
+        floor: floor ?? this.floor,
+        type: type ?? this.type,
+        status: status ?? this.status,
+        statusCode: statusCode ?? this.statusCode,
+        housingProject: housingProject ?? this.housingProject,
+      );
+
+  factory UnitData.fromJson(Map<String, dynamic> json) => UnitData(
+        code: json["code"],
+        no: json["no"],
+        block: json["block"],
+        floor: json["floor"],
+        type: json["type"],
+        status: json["status"],
+        statusCode: json["statusCode"],
+        housingProject: json["housingProject"] == null
+            ? null
+            : GeneralData.fromJson(json["housingProject"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "no": no,
+        "block": block,
+        "floor": floor,
+        "type": type,
+        "status": status,
+        "statusCode": statusCode,
+        "housingProject": housingProject?.toJson(),
+      };
+}
+
+class VisitData {
+  String? status;
+  String? statusCode;
+  DateTime? date;
   String? remark;
   String? round;
 
-  Visit({
+  VisitData({
     this.status,
+    this.statusCode,
+    this.date,
     this.remark,
     this.round,
   });
 
-  Visit copyWith({
+  VisitData copyWith({
     String? status,
+    String? statusCode,
+    DateTime? date,
     String? remark,
     String? round,
   }) =>
-      Visit(
+      VisitData(
         status: status ?? this.status,
+        statusCode: statusCode ?? this.statusCode,
+        date: date ?? this.date,
         remark: remark ?? this.remark,
         round: round ?? this.round,
       );
 
-  factory Visit.fromJson(Map<String, dynamic> json) => Visit(
+  factory VisitData.fromJson(Map<String, dynamic> json) => VisitData(
         status: json["status"],
+        statusCode: json["statusCode"],
+        date: json["date"] == null ? null : DateTime.parse(json["date"]),
         remark: json["remark"],
         round: json["round"],
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
+        "statusCode": statusCode,
+        "date":
+            "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
         "remark": remark,
         "round": round,
       };

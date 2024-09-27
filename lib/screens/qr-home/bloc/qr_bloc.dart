@@ -49,9 +49,9 @@ class QrBloc extends Bloc<QrEvent, QrState> {
       final resp = await repo.scanQrCode(qrCode: event.qrCode);
       residentData = resp;
       if (!isFromHome) {
-        if (residentData.unitNumber != selectedProperty.unitNo) {
+        if (residentData.unit!.no != selectedProperty.unitNo) {
           String errMsg =
-              "QR diimbas dimiliki oleh unit ${residentData.unitNumber} yang tidak sama seperti yang dipilih";
+              "QR diimbas dimiliki oleh unit ${residentData.unit!.no} yang tidak sama seperti yang dipilih";
           emit(QrNotTally(msg: errMsg));
           return;
         }
