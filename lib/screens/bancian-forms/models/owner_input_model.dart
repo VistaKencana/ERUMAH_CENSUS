@@ -13,7 +13,7 @@ class OwnerInputModel {
   String workSalary;
   String workAllowance;
   String workOtherIncome;
-  String isHasWelfareAid;
+  String welfareAid;
   Uint8List? uploadIncome;
   Uint8List? uploadIcFront;
   Uint8List? uploadIcBack;
@@ -32,7 +32,7 @@ class OwnerInputModel {
     required this.workSalary,
     required this.workAllowance,
     required this.workOtherIncome,
-    required this.isHasWelfareAid,
+    required this.welfareAid,
     this.uploadIncome,
     this.uploadIcFront,
     this.uploadIcBack,
@@ -53,7 +53,7 @@ class OwnerInputModel {
     String? workSalary,
     String? workAllowance,
     String? workOtherIncome,
-    String? isHasWelfareAid,
+    String? welfareAid,
     Uint8List? uploadIncome,
     Uint8List? uploadIcFront,
     Uint8List? uploadIcBack,
@@ -72,7 +72,7 @@ class OwnerInputModel {
       workSalary: workSalary ?? this.workSalary,
       workAllowance: workAllowance ?? this.workAllowance,
       workOtherIncome: workOtherIncome ?? this.workOtherIncome,
-      isHasWelfareAid: isHasWelfareAid ?? this.isHasWelfareAid,
+      welfareAid: welfareAid ?? this.welfareAid,
       uploadIncome: uploadIncome ?? this.uploadIncome,
       uploadIcFront: uploadIcFront ?? this.uploadIcFront,
       uploadIcBack: uploadIcBack ?? this.uploadIcBack,
@@ -95,7 +95,7 @@ class OwnerInputModel {
       'workSalary': workSalary,
       'workAllowance': workAllowance,
       'workOtherIncome': workOtherIncome,
-      'isHasWelfareAid': isHasWelfareAid
+      'welfareAid': welfareAid
     };
   }
 
@@ -106,5 +106,23 @@ class OwnerInputModel {
       'uploadIcBack': uploadIcBack,
       'uploadOkuCard': uploadOkuCard
     };
+  }
+
+  factory OwnerInputModel.fromJson(Map<String, dynamic> json) {
+    return OwnerInputModel(
+      cencusCode: json['cencusCode'] as String,
+      isNotOwner: json['isNotOwner'] as String,
+      totalHousehold: json['totalHousehold'] as String,
+      email: json['email'] as String,
+      phoneNo: json['phoneNo'] as String,
+      occupationTypeCode: json['occupationTypeCode'] as String,
+      maritalStatusCode: json['maritalStatusCode'] as String,
+      isOku: json['isOku'] as String,
+      workAddress: json['workAddress'] as String,
+      workSalary: json['workSalary'] as String,
+      workAllowance: json['workAllowance'] as String,
+      workOtherIncome: json['workOtherIncome'] as String,
+      welfareAid: json['welfareAid'] as String,
+    );
   }
 }

@@ -1,27 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CustomDropdownSheet<T> extends StatefulWidget {
+class SwitchModel {
+  String? code;
+  String? desc;
+
+  SwitchModel({this.code, this.desc});
+
+  static List<SwitchModel> getData() {
+    return [
+      SwitchModel(code: "1", desc: "Ya"),
+      SwitchModel(code: "0", desc: "Tidak"),
+    ];
+  }
+}
+
+class SwitchModal extends StatefulWidget {
   final String label;
-  final T? groupValue;
-  final T Function(List<T> data)? onFindGroupValue;
-  final List<T> items;
-  final String Function(T data) getTitle;
-  final List<T> Function(List<T> data, String? query)? onQuery;
-  final void Function(T? data) onChange;
+  final SwitchModel? groupValue;
+  final SwitchModel Function(List<SwitchModel> data)? onFindGroupValue;
+  final String Function(SwitchModel data) getTitle;
+  final List<SwitchModel> Function(List<SwitchModel> data, String? query)?
+      onQuery;
+  final void Function(SwitchModel? data) onChange;
   final double initialChildSize;
   final double maxChildSize;
   final double minChildSize;
 
-  const CustomDropdownSheet({
+  const SwitchModal({
     required this.label,
-    required this.items,
     required this.getTitle,
     super.key,
     this.groupValue,
     required this.onChange,
-    this.initialChildSize = 0.7,
-    this.maxChildSize = 0.7,
+    this.initialChildSize = 0.5,
+    this.maxChildSize = 0.5,
     this.minChildSize = 0.3,
     this.onFindGroupValue,
     this.onQuery,
@@ -37,24 +50,26 @@ class CustomDropdownSheet<T> extends StatefulWidget {
   }
 
   @override
-  State<CustomDropdownSheet<T>> createState() => _CustomDropdownSheetState<T>();
+  State<SwitchModal> createState() => _SwitchModalState();
 }
 
-class _CustomDropdownSheetState<T> extends State<CustomDropdownSheet<T>> {
-  T? currValue;
-  late List<T> shownItems;
-  late List<T> backupItems;
+class _SwitchModalState extends State<SwitchModal> {
+  SwitchModel? currValue;
+  late List<SwitchModel> shownItems;
+  late List<SwitchModel> backupItems;
+  var items = SwitchModel.getData();
   @override
   void initState() {
     super.initState();
     currValue = _setGroupValue();
-    shownItems = List.of(widget.items);
-    backupItems = List.of(widget.items);
+
+    shownItems = List.of(items);
+    backupItems = List.of(items);
   }
 
-  T? _setGroupValue() {
+  SwitchModel? _setGroupValue() {
     if (widget.onFindGroupValue != null) {
-      return widget.onFindGroupValue!(widget.items);
+      return widget.onFindGroupValue!(items);
     }
     return widget.groupValue;
   }
@@ -108,7 +123,7 @@ class _CustomDropdownSheetState<T> extends State<CustomDropdownSheet<T>> {
                     ),
                   ),
                 ),
-                widget.items.isNotEmpty
+                items.isNotEmpty
                     ? Expanded(
                         child: Scrollbar(
                         thickness: 10,
@@ -117,7 +132,7 @@ class _CustomDropdownSheetState<T> extends State<CustomDropdownSheet<T>> {
                           controller: sc,
                           children: List.generate(
                             shownItems.length,
-                            (index) => RadioListTile<T>(
+                            (index) => RadioListTile<SwitchModel>(
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
                                 groupValue: currValue,

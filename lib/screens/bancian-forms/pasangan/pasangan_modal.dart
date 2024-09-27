@@ -2,11 +2,16 @@ import 'dart:typed_data';
 
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/components/card_display.dart';
+import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
+import 'package:eperumahan_bancian/components/switch_modal.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
+import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../components/disability_checkbox.dart';
 import '../../../components/file_display.dart';
 
@@ -37,6 +42,13 @@ class _PasanganModalState extends State<PasanganModal> {
   Uint8List? okuCard;
   Uint8List? slipGajiImg;
   bool isOKU = false;
+  late DropdownBloc _dropdownBloc;
+  @override
+  void initState() {
+    super.initState();
+    _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -125,24 +137,21 @@ class _PasanganModalState extends State<PasanganModal> {
                           title: 'Umur(Tahun)',
                           initialValue: "50",
                           readOnly: _isReadOnly()),
+                      _dropdownKesihatan(),
+                      _dropdownJantina(),
+                      _dropdownBangsa(),
                       _textField(
-                          title: 'Tahap Kesihatan', initialValue: "Sihat"),
-                      _textField(
-                          title: 'Jantina',
-                          initialValue: "Perempuan",
-                          readOnly: _isReadOnly()),
-                      _textField(
-                          title: 'Bangsa',
-                          initialValue: "Melayu",
-                          readOnly: _isReadOnly()),
-                      _textField(
-                        title: 'Hidup',
-                        initialValue: "Ya",
-                      ),
-                      _textField(
-                        title: 'Jenis Pekerjaan',
-                        initialValue: "Suri Rumah",
-                      ),
+                          title: 'Hidup',
+                          initialValue: "Ya",
+                          isDropdown: true,
+                          onTap: () {
+                            SwitchModal(
+                                    label: "Pilih status",
+                                    getTitle: (data) => data.desc!,
+                                    onChange: (val) {})
+                                .show(context);
+                          }),
+                      _dropdownJenisPekerjaan(),
                     ],
                   ),
                 ],
@@ -178,20 +187,199 @@ class _PasanganModalState extends State<PasanganModal> {
     );
   }
 
+  // _textField(
+  //     {required String title,
+  //     String? initialValue,
+  //     bool readOnly = false,
+  //     String? hintText,
+  //     double? width}) {
+  //   return SizedBox(
+  //     width: width ?? MediaQuery.sizeOf(context).width * 0.4,
+  //     child: CustomFormField(
+  //       title: title,
+  //       readOnly: readOnly,
+  //       hintText: hintText,
+  //       initialValue: _isNewForm() ? "" : initialValue,
+  //     ),
+  //   );
+  // }
   _textField(
       {required String title,
       String? initialValue,
       bool readOnly = false,
+      bool enableDropdown = true,
       String? hintText,
-      double? width}) {
+      double? width,
+      void Function()? onTap,
+      bool isDropdown = false}) {
+    if (isDropdown) {
+      return SizedBox(
+          width: width ?? MediaQuery.sizeOf(context).width * 0.4,
+          child: CustomFormField(
+            title: title,
+            onTap: () {
+              if (onTap == null || !enableDropdown) return;
+              onTap();
+            },
+            readOnly: true,
+            fillColor: Colors.white,
+            hintText: hintText,
+            initialValue: _isNewForm() ? "" : initialValue,
+            suffixWidget: isDropdown
+                ? Icon(
+                    Icons.arrow_drop_down,
+                    color: readOnly ? Colors.grey : Colors.black,
+                  )
+                : null,
+          ));
+    }
     return SizedBox(
       width: width ?? MediaQuery.sizeOf(context).width * 0.4,
       child: CustomFormField(
         title: title,
+        onTap: onTap,
         readOnly: readOnly,
         hintText: hintText,
         initialValue: _isNewForm() ? "" : initialValue,
       ),
+    );
+  }
+
+  _dropdownBangsa() {
+    return BlocListener<DropdownBloc, DropdownState>(
+      listener: (context, state) {
+        if (state is DropdownSuccess) {
+          if (state.type == DdType.race) {
+            CustomDropdownSheet(
+              label: "Pilih Bangsa",
+              items: state.data,
+              // onFindGroupValue: (data) {
+              //   return data.where((val) {
+              //     var a = val?.desc
+              //             ?.toLowerCase()
+              //             .contains("selesai") ??
+              //         false;
+              //     return a;
+              //   }).firstOrNull;
+              // },
+              getTitle: (data) => data?.desc ?? "-",
+              onChange: (val) {},
+            ).show(context);
+          }
+        }
+      },
+      child: _textField(
+        title: 'Bangsa',
+        readOnly: _isReadOnly(),
+        enableDropdown: _isNewForm(),
+        initialValue: _isNewForm() ? "" : "Melayu",
+        isDropdown: true,
+        onTap: () {
+          _dropdownBloc.add(const FetchDdFormData(type: DdType.race));
+        },
+      ),
+    );
+  }
+
+  _dropdownJantina() {
+    return BlocListener<DropdownBloc, DropdownState>(
+      listener: (context, state) {
+        if (state is DropdownSuccess) {
+          if (state.type == DdType.gender) {
+            CustomDropdownSheet(
+              label: "Pilih Jantina",
+              items: state.data,
+              // onFindGroupValue: (data) {
+              //   return data.where((val) {
+              //     var a = val?.desc
+              //             ?.toLowerCase()
+              //             .contains("selesai") ??
+              //         false;
+              //     return a;
+              //   }).firstOrNull;
+              // },
+              getTitle: (data) => data?.desc ?? "-",
+              onChange: (val) {},
+            ).show(context);
+          }
+        }
+      },
+      child: _textField(
+          title: 'Jantina',
+          readOnly: _isReadOnly(),
+          enableDropdown: _isNewForm(),
+          isDropdown: true,
+          onTap: () {
+            _dropdownBloc.add(const FetchDdFormData(type: DdType.gender));
+          },
+          initialValue: _isNewForm() ? "" : "Perempuan"),
+    );
+  }
+
+  _dropdownKesihatan() {
+    return BlocListener<DropdownBloc, DropdownState>(
+      listener: (context, state) {
+        if (state is DropdownSuccess) {
+          if (state.type == DdType.healthLevel) {
+            CustomDropdownSheet(
+              label: "Pilih Tahap Kesihatan",
+              items: state.data,
+              // onFindGroupValue: (data) {
+              //   return data.where((val) {
+              //     var a = val?.desc
+              //             ?.toLowerCase()
+              //             .contains("selesai") ??
+              //         false;
+              //     return a;
+              //   }).firstOrNull;
+              // },
+              getTitle: (data) => data?.desc ?? "-",
+              onChange: (val) {},
+            ).show(context);
+          }
+        }
+      },
+      child: _textField(
+          title: 'Tahap Kesihatan',
+          isDropdown: true,
+          onTap: () {
+            _dropdownBloc.add(const FetchDdFormData(type: DdType.healthLevel));
+          },
+          initialValue: _isNewForm() ? "" : "Sihat"),
+    );
+  }
+
+  _dropdownJenisPekerjaan() {
+    return BlocListener<DropdownBloc, DropdownState>(
+      listener: (context, state) {
+        if (state is DropdownSuccess) {
+          if (state.type == DdType.occupationType) {
+            CustomDropdownSheet(
+              label: "Pilih Jenis Pekerjaan",
+              items: state.data,
+              // onFindGroupValue: (data) {
+              //   return data.where((val) {
+              //     var a = val?.desc
+              //             ?.toLowerCase()
+              //             .contains("selesai") ??
+              //         false;
+              //     return a;
+              //   }).firstOrNull;
+              // },
+              getTitle: (data) => data?.desc ?? "-",
+              onChange: (val) {},
+            ).show(context);
+          }
+        }
+      },
+      child: _textField(
+          title: 'Jenis Pekerjaan',
+          isDropdown: true,
+          onTap: () {
+            _dropdownBloc
+                .add(const FetchDdFormData(type: DdType.occupationType));
+          },
+          initialValue: _isNewForm() ? "" : "Swasta"),
     );
   }
 

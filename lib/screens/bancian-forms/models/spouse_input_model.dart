@@ -15,7 +15,6 @@ class SpouseInputModel {
   final String genderCode;
   final String raceCode;
   final String occupationTypeCode;
-  final String maritalStatusCode;
   final String isOku;
   final Uint8List? uploadIncome;
   final Uint8List? uploadIcFront;
@@ -37,7 +36,6 @@ class SpouseInputModel {
     required this.genderCode,
     required this.raceCode,
     required this.occupationTypeCode,
-    required this.maritalStatusCode,
     required this.isOku,
     this.uploadIncome,
     this.uploadIcFront,
@@ -60,7 +58,6 @@ class SpouseInputModel {
     String? genderCode,
     String? raceCode,
     String? occupationTypeCode,
-    String? maritalStatusCode,
     String? isOku,
     Uint8List? uploadIncome,
     Uint8List? uploadIcFront,
@@ -82,7 +79,6 @@ class SpouseInputModel {
       genderCode: genderCode ?? this.genderCode,
       raceCode: raceCode ?? this.raceCode,
       occupationTypeCode: occupationTypeCode ?? this.occupationTypeCode,
-      maritalStatusCode: maritalStatusCode ?? this.maritalStatusCode,
       isOku: isOku ?? this.isOku,
       uploadIncome: uploadIncome ?? this.uploadIncome,
       uploadIcFront: uploadIcFront ?? this.uploadIcFront,
@@ -107,7 +103,6 @@ class SpouseInputModel {
       'genderCode': genderCode,
       'raceCode': raceCode,
       'occupationTypeCode': occupationTypeCode,
-      'maritalStatusCode': maritalStatusCode,
       'isOku': isOku,
     };
   }
@@ -119,5 +114,26 @@ class SpouseInputModel {
       'uploadIcBack': uploadIcBack,
       'uploadOkuCard': uploadOkuCard,
     };
+  }
+
+  // FromJson method
+  factory SpouseInputModel.fromJson(Map<String, dynamic> json) {
+    return SpouseInputModel(
+      censusCode: json['censusCode'] as String,
+      icNo: json['icNo'] as String,
+      name: json['name'] as String,
+      email: json['email'] as String,
+      totalHousehold: json['totalHousehold'] as String,
+      healthLevelCode: json['healthLevelCode'] as String,
+      workAddress: json['workAddress'] as String,
+      workSalary: json['workSalary'] as String,
+      workAllowance: json['workAllowance'] as String,
+      workOtherIncome: json['workOtherIncome'] as String,
+      welfareAid: json['welfareAid'] as String,
+      genderCode: json['genderCode'] as String,
+      raceCode: json['raceCode'] as String,
+      occupationTypeCode: json['occupationTypeCode'] as String,
+      isOku: json['isOku'] as String,
+    );
   }
 }

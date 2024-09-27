@@ -14,7 +14,7 @@ class StatusInputModel {
     required this.statusCode,
     required this.email,
     required this.remark,
-    required this.images,
+    this.images = const [],
   });
 
   // CopyWith method
@@ -50,5 +50,16 @@ class StatusInputModel {
 
   List<Uint8List> getFiles() {
     return images;
+  }
+
+  // fromJson method
+  factory StatusInputModel.fromJson(Map<String, dynamic> json) {
+    return StatusInputModel(
+      cencusCode: json['cencusCode'] as String,
+      isFingerPrintVerified: json['isFingerPrintVerified'] as String,
+      statusCode: json['statusCode'] as String,
+      email: json['email'] as String,
+      remark: json['remark'] as String,
+    );
   }
 }

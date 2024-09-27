@@ -10,12 +10,14 @@ import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_main_screen.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/jenis_pekerjaan_modal.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/status_kahwin_modal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../components/custom_appbar.dart';
+import '../../../components/custom_dropdown_sheet.dart';
+import '../../../data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
 
 class PenghuniForm extends StatefulWidget {
   final bool? isNewForm;
@@ -27,13 +29,21 @@ class PenghuniForm extends StatefulWidget {
 }
 
 class _PenghuniFormState extends State<PenghuniForm> {
-  _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
-  _isReadOnly() => _isNewForm() ? false : true;
+  bool _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
+  bool _isReadOnly() => _isNewForm() ? false : true;
   Uint8List? frontCard;
   Uint8List? backCard;
   Uint8List? okuCard;
   Uint8List? slipGajiImg;
   bool isOKU = false;
+  late DropdownBloc _dropdownBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.sizeOf(context);
@@ -126,29 +136,10 @@ class _PenghuniFormState extends State<PenghuniForm> {
                           _textField(
                               title: 'No Telefon',
                               initialValue: _isNewForm() ? "" : "0186456762"),
-                          _textField(
-                              title: 'Jantina',
-                              readOnly: _isReadOnly(),
-                              initialValue: _isNewForm() ? "" : "Lelaki"),
-                          _textField(
-                              title: 'Bangsa',
-                              readOnly: _isReadOnly(),
-                              initialValue: _isNewForm() ? "" : "Melayu"),
-                          _textField(
-                              title: 'Jenis Pekerjaan',
-                              isDropdown: true,
-                              onTap: () =>
-                                  const JenisPekerjaanModal().show(context),
-                              initialValue: _isNewForm() ? "" : "Swasta"),
-                          _textField(
-                              title: 'Status Perkahwinan',
-                              isDropdown: true,
-                              onTap: () =>
-                                  const StatusKahwinModal().show(context),
-                              initialValue: _isNewForm()
-                                  ? ""
-                                  : "Berkahwin dan Tiada Anak"),
-                          // _textField(title: 'Kecacatan (OKU)'),
+                          _dropdownJantina(),
+                          _dropdownBangsa(),
+                          _dropdownJenisPekerjaan(),
+                          _dropdownStatusPerkahwinan(),
                         ],
                       ),
                       _gap(),
@@ -191,6 +182,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
       {required String title,
       String? initialValue,
       bool readOnly = false,
+      bool enableDropdown = true,
       String? hintText,
       double? width,
       void Function()? onTap,
@@ -200,12 +192,20 @@ class _PenghuniFormState extends State<PenghuniForm> {
           width: width ?? MediaQuery.sizeOf(context).width * 0.4,
           child: CustomFormField(
             title: title,
-            onTap: onTap,
+            onTap: () {
+              if (onTap == null || !enableDropdown) return;
+              onTap();
+            },
             readOnly: true,
             fillColor: Colors.white,
             hintText: hintText,
             initialValue: _isNewForm() ? "" : initialValue,
-            suffixIcon: isDropdown ? Icons.arrow_drop_down : null,
+            suffixWidget: isDropdown
+                ? Icon(
+                    Icons.arrow_drop_down,
+                    color: readOnly ? Colors.grey : Colors.black,
+                  )
+                : null,
           ));
     }
     return SizedBox(
@@ -217,6 +217,149 @@ class _PenghuniFormState extends State<PenghuniForm> {
         hintText: hintText,
         initialValue: _isNewForm() ? "" : initialValue,
       ),
+    );
+  }
+
+  _dropdownJantina() {
+    return BlocListener<DropdownBloc, DropdownState>(
+      listener: (context, state) {
+        if (_isNewForm()) return;
+        if (state is DropdownSuccess) {
+          if (state.type == DdType.gender) {
+            CustomDropdownSheet(
+              label: "Pilih Jantina",
+              items: state.data,
+              // onFindGroupValue: (data) {
+              //   return data.where((val) {
+              //     var a = val?.desc
+              //             ?.toLowerCase()
+              //             .contains("selesai") ??
+              //         false;
+              //     return a;
+              //   }).firstOrNull;
+              // },
+              getTitle: (data) => data?.desc ?? "-",
+              onChange: (val) {},
+            ).show(context);
+          }
+        }
+      },
+      child: _textField(
+          title: 'Jantina',
+          readOnly: _isReadOnly(),
+          enableDropdown: _isNewForm(),
+          isDropdown: true,
+          onTap: () {
+            _dropdownBloc.add(const FetchDdFormData(type: DdType.gender));
+          },
+          initialValue: _isNewForm() ? "" : "Lelaki"),
+    );
+  }
+
+  _dropdownBangsa() {
+    return BlocListener<DropdownBloc, DropdownState>(
+      listener: (context, state) {
+        if (state is DropdownSuccess) {
+          if (_isNewForm()) return;
+          if (state.type == DdType.race) {
+            CustomDropdownSheet(
+              label: "Pilih Bangsa",
+              items: state.data,
+              // onFindGroupValue: (data) {
+              //   return data.where((val) {
+              //     var a = val?.desc
+              //             ?.toLowerCase()
+              //             .contains("selesai") ??
+              //         false;
+              //     return a;
+              //   }).firstOrNull;
+              // },
+              getTitle: (data) => data?.desc ?? "-",
+              onChange: (val) {},
+            ).show(context);
+          }
+        }
+      },
+      child: _textField(
+        title: 'Bangsa',
+        readOnly: _isReadOnly(),
+        enableDropdown: _isNewForm(),
+        initialValue: _isNewForm() ? "" : "Melayu",
+        isDropdown: true,
+        onTap: () {
+          _dropdownBloc.add(const FetchDdFormData(type: DdType.race));
+        },
+      ),
+    );
+  }
+
+  _dropdownJenisPekerjaan() {
+    return BlocListener<DropdownBloc, DropdownState>(
+      listener: (context, state) {
+        if (state is DropdownSuccess) {
+          if (_isNewForm()) return;
+          if (state.type == DdType.occupationType) {
+            CustomDropdownSheet(
+              label: "Pilih Jenis Pekerjaan",
+              items: state.data,
+              // onFindGroupValue: (data) {
+              //   return data.where((val) {
+              //     var a = val?.desc
+              //             ?.toLowerCase()
+              //             .contains("selesai") ??
+              //         false;
+              //     return a;
+              //   }).firstOrNull;
+              // },
+              getTitle: (data) => data?.desc ?? "-",
+              onChange: (val) {},
+            ).show(context);
+          }
+        }
+      },
+      child: _textField(
+          title: 'Jenis Pekerjaan',
+          isDropdown: true,
+          onTap: () {
+            _dropdownBloc
+                .add(const FetchDdFormData(type: DdType.occupationType));
+          },
+          initialValue: _isNewForm() ? "" : "Swasta"),
+    );
+  }
+
+  _dropdownStatusPerkahwinan() {
+    return BlocListener<DropdownBloc, DropdownState>(
+      listener: (context, state) {
+        if (state is DropdownSuccess) {
+          if (_isNewForm()) return;
+          if (state.type == DdType.maritalStatus) {
+            CustomDropdownSheet(
+              label: 'Status Perkahwinan',
+              items: state.data,
+              // onFindGroupValue: (data) {
+              //   return data.where((val) {
+              //     var a = val?.desc
+              //             ?.toLowerCase()
+              //             .contains("selesai") ??
+              //         false;
+              //     return a;
+              //   }).firstOrNull;
+              // },
+              getTitle: (data) => data?.desc ?? "-",
+              onChange: (val) {},
+            ).show(context);
+          }
+        }
+      },
+      child: _textField(
+          title: 'Status Perkahwinan',
+          isDropdown: true,
+          onTap: () {
+            _dropdownBloc
+                .add(const FetchDdFormData(type: DdType.maritalStatus));
+          },
+          initialValue: _isNewForm() ? "" : "Berkahwin dan Tiada Anak"),
     );
   }
 

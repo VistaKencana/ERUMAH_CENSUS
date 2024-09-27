@@ -85,4 +85,18 @@ class DependantInputModel {
       'uploadOkuCard': uploadOkuCard,
     };
   }
+
+  // FromJson method
+  factory DependantInputModel.fromJson(Map<String, dynamic> json) {
+    return DependantInputModel(
+        censusCode: json['censusCode'] as String,
+        icNo: json['icNo'] as String,
+        name: json['name'] as String,
+        email: json['email'] as String,
+        relationshipCode: json['relationshipCode'] as String,
+        healthLevelCode: json['healthLevelCode'] as String,
+        genderCode: json['genderCode'] as String,
+        raceCode: json['raceCode'] as String,
+        isOku: json['isOku'] as String);
+  }
 }

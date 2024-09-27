@@ -176,6 +176,15 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                         CustomDropdownSheet(
                           label: "Pilih status",
                           items: state.data,
+                          // onFindGroupValue: (data) {
+                          //   return data.where((val) {
+                          //     var a = val?.desc
+                          //             ?.toLowerCase()
+                          //             .contains("selesai") ??
+                          //         false;
+                          //     return a;
+                          //   }).firstOrNull;
+                          // },
                           getTitle: (data) => data?.desc ?? "-",
                           onChange: (val) {},
                         ).show(context);
@@ -185,6 +194,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                   child: CustomTextField(
                     hintText: "Pilih status",
                     readOnly: true,
+                    suffixIcon: Icons.arrow_drop_down,
                     onTap: () {
                       _dropdownBloc.add(
                           const FetchDdFormData(type: DdType.censusStatus));

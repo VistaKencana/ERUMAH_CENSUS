@@ -132,6 +132,45 @@ class ResidentInfoData {
             ? []
             : List<dynamic>.from(visits!.map((x) => x.toJson())),
       };
+
+  Map<String, dynamic> toOwnerJson() {
+    return {
+      'cencusCode': censusCode, //Get from resident data
+      'isNotOwner': "0", //0-false 1- true
+      'totalHousehold': owner?.totalHousehold,
+      'email': owner?.email,
+      'phoneNo': owner?.phoneNo,
+      'occupationTypeCode': owner?.occupation?.type,
+      'maritalStatusCode': owner?.maritalStatus?.code,
+      'isOku': owner?.isOku,
+      'workAddress': owner?.occupation?.workplace?.address,
+      'workSalary': owner?.income?.basicSalary,
+      'workAllowance': owner?.income?.allowance,
+      'workOtherIncome': owner?.income?.other,
+      'welfareAid': owner?.income?.welfareAid
+    };
+  }
+
+  List<Map<String, dynamic>> toDependantChildJson() {
+    return dependants?.child == null || (dependants?.child?.isEmpty ?? true)
+        ? <Map<String, dynamic>>[]
+        : List<Map<String, dynamic>>.from(dependants!.child!
+            .map((x) => x.toDepandantJson(censusCode: censusCode)));
+  }
+
+  List<Map<String, dynamic>> toDependantOtherJson() {
+    return dependants?.others == null || (dependants?.others?.isEmpty ?? true)
+        ? <Map<String, dynamic>>[]
+        : List<Map<String, dynamic>>.from(
+            dependants!.others!.map((x) => x.toJson()));
+  }
+
+  List<Map<String, dynamic>> toListSpouseJson() {
+    return spouse == null || (spouse?.isEmpty ?? true)
+        ? <Map<String, dynamic>>[]
+        : List<Map<String, dynamic>>.from(spouse!.map((x) => x.toSpouseJson(
+            censCode: censusCode, totalHousehold: owner?.totalHousehold)));
+  }
 }
 
 class DependantsModel {
@@ -187,6 +226,7 @@ class SpouseData {
   GeneralData? relationship;
   GeneralData? race;
   GeneralData? gender;
+  GeneralData? healthLevel;
   String? isOku;
   OccupationData? occupation;
   IncomeData? income;
@@ -202,6 +242,7 @@ class SpouseData {
     this.relationship,
     this.race,
     this.gender,
+    this.healthLevel,
     this.isOku,
     this.occupation,
     this.income,
@@ -218,6 +259,7 @@ class SpouseData {
     GeneralData? relationship,
     GeneralData? race,
     GeneralData? gender,
+    GeneralData? healthLevel,
     String? isOku,
     OccupationData? occupation,
     IncomeData? income,
@@ -233,6 +275,7 @@ class SpouseData {
         relationship: relationship ?? this.relationship,
         race: race ?? this.race,
         gender: gender ?? this.gender,
+        healthLevel: healthLevel ?? this.healthLevel,
         isOku: isOku ?? this.isOku,
         occupation: occupation ?? this.occupation,
         income: income ?? this.income,
@@ -253,6 +296,9 @@ class SpouseData {
         gender: json["gender"] == null
             ? null
             : GeneralData.fromJson(json["gender"]),
+        healthLevel: json["healthLevel"] == null
+            ? null
+            : GeneralData.fromJson(json["healthLevel"]),
         isOku: json["isOku"],
         occupation: json["occupation"] == null
             ? null
@@ -272,10 +318,32 @@ class SpouseData {
         "relationship": relationship?.toJson(),
         "race": race?.toJson(),
         "gender": gender?.toJson(),
+        "healthLevel": healthLevel?.toJson(),
         "isOku": isOku,
         "occupation": occupation?.toJson(),
         "income": income?.toJson(),
       };
+
+  Map<String, dynamic> toSpouseJson(
+      {String? censCode, String? totalHousehold}) {
+    return {
+      'censusCode': censCode,
+      'icNo': icNo,
+      'name': name,
+      'email': email,
+      'totalHousehold': totalHousehold,
+      'healthLevelCode': healthLevel?.code,
+      'workAddress': occupation?.workplace?.address ?? "",
+      'workSalary': income?.basicSalary ?? "",
+      'workAllowance': income?.allowance ?? "",
+      'workOtherIncome': income?.other ?? "",
+      'welfareAid': income?.welfareAid,
+      'genderCode': gender?.code,
+      'raceCode': race?.code,
+      'occupationTypeCode': occupation?.type,
+      'isOku': isOku,
+    };
+  }
 }
 
 class DependantsData {
@@ -288,6 +356,7 @@ class DependantsData {
   GeneralData? relationship;
   GeneralData? race;
   GeneralData? gender;
+  GeneralData? healthLevel;
   String? isOku;
 
   DependantsData({
@@ -300,6 +369,7 @@ class DependantsData {
     this.relationship,
     this.race,
     this.gender,
+    this.healthLevel,
     this.isOku,
   });
 
@@ -313,9 +383,8 @@ class DependantsData {
     GeneralData? relationship,
     GeneralData? race,
     GeneralData? gender,
+    GeneralData? healthLevel,
     String? isOku,
-    OccupationData? occupation,
-    IncomeData? income,
   }) =>
       DependantsData(
         code: code ?? this.code,
@@ -327,6 +396,7 @@ class DependantsData {
         relationship: relationship ?? this.relationship,
         race: race ?? this.race,
         gender: gender ?? this.gender,
+        healthLevel: healthLevel ?? this.healthLevel,
         isOku: isOku ?? this.isOku,
       );
 
@@ -344,6 +414,9 @@ class DependantsData {
         gender: json["gender"] == null
             ? null
             : GeneralData.fromJson(json["gender"]),
+        healthLevel: json["healthLevel"] == null
+            ? null
+            : GeneralData.fromJson(json["healthLevel"]),
         isOku: json["isOku"],
       );
 
@@ -357,8 +430,23 @@ class DependantsData {
         "relationship": relationship?.toJson(),
         "race": race?.toJson(),
         "gender": gender?.toJson(),
+        "healthLevel": healthLevel?.toJson(),
         "isOku": isOku,
       };
+
+  Map<String, dynamic> toDepandantJson({String? censusCode}) {
+    return {
+      'censusCode': censusCode,
+      'icNo': icNo,
+      'name': name,
+      'email': email,
+      'relationshipCode': relationship?.code,
+      'healthLevelCode': healthLevel?.code,
+      'genderCode': gender?.code,
+      'raceCode': race?.code,
+      'isOku': isOku,
+    };
+  }
 }
 
 class GeneralData {
@@ -494,6 +582,7 @@ class OwnerData {
   String? phoneNo;
   GeneralData? race;
   GeneralData? gender;
+  GeneralData? healthLevel;
   OccupationData? occupation;
   IncomeData? income;
   GeneralData? maritalStatus;
@@ -508,6 +597,7 @@ class OwnerData {
     this.phoneNo,
     this.race,
     this.gender,
+    this.healthLevel,
     this.occupation,
     this.income,
     this.maritalStatus,
@@ -523,6 +613,7 @@ class OwnerData {
     String? phoneNo,
     GeneralData? race,
     GeneralData? gender,
+    GeneralData? healthLevel,
     OccupationData? occupation,
     IncomeData? income,
     GeneralData? maritalStatus,
@@ -537,6 +628,7 @@ class OwnerData {
         phoneNo: phoneNo ?? this.phoneNo,
         race: race ?? this.race,
         gender: gender ?? this.gender,
+        healthLevel: healthLevel ?? this.healthLevel,
         occupation: occupation ?? this.occupation,
         income: income ?? this.income,
         maritalStatus: maritalStatus ?? this.maritalStatus,
@@ -554,6 +646,9 @@ class OwnerData {
         gender: json["gender"] == null
             ? null
             : GeneralData.fromJson(json["gender"]),
+        healthLevel: json["healthLevel"] == null
+            ? null
+            : GeneralData.fromJson(json["healthLevel"]),
         occupation: json["occupation"] == null
             ? null
             : OccupationData.fromJson(json["occupation"]),
@@ -574,6 +669,7 @@ class OwnerData {
         "phoneNo": phoneNo,
         "race": race?.toJson(),
         "gender": gender?.toJson(),
+        "healthLevel": healthLevel?.toJson(),
         "occupation": occupation?.toJson(),
         "income": income?.toJson(),
         "maritalStatus": maritalStatus?.toJson(),
