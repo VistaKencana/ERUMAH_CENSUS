@@ -13,8 +13,9 @@ final class DropdownLoading extends DropdownInitial {}
 
 final class DropdownSuccess extends DropdownInitial {
   final List<DropdownData?> data;
+  final DdType type;
 
-  DropdownSuccess({required this.data});
+  DropdownSuccess({required this.data, required this.type});
 }
 
 final class DropdownError extends DropdownInitial {

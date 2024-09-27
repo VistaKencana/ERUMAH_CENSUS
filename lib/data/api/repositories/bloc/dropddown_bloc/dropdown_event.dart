@@ -12,19 +12,3 @@ class FetchDdFormData extends DropdownEvent {
   final DdType type;
   const FetchDdFormData({required this.type});
 }
-
-class FetchDdFZone extends DropdownEvent {
-  const FetchDdFZone();
-}
-
-class FetchDdArea extends DropdownEvent {
-  const FetchDdArea();
-}
-
-class FetchDdBlock extends DropdownEvent {
-  const FetchDdBlock();
-}
-
-class FetchDdLevel extends DropdownEvent {
-  const FetchDdLevel();
-}

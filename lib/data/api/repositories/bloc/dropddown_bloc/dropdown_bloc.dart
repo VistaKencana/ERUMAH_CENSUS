@@ -13,7 +13,7 @@ class DropdownBloc extends Bloc<DropdownEvent, DropdownState> {
     on<FetchDdFormData>(_onFetchDdData);
   }
 
-  //Temparory variable
+  //Temporarily store dropdown data
   List<DropdownData> raceList = [];
   List<DropdownData> genderList = [];
   List<DropdownData> maritalStatusList = [];
@@ -24,28 +24,38 @@ class DropdownBloc extends Bloc<DropdownEvent, DropdownState> {
 
   final repo = DropdownRepository();
   final log = const AppLog(classname: "DropdownBloc");
+
   _onFetchDdData(FetchDdFormData event, Emitter<DropdownState> emit) async {
+    emit(DropdownLoading());
     final dropdownType = event.type;
     var listData = _getDropdownList(type: dropdownType);
+
     if (listData.isNotEmpty) {
-      emit(DropdownSuccess(data: listData));
+      emit(DropdownSuccess(data: listData, type: event.type));
       return;
     }
-    emit(DropdownLoading());
+
     EasyLoading.show();
+
     try {
       final resp = await repo.getDropdownData(type: dropdownType);
+
+      // Update the respective list based on the type
       listData = resp;
-      emit(DropdownSuccess(data: listData));
+      _updateDropdownList(type: dropdownType, data: listData);
+
+      emit(DropdownSuccess(data: listData, type: event.type));
     } catch (e) {
       log.logError(tag: "_onFetchDdData", msg: e.toString());
       emit(DropdownError(msg: e.toString()));
     } finally {
+      emit(DropdownSuccess(data: listData, type: event.type));
       EasyLoading.dismiss();
     }
   }
 
-  List<DropdownData?> _getDropdownList({required DdType type}) {
+  // Get the list for the specific dropdown type
+  List<DropdownData> _getDropdownList({required DdType type}) {
     final listData = {
       DdType.race: raceList,
       DdType.gender: genderList,
@@ -56,5 +66,33 @@ class DropdownBloc extends Bloc<DropdownEvent, DropdownState> {
       DdType.censusStatus: censusStatusList,
     };
     return listData[type] ?? [];
+  }
+
+  // Update the list based on the dropdown type
+  void _updateDropdownList(
+      {required DdType type, required List<DropdownData> data}) {
+    switch (type) {
+      case DdType.race:
+        raceList = data;
+        break;
+      case DdType.gender:
+        genderList = data;
+        break;
+      case DdType.maritalStatus:
+        maritalStatusList = data;
+        break;
+      case DdType.occupationType:
+        occupationTypeList = data;
+        break;
+      case DdType.relationship:
+        relationshipList = data;
+        break;
+      case DdType.healthLevel:
+        healthLevelList = data;
+        break;
+      case DdType.censusStatus:
+        censusStatusList = data;
+        break;
+    }
   }
 }

@@ -2,17 +2,21 @@ import 'dart:typed_data';
 
 import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
+import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
+import 'package:eperumahan_bancian/components/custom_textfield.dart';
 import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
+import 'package:eperumahan_bancian/data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
+import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/tanggungan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_result.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/bancian_status_field.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../components/borang_listtile.dart';
@@ -31,6 +35,14 @@ class BancianMainScreen extends StatefulWidget {
 }
 
 class _BancianMainScreenState extends State<BancianMainScreen> {
+  late DropdownBloc _dropdownBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
+  }
+
   _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
   _onPop() async {
     if (_isNewForm()) {
@@ -153,9 +165,33 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                 ),
                 _gap(),
                 _section("Status Bancian"),
-                const BancianStatusField(
-                  initialVal: "Bancian Berjaya",
+                // const BancianStatusField(
+                //   initialVal: "Bancian Berjaya",
+                // ),
+                BlocListener<DropdownBloc, DropdownState>(
+                  listener: (context, state) {
+                    if (state is DropdownSuccess) {
+                      if (state.type == DdType.censusStatus) {
+                        setState(() {});
+                        CustomDropdownSheet(
+                          label: "Pilih status",
+                          items: state.data,
+                          getTitle: (data) => data?.desc ?? "-",
+                          onChange: (val) {},
+                        ).show(context);
+                      }
+                    }
+                  },
+                  child: CustomTextField(
+                    hintText: "Pilih status",
+                    readOnly: true,
+                    onTap: () {
+                      _dropdownBloc.add(
+                          const FetchDdFormData(type: DdType.censusStatus));
+                    },
+                  ),
                 ),
+
                 _gap(),
                 _section("Gambar"),
                 SectionContainer(
