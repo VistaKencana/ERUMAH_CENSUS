@@ -58,7 +58,10 @@ class DisabilityCheckboxState extends State<DisabilityCheckbox> {
               children: [
                 Checkbox(
                   value: _isYesChecked,
-                  onChanged: _onYesChanged,
+                  onChanged: (val) {
+                    if (!val!) return;
+                    _onYesChanged(val);
+                  },
                 ),
                 const Text('Ya'),
               ],
@@ -69,7 +72,10 @@ class DisabilityCheckboxState extends State<DisabilityCheckbox> {
               children: [
                 Checkbox(
                   value: _isNoChecked,
-                  onChanged: _onNoChanged,
+                  onChanged: (val) {
+                    if (!val!) return;
+                    _onNoChanged(val);
+                  },
                 ),
                 const Text('Tiada'),
               ],

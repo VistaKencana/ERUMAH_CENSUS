@@ -24,13 +24,23 @@ class ApplicationRepository {
   Future storeOwner({required OwnerInputModel data}) async {
     List<http.MultipartFile> files = [];
     int cnt = 0;
-    data.getFiles().forEach((field, img) {
+    // data.getFiles().forEach((field, img) {
+    //   if (img != null) {
+    //     cnt++;
+    //     files.add(client.bytesToMultipartFile(
+    //         fieldName: field, bytes: img, filename: "image_$cnt.jpg"));
+    //   }
+    // });
+    for (var entry in data.getFiles().entries) {
+      final field = entry.key;
+      final img = entry.value;
       if (img != null) {
         cnt++;
         files.add(client.bytesToMultipartFile(
             fieldName: field, bytes: img, filename: "image_$cnt.jpg"));
       }
-    });
+    }
+
     await client.postFormData(
         endpoint: "/appl/owner/store", files: files, body: data.toJson());
   }

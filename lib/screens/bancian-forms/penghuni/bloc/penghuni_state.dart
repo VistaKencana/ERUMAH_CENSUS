@@ -8,3 +8,9 @@ sealed class PenghuniState extends Equatable {
 }
 
 final class PenghuniInitial extends PenghuniState {}
+
+final class PenghuniLoading extends PenghuniState {}
+
+final class PenghuniLoaded extends PenghuniState {}
+
+final class PenghuniError extends PenghuniState {}

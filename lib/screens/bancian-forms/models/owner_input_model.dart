@@ -116,7 +116,7 @@ class OwnerInputModel {
   // ToJson method
   Map<String, String> toJson() {
     return {
-      'cencusCode': cencusCode,
+      'censusCode': cencusCode,
       'isNotOwner': isNotOwner,
       'name': name,
       'icNo': icNo,
@@ -170,4 +170,37 @@ class OwnerInputModel {
       raceCode: json['raceCode'] as String,
     );
   }
+
+  // CopyWith method
+  OwnerInputModel resetImage(CardType type) {
+    return OwnerInputModel(
+      cencusCode: cencusCode,
+      isNotOwner: isNotOwner,
+      name: name,
+      icNo: icNo,
+      raceCode: raceCode,
+      genderCode: genderCode,
+      totalHousehold: totalHousehold,
+      email: email,
+      phoneNo: phoneNo,
+      occupationTypeCode: occupationTypeCode,
+      maritalStatusCode: maritalStatusCode,
+      isOku: isOku,
+      workAddress: workAddress,
+      workSalary: workSalary,
+      workAllowance: workAllowance,
+      workOtherIncome: workOtherIncome,
+      welfareAid: welfareAid,
+      uploadIncome: type == CardType.income ? null : uploadIncome,
+      uploadIcFront: type == CardType.front ? null : uploadIcFront,
+      uploadIcBack: type == CardType.back ? null : uploadIcBack,
+      uploadOkuCard: type == CardType.oku ? null : uploadOkuCard,
+      raceDesc: raceDesc,
+      genderDesc: genderDesc,
+      occupationTypeDesc: occupationTypeDesc,
+      maritalStatusDesc: maritalStatusDesc,
+    );
+  }
 }
+
+enum CardType { oku, front, back, income }

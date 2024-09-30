@@ -1,7 +1,9 @@
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/anak_modal.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/bloc/anak_tanggungan_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'tanggungan_modal.dart';
 
@@ -65,8 +67,21 @@ class _TanggunganFormState extends State<TanggunganForm> {
               title: const Text("Tambah anak"),
             ),
             const Divider(height: 0),
-            _customTile(title: "Anak 1", name: "Liyana Aina"),
-            _customTile(title: "Anak 2", name: "Nur Fatin")
+            // _customTile(title: "Anak 1", name: "Liyana Aina"),
+            // _customTile(title: "Anak 2", name: "Nur Fatin")
+            BlocBuilder<AnakTanggunganBloc, AnakTanggunganState>(
+              builder: (context, state) {
+                if (state is AnakTanggunganLoaded) {
+                  return Column(
+                      children: List.generate(
+                          state.childData.length,
+                          (index) => _customTile(
+                              title: "Anak ${index + 1}",
+                              name: "Liyana Aina")));
+                }
+                return const SizedBox();
+              },
+            ),
           ],
         ),
       ),
@@ -99,9 +114,23 @@ class _TanggunganFormState extends State<TanggunganForm> {
               title: const Text("Tambah tanggungan"),
             ),
             const Divider(height: 0),
-            _customTile(
-                title: "Tanggungan 1", name: "Liyana Aina", isAnak: false),
-            _customTile(title: "Tanggungan 2", name: "Nur Fatin", isAnak: false)
+            // _customTile(
+            //     title: "Tanggungan 1", name: "Liyana Aina", isAnak: false),
+            // _customTile(title: "Tanggungan 2", name: "Nur Fatin", isAnak: false)
+            BlocBuilder<AnakTanggunganBloc, AnakTanggunganState>(
+              builder: (context, state) {
+                if (state is AnakTanggunganLoaded) {
+                  return Column(
+                      children: List.generate(
+                          state.otherData.length,
+                          (index) => _customTile(
+                              title: "Tanggungan ${index + 1}",
+                              name: state.otherData[index].name,
+                              isAnak: false)));
+                }
+                return const SizedBox();
+              },
+            ),
           ],
         ),
       ),

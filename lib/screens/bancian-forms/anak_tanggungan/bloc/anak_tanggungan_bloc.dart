@@ -19,17 +19,23 @@ class AnakTanggunganBloc
   _onSetAnakTanggungData(
       SetAnakTanggungData event, Emitter<AnakTanggunganState> emit) {
     unitData = event.data;
-
     existChild.clear();
     final data = unitData.toDependantChildJson();
+    (data);
     if (data.isNotEmpty) {
-      data.map((e) => existChild.add(DependantInputModel.fromJson(e)));
+      existChild
+          .addAll(data.map((e) => DependantInputModel.fromJson(e)).toList());
     }
 
     existOthers.clear();
     final data2 = unitData.toDependantOtherJson();
     if (data2.isNotEmpty) {
-      data2.map((e) => existOthers.add(DependantInputModel.fromJson(e)));
+      existOthers
+          .addAll(data2.map((e) => DependantInputModel.fromJson(e)).toList());
     }
+    applog.logDebug(
+        tag: "_onSetAnakTanggungData",
+        msg: "Child: ${existChild.length}, Other: ${existOthers.length}");
+    emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));
   }
 }

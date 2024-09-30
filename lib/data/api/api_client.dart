@@ -126,6 +126,14 @@ class ApiClient {
     }
 
     final response = await http.Response.fromStream(await request.send());
+
+    if (response.statusCode != 200) {
+      // Log or handle error case
+      debugPrint("Error uploading: ${response.statusCode}, ${response.body}");
+      throw Exception(
+          "Failed to upload data. Status code: ${response.statusCode}");
+    }
+
     return response;
   }
 

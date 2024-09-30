@@ -1,6 +1,8 @@
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/bloc/pasangan_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_modal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../components/bottombar_button.dart';
 import '../../../components/custom_appbar.dart';
@@ -40,8 +42,21 @@ class _PasanganFormState extends State<PasanganForm> {
                 title: const Text("Tambah pasangan"),
               ),
               const Divider(height: 0),
-              _pasanganTile(name: "Siti Nabila", index: 1),
-              _pasanganTile(name: "Nur Saleha", index: 2)
+              BlocBuilder<PasanganBloc, PasanganState>(
+                builder: (context, state) {
+                  if (state is PasanganLoaded) {
+                    return Column(
+                      children: List.generate(
+                          state.spouseData.length,
+                          (index) => _pasanganTile(
+                              name: state.spouseData[index].name,
+                              index: index + 1)),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              ),
             ],
           ),
         ),

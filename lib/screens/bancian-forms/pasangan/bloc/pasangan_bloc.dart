@@ -20,7 +20,8 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
     existData.clear();
     final data = unitData.toListSpouseJson();
     if (data.isNotEmpty) {
-      data.map((e) => existData.add(SpouseInputModel.fromJson(e)));
+      existData.addAll(data.map((e) => SpouseInputModel.fromJson(e)).toList());
     }
+    emit(PasanganLoaded(spouseData: existData));
   }
 }

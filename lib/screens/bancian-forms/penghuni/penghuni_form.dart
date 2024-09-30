@@ -12,6 +12,8 @@ import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_main_screen.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/models/owner_input_model.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/bloc/penghuni_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,11 +39,41 @@ class _PenghuniFormState extends State<PenghuniForm> {
   Uint8List? slipGajiImg;
   bool isOKU = false;
   late DropdownBloc _dropdownBloc;
+  late PenghuniBloc _penghuniBloc;
+  OwnerInputModel? ownerData;
+  final nameCtrl = TextEditingController();
+  final bilIsiRumahCtrl = TextEditingController();
+  final icNoCtrl = TextEditingController();
+  final emelCtrl = TextEditingController();
+  final umurCtrl = TextEditingController();
+  final noTelCtrl = TextEditingController();
+  final jantinaCtrl = TextEditingController();
+  final bangsaCtrl = TextEditingController();
+  final jenisKerjaCtrl = TextEditingController();
+  final statusKahwinCtrl = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
+    _penghuniBloc = BlocProvider.of<PenghuniBloc>(context, listen: false);
+    ownerData = _penghuniBloc.existData!.copyWith();
+    initVal();
+  }
+
+  initVal() {
+    nameCtrl.text = _isNewForm() ? "" : ownerData?.name ?? "";
+    bilIsiRumahCtrl.text = ownerData?.totalHousehold ?? "0";
+    icNoCtrl.text = _isNewForm() ? "" : ownerData?.icNo ?? "";
+    emelCtrl.text = _isNewForm() ? "" : ownerData?.email ?? "";
+    umurCtrl.text = _isNewForm() ? "" : "50";
+    noTelCtrl.text = _isNewForm() ? "" : ownerData?.phoneNo ?? "";
+    jantinaCtrl.text = _isNewForm() ? "" : ownerData?.genderDesc ?? "";
+    bangsaCtrl.text = _isNewForm() ? "" : ownerData?.raceDesc ?? "";
+    jenisKerjaCtrl.text =
+        _isNewForm() ? "" : ownerData?.occupationTypeDesc ?? "";
+    statusKahwinCtrl.text =
+        _isNewForm() ? "" : ownerData?.maritalStatusDesc ?? "";
   }
 
   @override
@@ -101,10 +133,12 @@ class _PenghuniFormState extends State<PenghuniForm> {
                 ),
                 KadPengenalanTile(
                   onFrontCard: (bytes) {
-                    setState(() => frontCard = bytes);
+                    setState(() =>
+                        ownerData = ownerData!.copyWith(uploadIcFront: bytes));
                   },
                   onBackCard: (bytes) {
-                    setState(() => backCard = bytes);
+                    setState(() =>
+                        ownerData = ownerData!.copyWith(uploadIcBack: bytes));
                   },
                 ),
                 SectionContainer(
@@ -113,29 +147,28 @@ class _PenghuniFormState extends State<PenghuniForm> {
                     children: [
                       _textField(
                           title: 'Nama Penuh',
-                          initialValue: _isNewForm() ? "" : "Arif Aiman",
+                          controller: nameCtrl,
+                          // initialValue:
+                          //     _isNewForm() ? "" : ownerData?.name ?? "",
                           width: double.infinity,
                           readOnly: _isReadOnly()),
                       _gap(),
                       TwoColumnForm(
                         children: [
                           _textField(
-                              title: 'Bilangan Isi Rumah', initialValue: "2"),
+                              title: 'Bilangan Isi Rumah',
+                              controller: bilIsiRumahCtrl),
                           _textField(
                               title: 'No. Kad Pengenalan',
-                              initialValue: _isNewForm() ? "" : "7056448140568",
+                              controller: icNoCtrl,
                               readOnly: _isReadOnly()),
-                          _textField(
-                              title: 'Emel',
-                              initialValue:
-                                  _isNewForm() ? "" : "arifaiman@gmail.com"),
+                          _textField(title: 'Emel', controller: emelCtrl),
                           _textField(
                               title: 'Umur(Tahun)',
-                              initialValue: _isNewForm() ? "" : "50",
+                              controller: umurCtrl,
                               readOnly: _isReadOnly()),
                           _textField(
-                              title: 'No Telefon',
-                              initialValue: _isNewForm() ? "" : "0186456762"),
+                              title: 'No Telefon', controller: noTelCtrl),
                           _dropdownJantina(),
                           _dropdownBangsa(),
                           _dropdownJenisPekerjaan(),
@@ -144,12 +177,15 @@ class _PenghuniFormState extends State<PenghuniForm> {
                       ),
                       _gap(),
                       DisabilityCheckbox(
-                          initVal: isOKU,
+                          initVal: (ownerData?.isOku == "1"),
                           onCheck: (val) {
-                            setState(() => isOKU = val);
+                            setState(() {
+                              ownerData =
+                                  ownerData!.copyWith(isOku: val ? "1" : "0");
+                            });
                           }),
                       Visibility(
-                        visible: isOKU,
+                        visible: (ownerData?.isOku == "1"),
                         child: CardDisplay(
                           title: "",
                           img: okuCard,
@@ -173,7 +209,11 @@ class _PenghuniFormState extends State<PenghuniForm> {
           ),
         ),
         bottomNavigationBar: BottomBarButton(
-            onTap: () => Navigator.pop(context), title: "Simpan"),
+            onTap: () {
+              _penghuniBloc.add(SavePenghuniData(data: ownerData!));
+              // Navigator.pop(context);
+            },
+            title: "Simpan"),
       ),
     );
   }
@@ -183,6 +223,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
       String? initialValue,
       bool readOnly = false,
       bool enableDropdown = true,
+      TextEditingController? controller,
       String? hintText,
       double? width,
       void Function()? onTap,
@@ -192,6 +233,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
           width: width ?? MediaQuery.sizeOf(context).width * 0.4,
           child: CustomFormField(
             title: title,
+            controller: controller,
             onTap: () {
               if (onTap == null || !enableDropdown) return;
               onTap();
@@ -213,6 +255,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
       child: CustomFormField(
         title: title,
         onTap: onTap,
+        controller: controller,
         readOnly: readOnly,
         hintText: hintText,
         initialValue: _isNewForm() ? "" : initialValue,
@@ -229,30 +272,35 @@ class _PenghuniFormState extends State<PenghuniForm> {
             CustomDropdownSheet(
               label: "Pilih Jantina",
               items: state.data,
-              // onFindGroupValue: (data) {
-              //   return data.where((val) {
-              //     var a = val?.desc
-              //             ?.toLowerCase()
-              //             .contains("selesai") ??
-              //         false;
-              //     return a;
-              //   }).firstOrNull;
-              // },
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a = val?.code?.toLowerCase().contains(
+                          ownerData?.genderCode.toLowerCase() ?? "") ??
+                      false;
+                  return a;
+                }).firstOrNull;
+              },
               getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {},
+              onChange: (val) {
+                if (val == null) return;
+                ownerData = ownerData!
+                    .copyWith(genderCode: val.code, genderDesc: val.desc);
+                jantinaCtrl.text = val.desc ?? "";
+              },
             ).show(context);
           }
         }
       },
       child: _textField(
-          title: 'Jantina',
-          readOnly: _isReadOnly(),
-          enableDropdown: _isNewForm(),
-          isDropdown: true,
-          onTap: () {
-            _dropdownBloc.add(const FetchDdFormData(type: DdType.gender));
-          },
-          initialValue: _isNewForm() ? "" : "Lelaki"),
+        title: 'Jantina',
+        controller: jantinaCtrl,
+        readOnly: _isReadOnly(),
+        enableDropdown: _isNewForm(),
+        isDropdown: true,
+        onTap: () {
+          _dropdownBloc.add(const FetchDdFormData(type: DdType.gender));
+        },
+      ),
     );
   }
 
@@ -265,26 +313,31 @@ class _PenghuniFormState extends State<PenghuniForm> {
             CustomDropdownSheet(
               label: "Pilih Bangsa",
               items: state.data,
-              // onFindGroupValue: (data) {
-              //   return data.where((val) {
-              //     var a = val?.desc
-              //             ?.toLowerCase()
-              //             .contains("selesai") ??
-              //         false;
-              //     return a;
-              //   }).firstOrNull;
-              // },
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a = val?.code
+                          ?.toLowerCase()
+                          .contains(ownerData?.raceCode.toLowerCase() ?? "") ??
+                      false;
+                  return a;
+                }).firstOrNull;
+              },
               getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {},
+              onChange: (val) {
+                if (val == null) return;
+                ownerData =
+                    ownerData!.copyWith(raceCode: val.code, raceDesc: val.desc);
+                bangsaCtrl.text = val.desc ?? "";
+              },
             ).show(context);
           }
         }
       },
       child: _textField(
         title: 'Bangsa',
+        controller: bangsaCtrl,
         readOnly: _isReadOnly(),
         enableDropdown: _isNewForm(),
-        initialValue: _isNewForm() ? "" : "Melayu",
         isDropdown: true,
         onTap: () {
           _dropdownBloc.add(const FetchDdFormData(type: DdType.race));
@@ -302,29 +355,33 @@ class _PenghuniFormState extends State<PenghuniForm> {
             CustomDropdownSheet(
               label: "Pilih Jenis Pekerjaan",
               items: state.data,
-              // onFindGroupValue: (data) {
-              //   return data.where((val) {
-              //     var a = val?.desc
-              //             ?.toLowerCase()
-              //             .contains("selesai") ??
-              //         false;
-              //     return a;
-              //   }).firstOrNull;
-              // },
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a = val?.code?.toLowerCase().contains(
+                          ownerData?.occupationTypeCode.toLowerCase() ?? "") ??
+                      false;
+                  return a;
+                }).firstOrNull;
+              },
               getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {},
+              onChange: (val) {
+                if (val == null) return;
+                ownerData = ownerData!.copyWith(
+                    occupationTypeCode: val.code, occupationTypeDesc: val.desc);
+                jenisKerjaCtrl.text = val.desc ?? "";
+              },
             ).show(context);
           }
         }
       },
       child: _textField(
-          title: 'Jenis Pekerjaan',
-          isDropdown: true,
-          onTap: () {
-            _dropdownBloc
-                .add(const FetchDdFormData(type: DdType.occupationType));
-          },
-          initialValue: _isNewForm() ? "" : "Swasta"),
+        title: 'Jenis Pekerjaan',
+        controller: jenisKerjaCtrl,
+        isDropdown: true,
+        onTap: () {
+          _dropdownBloc.add(const FetchDdFormData(type: DdType.occupationType));
+        },
+      ),
     );
   }
 
@@ -337,29 +394,33 @@ class _PenghuniFormState extends State<PenghuniForm> {
             CustomDropdownSheet(
               label: 'Status Perkahwinan',
               items: state.data,
-              // onFindGroupValue: (data) {
-              //   return data.where((val) {
-              //     var a = val?.desc
-              //             ?.toLowerCase()
-              //             .contains("selesai") ??
-              //         false;
-              //     return a;
-              //   }).firstOrNull;
-              // },
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a = val?.code?.toLowerCase().contains(
+                          ownerData?.maritalStatusCode.toLowerCase() ?? "") ??
+                      false;
+                  return a;
+                }).firstOrNull;
+              },
               getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {},
+              onChange: (val) {
+                if (val == null) return;
+                ownerData = ownerData!.copyWith(
+                    maritalStatusCode: val.code, maritalStatusDesc: val.desc);
+                statusKahwinCtrl.text = val.desc ?? "";
+              },
             ).show(context);
           }
         }
       },
       child: _textField(
-          title: 'Status Perkahwinan',
-          isDropdown: true,
-          onTap: () {
-            _dropdownBloc
-                .add(const FetchDdFormData(type: DdType.maritalStatus));
-          },
-          initialValue: _isNewForm() ? "" : "Berkahwin dan Tiada Anak"),
+        title: 'Status Perkahwinan',
+        controller: statusKahwinCtrl,
+        isDropdown: true,
+        onTap: () {
+          _dropdownBloc.add(const FetchDdFormData(type: DdType.maritalStatus));
+        },
+      ),
     );
   }
 
@@ -386,9 +447,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
           children: [
             CustomFormField(
               title: "Alamat Majikan",
-              initialValue: _isNewForm()
-                  ? ""
-                  : "No. 1 Jalan 2 Taman Perindustrian, 50300 Kuala Lumpur",
+              initialValue: _isNewForm() ? "" : ownerData?.workAddress,
               maxLines: 3,
               contentPadding: const EdgeInsets.all(8),
             ),
@@ -402,21 +461,42 @@ class _PenghuniFormState extends State<PenghuniForm> {
                 hintText: "0.00",
                 initialValue: "1800"),
             _textField(
-                title: 'Elaun (RM)', hintText: "0.00", initialValue: "0.00"),
-            _textField(title: 'Lain-lain Pendapatan', initialValue: "Tiada"),
-            _textField(title: 'Bantuan Kewangan', initialValue: "Tiada"),
+                title: 'Elaun (RM)',
+                hintText: "0.00",
+                initialValue: ownerData?.workAllowance),
+            _textField(
+                title: 'Lain-lain Pendapatan',
+                initialValue: ownerData?.workOtherIncome),
+            _textField(
+                title: 'Bantuan Kewangan', initialValue: ownerData?.welfareAid),
           ],
         ),
         const SizedBox(height: 10),
         FileDisplay(
           title: "Slip Gaji / Penyata KWSP",
           isMandatory: true,
-          img: slipGajiImg,
-          onPicture: (bytes) => setState(() => slipGajiImg = bytes),
+          img: ownerData!.uploadIncome,
+          onPicture: (bytes) => setState(() => setState(
+              () => ownerData = ownerData!.copyWith(uploadIncome: bytes))),
         )
       ],
     );
   }
 
   _gap({double height = 10}) => SizedBox(height: height);
+
+  @override
+  void dispose() {
+    nameCtrl.dispose();
+    bilIsiRumahCtrl.dispose();
+    icNoCtrl.dispose();
+    emelCtrl.dispose();
+    umurCtrl.dispose();
+    noTelCtrl.dispose();
+    jantinaCtrl.dispose();
+    bangsaCtrl.dispose();
+    jenisKerjaCtrl.dispose();
+    statusKahwinCtrl.dispose();
+    super.dispose();
+  }
 }
