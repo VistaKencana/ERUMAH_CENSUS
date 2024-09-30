@@ -13,6 +13,7 @@ import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pr
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/tanggungan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_result.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form.dart';
 import 'package:flutter/material.dart';
@@ -36,11 +37,12 @@ class BancianMainScreen extends StatefulWidget {
 
 class _BancianMainScreenState extends State<BancianMainScreen> {
   late DropdownBloc _dropdownBloc;
-
+  late BancianBloc _bancianBloc;
   @override
   void initState() {
     super.initState();
     _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
+    _bancianBloc = BlocProvider.of<BancianBloc>(context, listen: false);
   }
 
   _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
@@ -119,21 +121,22 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           const Icon(Icons.location_on),
-                          const Text(
-                            "PPR Sri Selangor",
-                            style: TextStyle(
+                          Text(
+                            _bancianBloc.unitData.unit?.housingProject?.desc ??
+                                "-",
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(width: size.width * .1),
                           Text(
-                            "Unit No: 01-1-01",
+                            "Unit No:${_bancianBloc.unitData.unit?.no ?? "-"}",
                             style:
                                 TextStyle(color: AppColors.dimmedPurple.color),
                           )
                         ],
                       ),
-                      const SizedBox(height: 10),
-                      const Text("Lawatan 2"),
+                      // const SizedBox(height: 10),
+                      // const Text("Lawatan 2"),
                     ],
                   ),
                 ),

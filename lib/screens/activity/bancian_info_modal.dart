@@ -1,6 +1,10 @@
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/screens/activity/bancian_info_tile.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/bloc/anak_tanggungan_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_proof_camera.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/bloc/pasangan_bloc.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/bloc/penghuni_bloc.dart';
 import 'package:eperumahan_bancian/screens/qr-home/bloc/qr_bloc.dart';
 import 'package:eperumahan_bancian/screens/qr-home/models/resident_info_model.dart';
 import 'package:eperumahan_bancian/services/date_format.dart';
@@ -28,6 +32,10 @@ class BancianInfosModal extends StatefulWidget {
 class _BancianInfosModalState extends State<BancianInfosModal> {
   late QrBloc _qrBloc;
   String currValue = "Bancian Biasa";
+  late BancianBloc _bancianBloc;
+  late PenghuniBloc _penghuniBloc;
+  late PasanganBloc _pasanganBloc;
+  late AnakTanggunganBloc _anakTanggunganBloc;
   List<String> statusFilter = [
     "Bancian Biasa",
     "Tiada Penghuni",
@@ -37,6 +45,11 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
   void initState() {
     super.initState();
     _qrBloc = BlocProvider.of<QrBloc>(context, listen: false);
+    _bancianBloc = BlocProvider.of<BancianBloc>(context, listen: false);
+    _penghuniBloc = BlocProvider.of<PenghuniBloc>(context, listen: false);
+    _pasanganBloc = BlocProvider.of<PasanganBloc>(context, listen: false);
+    _anakTanggunganBloc =
+        BlocProvider.of<AnakTanggunganBloc>(context, listen: false);
     residentData = _qrBloc.residentData;
   }
 
@@ -97,6 +110,13 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
             visible: (residentData.visits?.length ?? 0) < 2,
             child: BottomBarButton(
                 onTap: () {
+                  _bancianBloc.add(SetBancianData(data: _qrBloc.residentData));
+                  _penghuniBloc
+                      .add(SetPenghuniData(data: _qrBloc.residentData));
+                  _pasanganBloc
+                      .add(SetPasanganData(data: _qrBloc.residentData));
+                  _anakTanggunganBloc
+                      .add(SetAnakTanggungData(data: _qrBloc.residentData));
                   Navigator.push(
                       context,
                       PageTransition(

@@ -137,17 +137,26 @@ class ResidentInfoData {
     return {
       'cencusCode': censusCode, //Get from resident data
       'isNotOwner': "0", //0-false 1- true
+      'name': owner?.name,
+      'icNo': owner?.icNo,
       'totalHousehold': owner?.totalHousehold,
       'email': owner?.email,
       'phoneNo': owner?.phoneNo,
-      'occupationTypeCode': owner?.occupation?.type,
-      'maritalStatusCode': owner?.maritalStatus?.code,
       'isOku': owner?.isOku,
       'workAddress': owner?.occupation?.workplace?.address,
       'workSalary': owner?.income?.basicSalary,
       'workAllowance': owner?.income?.allowance,
       'workOtherIncome': owner?.income?.other,
-      'welfareAid': owner?.income?.welfareAid
+      'welfareAid': owner?.income?.welfareAid,
+      //dropdown
+      'genderDesc': owner?.gender?.desc,
+      'genderCode': owner?.gender?.code,
+      'raceDesc': owner?.race?.desc,
+      'raceCode': owner?.race?.code,
+      'occupationTypeDesc': owner?.occupation?.type,
+      'occupationTypeCode': owner?.occupation?.typeCode,
+      'maritalStatusDesc': owner?.maritalStatus?.desc,
+      'maritalStatusCode': owner?.maritalStatus?.code,
     };
   }
 
@@ -444,7 +453,7 @@ class DependantsData {
       'healthLevelCode': healthLevel?.code,
       'genderCode': gender?.code,
       'raceCode': race?.code,
-      'isOku': isOku,
+      'isOku': isOku ?? "0",
     };
   }
 }
@@ -521,24 +530,29 @@ class IncomeData {
 
 class OccupationData {
   String? type;
+  String? typeCode;
   WorkplaceData? workplace;
 
   OccupationData({
     this.type,
+    this.typeCode,
     this.workplace,
   });
 
   OccupationData copyWith({
     String? type,
+    String? typeCode,
     WorkplaceData? workplace,
   }) =>
       OccupationData(
         type: type ?? this.type,
+        typeCode: typeCode ?? this.typeCode,
         workplace: workplace ?? this.workplace,
       );
 
   factory OccupationData.fromJson(Map<String, dynamic> json) => OccupationData(
         type: json["type"],
+        typeCode: json["typeCode"],
         workplace: json["workplace"] == null
             ? null
             : WorkplaceData.fromJson(json["workplace"]),
@@ -546,6 +560,7 @@ class OccupationData {
 
   Map<String, dynamic> toJson() => {
         "type": type,
+        "typeCode": typeCode,
         "workplace": workplace?.toJson(),
       };
 }

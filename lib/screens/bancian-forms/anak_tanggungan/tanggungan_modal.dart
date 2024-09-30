@@ -6,7 +6,11 @@ import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../components/custom_dropdown_sheet.dart';
 import '../../../components/disability_checkbox.dart';
+import '../../../data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
+import '../../../data/api/repositories/dropdown_repository.dart';
 
 class TanggunganModal extends StatefulWidget {
   final bool? isEdit;
@@ -33,6 +37,13 @@ class _TanggunganModalState extends State<TanggunganModal> {
   Uint8List? backCard;
   Uint8List? okuCard;
   bool isOKU = false;
+  late DropdownBloc _dropdownBloc;
+  @override
+  void initState() {
+    super.initState();
+    _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -82,13 +93,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
                               _gap(height: 14),
                               TwoColumnForm(
                                 children: [
-                                  _textField(
-                                    title: 'Hubungan Dengan Penyewa',
-                                    initialValue: "Anak",
-                                    isDropdown: true,
-                                    readOnly: true,
-                                    onTap: _isEdit() ? () {} : null,
-                                  ),
+                                  _dropdownHubungan(),
                                   _textField(
                                       title: 'No. Kad Pengenalan',
                                       initialValue: "9512345145678",
@@ -100,21 +105,13 @@ class _TanggunganModalState extends State<TanggunganModal> {
                                       title: 'Umur(Tahun)',
                                       initialValue: "26",
                                       readOnly: _isReadOnly()),
-                                  _textField(
-                                      title: 'Tahap Kesihatan',
-                                      initialValue: "Sihat"),
+                                  _dropdownKesihatan(),
                                   _textField(
                                       title: 'No. Telefon',
                                       initialValue: "01645678642",
                                       readOnly: _isReadOnly()),
-                                  _textField(
-                                      title: 'Jantina',
-                                      initialValue: "Perempuan",
-                                      readOnly: _isReadOnly()),
-                                  _textField(
-                                    title: 'Bangsa',
-                                    initialValue: "Melayu",
-                                  ),
+                                  _dropdownJantina(),
+                                  _dropdownBangsa(),
                                 ],
                               ),
                               _gap(height: 14),
@@ -181,18 +178,179 @@ class _TanggunganModalState extends State<TanggunganModal> {
       {required String title,
       String? initialValue,
       bool readOnly = false,
-      bool isDropdown = false,
+      bool enableDropdown = true,
+      String? hintText,
+      double? width,
       void Function()? onTap,
-      double? width}) {
+      bool isDropdown = false}) {
+    if (isDropdown) {
+      return SizedBox(
+          width: width ?? MediaQuery.sizeOf(context).width * 0.4,
+          child: CustomFormField(
+            title: title,
+            onTap: () {
+              if (onTap == null || !enableDropdown) return;
+              onTap();
+            },
+            readOnly: true,
+            fillColor: Colors.white,
+            hintText: hintText,
+            initialValue: _isEdit() ? "" : initialValue,
+            suffixWidget: isDropdown
+                ? Icon(
+                    Icons.arrow_drop_down,
+                    color: (readOnly) ? Colors.grey : Colors.black,
+                  )
+                : null,
+          ));
+    }
     return SizedBox(
       width: width ?? MediaQuery.sizeOf(context).width * 0.4,
       child: CustomFormField(
         title: title,
-        readOnly: readOnly,
-        fillColor: isDropdown && _isEdit() ? Colors.white : null,
         onTap: onTap,
+        readOnly: readOnly,
+        hintText: hintText,
         initialValue: _isEdit() ? "" : initialValue,
-        suffixIcon: isDropdown ? Icons.arrow_drop_down_rounded : null,
+      ),
+    );
+  }
+
+  _dropdownHubungan() {
+    return BlocListener<DropdownBloc, DropdownState>(
+      listener: (context, state) {
+        if (state is DropdownSuccess) {
+          if (state.type == DdType.relationship) {
+            CustomDropdownSheet(
+              label: "Hubungan Dengan Penyewa",
+              items: state.data,
+              // onFindGroupValue: (data) {
+              //   return data.where((val) {
+              //     var a = val?.desc
+              //             ?.toLowerCase()
+              //             .contains("selesai") ??
+              //         false;
+              //     return a;
+              //   }).firstOrNull;
+              // },
+              getTitle: (data) => data?.desc ?? "-",
+              onChange: (val) {},
+            ).show(context);
+          }
+        }
+      },
+      child: _textField(
+          title: 'Hubungan Dengan Penyewa',
+          isDropdown: true,
+          enableDropdown: _isEdit(),
+          readOnly: _isReadOnly(),
+          onTap: () {
+            _dropdownBloc.add(const FetchDdFormData(type: DdType.relationship));
+          },
+          initialValue: _isEdit() ? "" : "Anak"),
+    );
+  }
+
+  _dropdownKesihatan() {
+    return BlocListener<DropdownBloc, DropdownState>(
+      listener: (context, state) {
+        if (state is DropdownSuccess) {
+          if (state.type == DdType.healthLevel) {
+            CustomDropdownSheet(
+              label: "Pilih Tahap Kesihatan",
+              items: state.data,
+              // onFindGroupValue: (data) {
+              //   return data.where((val) {
+              //     var a = val?.desc
+              //             ?.toLowerCase()
+              //             .contains("selesai") ??
+              //         false;
+              //     return a;
+              //   }).firstOrNull;
+              // },
+              getTitle: (data) => data?.desc ?? "-",
+              onChange: (val) {},
+            ).show(context);
+          }
+        }
+      },
+      child: _textField(
+          title: 'Tahap Kesihatan',
+          isDropdown: true,
+          onTap: () {
+            _dropdownBloc.add(const FetchDdFormData(type: DdType.healthLevel));
+          },
+          initialValue: _isEdit() ? "" : "Sihat"),
+    );
+  }
+
+  _dropdownJantina() {
+    return BlocListener<DropdownBloc, DropdownState>(
+      listener: (context, state) {
+        if (state is DropdownSuccess) {
+          if (state.type == DdType.gender) {
+            CustomDropdownSheet(
+              label: "Pilih Jantina",
+              items: state.data,
+              // onFindGroupValue: (data) {
+              //   return data.where((val) {
+              //     var a = val?.desc
+              //             ?.toLowerCase()
+              //             .contains("selesai") ??
+              //         false;
+              //     return a;
+              //   }).firstOrNull;
+              // },
+              getTitle: (data) => data?.desc ?? "-",
+              onChange: (val) {},
+            ).show(context);
+          }
+        }
+      },
+      child: _textField(
+          title: 'Jantina',
+          readOnly: _isReadOnly(),
+          enableDropdown: _isEdit(),
+          isDropdown: true,
+          onTap: () {
+            _dropdownBloc.add(const FetchDdFormData(type: DdType.gender));
+          },
+          initialValue: _isEdit() ? "" : "Perempuan"),
+    );
+  }
+
+  _dropdownBangsa() {
+    return BlocListener<DropdownBloc, DropdownState>(
+      listener: (context, state) {
+        if (state is DropdownSuccess) {
+          if (state.type == DdType.race) {
+            CustomDropdownSheet(
+              label: "Pilih Bangsa",
+              items: state.data,
+              // onFindGroupValue: (data) {
+              //   return data.where((val) {
+              //     var a = val?.desc
+              //             ?.toLowerCase()
+              //             .contains("selesai") ??
+              //         false;
+              //     return a;
+              //   }).firstOrNull;
+              // },
+              getTitle: (data) => data?.desc ?? "-",
+              onChange: (val) {},
+            ).show(context);
+          }
+        }
+      },
+      child: _textField(
+        title: 'Bangsa',
+        readOnly: _isReadOnly(),
+        enableDropdown: _isEdit(),
+        initialValue: _isEdit() ? "" : "Melayu",
+        isDropdown: true,
+        onTap: () {
+          _dropdownBloc.add(const FetchDdFormData(type: DdType.race));
+        },
       ),
     );
   }

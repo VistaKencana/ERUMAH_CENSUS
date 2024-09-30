@@ -23,7 +23,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
 
   final repo = QrRepository();
   final log = const AppLog(classname: "QrBloc");
-  var residentData = ResidentInfoData();
+  ResidentInfoData residentData = ResidentInfoData();
   String qrCode = "";
   bool isFromHome = false;
 
