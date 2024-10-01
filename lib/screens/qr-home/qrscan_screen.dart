@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/qr_not_tally_dialog.dart';
-import 'package:eperumahan_bancian/screens/activity/bancian_info_modal.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/qr/bancian_register_qr.dart';
 import 'package:eperumahan_bancian/screens/qr-home/bloc/qr_bloc.dart';
 import 'package:eperumahan_bancian/services/app_log.dart';
@@ -10,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+
+import '../activity/bancian_info_modal.dart';
+import 'qr_confirmation_dialog.dart';
 
 class QrScanScreen extends StatefulWidget {
   final bool isFromHome;
@@ -61,8 +63,30 @@ class _QrScanScreenState extends State<QrScanScreen> {
           } else if (state is QrSuccess) {
             EasyLoading.dismiss();
             controller?.pauseCamera();
-            BancianInfosModal.show(context)
-                .then((val) => controller?.resumeCamera());
+            QrConfirmationDialog(
+              title: "Imbasan QR Berjaya",
+              subtitle: "Adakah nombor unit sama dengan yang anda imbas?",
+              unitNumber: state.data?.unit?.no ?? "",
+              colorBtnLabel: "Ya, Teruskan Bancian",
+              onColorBtn: () {
+                Navigator.pop(context);
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  controller?.pauseCamera();
+                  BancianInfosModal.show(context)
+                      .then((val) => controller?.resumeCamera());
+                });
+              },
+              dimmedBtnLabel: "Tidak",
+              onDimmedBtn: () {
+                Navigator.pop(context);
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  controller?.pauseCamera();
+                  const BancianRegisterQr()
+                      .show(context)
+                      .then((val) => controller?.resumeCamera());
+                });
+              },
+            ).show(context).then((val) => controller?.resumeCamera());
           } else if (state is QrNotFound) {
             controller?.resumeCamera();
             EasyLoading.dismiss().then((val) => _registerAlertDialog());
@@ -146,7 +170,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
   //   );
   // }
 
-  _registerAlertDialog() {
+  Future _registerAlertDialog() async {
     controller?.pauseCamera();
     CustomAlertDialog(
       title: "QR tidak berdaftar!",

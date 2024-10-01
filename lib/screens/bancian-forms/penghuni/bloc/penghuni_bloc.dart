@@ -31,16 +31,15 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
   _onSavePenghuniData(
       SavePenghuniData event, Emitter<PenghuniState> emit) async {
     emit(PenghuniLoading());
-    EasyLoading.show();
     applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
     try {
       final resp = await repo.storeOwner(data: event.data);
-      applog.logDebug(tag: "_onSavePenghuniData", msg: resp.toString());
-      emit(PenghuniLoaded());
+      applog.logDebug(tag: "_onSavePenghuniData", msg: resp);
+      existData = event.data;
+      emit(PenghuniSuccess());
     } catch (e) {
       applog.logError(tag: "_onSavePenghuniData", msg: e.toString());
-      emit(PenghuniError());
-      EasyLoading.dismiss();
+      emit(PenghuniError(msg: e.toString()));
     } finally {
       EasyLoading.dismiss();
     }

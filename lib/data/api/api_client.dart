@@ -120,9 +120,7 @@ class ApiClient {
       request.fields.addAll(body);
     }
     if (files.isNotEmpty) {
-      for (var file in files) {
-        request.files.add(file);
-      }
+      request.files.addAll(files);
     }
 
     final response = await http.Response.fromStream(await request.send());
@@ -130,8 +128,7 @@ class ApiClient {
     if (response.statusCode != 200) {
       // Log or handle error case
       debugPrint("Error uploading: ${response.statusCode}, ${response.body}");
-      throw Exception(
-          "Failed to upload data. Status code: ${response.statusCode}");
+      throw Exception(response.body);
     }
 
     return response;

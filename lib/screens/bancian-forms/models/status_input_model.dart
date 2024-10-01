@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 class StatusInputModel {
-  String cencusCode;
+  String censusCode;
   String isFingerPrintVerified;
   String statusCode;
   String email;
@@ -9,7 +9,7 @@ class StatusInputModel {
   List<Uint8List> images;
 
   StatusInputModel({
-    required this.cencusCode,
+    required this.censusCode,
     required this.isFingerPrintVerified,
     required this.statusCode,
     required this.email,
@@ -19,7 +19,7 @@ class StatusInputModel {
 
   // CopyWith method
   StatusInputModel copyWith({
-    String? cencusCode,
+    String? censusCode,
     String? isFingerPrintVerified,
     String? statusCode,
     String? email,
@@ -27,7 +27,7 @@ class StatusInputModel {
     List<Uint8List>? images,
   }) {
     return StatusInputModel(
-      cencusCode: cencusCode ?? this.cencusCode,
+      censusCode: censusCode ?? this.censusCode,
       isFingerPrintVerified:
           isFingerPrintVerified ?? this.isFingerPrintVerified,
       statusCode: statusCode ?? this.statusCode,
@@ -40,7 +40,7 @@ class StatusInputModel {
   // toJson method
   Map<String, String> toJson() {
     return {
-      'cencusCode': cencusCode,
+      'censusCode': censusCode,
       'isFingerPrintVerified': isFingerPrintVerified,
       'statusCode': statusCode,
       'email': email,
@@ -55,7 +55,7 @@ class StatusInputModel {
   // fromJson method
   factory StatusInputModel.fromJson(Map<String, dynamic> json) {
     return StatusInputModel(
-      cencusCode: json['cencusCode'] as String,
+      censusCode: json['censusCode'] as String,
       isFingerPrintVerified: json['isFingerPrintVerified'] as String,
       statusCode: json['statusCode'] as String,
       email: json['email'] as String,

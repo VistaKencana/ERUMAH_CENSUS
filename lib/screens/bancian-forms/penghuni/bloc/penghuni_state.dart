@@ -13,4 +13,10 @@ final class PenghuniLoading extends PenghuniState {}
 
 final class PenghuniLoaded extends PenghuniState {}
 
-final class PenghuniError extends PenghuniState {}
+final class PenghuniSuccess extends PenghuniState {}
+
+final class PenghuniError extends PenghuniState {
+  final String msg;
+
+  const PenghuniError({required this.msg});
+}

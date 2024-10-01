@@ -14,8 +14,10 @@ import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dar
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_main_screen.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/owner_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/bloc/penghuni_bloc.dart';
+import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../../components/custom_appbar.dart';
 import '../../../components/custom_dropdown_sheet.dart';
@@ -51,6 +53,11 @@ class _PenghuniFormState extends State<PenghuniForm> {
   final bangsaCtrl = TextEditingController();
   final jenisKerjaCtrl = TextEditingController();
   final statusKahwinCtrl = TextEditingController();
+  final majikanAddressCtrl = TextEditingController();
+  final gajiPokokCtrl = TextEditingController();
+  final elaunCtrl = TextEditingController();
+  final lainPendapatanCtrl = TextEditingController();
+  final bantuanCtrl = TextEditingController();
 
   @override
   void initState() {
@@ -62,18 +69,26 @@ class _PenghuniFormState extends State<PenghuniForm> {
   }
 
   initVal() {
-    nameCtrl.text = _isNewForm() ? "" : ownerData?.name ?? "";
-    bilIsiRumahCtrl.text = ownerData?.totalHousehold ?? "0";
-    icNoCtrl.text = _isNewForm() ? "" : ownerData?.icNo ?? "";
-    emelCtrl.text = _isNewForm() ? "" : ownerData?.email ?? "";
-    umurCtrl.text = _isNewForm() ? "" : "50";
-    noTelCtrl.text = _isNewForm() ? "" : ownerData?.phoneNo ?? "";
-    jantinaCtrl.text = _isNewForm() ? "" : ownerData?.genderDesc ?? "";
-    bangsaCtrl.text = _isNewForm() ? "" : ownerData?.raceDesc ?? "";
-    jenisKerjaCtrl.text =
-        _isNewForm() ? "" : ownerData?.occupationTypeDesc ?? "";
-    statusKahwinCtrl.text =
-        _isNewForm() ? "" : ownerData?.maritalStatusDesc ?? "";
+    nameCtrl.text = setDataValue(ownerData?.name);
+    bilIsiRumahCtrl.text =
+        setDataValue(ownerData?.totalHousehold, defaultVal: "0");
+    icNoCtrl.text = setDataValue(ownerData?.icNo);
+    emelCtrl.text = setDataValue(ownerData?.email);
+    umurCtrl.text = setDataValue("", defaultVal: "50");
+    noTelCtrl.text = setDataValue(ownerData?.phoneNo);
+    jantinaCtrl.text = setDataValue(ownerData?.genderDesc);
+    bangsaCtrl.text = setDataValue(ownerData?.raceDesc);
+    jenisKerjaCtrl.text = setDataValue(ownerData?.occupationTypeDesc);
+    statusKahwinCtrl.text = setDataValue(ownerData?.maritalStatusDesc);
+    majikanAddressCtrl.text = setDataValue(ownerData?.workAddress);
+    gajiPokokCtrl.text = setDataValue(ownerData?.workSalary);
+    elaunCtrl.text = setDataValue(ownerData?.workAllowance);
+    lainPendapatanCtrl.text = setDataValue(ownerData?.workOtherIncome);
+    bantuanCtrl.text = setDataValue(ownerData?.welfareAid);
+  }
+
+  String setDataValue(String? val, {String? defaultVal}) {
+    return _isNewForm() ? "" : val ?? (defaultVal ?? "");
   }
 
   @override
@@ -117,104 +132,176 @@ class _PenghuniFormState extends State<PenghuniForm> {
                   ),
                 ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 6.0, bottom: 18),
-                  child: Text(
-                    "Maklumat Penghuni",
-                    style: appTextStyle(size: 25, fontWeight: FontWeight.bold),
+        body: BlocListener<PenghuniBloc, PenghuniState>(
+          listener: (context, state) {
+            if (state is PenghuniLoading) {
+              EasyLoading.show();
+            } else if (state is PenghuniSuccess) {
+              EasyLoading.dismiss();
+              CustomFlushbar.of(context)
+                  .showSuccess(msg: "Berjaya menmyimpan data");
+            } else if (state is PenghuniError) {
+              EasyLoading.dismiss();
+              CustomFlushbar.of(context).showFailed(msg: state.msg);
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6.0, bottom: 18),
+                    child: Text(
+                      "Maklumat Penghuni",
+                      style:
+                          appTextStyle(size: 25, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-                KadPengenalanTile(
-                  onFrontCard: (bytes) {
-                    setState(() =>
-                        ownerData = ownerData!.copyWith(uploadIcFront: bytes));
-                  },
-                  onBackCard: (bytes) {
-                    setState(() =>
-                        ownerData = ownerData!.copyWith(uploadIcBack: bytes));
-                  },
-                ),
-                SectionContainer(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _textField(
-                          title: 'Nama Penuh',
-                          controller: nameCtrl,
-                          // initialValue:
-                          //     _isNewForm() ? "" : ownerData?.name ?? "",
-                          width: double.infinity,
-                          readOnly: _isReadOnly()),
-                      _gap(),
-                      TwoColumnForm(
-                        children: [
-                          _textField(
-                              title: 'Bilangan Isi Rumah',
-                              controller: bilIsiRumahCtrl),
-                          _textField(
-                              title: 'No. Kad Pengenalan',
-                              controller: icNoCtrl,
-                              readOnly: _isReadOnly()),
-                          _textField(title: 'Emel', controller: emelCtrl),
-                          _textField(
-                              title: 'Umur(Tahun)',
-                              controller: umurCtrl,
-                              readOnly: _isReadOnly()),
-                          _textField(
-                              title: 'No Telefon', controller: noTelCtrl),
-                          _dropdownJantina(),
-                          _dropdownBangsa(),
-                          _dropdownJenisPekerjaan(),
-                          _dropdownStatusPerkahwinan(),
-                        ],
-                      ),
-                      _gap(),
-                      DisabilityCheckbox(
-                          initVal: (ownerData?.isOku == "1"),
-                          onCheck: (val) {
-                            setState(() {
-                              ownerData =
-                                  ownerData!.copyWith(isOku: val ? "1" : "0");
-                            });
-                          }),
-                      Visibility(
-                        visible: (ownerData?.isOku == "1"),
-                        child: CardDisplay(
-                          title: "",
-                          img: okuCard,
-                          onPicture: (bytes) => setState(() => okuCard = bytes),
+                  KadPengenalanTile(
+                    frontCard: ownerData?.uploadIcFront,
+                    onFrontCard: (bytes) {
+                      setState(() => ownerData =
+                          ownerData!.copyWith(uploadIcFront: bytes));
+                    },
+                    backCard: ownerData?.uploadIcBack,
+                    onBackCard: (bytes) {
+                      setState(() =>
+                          ownerData = ownerData!.copyWith(uploadIcBack: bytes));
+                    },
+                  ),
+                  SectionContainer(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _textField(
+                            title: 'Nama Penuh',
+                            controller: nameCtrl,
+                            // initialValue:
+                            //     _isNewForm() ? "" : ownerData?.name ?? "",
+                            width: double.infinity,
+                            readOnly: _isReadOnly()),
+                        _gap(),
+                        TwoColumnForm(
+                          children: [
+                            _textField(
+                                title: 'Bilangan Isi Rumah',
+                                controller: bilIsiRumahCtrl),
+                            _textField(
+                                title: 'No. Kad Pengenalan',
+                                controller: icNoCtrl,
+                                readOnly: _isReadOnly()),
+                            _textField(title: 'Emel', controller: emelCtrl),
+                            _textField(
+                                title: 'Umur(Tahun)',
+                                controller: umurCtrl,
+                                readOnly: _isReadOnly()),
+                            _textField(
+                                title: 'No Telefon', controller: noTelCtrl),
+                            _dropdownJantina(),
+                            _dropdownBangsa(),
+                            _dropdownJenisPekerjaan(),
+                            _dropdownStatusPerkahwinan(),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
+                        _gap(),
+                        DisabilityCheckbox(
+                            initVal: (ownerData?.isOku == "1"),
+                            onCheck: (val) {
+                              setState(() {
+                                ownerData =
+                                    ownerData!.copyWith(isOku: val ? "1" : "0");
+                              });
+                            }),
+                        Visibility(
+                          visible: (ownerData?.isOku == "1"),
+                          child: CardDisplay(
+                            title: "",
+                            img: okuCard,
+                            onPicture: (bytes) =>
+                                setState(() => okuCard = bytes),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
                   ),
-                ),
-                SectionContainer(
-                  child: Column(
-                    children: [
-                      _headerTitle(),
-                      maklumatPendapatan(),
-                    ],
-                  ),
-                )
-              ],
+                  SectionContainer(
+                    child: Column(
+                      children: [
+                        _headerTitle(),
+                        maklumatPendapatan(),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
         bottomNavigationBar: BottomBarButton(
             onTap: () {
+              setState(() {
+                ownerData = ownerData!.copyWith(
+                    workAddress: majikanAddressCtrl.text,
+                    workSalary: gajiPokokCtrl.text,
+                    workAllowance: elaunCtrl.text,
+                    workOtherIncome: lainPendapatanCtrl.text,
+                    welfareAid: bantuanCtrl.text);
+              });
               _penghuniBloc.add(SavePenghuniData(data: ownerData!));
               // Navigator.pop(context);
             },
             title: "Simpan"),
       ),
+    );
+  }
+
+  maklumatPendapatan() {
+    return Column(
+      children: [
+        const SizedBox(height: 10),
+        Column(
+          children: [
+            CustomFormField(
+              title: "Alamat Majikan",
+              controller: majikanAddressCtrl,
+              maxLines: 3,
+              contentPadding: const EdgeInsets.all(8),
+            ),
+            const SizedBox(height: 12),
+          ],
+        ),
+        TwoColumnForm(
+          children: [
+            _textField(
+                title: 'Gaji Pokok (RM)',
+                hintText: "0.00",
+                controller: gajiPokokCtrl),
+            _textField(
+              title: 'Elaun (RM)',
+              hintText: "0.00",
+              controller: elaunCtrl,
+            ),
+            _textField(
+                title: 'Lain-lain Pendapatan', controller: lainPendapatanCtrl),
+            _textField(
+              title: 'Bantuan Kewangan',
+              controller: bantuanCtrl,
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        FileDisplay(
+          title: "Slip Gaji / Penyata KWSP",
+          isMandatory: true,
+          img: ownerData!.uploadIncome,
+          onPicture: (bytes) => setState(() => setState(
+              () => ownerData = ownerData!.copyWith(uploadIncome: bytes))),
+        )
+      ],
     );
   }
 
@@ -225,6 +312,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
       bool enableDropdown = true,
       TextEditingController? controller,
       String? hintText,
+      void Function(String)? onChanged,
       double? width,
       void Function()? onTap,
       bool isDropdown = false}) {
@@ -233,6 +321,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
           width: width ?? MediaQuery.sizeOf(context).width * 0.4,
           child: CustomFormField(
             title: title,
+            onChanged: onChanged,
             controller: controller,
             onTap: () {
               if (onTap == null || !enableDropdown) return;
@@ -258,6 +347,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
         controller: controller,
         readOnly: readOnly,
         hintText: hintText,
+        onChanged: onChanged,
         initialValue: _isNewForm() ? "" : initialValue,
       ),
     );
@@ -436,50 +526,6 @@ class _PenghuniFormState extends State<PenghuniForm> {
           Spacer(),
         ],
       ),
-    );
-  }
-
-  maklumatPendapatan() {
-    return Column(
-      children: [
-        const SizedBox(height: 10),
-        Column(
-          children: [
-            CustomFormField(
-              title: "Alamat Majikan",
-              initialValue: _isNewForm() ? "" : ownerData?.workAddress,
-              maxLines: 3,
-              contentPadding: const EdgeInsets.all(8),
-            ),
-            const SizedBox(height: 12),
-          ],
-        ),
-        TwoColumnForm(
-          children: [
-            _textField(
-                title: 'Gaji Pokok (RM)',
-                hintText: "0.00",
-                initialValue: "1800"),
-            _textField(
-                title: 'Elaun (RM)',
-                hintText: "0.00",
-                initialValue: ownerData?.workAllowance),
-            _textField(
-                title: 'Lain-lain Pendapatan',
-                initialValue: ownerData?.workOtherIncome),
-            _textField(
-                title: 'Bantuan Kewangan', initialValue: ownerData?.welfareAid),
-          ],
-        ),
-        const SizedBox(height: 10),
-        FileDisplay(
-          title: "Slip Gaji / Penyata KWSP",
-          isMandatory: true,
-          img: ownerData!.uploadIncome,
-          onPicture: (bytes) => setState(() => setState(
-              () => ownerData = ownerData!.copyWith(uploadIncome: bytes))),
-        )
-      ],
     );
   }
 

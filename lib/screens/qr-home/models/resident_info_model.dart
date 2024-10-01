@@ -135,7 +135,7 @@ class ResidentInfoData {
 
   Map<String, dynamic> toOwnerJson() {
     return {
-      'cencusCode': censusCode, //Get from resident data
+      'censusCode': censusCode, //Get from resident data
       'isNotOwner': "0", //0-false 1- true
       'name': owner?.name,
       'icNo': owner?.icNo,

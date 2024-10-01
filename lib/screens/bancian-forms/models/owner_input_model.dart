@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 class OwnerInputModel {
-  String cencusCode;
+  String censusCode;
   String isNotOwner;
   String name;
   String icNo;
@@ -29,7 +29,7 @@ class OwnerInputModel {
   String maritalStatusDesc;
 
   OwnerInputModel(
-      {required this.cencusCode,
+      {required this.censusCode,
       required this.isNotOwner,
       required this.name,
       required this.icNo,
@@ -58,7 +58,7 @@ class OwnerInputModel {
 
   // CopyWith method
   OwnerInputModel copyWith({
-    String? cencusCode,
+    String? censusCode,
     String? isNotOwner,
     String? name,
     String? icNo,
@@ -85,7 +85,7 @@ class OwnerInputModel {
     String? maritalStatusDesc,
   }) {
     return OwnerInputModel(
-      cencusCode: cencusCode ?? this.cencusCode,
+      censusCode: censusCode ?? this.censusCode,
       isNotOwner: isNotOwner ?? this.isNotOwner,
       name: name ?? this.name,
       icNo: icNo ?? this.icNo,
@@ -116,7 +116,7 @@ class OwnerInputModel {
   // ToJson method
   Map<String, String> toJson() {
     return {
-      'censusCode': cencusCode,
+      'censusCode': censusCode,
       'isNotOwner': isNotOwner,
       'name': name,
       'icNo': icNo,
@@ -147,7 +147,7 @@ class OwnerInputModel {
 
   factory OwnerInputModel.fromJson(Map<String, dynamic> json) {
     return OwnerInputModel(
-      cencusCode: json['cencusCode'] as String,
+      censusCode: json['censusCode'] as String,
       isNotOwner: json['isNotOwner'] as String,
       name: json['name'] as String,
       icNo: json['icNo'] as String,
@@ -174,7 +174,7 @@ class OwnerInputModel {
   // CopyWith method
   OwnerInputModel resetImage(CardType type) {
     return OwnerInputModel(
-      cencusCode: cencusCode,
+      censusCode: censusCode,
       isNotOwner: isNotOwner,
       name: name,
       icNo: icNo,

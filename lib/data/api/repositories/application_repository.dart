@@ -21,16 +21,9 @@ class ApplicationRepository {
     return json["data"]["censusCode"];
   }
 
-  Future storeOwner({required OwnerInputModel data}) async {
+  Future<String> storeOwner({required OwnerInputModel data}) async {
     List<http.MultipartFile> files = [];
     int cnt = 0;
-    // data.getFiles().forEach((field, img) {
-    //   if (img != null) {
-    //     cnt++;
-    //     files.add(client.bytesToMultipartFile(
-    //         fieldName: field, bytes: img, filename: "image_$cnt.jpg"));
-    //   }
-    // });
     for (var entry in data.getFiles().entries) {
       final field = entry.key;
       final img = entry.value;
@@ -41,62 +34,89 @@ class ApplicationRepository {
       }
     }
 
-    await client.postFormData(
+    final resp = await client.postFormData(
         endpoint: "/appl/owner/store", files: files, body: data.toJson());
+    final json = jsonDecode(resp.body);
+    final isValid = RespValidator.isSuccess(json);
+    if (!isValid) throw Exception(RespValidator.getMessage(json));
+    return json.toString();
   }
 
-  Future storeNotOwner({required OwnerInputModel data}) async {
+  Future<String> storeNotOwner({required OwnerInputModel data}) async {
     data = data.copyWith(isNotOwner: "1");
     List<http.MultipartFile> files = [];
     int cnt = 0;
-    data.getFiles().forEach((field, img) {
+    for (var entry in data.getFiles().entries) {
+      final field = entry.key;
+      final img = entry.value;
       if (img != null) {
         cnt++;
         files.add(client.bytesToMultipartFile(
             fieldName: field, bytes: img, filename: "image_$cnt.jpg"));
       }
-    });
-    await client.postFormData(
+    }
+    final resp = await client.postFormData(
         endpoint: "/appl/owner/store", files: files, body: data.toJson());
+    final json = jsonDecode(resp.body);
+    final isValid = RespValidator.isSuccess(json);
+    if (!isValid) throw Exception(RespValidator.getMessage(json));
+    return json.toString();
   }
 
-  Future storeSpouse({required SpouseInputModel data}) async {
+  Future<String> storeSpouse({required SpouseInputModel data}) async {
     List<http.MultipartFile> files = [];
     int cnt = 0;
-    data.getFiles().forEach((field, img) {
+    for (var entry in data.getFiles().entries) {
+      final field = entry.key;
+      final img = entry.value;
       if (img != null) {
         cnt++;
         files.add(client.bytesToMultipartFile(
             fieldName: field, bytes: img, filename: "image_$cnt.jpg"));
       }
-    });
-    await client.postFormData(
+    }
+
+    final resp = await client.postFormData(
         endpoint: "/appl/spouse/store", files: files, body: data.toJson());
+    final json = jsonDecode(resp.body);
+    final isValid = RespValidator.isSuccess(json);
+    if (!isValid) throw Exception(RespValidator.getMessage(json));
+    return json.toString();
   }
 
-  Future storeDependant({required DependantInputModel data}) async {
+  Future<String> storeDependant({required DependantInputModel data}) async {
     List<http.MultipartFile> files = [];
     int cnt = 0;
-    data.getFiles().forEach((field, img) {
+    for (var entry in data.getFiles().entries) {
+      final field = entry.key;
+      final img = entry.value;
       if (img != null) {
         cnt++;
         files.add(client.bytesToMultipartFile(
             fieldName: field, bytes: img, filename: "image_$cnt.jpg"));
       }
-    });
-    await client.postFormData(
+    }
+    final resp = await client.postFormData(
         endpoint: "/appl/dependant/store", files: files, body: data.toJson());
+    final json = jsonDecode(resp.body);
+    final isValid = RespValidator.isSuccess(json);
+    if (!isValid) throw Exception(RespValidator.getMessage(json));
+    return json.toString();
   }
 
-  Future storeStatus({required StatusInputModel data}) async {
+  Future<String> storeStatus({required StatusInputModel data}) async {
     List<http.MultipartFile> files = [];
     int cnt = 0;
-    data.getFiles().forEach((img) {
+    for (var img in data.getFiles()) {
       cnt++;
       files.add(client.bytesToMultipartFile(
           fieldName: "images[]", bytes: img, filename: "image_$cnt.jpg"));
-    });
-    await client.postFormData(
+    }
+    final resp = await client.postFormData(
         endpoint: "/appl/status/update", files: files, body: data.toJson());
+    final json = jsonDecode(resp.body);
+    final isValid = RespValidator.isSuccess(json);
+    if (!isValid) throw Exception(RespValidator.getMessage(json));
+    return json.toString();
   }
 }
