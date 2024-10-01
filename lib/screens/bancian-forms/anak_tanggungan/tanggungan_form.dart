@@ -16,6 +16,14 @@ class TanggunganForm extends StatefulWidget {
 
 class _TanggunganFormState extends State<TanggunganForm> {
   List<String> tabName = ["Anak", "Tanggungan"];
+  late AnakTanggunganBloc _tanggunganBloc;
+  @override
+  void initState() {
+    super.initState();
+    _tanggunganBloc =
+        BlocProvider.of<AnakTanggunganBloc>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -76,8 +84,13 @@ class _TanggunganFormState extends State<TanggunganForm> {
                       children: List.generate(
                           state.childData.length,
                           (index) => _customTile(
-                              title: "Anak ${index + 1}",
-                              name: "Liyana Aina")));
+                                title: "Anak ${index + 1}",
+                                name: state.childData[index].name,
+                                onTap: () {
+                                  _tanggunganBloc.selectDependant(
+                                      state.childData[index], index);
+                                },
+                              )));
                 }
                 return const SizedBox();
               },
@@ -124,9 +137,14 @@ class _TanggunganFormState extends State<TanggunganForm> {
                       children: List.generate(
                           state.otherData.length,
                           (index) => _customTile(
-                              title: "Tanggungan ${index + 1}",
-                              name: state.otherData[index].name,
-                              isAnak: false)));
+                                isAnak: false,
+                                title: "Tanggungan ${index + 1}",
+                                name: state.otherData[index].name,
+                                onTap: () {
+                                  _tanggunganBloc.selectDependant(
+                                      state.otherData[index], index);
+                                },
+                              )));
                 }
                 return const SizedBox();
               },
@@ -138,12 +156,18 @@ class _TanggunganFormState extends State<TanggunganForm> {
   }
 
   _customTile(
-      {required String title, required String name, bool isAnak = true}) {
+      {required String title,
+      required String name,
+      bool isAnak = true,
+      void Function()? onTap}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         ListTile(
           onTap: () {
+            if (onTap != null) {
+              onTap();
+            }
             isAnak
                 ? const AnakModal().show(context)
                 : const TanggunganModal().show(context);

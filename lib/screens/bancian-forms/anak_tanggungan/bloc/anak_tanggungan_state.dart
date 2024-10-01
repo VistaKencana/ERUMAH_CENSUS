@@ -16,3 +16,9 @@ final class AnakTanggunganLoaded extends AnakTanggunganState {
   const AnakTanggunganLoaded(
       {required this.childData, required this.otherData});
 }
+
+class DependantLoading extends AnakTanggunganState {}
+
+class DependantSuccess extends AnakTanggunganState {}
+
+class DependantError extends AnakTanggunganState {}

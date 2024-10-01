@@ -445,9 +445,13 @@ class DependantsData {
       'name': name,
       'email': email,
       'relationshipCode': relationship?.code ?? "",
+      'relationshipDesc': relationship?.desc ?? "",
       'healthLevelCode': healthLevel?.code ?? "",
+      'healthLevelDesc': healthLevel?.desc ?? "",
       'genderCode': gender?.code ?? "",
+      'genderDesc': gender?.desc ?? "",
       'raceCode': race?.code ?? "",
+      'raceDesc': race?.desc ?? "",
       'isOku': isOku ?? "0",
     };
   }

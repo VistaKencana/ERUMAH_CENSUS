@@ -6,9 +6,13 @@ class DependantInputModel {
   final String name;
   final String email;
   final String relationshipCode;
+  final String relationshipDesc;
   final String healthLevelCode;
+  final String healthLevelDesc;
   final String genderCode;
+  final String genderDesc;
   final String raceCode;
+  final String raceDesc;
   final String isOku;
   final Uint8List? uploadIncome;
   final Uint8List? uploadIcFront;
@@ -21,9 +25,13 @@ class DependantInputModel {
     required this.name,
     required this.email,
     required this.relationshipCode,
+    required this.relationshipDesc,
     required this.healthLevelCode,
+    required this.healthLevelDesc,
     required this.genderCode,
+    required this.genderDesc,
     required this.raceCode,
+    required this.raceDesc,
     required this.isOku,
     this.uploadIncome,
     this.uploadIcFront,
@@ -37,9 +45,13 @@ class DependantInputModel {
     String? name,
     String? email,
     String? relationshipCode,
+    String? relationshipDesc,
     String? healthLevelCode,
+    String? healthLevelDesc,
     String? genderCode,
+    String? genderDesc,
     String? raceCode,
+    String? raceDesc,
     String? isOku,
     Uint8List? uploadIncome,
     Uint8List? uploadIcFront,
@@ -52,9 +64,13 @@ class DependantInputModel {
       name: name ?? this.name,
       email: email ?? this.email,
       relationshipCode: relationshipCode ?? this.relationshipCode,
+      relationshipDesc: relationshipDesc ?? this.relationshipDesc,
       healthLevelCode: healthLevelCode ?? this.healthLevelCode,
+      healthLevelDesc: healthLevelDesc ?? this.healthLevelDesc,
       genderCode: genderCode ?? this.genderCode,
+      genderDesc: genderDesc ?? this.genderDesc,
       raceCode: raceCode ?? this.raceCode,
+      raceDesc: raceDesc ?? this.raceDesc,
       isOku: isOku ?? this.isOku,
       uploadIncome: uploadIncome ?? this.uploadIncome,
       uploadIcFront: uploadIcFront ?? this.uploadIcFront,
@@ -94,9 +110,13 @@ class DependantInputModel {
       name: json['name'] ?? "",
       email: json['email'] ?? "",
       relationshipCode: json['relationshipCode'] ?? "",
+      relationshipDesc: json['relationshipDesc'] ?? "",
       healthLevelCode: json['healthLevelCode'] ?? "",
+      healthLevelDesc: json['healthLevelDesc'] ?? "",
       genderCode: json['genderCode'] ?? "",
+      genderDesc: json['genderDesc'] ?? "",
       raceCode: json['raceCode'] ?? "",
+      raceDesc: json['raceDesc'] ?? "",
       isOku: json['isOku'] ?? "",
     );
   }

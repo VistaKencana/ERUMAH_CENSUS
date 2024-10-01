@@ -4,6 +4,8 @@ import 'package:eperumahan_bancian/services/app_log.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../data/api/repositories/application_repository.dart';
+
 part 'anak_tanggungan_event.dart';
 part 'anak_tanggungan_state.dart';
 
@@ -11,10 +13,15 @@ class AnakTanggunganBloc
     extends Bloc<AnakTanggunganEvent, AnakTanggunganState> {
   AnakTanggunganBloc() : super(AnakTanggunganInitial()) {
     on<SetAnakTanggungData>(_onSetAnakTanggungData);
+    on<SaveChildData>(_onSaveChildData);
+    on<SaveOtherData>(_onSaveOtherData);
   }
   ResidentInfoData unitData = ResidentInfoData();
   List<DependantInputModel> existChild = [];
   List<DependantInputModel> existOthers = [];
+  DependantInputModel? selectedData;
+  int selectedIndex = 0;
+  final repo = ApplicationRepository();
   final applog = const AppLog(classname: "AnakTanggunganBloc");
   _onSetAnakTanggungData(
       SetAnakTanggungData event, Emitter<AnakTanggunganState> emit) {
@@ -41,5 +48,18 @@ class AnakTanggunganBloc
     } catch (e) {
       applog.logError(tag: "_onSetAnakTanggungData", msg: e.toString());
     }
+  }
+
+  _onSaveChildData(
+      SaveChildData event, Emitter<AnakTanggunganState> emit) async {}
+
+  _onSaveOtherData(
+      SaveOtherData event, Emitter<AnakTanggunganState> emit) async {}
+
+  selectDependant(DependantInputModel data, int index) {
+    selectedData = data;
+    selectedIndex = index;
+    applog.logDebug(
+        tag: "Select Dependant", msg: selectedData!.toJson().toString());
   }
 }

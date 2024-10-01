@@ -12,3 +12,15 @@ class SetAnakTanggungData extends AnakTanggunganEvent {
 
   const SetAnakTanggungData({required this.data});
 }
+
+class SaveChildData extends AnakTanggunganEvent {
+  final DependantInputModel data;
+
+  const SaveChildData({required this.data});
+}
+
+class SaveOtherData extends AnakTanggunganEvent {
+  final DependantInputModel data;
+
+  const SaveOtherData({required this.data});
+}
