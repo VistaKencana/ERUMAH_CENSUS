@@ -10,10 +10,14 @@ import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/models/spouse_input_model.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/bloc/pasangan_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../../components/disability_checkbox.dart';
 import '../../../components/file_display.dart';
+import '../../../services/flushbar/custom_flushbar.dart';
 
 class PasanganModal extends StatefulWidget {
   final bool? isNewForm;
@@ -43,38 +47,113 @@ class _PasanganModalState extends State<PasanganModal> {
   Uint8List? slipGajiImg;
   bool isOKU = false;
   late DropdownBloc _dropdownBloc;
+  late PasanganBloc _pasanganBloc;
+  SpouseInputModel? spouseData;
+  final nameCtrl = TextEditingController();
+  final bilIsiRumahCtrl = TextEditingController();
+  final icNoCtrl = TextEditingController();
+  final emelCtrl = TextEditingController();
+  final umurCtrl = TextEditingController();
+  final noTelCtrl = TextEditingController();
+  final jantinaCtrl = TextEditingController();
+  final bangsaCtrl = TextEditingController();
+  final jenisKerjaCtrl = TextEditingController();
+  final statusKahwinCtrl = TextEditingController();
+  final majikanAddressCtrl = TextEditingController();
+  final gajiPokokCtrl = TextEditingController();
+  final elaunCtrl = TextEditingController();
+  final lainPendapatanCtrl = TextEditingController();
+  final bantuanCtrl = TextEditingController();
+  final kesihatanCtrl = TextEditingController();
   @override
   void initState() {
     super.initState();
     _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
+    _pasanganBloc = BlocProvider.of<PasanganBloc>(context, listen: false);
+    spouseData = _pasanganBloc.selectedSpouse!.copyWith();
+    initVal();
+  }
+
+  initVal() {
+    nameCtrl.text = setDataValue(spouseData?.name);
+    bilIsiRumahCtrl.text =
+        setDataValue(spouseData?.totalHousehold, defaultVal: "0");
+    icNoCtrl.text = setDataValue(spouseData?.icNo);
+    emelCtrl.text = setDataValue(spouseData?.email);
+    umurCtrl.text = setDataValue("", defaultVal: "50");
+    noTelCtrl.text = setDataValue(spouseData?.phoneNo);
+    jantinaCtrl.text = setDataValue(spouseData?.genderDesc);
+    bangsaCtrl.text = setDataValue(spouseData?.raceDesc);
+    jenisKerjaCtrl.text = setDataValue(spouseData?.occupationTypeDesc);
+    statusKahwinCtrl.text = setDataValue(spouseData?.maritalStatusDesc);
+    majikanAddressCtrl.text = setDataValue(spouseData?.workAddress);
+    gajiPokokCtrl.text = setDataValue(spouseData?.workSalary);
+    elaunCtrl.text = setDataValue(spouseData?.workAllowance);
+    lainPendapatanCtrl.text = setDataValue(spouseData?.workOtherIncome);
+    bantuanCtrl.text = setDataValue(spouseData?.welfareAid);
+    kesihatanCtrl.text = setDataValue(spouseData?.healthLevelDesc);
+  }
+
+  String setDataValue(String? val, {String? defaultVal}) {
+    return _isNewForm() ? "" : val ?? (defaultVal ?? "");
   }
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      expand: false,
-      initialChildSize: 0.94,
-      maxChildSize: 0.94,
-      builder: (context, sc) {
-        return Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius:
-                BorderRadiusDirectional.vertical(top: Radius.circular(16)),
-          ),
-          child: Scaffold(
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [_header(), _form()],
-            ),
-            bottomNavigationBar: BottomBarButton(
-                onTap: () => Navigator.pop(context), title: "Simpan"),
-          ),
-        );
+    return BlocListener<PasanganBloc, PasanganState>(
+      listener: (context, state) {
+        if (state is PasanganLoading) {
+          EasyLoading.show();
+        } else if (state is PasanganSuccess) {
+          EasyLoading.dismiss();
+          CustomFlushbar.of(context)
+              .showSuccess(msg: "Berjaya menmyimpan data");
+        } else if (state is PasanganError) {
+          EasyLoading.dismiss();
+          CustomFlushbar.of(context).showFailed(msg: state.msg);
+        }
       },
+      child: DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.94,
+        maxChildSize: 0.94,
+        builder: (context, sc) {
+          return Container(
+            clipBehavior: Clip.antiAlias,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius:
+                  BorderRadiusDirectional.vertical(top: Radius.circular(16)),
+            ),
+            child: Scaffold(
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [_header(), _form()],
+              ),
+              bottomNavigationBar: BottomBarButton(
+                  onTap: () {
+                    setState(() {
+                      spouseData = spouseData!.copyWith(
+                          name: nameCtrl.text,
+                          totalHousehold: bilIsiRumahCtrl.text,
+                          icNo: icNoCtrl.text,
+                          email: emelCtrl.text,
+                          phoneNo: noTelCtrl.text,
+                          workAddress: majikanAddressCtrl.text,
+                          workSalary: gajiPokokCtrl.text,
+                          workAllowance: elaunCtrl.text,
+                          workOtherIncome: lainPendapatanCtrl.text,
+                          welfareAid: bantuanCtrl.text);
+                    });
+                    _pasanganBloc.add(SavePasanganData(data: spouseData!));
+                  },
+                  title: "Simpan"),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -104,9 +183,11 @@ class _PasanganModalState extends State<PasanganModal> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             KadPengenalanTile(
+              frontCard: spouseData?.uploadIcFront,
               onFrontCard: (bytes) {
                 setState(() => frontCard = bytes);
               },
+              backCard: spouseData?.uploadIcBack,
               onBackCard: (bytes) {
                 setState(() => backCard = bytes);
               },
@@ -118,38 +199,44 @@ class _PasanganModalState extends State<PasanganModal> {
               child: Column(
                 children: [
                   _textField(
-                      initialValue: "Siti Nabila",
                       title: 'Nama Penuh',
+                      controller: nameCtrl,
                       width: double.infinity,
                       readOnly: _isReadOnly()),
                   _gap(height: 14),
                   TwoColumnForm(
                     children: [
-                      _textField(
-                          title: 'Emel', initialValue: "sitinabila@gmail.com"),
+                      _textField(title: 'Emel', controller: emelCtrl),
                       _textField(
                           title: 'No. Kad Pengenalan',
-                          initialValue: "697870984456",
+                          controller: icNoCtrl,
                           readOnly: _isReadOnly()),
-                      _textField(
-                          title: 'No Telefon', initialValue: "0198765654"),
+                      _textField(title: 'No Telefon', controller: noTelCtrl),
                       _textField(
                           title: 'Umur(Tahun)',
-                          initialValue: "50",
+                          controller: umurCtrl,
                           readOnly: _isReadOnly()),
                       _dropdownKesihatan(),
                       _dropdownJantina(),
                       _dropdownBangsa(),
                       _textField(
-                          title: 'Hidup',
+                          title: 'Masih Hidup',
                           initialValue: "Ya",
                           isDropdown: true,
                           onTap: () {
                             SwitchModal(
-                                    label: "Pilih status",
-                                    getTitle: (data) => data.desc!,
-                                    onChange: (val) {})
-                                .show(context);
+                                label: "Pilih status",
+                                onFindGroupValue: (data) {
+                                  var a = data
+                                      .where((val) =>
+                                          val.code?.contains("1") ?? false)
+                                      .toList();
+                                  return a.firstOrNull;
+                                },
+                                getTitle: (data) => data.desc!,
+                                onChange: (val) {
+                                  spouseData!.copyWith();
+                                }).show(context);
                           }),
                       _dropdownJenisPekerjaan(),
                     ],
@@ -163,16 +250,22 @@ class _PasanganModalState extends State<PasanganModal> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DisabilityCheckbox(
-                        initVal: isOKU,
+                        initVal: (spouseData?.isOku == "1"),
                         onCheck: (val) {
-                          setState(() => isOKU = val);
+                          setState(() {
+                            spouseData =
+                                spouseData!.copyWith(isOku: val ? "1" : "0");
+                          });
                         }),
                     Visibility(
-                      visible: isOKU,
+                      visible: (spouseData?.isOku == "1"),
                       child: CardDisplay(
                         title: "",
                         img: okuCard,
-                        onPicture: (bytes) => setState(() => okuCard = bytes),
+                        onPicture: (bytes) => setState(() {
+                          spouseData =
+                              spouseData!.copyWith(uploadOkuCard: bytes);
+                        }),
                       ),
                     ),
                   ],
@@ -187,28 +280,14 @@ class _PasanganModalState extends State<PasanganModal> {
     );
   }
 
-  // _textField(
-  //     {required String title,
-  //     String? initialValue,
-  //     bool readOnly = false,
-  //     String? hintText,
-  //     double? width}) {
-  //   return SizedBox(
-  //     width: width ?? MediaQuery.sizeOf(context).width * 0.4,
-  //     child: CustomFormField(
-  //       title: title,
-  //       readOnly: readOnly,
-  //       hintText: hintText,
-  //       initialValue: _isNewForm() ? "" : initialValue,
-  //     ),
-  //   );
-  // }
   _textField(
       {required String title,
       String? initialValue,
       bool readOnly = false,
       bool enableDropdown = true,
+      TextEditingController? controller,
       String? hintText,
+      void Function(String)? onChanged,
       double? width,
       void Function()? onTap,
       bool isDropdown = false}) {
@@ -217,6 +296,8 @@ class _PasanganModalState extends State<PasanganModal> {
           width: width ?? MediaQuery.sizeOf(context).width * 0.4,
           child: CustomFormField(
             title: title,
+            onChanged: onChanged,
+            controller: controller,
             onTap: () {
               if (onTap == null || !enableDropdown) return;
               onTap();
@@ -238,8 +319,10 @@ class _PasanganModalState extends State<PasanganModal> {
       child: CustomFormField(
         title: title,
         onTap: onTap,
+        controller: controller,
         readOnly: readOnly,
         hintText: hintText,
+        onChanged: onChanged,
         initialValue: _isNewForm() ? "" : initialValue,
       ),
     );
@@ -253,17 +336,20 @@ class _PasanganModalState extends State<PasanganModal> {
             CustomDropdownSheet(
               label: "Pilih Bangsa",
               items: state.data,
-              // onFindGroupValue: (data) {
-              //   return data.where((val) {
-              //     var a = val?.desc
-              //             ?.toLowerCase()
-              //             .contains("selesai") ??
-              //         false;
-              //     return a;
-              //   }).firstOrNull;
-              // },
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a =
+                      val?.code?.contains(spouseData?.raceCode ?? "") ?? false;
+                  return a;
+                }).firstOrNull;
+              },
               getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {},
+              onChange: (val) {
+                if (val == null) return;
+                spouseData = spouseData!
+                    .copyWith(raceCode: val.code, raceDesc: val.desc);
+                bangsaCtrl.text = val.desc ?? "";
+              },
             ).show(context);
           }
         }
@@ -272,7 +358,7 @@ class _PasanganModalState extends State<PasanganModal> {
         title: 'Bangsa',
         readOnly: _isReadOnly(),
         enableDropdown: _isNewForm(),
-        initialValue: _isNewForm() ? "" : "Melayu",
+        controller: bangsaCtrl,
         isDropdown: true,
         onTap: () {
           _dropdownBloc.add(const FetchDdFormData(type: DdType.race));
@@ -289,17 +375,20 @@ class _PasanganModalState extends State<PasanganModal> {
             CustomDropdownSheet(
               label: "Pilih Jantina",
               items: state.data,
-              // onFindGroupValue: (data) {
-              //   return data.where((val) {
-              //     var a = val?.desc
-              //             ?.toLowerCase()
-              //             .contains("selesai") ??
-              //         false;
-              //     return a;
-              //   }).firstOrNull;
-              // },
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a = val?.code?.contains(spouseData?.genderCode ?? "") ??
+                      false;
+                  return a;
+                }).firstOrNull;
+              },
               getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {},
+              onChange: (val) {
+                if (val == null) return;
+                spouseData = spouseData!
+                    .copyWith(genderCode: val.code, genderDesc: val.desc);
+                jantinaCtrl.text = val.desc ?? "";
+              },
             ).show(context);
           }
         }
@@ -312,7 +401,7 @@ class _PasanganModalState extends State<PasanganModal> {
           onTap: () {
             _dropdownBloc.add(const FetchDdFormData(type: DdType.gender));
           },
-          initialValue: _isNewForm() ? "" : "Perempuan"),
+          controller: jantinaCtrl),
     );
   }
 
@@ -324,17 +413,21 @@ class _PasanganModalState extends State<PasanganModal> {
             CustomDropdownSheet(
               label: "Pilih Tahap Kesihatan",
               items: state.data,
-              // onFindGroupValue: (data) {
-              //   return data.where((val) {
-              //     var a = val?.desc
-              //             ?.toLowerCase()
-              //             .contains("selesai") ??
-              //         false;
-              //     return a;
-              //   }).firstOrNull;
-              // },
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a =
+                      val?.code?.contains(spouseData?.healthLevelCode ?? "") ??
+                          false;
+                  return a;
+                }).firstOrNull;
+              },
               getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {},
+              onChange: (val) {
+                if (val == null) return;
+                spouseData = spouseData!.copyWith(
+                    healthLevelCode: val.code, healthLevelDesc: val.desc);
+                kesihatanCtrl.text = val.desc ?? "";
+              },
             ).show(context);
           }
         }
@@ -345,7 +438,7 @@ class _PasanganModalState extends State<PasanganModal> {
           onTap: () {
             _dropdownBloc.add(const FetchDdFormData(type: DdType.healthLevel));
           },
-          initialValue: _isNewForm() ? "" : "Sihat"),
+          controller: kesihatanCtrl),
     );
   }
 
@@ -357,17 +450,21 @@ class _PasanganModalState extends State<PasanganModal> {
             CustomDropdownSheet(
               label: "Pilih Jenis Pekerjaan",
               items: state.data,
-              // onFindGroupValue: (data) {
-              //   return data.where((val) {
-              //     var a = val?.desc
-              //             ?.toLowerCase()
-              //             .contains("selesai") ??
-              //         false;
-              //     return a;
-              //   }).firstOrNull;
-              // },
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a = val?.code
+                          ?.contains(spouseData?.occupationTypeCode ?? "") ??
+                      false;
+                  return a;
+                }).firstOrNull;
+              },
               getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {},
+              onChange: (val) {
+                if (val == null) return;
+                spouseData = spouseData!.copyWith(
+                    occupationTypeCode: val.code, occupationTypeDesc: val.desc);
+                jenisKerjaCtrl.text = val.desc ?? "";
+              },
             ).show(context);
           }
         }
@@ -379,7 +476,7 @@ class _PasanganModalState extends State<PasanganModal> {
             _dropdownBloc
                 .add(const FetchDdFormData(type: DdType.occupationType));
           },
-          initialValue: _isNewForm() ? "" : "Swasta"),
+          controller: jenisKerjaCtrl),
     );
   }
 
@@ -398,9 +495,7 @@ class _PasanganModalState extends State<PasanganModal> {
             children: [
               CustomFormField(
                 title: "Alamat Majikan",
-                initialValue: _isNewForm()
-                    ? ""
-                    : "No. 1 Jalan 2 Taman Perindustrian, 50300 Kuala Lumpur",
+                controller: majikanAddressCtrl,
                 maxLines: 3,
                 contentPadding: const EdgeInsets.all(8),
               ),
@@ -412,19 +507,22 @@ class _PasanganModalState extends State<PasanganModal> {
               _textField(
                   title: 'Gaji Pokok (RM)',
                   hintText: "0.00",
-                  initialValue: "1800"),
+                  controller: gajiPokokCtrl),
               _textField(
-                  title: 'Elaun (RM)', hintText: "0.00", initialValue: "0.00"),
-              _textField(title: 'Lain-lain Pendapatan', initialValue: "Tiada"),
-              _textField(title: 'Bantuan Kewangan', initialValue: "Tiada"),
+                  title: 'Elaun (RM)', hintText: "0.00", controller: elaunCtrl),
+              _textField(
+                  title: 'Lain-lain Pendapatan',
+                  controller: lainPendapatanCtrl),
+              _textField(title: 'Bantuan Kewangan', controller: bantuanCtrl),
             ],
           ),
           const SizedBox(height: 10),
           FileDisplay(
             title: "Slip Gaji / Penyata KWSP",
             isMandatory: true,
-            img: slipGajiImg,
-            onPicture: (bytes) => setState(() => slipGajiImg = bytes),
+            img: spouseData!.uploadIncome,
+            onPicture: (bytes) => setState(() => setState(
+                () => spouseData = spouseData!.copyWith(uploadIncome: bytes))),
           )
         ],
       ),

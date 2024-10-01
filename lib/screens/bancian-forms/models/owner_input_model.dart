@@ -141,7 +141,7 @@ class OwnerInputModel {
       'uploadIncome': uploadIncome,
       'uploadIcFront': uploadIcFront,
       'uploadIcBack': uploadIcBack,
-      'uploadOkuCard': uploadOkuCard
+      'uploadOkuCard': isOku == "0" ? null : uploadOkuCard
     };
   }
 

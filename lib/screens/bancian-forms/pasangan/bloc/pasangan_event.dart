@@ -12,3 +12,9 @@ class SetPasanganData extends PasanganEvent {
 
   const SetPasanganData({required this.data});
 }
+
+class SavePasanganData extends PasanganEvent {
+  final SpouseInputModel data;
+
+  const SavePasanganData({required this.data});
+}

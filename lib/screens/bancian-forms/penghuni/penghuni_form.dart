@@ -219,9 +219,11 @@ class _PenghuniFormState extends State<PenghuniForm> {
                           visible: (ownerData?.isOku == "1"),
                           child: CardDisplay(
                             title: "",
-                            img: okuCard,
-                            onPicture: (bytes) =>
-                                setState(() => okuCard = bytes),
+                            img: ownerData?.uploadOkuCard,
+                            onPicture: (bytes) => setState(() {
+                              ownerData =
+                                  ownerData!.copyWith(uploadOkuCard: bytes);
+                            }),
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -245,6 +247,11 @@ class _PenghuniFormState extends State<PenghuniForm> {
             onTap: () {
               setState(() {
                 ownerData = ownerData!.copyWith(
+                    name: nameCtrl.text,
+                    totalHousehold: bilIsiRumahCtrl.text,
+                    icNo: icNoCtrl.text,
+                    email: emelCtrl.text,
+                    phoneNo: noTelCtrl.text,
                     workAddress: majikanAddressCtrl.text,
                     workSalary: gajiPokokCtrl.text,
                     workAllowance: elaunCtrl.text,

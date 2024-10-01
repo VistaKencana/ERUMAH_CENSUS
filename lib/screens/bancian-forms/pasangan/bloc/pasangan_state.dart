@@ -14,3 +14,13 @@ final class PasanganLoaded extends PasanganState {
 
   const PasanganLoaded({required this.spouseData});
 }
+
+final class PasanganLoading extends PasanganState {}
+
+final class PasanganSuccess extends PasanganState {}
+
+final class PasanganError extends PasanganState {
+  final String msg;
+
+  const PasanganError({required this.msg});
+}

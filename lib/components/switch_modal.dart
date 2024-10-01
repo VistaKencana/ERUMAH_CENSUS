@@ -18,7 +18,7 @@ class SwitchModel {
 class SwitchModal extends StatefulWidget {
   final String label;
   final SwitchModel? groupValue;
-  final SwitchModel Function(List<SwitchModel> data)? onFindGroupValue;
+  final SwitchModel? Function(List<SwitchModel> data)? onFindGroupValue;
   final String Function(SwitchModel data) getTitle;
   final List<SwitchModel> Function(List<SwitchModel> data, String? query)?
       onQuery;

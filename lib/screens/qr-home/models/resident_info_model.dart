@@ -225,14 +225,13 @@ class DependantsModel {
 }
 
 class SpouseData {
-  String? code;
   String? name;
   String? icNo;
   String? email;
   String? age;
   String? phoneNo;
   String? isDead;
-  GeneralData? relationship;
+
   GeneralData? race;
   GeneralData? gender;
   GeneralData? healthLevel;
@@ -241,14 +240,12 @@ class SpouseData {
   IncomeData? income;
 
   SpouseData({
-    this.code,
     this.name,
     this.icNo,
     this.email,
     this.age,
     this.phoneNo,
     this.isDead,
-    this.relationship,
     this.race,
     this.gender,
     this.healthLevel,
@@ -265,7 +262,6 @@ class SpouseData {
     String? age,
     String? phoneNo,
     String? isDead,
-    GeneralData? relationship,
     GeneralData? race,
     GeneralData? gender,
     GeneralData? healthLevel,
@@ -274,14 +270,12 @@ class SpouseData {
     IncomeData? income,
   }) =>
       SpouseData(
-        code: code ?? this.code,
         name: name ?? this.name,
         icNo: icNo ?? this.icNo,
         email: email ?? this.email,
         age: age ?? this.age,
         phoneNo: phoneNo ?? this.phoneNo,
         isDead: isDead ?? this.isDead,
-        relationship: relationship ?? this.relationship,
         race: race ?? this.race,
         gender: gender ?? this.gender,
         healthLevel: healthLevel ?? this.healthLevel,
@@ -291,16 +285,12 @@ class SpouseData {
       );
 
   factory SpouseData.fromJson(Map<String, dynamic> json) => SpouseData(
-        code: json["code"],
         name: json["name"],
         icNo: json["icNo"],
         email: json["email"],
         age: json["age"],
         phoneNo: json["phoneNo"],
         isDead: json["isDead"],
-        relationship: json["relationship"] == null
-            ? null
-            : GeneralData.fromJson(json["relationship"]),
         race: json["race"] == null ? null : GeneralData.fromJson(json["race"]),
         gender: json["gender"] == null
             ? null
@@ -317,14 +307,12 @@ class SpouseData {
       );
 
   Map<String, dynamic> toJson() => {
-        "code": code,
         "name": name,
         "icNo": icNo,
         "email": email,
         "age": age,
         "phoneNo": phoneNo,
         "isDead": isDead,
-        "relationship": relationship?.toJson(),
         "race": race?.toJson(),
         "gender": gender?.toJson(),
         "healthLevel": healthLevel?.toJson(),
@@ -340,16 +328,23 @@ class SpouseData {
       'icNo': icNo,
       'name': name,
       'email': email,
+      "phoneNo": phoneNo,
       'totalHousehold': totalHousehold,
-      'healthLevelCode': healthLevel?.code,
+      'healthLevelCode': healthLevel?.code ?? "",
+      'healthLevelDesc': healthLevel?.desc ?? "",
       'workAddress': occupation?.workplace?.address ?? "",
-      'workSalary': income?.basicSalary ?? "",
-      'workAllowance': income?.allowance ?? "",
+      'workSalary': income?.basicSalary,
+      'workAllowance': income?.allowance,
       'workOtherIncome': income?.other ?? "",
-      'welfareAid': income?.welfareAid,
-      'genderCode': gender?.code,
-      'raceCode': race?.code,
-      'occupationTypeCode': occupation?.type,
+      'welfareAid': income?.welfareAid ?? "",
+      'genderCode': gender?.code ?? "",
+      'genderDesc': gender?.desc ?? "",
+      'raceCode': race?.code ?? "",
+      'raceDesc': race?.desc ?? "",
+      'occupationTypeDesc': occupation?.type ?? "",
+      'occupationTypeCode': occupation?.typeCode ?? "",
+      'maritalStatusCode': "",
+      'maritalStatusDesc': "",
       'isOku': isOku,
     };
   }
@@ -449,10 +444,10 @@ class DependantsData {
       'icNo': icNo,
       'name': name,
       'email': email,
-      'relationshipCode': relationship?.code,
-      'healthLevelCode': healthLevel?.code,
-      'genderCode': gender?.code,
-      'raceCode': race?.code,
+      'relationshipCode': relationship?.code ?? "",
+      'healthLevelCode': healthLevel?.code ?? "",
+      'genderCode': gender?.code ?? "",
+      'raceCode': race?.code ?? "",
       'isOku': isOku ?? "0",
     };
   }

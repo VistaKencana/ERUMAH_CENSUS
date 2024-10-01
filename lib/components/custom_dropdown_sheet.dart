@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 class CustomDropdownSheet<T> extends StatefulWidget {
   final String label;
   final T? groupValue;
-  final T Function(List<T> data)? onFindGroupValue;
+  final T? Function(List<T> data)? onFindGroupValue;
   final List<T> items;
   final String Function(T data) getTitle;
   final List<T> Function(List<T> data, String? query)? onQuery;

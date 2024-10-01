@@ -18,24 +18,28 @@ class AnakTanggunganBloc
   final applog = const AppLog(classname: "AnakTanggunganBloc");
   _onSetAnakTanggungData(
       SetAnakTanggungData event, Emitter<AnakTanggunganState> emit) {
-    unitData = event.data;
-    existChild.clear();
-    final data = unitData.toDependantChildJson();
-    (data);
-    if (data.isNotEmpty) {
-      existChild
-          .addAll(data.map((e) => DependantInputModel.fromJson(e)).toList());
-    }
+    try {
+      unitData = event.data;
+      existChild.clear();
+      final data = unitData.toDependantChildJson();
+      (data);
+      if (data.isNotEmpty) {
+        existChild
+            .addAll(data.map((e) => DependantInputModel.fromJson(e)).toList());
+      }
 
-    existOthers.clear();
-    final data2 = unitData.toDependantOtherJson();
-    if (data2.isNotEmpty) {
-      existOthers
-          .addAll(data2.map((e) => DependantInputModel.fromJson(e)).toList());
+      existOthers.clear();
+      final data2 = unitData.toDependantOtherJson();
+      if (data2.isNotEmpty) {
+        existOthers
+            .addAll(data2.map((e) => DependantInputModel.fromJson(e)).toList());
+      }
+      applog.logDebug(
+          tag: "_onSetAnakTanggungData",
+          msg: "Child: ${existChild.length}, Other: ${existOthers.length}");
+      emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));
+    } catch (e) {
+      applog.logError(tag: "_onSetAnakTanggungData", msg: e.toString());
     }
-    applog.logDebug(
-        tag: "_onSetAnakTanggungData",
-        msg: "Child: ${existChild.length}, Other: ${existOthers.length}");
-    emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));
   }
 }

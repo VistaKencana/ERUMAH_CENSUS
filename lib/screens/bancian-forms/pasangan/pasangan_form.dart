@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../components/bottombar_button.dart';
 import '../../../components/custom_appbar.dart';
+import '../models/spouse_input_model.dart';
 
 class PasanganForm extends StatefulWidget {
   const PasanganForm({super.key});
@@ -15,6 +16,14 @@ class PasanganForm extends StatefulWidget {
 }
 
 class _PasanganFormState extends State<PasanganForm> {
+  late PasanganBloc _pasanganBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _pasanganBloc = BlocProvider.of<PasanganBloc>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,8 +58,7 @@ class _PasanganFormState extends State<PasanganForm> {
                       children: List.generate(
                           state.spouseData.length,
                           (index) => _pasanganTile(
-                              name: state.spouseData[index].name,
-                              index: index + 1)),
+                              data: state.spouseData[index], index: index)),
                     );
                   } else {
                     return const SizedBox();
@@ -66,12 +74,13 @@ class _PasanganFormState extends State<PasanganForm> {
     );
   }
 
-  _pasanganTile({required String name, required int index}) {
+  _pasanganTile({required SpouseInputModel data, required int index}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         ListTile(
           onTap: () {
+            _pasanganBloc.selectPasangan(data, index);
             const PasanganModal(
               isNewForm: false,
             ).show(context);
@@ -80,8 +89,8 @@ class _PasanganFormState extends State<PasanganForm> {
           leading: const CircleAvatar(
             child: Icon(Icons.person),
           ),
-          title: Text("Pasangan $index"),
-          subtitle: Text(name),
+          title: Text("Pasangan ${index + 1}"),
+          subtitle: Text(data.name),
         ),
         const Divider(
           height: 0,
