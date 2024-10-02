@@ -15,6 +15,7 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
     on<SetPenghuniData>(_onSetPenghuniData);
     on<SavePenghuniData>(_onSavePenghuniData);
   }
+  String censusCode = "";
   ResidentInfoData unitData = ResidentInfoData();
   OwnerInputModel? existData;
   final repo = ApplicationRepository();
@@ -23,6 +24,7 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
     unitData = event.data;
     existData = null;
     existData = OwnerInputModel.fromJson(unitData.toOwnerJson());
+    censusCode = event.censusCode;
     applog.logDebug(
         tag: "_onSetPenghuniData",
         msg: existData?.toJson().toString() ?? "No data");

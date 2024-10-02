@@ -7,10 +7,14 @@ import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../../components/custom_dropdown_sheet.dart';
 import '../../../components/disability_checkbox.dart';
 import '../../../data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
 import '../../../data/api/repositories/dropdown_repository.dart';
+import '../../../services/flushbar/custom_flushbar.dart';
+import '../models/dependant_input_model.dart';
+import 'bloc/anak_tanggungan_bloc.dart';
 
 class TanggunganModal extends StatefulWidget {
   final bool? isEdit;
@@ -38,10 +42,41 @@ class _TanggunganModalState extends State<TanggunganModal> {
   Uint8List? okuCard;
   bool isOKU = false;
   late DropdownBloc _dropdownBloc;
+  late AnakTanggunganBloc _tanggunganBloc;
+  DependantInputModel? dependantData;
+  final nameCtrl = TextEditingController();
+  final icNoCtrl = TextEditingController();
+  final emelCtrl = TextEditingController();
+  final umurCtrl = TextEditingController();
+  final noTelCtrl = TextEditingController();
+  final hubunganCtrl = TextEditingController();
+  final kesihatanCtrl = TextEditingController();
+  final jantinaCtrl = TextEditingController();
+  final bangsaCtrl = TextEditingController();
   @override
   void initState() {
     super.initState();
     _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
+    _tanggunganBloc =
+        BlocProvider.of<AnakTanggunganBloc>(context, listen: false);
+    dependantData = _tanggunganBloc.selectedData!.copyWith();
+    initVal();
+  }
+
+  initVal() {
+    nameCtrl.text = setDataValue(dependantData?.name);
+    icNoCtrl.text = setDataValue(dependantData?.icNo);
+    emelCtrl.text = setDataValue(dependantData?.email);
+    noTelCtrl.text = setDataValue(dependantData?.phoneNo);
+    hubunganCtrl.text = setDataValue(dependantData?.relationshipDesc);
+    umurCtrl.text = setDataValue(dependantData?.age);
+    kesihatanCtrl.text = setDataValue(dependantData?.healthLevelDesc);
+    jantinaCtrl.text = setDataValue(dependantData?.genderDesc);
+    bangsaCtrl.text = setDataValue(dependantData?.raceDesc);
+  }
+
+  String setDataValue(String? val, {String? defaultVal}) {
+    return _isEdit() ? "" : val ?? (defaultVal ?? "");
   }
 
   @override
@@ -87,7 +122,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
                             children: [
                               _textField(
                                   title: 'Nama Tanggungan',
-                                  initialValue: "Nur Fatin",
+                                  controller: nameCtrl,
                                   width: double.infinity,
                                   readOnly: _isReadOnly()),
                               _gap(height: 14),
@@ -96,19 +131,18 @@ class _TanggunganModalState extends State<TanggunganModal> {
                                   _dropdownHubungan(),
                                   _textField(
                                       title: 'No. Kad Pengenalan',
-                                      initialValue: "9512345145678",
+                                      controller: icNoCtrl,
                                       readOnly: _isReadOnly()),
                                   _textField(
-                                      title: 'Emel',
-                                      initialValue: "nurfatin@gmail.com"),
+                                      title: 'Emel', controller: emelCtrl),
                                   _textField(
                                       title: 'Umur(Tahun)',
-                                      initialValue: "26",
+                                      controller: umurCtrl,
                                       readOnly: _isReadOnly()),
                                   _dropdownKesihatan(),
                                   _textField(
                                       title: 'No. Telefon',
-                                      initialValue: "01645678642",
+                                      controller: noTelCtrl,
                                       readOnly: _isReadOnly()),
                                   _dropdownJantina(),
                                   _dropdownBangsa(),
@@ -116,17 +150,22 @@ class _TanggunganModalState extends State<TanggunganModal> {
                               ),
                               _gap(height: 14),
                               DisabilityCheckbox(
-                                  initVal: isOKU,
+                                  initVal: (dependantData?.isOku == "1"),
                                   onCheck: (val) {
-                                    setState(() => isOKU = val);
+                                    setState(() {
+                                      dependantData = dependantData!
+                                          .copyWith(isOku: val ? "1" : "0");
+                                    });
                                   }),
                               Visibility(
-                                visible: isOKU,
+                                visible: (dependantData?.isOku == "1"),
                                 child: CardDisplay(
                                   title: "",
-                                  img: okuCard,
-                                  onPicture: (bytes) =>
-                                      setState(() => okuCard = bytes),
+                                  img: dependantData?.uploadOkuCard,
+                                  onPicture: (bytes) => setState(() {
+                                    dependantData = dependantData!
+                                        .copyWith(uploadOkuCard: bytes);
+                                  }),
                                 ),
                               ),
                               const SizedBox(height: 10)
@@ -139,8 +178,36 @@ class _TanggunganModalState extends State<TanggunganModal> {
                 )
               ],
             ),
-            bottomNavigationBar: BottomBarButton(
-                onTap: () => Navigator.pop(context), title: "Simpan"),
+            bottomNavigationBar:
+                BlocListener<AnakTanggunganBloc, AnakTanggunganState>(
+              listener: (context, state) {
+                if (state is DependantNoChanges) {
+                  CustomFlushbar.of(context).showInfo(msg: state.msg);
+                } else if (state is DependantLoading) {
+                  EasyLoading.show();
+                } else if (state is DependantSuccess) {
+                  EasyLoading.dismiss();
+                  CustomFlushbar.of(context)
+                      .showSuccess(msg: "Berjaya menmyimpan data");
+                } else if (state is DependantError) {
+                  EasyLoading.dismiss();
+                  CustomFlushbar.of(context).showFailed(msg: state.msg);
+                }
+              },
+              child: BottomBarButton(
+                  onTap: () {
+                    setState(() {
+                      dependantData = dependantData!.copyWith(
+                          name: nameCtrl.text,
+                          icNo: icNoCtrl.text,
+                          email: emelCtrl.text,
+                          phoneNo: noTelCtrl.text,
+                          age: umurCtrl.text);
+                    });
+                    _tanggunganBloc.add(SaveOtherData(data: dependantData!));
+                  },
+                  title: "Simpan"),
+            ),
           ),
         );
       },
@@ -176,10 +243,12 @@ class _TanggunganModalState extends State<TanggunganModal> {
 
   _textField(
       {required String title,
-      String? initialValue,
+      // String? initialValue,
       bool readOnly = false,
       bool enableDropdown = true,
+      TextEditingController? controller,
       String? hintText,
+      void Function(String)? onChanged,
       double? width,
       void Function()? onTap,
       bool isDropdown = false}) {
@@ -188,6 +257,8 @@ class _TanggunganModalState extends State<TanggunganModal> {
           width: width ?? MediaQuery.sizeOf(context).width * 0.4,
           child: CustomFormField(
             title: title,
+            onChanged: onChanged,
+            controller: controller,
             onTap: () {
               if (onTap == null || !enableDropdown) return;
               onTap();
@@ -195,11 +266,11 @@ class _TanggunganModalState extends State<TanggunganModal> {
             readOnly: true,
             fillColor: Colors.white,
             hintText: hintText,
-            initialValue: _isEdit() ? "" : initialValue,
+            // initialValue: _isEdit() ? "" : initialValue,
             suffixWidget: isDropdown
                 ? Icon(
                     Icons.arrow_drop_down,
-                    color: (readOnly) ? Colors.grey : Colors.black,
+                    color: readOnly ? Colors.grey : Colors.black,
                   )
                 : null,
           ));
@@ -209,9 +280,11 @@ class _TanggunganModalState extends State<TanggunganModal> {
       child: CustomFormField(
         title: title,
         onTap: onTap,
+        controller: controller,
         readOnly: readOnly,
         hintText: hintText,
-        initialValue: _isEdit() ? "" : initialValue,
+        onChanged: onChanged,
+        // initialValue: _isEdit() ? "" : initialValue,
       ),
     );
   }
@@ -224,30 +297,35 @@ class _TanggunganModalState extends State<TanggunganModal> {
             CustomDropdownSheet(
               label: "Hubungan Dengan Penyewa",
               items: state.data,
-              // onFindGroupValue: (data) {
-              //   return data.where((val) {
-              //     var a = val?.desc
-              //             ?.toLowerCase()
-              //             .contains("selesai") ??
-              //         false;
-              //     return a;
-              //   }).firstOrNull;
-              // },
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a = val?.code
+                          ?.contains(dependantData?.relationshipCode ?? "") ??
+                      false;
+                  return a;
+                }).firstOrNull;
+              },
               getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {},
+              onChange: (val) {
+                if (val == null) return;
+                dependantData = dependantData!.copyWith(
+                    relationshipCode: val.code, relationshipDesc: val.desc);
+                hubunganCtrl.text = val.desc ?? "";
+              },
             ).show(context);
           }
         }
       },
       child: _textField(
-          title: 'Hubungan Dengan Penyewa',
-          isDropdown: true,
-          enableDropdown: _isEdit(),
-          readOnly: _isReadOnly(),
-          onTap: () {
-            _dropdownBloc.add(const FetchDdFormData(type: DdType.relationship));
-          },
-          initialValue: _isEdit() ? "" : "Anak"),
+        title: 'Hubungan Dengan Penyewa',
+        isDropdown: true,
+        readOnly: _isReadOnly(),
+        controller: hubunganCtrl,
+        enableDropdown: _isEdit(),
+        onTap: () {
+          _dropdownBloc.add(const FetchDdFormData(type: DdType.relationship));
+        },
+      ),
     );
   }
 
@@ -259,17 +337,21 @@ class _TanggunganModalState extends State<TanggunganModal> {
             CustomDropdownSheet(
               label: "Pilih Tahap Kesihatan",
               items: state.data,
-              // onFindGroupValue: (data) {
-              //   return data.where((val) {
-              //     var a = val?.desc
-              //             ?.toLowerCase()
-              //             .contains("selesai") ??
-              //         false;
-              //     return a;
-              //   }).firstOrNull;
-              // },
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a = val?.code
+                          ?.contains(dependantData?.healthLevelCode ?? "") ??
+                      false;
+                  return a;
+                }).firstOrNull;
+              },
               getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {},
+              onChange: (val) {
+                if (val == null) return;
+                dependantData = dependantData!.copyWith(
+                    healthLevelCode: val.code, healthLevelDesc: val.desc);
+                kesihatanCtrl.text = val.desc ?? "";
+              },
             ).show(context);
           }
         }
@@ -280,7 +362,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
           onTap: () {
             _dropdownBloc.add(const FetchDdFormData(type: DdType.healthLevel));
           },
-          initialValue: _isEdit() ? "" : "Sihat"),
+          controller: kesihatanCtrl),
     );
   }
 
@@ -292,30 +374,35 @@ class _TanggunganModalState extends State<TanggunganModal> {
             CustomDropdownSheet(
               label: "Pilih Jantina",
               items: state.data,
-              // onFindGroupValue: (data) {
-              //   return data.where((val) {
-              //     var a = val?.desc
-              //             ?.toLowerCase()
-              //             .contains("selesai") ??
-              //         false;
-              //     return a;
-              //   }).firstOrNull;
-              // },
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a =
+                      val?.code?.contains(dependantData?.genderCode ?? "") ??
+                          false;
+                  return a;
+                }).firstOrNull;
+              },
               getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {},
+              onChange: (val) {
+                if (val == null) return;
+                dependantData = dependantData!
+                    .copyWith(genderCode: val.code, genderDesc: val.desc);
+                jantinaCtrl.text = val.desc ?? "";
+              },
             ).show(context);
           }
         }
       },
       child: _textField(
-          title: 'Jantina',
-          readOnly: _isReadOnly(),
-          enableDropdown: _isEdit(),
-          isDropdown: true,
-          onTap: () {
-            _dropdownBloc.add(const FetchDdFormData(type: DdType.gender));
-          },
-          initialValue: _isEdit() ? "" : "Perempuan"),
+        title: 'Jantina',
+        controller: jantinaCtrl,
+        readOnly: _isReadOnly(),
+        enableDropdown: _isEdit(),
+        isDropdown: true,
+        onTap: () {
+          _dropdownBloc.add(const FetchDdFormData(type: DdType.gender));
+        },
+      ),
     );
   }
 
@@ -327,26 +414,29 @@ class _TanggunganModalState extends State<TanggunganModal> {
             CustomDropdownSheet(
               label: "Pilih Bangsa",
               items: state.data,
-              // onFindGroupValue: (data) {
-              //   return data.where((val) {
-              //     var a = val?.desc
-              //             ?.toLowerCase()
-              //             .contains("selesai") ??
-              //         false;
-              //     return a;
-              //   }).firstOrNull;
-              // },
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a = val?.code?.contains(dependantData?.raceCode ?? "") ??
+                      false;
+                  return a;
+                }).firstOrNull;
+              },
               getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {},
+              onChange: (val) {
+                if (val == null) return;
+                dependantData = dependantData!
+                    .copyWith(raceCode: val.code, raceDesc: val.desc);
+                bangsaCtrl.text = val.desc ?? "";
+              },
             ).show(context);
           }
         }
       },
       child: _textField(
         title: 'Bangsa',
+        controller: bangsaCtrl,
         readOnly: _isReadOnly(),
         enableDropdown: _isEdit(),
-        initialValue: _isEdit() ? "" : "Melayu",
         isDropdown: true,
         onTap: () {
           _dropdownBloc.add(const FetchDdFormData(type: DdType.race));

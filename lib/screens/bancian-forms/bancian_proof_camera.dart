@@ -2,8 +2,10 @@ import 'dart:typed_data';
 
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_image_preview.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_main_screen.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
 import 'package:eperumahan_bancian/services/camera_service/camera_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 
 class BancianProofCamera extends StatefulWidget {
@@ -64,7 +66,10 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
                         onPressed: imgs.length < (maxImage - 1)
                             ? null
                             : () {
-                                _goReplace(BancianMainScreen(imgs: imgs));
+                                context
+                                    .read<BancianBloc>()
+                                    .setImages(imgs: imgs);
+                                _goReplace(const BancianMainScreen());
                               },
                         child: const Text("Seterusnya")),
                   ],
@@ -130,14 +135,14 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
       PageTransition(child: screen, type: PageTransitionType.rightToLeft));
 
   int imageLength() {
-    if (imgs.isNotEmpty) {
-      int len = imgs.length;
-      if (len >= maxImage) {
-        return len;
-      }
-      return len + 1;
+    if (imgs.isEmpty) {
+      return 1;
     }
-    return 1;
+    int len = imgs.length;
+    if (len >= maxImage) {
+      return len;
+    }
+    return len + 1;
   }
 
   bool canAddImage(int index) {

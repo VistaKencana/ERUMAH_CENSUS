@@ -74,7 +74,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
         setDataValue(ownerData?.totalHousehold, defaultVal: "0");
     icNoCtrl.text = setDataValue(ownerData?.icNo);
     emelCtrl.text = setDataValue(ownerData?.email);
-    umurCtrl.text = setDataValue("", defaultVal: "50");
+    umurCtrl.text = setDataValue(ownerData?.age);
     noTelCtrl.text = setDataValue(ownerData?.phoneNo);
     jantinaCtrl.text = setDataValue(ownerData?.genderDesc);
     bangsaCtrl.text = setDataValue(ownerData?.raceDesc);
@@ -110,9 +110,8 @@ class _PenghuniFormState extends State<PenghuniForm> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => BancianMainScreen(
+                                  builder: (_) => const BancianMainScreen(
                                         isNewForm: true,
-                                        imgs: widget.imgs,
                                       )));
                         },
                         child: const Row(

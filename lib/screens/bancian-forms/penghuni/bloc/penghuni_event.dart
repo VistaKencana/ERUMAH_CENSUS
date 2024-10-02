@@ -9,8 +9,8 @@ sealed class PenghuniEvent extends Equatable {
 
 class SetPenghuniData extends PenghuniEvent {
   final ResidentInfoData data;
-
-  const SetPenghuniData({required this.data});
+  final String censusCode;
+  const SetPenghuniData({required this.data, required this.censusCode});
 }
 
 class SavePenghuniData extends PenghuniEvent {

@@ -9,8 +9,8 @@ class SwitchModel {
 
   static List<SwitchModel> getData() {
     return [
-      SwitchModel(code: "1", desc: "Ya"),
       SwitchModel(code: "0", desc: "Tidak"),
+      SwitchModel(code: "1", desc: "Ya"),
     ];
   }
 }

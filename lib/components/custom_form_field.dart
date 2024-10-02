@@ -99,7 +99,7 @@ class CustomFormField extends StatelessWidget {
           inputFormatters: inputFormatters,
           maxLines: maxLines,
           decoration: InputDecoration(
-            filled: true,
+            filled: true, errorStyle: errorStyle,
             hintText: hintText,
             fillColor: fillColor ?? (readOnly ? null : Colors.white),
             // fillColor: fillColor,

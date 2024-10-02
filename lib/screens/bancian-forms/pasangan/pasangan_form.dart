@@ -90,7 +90,7 @@ class _PasanganFormState extends State<PasanganForm> {
             child: Icon(Icons.person),
           ),
           title: Text("Pasangan ${index + 1}"),
-          subtitle: Text(data.name),
+          subtitle: Text(data.name ?? ""),
         ),
         const Divider(
           height: 0,

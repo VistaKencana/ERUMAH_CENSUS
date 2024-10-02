@@ -3,6 +3,7 @@ import 'package:eperumahan_bancian/screens/qr-home/models/resident_info_model.da
 import 'package:eperumahan_bancian/services/app_log.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../../../data/api/repositories/application_repository.dart';
 
@@ -16,6 +17,8 @@ class AnakTanggunganBloc
     on<SaveChildData>(_onSaveChildData);
     on<SaveOtherData>(_onSaveOtherData);
   }
+
+  String censusCode = "";
   ResidentInfoData unitData = ResidentInfoData();
   List<DependantInputModel> existChild = [];
   List<DependantInputModel> existOthers = [];
@@ -44,6 +47,7 @@ class AnakTanggunganBloc
       applog.logDebug(
           tag: "_onSetAnakTanggungData",
           msg: "Child: ${existChild.length}, Other: ${existOthers.length}");
+      censusCode = event.censusCode;
       emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));
     } catch (e) {
       applog.logError(tag: "_onSetAnakTanggungData", msg: e.toString());
@@ -51,10 +55,56 @@ class AnakTanggunganBloc
   }
 
   _onSaveChildData(
-      SaveChildData event, Emitter<AnakTanggunganState> emit) async {}
+      SaveChildData event, Emitter<AnakTanggunganState> emit) async {
+    var origin = selectedData!.toJson().toString();
+    var newData = event.data.toJson().toString();
+    if (origin.contains(newData)) {
+      emit(const DependantNoChanges(msg: "Tiada Perubahan Dibuat"));
+      emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));
+      return;
+    }
+    emit(DependantLoading());
+    applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
+    try {
+      final resp = await repo.storeDependant(data: event.data);
+      applog.logDebug(tag: "_onSaveChildData", msg: resp);
+      existChild[selectedIndex] = event.data;
+      selectedData = event.data;
+      emit(DependantSuccess());
+    } catch (e) {
+      applog.logError(tag: "_onSaveChildData", msg: e.toString());
+      emit(DependantError(msg: e.toString()));
+    } finally {
+      emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));
+      EasyLoading.dismiss();
+    }
+  }
 
   _onSaveOtherData(
-      SaveOtherData event, Emitter<AnakTanggunganState> emit) async {}
+      SaveOtherData event, Emitter<AnakTanggunganState> emit) async {
+    var origin = selectedData!.toJson().toString();
+    var newData = event.data.toJson().toString();
+    if (origin.contains(newData)) {
+      emit(const DependantNoChanges(msg: "Tiada Perubahan Dibuat"));
+      emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));
+      return;
+    }
+    emit(DependantLoading());
+    applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
+    try {
+      final resp = await repo.storeDependant(data: event.data);
+      applog.logDebug(tag: "_onSaveOtherData", msg: resp);
+      selectedData = event.data;
+      existOthers[selectedIndex] = event.data;
+      emit(DependantSuccess());
+    } catch (e) {
+      applog.logError(tag: "_onSaveOtherData", msg: e.toString());
+      emit(DependantError(msg: e.toString()));
+    } finally {
+      emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));
+      EasyLoading.dismiss();
+    }
+  }
 
   selectDependant(DependantInputModel data, int index) {
     selectedData = data;

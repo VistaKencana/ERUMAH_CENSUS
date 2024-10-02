@@ -12,6 +12,7 @@ import 'package:eperumahan_bancian/data/api/repositories/bloc/dropddown_bloc/dro
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/spouse_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/bloc/pasangan_bloc.dart';
+import 'package:eperumahan_bancian/services/app_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -39,8 +40,8 @@ class PasanganModal extends StatefulWidget {
 }
 
 class _PasanganModalState extends State<PasanganModal> {
-  _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
-  _isReadOnly() => _isNewForm() ? false : true;
+  bool _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
+  bool _isReadOnly() => _isNewForm() ? false : true;
   Uint8List? frontCard;
   Uint8List? backCard;
   Uint8List? okuCard;
@@ -65,22 +66,28 @@ class _PasanganModalState extends State<PasanganModal> {
   final lainPendapatanCtrl = TextEditingController();
   final bantuanCtrl = TextEditingController();
   final kesihatanCtrl = TextEditingController();
+  final isAliveCtrl = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
     _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
     _pasanganBloc = BlocProvider.of<PasanganBloc>(context, listen: false);
-    spouseData = _pasanganBloc.selectedSpouse!.copyWith();
     initVal();
   }
 
   initVal() {
+    if (_isNewForm()) {
+      _pasanganBloc.addNewPasangan();
+    }
+    spouseData = _pasanganBloc.selectedSpouse!.copyWith();
+
     nameCtrl.text = setDataValue(spouseData?.name);
     bilIsiRumahCtrl.text =
         setDataValue(spouseData?.totalHousehold, defaultVal: "0");
     icNoCtrl.text = setDataValue(spouseData?.icNo);
     emelCtrl.text = setDataValue(spouseData?.email);
-    umurCtrl.text = setDataValue("", defaultVal: "50");
+    umurCtrl.text = setDataValue(spouseData?.age);
     noTelCtrl.text = setDataValue(spouseData?.phoneNo);
     jantinaCtrl.text = setDataValue(spouseData?.genderDesc);
     bangsaCtrl.text = setDataValue(spouseData?.raceDesc);
@@ -92,6 +99,8 @@ class _PasanganModalState extends State<PasanganModal> {
     lainPendapatanCtrl.text = setDataValue(spouseData?.workOtherIncome);
     bantuanCtrl.text = setDataValue(spouseData?.welfareAid);
     kesihatanCtrl.text = setDataValue(spouseData?.healthLevelDesc);
+    isAliveCtrl.text = setDataValue(
+        (spouseData?.isAlive.contains("0") ?? false) ? "Tidak" : "Ya");
   }
 
   String setDataValue(String? val, {String? defaultVal}) {
@@ -111,48 +120,67 @@ class _PasanganModalState extends State<PasanganModal> {
         } else if (state is PasanganError) {
           EasyLoading.dismiss();
           CustomFlushbar.of(context).showFailed(msg: state.msg);
+        } else if (state is PasanganNoChanges) {
+          CustomFlushbar.of(context).showInfo(msg: state.msg);
         }
       },
-      child: DraggableScrollableSheet(
-        expand: false,
-        initialChildSize: 0.94,
-        maxChildSize: 0.94,
-        builder: (context, sc) {
-          return Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius:
-                  BorderRadiusDirectional.vertical(top: Radius.circular(16)),
-            ),
-            child: Scaffold(
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [_header(), _form()],
+      child: Form(
+        key: formKey,
+        child: DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.94,
+          maxChildSize: 0.94,
+          builder: (context, sc) {
+            return Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius:
+                    BorderRadiusDirectional.vertical(top: Radius.circular(16)),
               ),
-              bottomNavigationBar: BottomBarButton(
-                  onTap: () {
-                    setState(() {
-                      spouseData = spouseData!.copyWith(
-                          name: nameCtrl.text,
-                          totalHousehold: bilIsiRumahCtrl.text,
-                          icNo: icNoCtrl.text,
-                          email: emelCtrl.text,
-                          phoneNo: noTelCtrl.text,
-                          workAddress: majikanAddressCtrl.text,
-                          workSalary: gajiPokokCtrl.text,
-                          workAllowance: elaunCtrl.text,
-                          workOtherIncome: lainPendapatanCtrl.text,
-                          welfareAid: bantuanCtrl.text);
-                    });
-                    _pasanganBloc.add(SavePasanganData(data: spouseData!));
-                  },
-                  title: "Simpan"),
-            ),
-          );
-        },
+              child: Scaffold(
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [_header(), _form()],
+                ),
+                bottomNavigationBar: BottomBarButton(
+                    onTap: () {
+                      setState(() {
+                        spouseData = spouseData!.copyWith(
+                            name: nameCtrl.text,
+                            totalHousehold: bilIsiRumahCtrl.text,
+                            icNo: icNoCtrl.text,
+                            email: emelCtrl.text,
+                            phoneNo: noTelCtrl.text,
+                            workAddress: majikanAddressCtrl.text,
+                            workSalary: gajiPokokCtrl.text,
+                            workAllowance: elaunCtrl.text,
+                            workOtherIncome: lainPendapatanCtrl.text,
+                            welfareAid: bantuanCtrl.text);
+                      });
+                      AppLog.instantLog(
+                          tag: "Cubaan",
+                          classname: "Pasangan",
+                          msg: spouseData!.toJson().toString());
+                      //if update data
+                      if (!_isNewForm()) {
+                        _pasanganBloc.add(SavePasanganData(data: spouseData!));
+                        return;
+                      }
+                      //if add new data
+                      if (formKey.currentState!.validate() == false) {
+                        CustomFlushbar.of(context)
+                            .showFailed(msg: "Sila isi maklumat diperlukan");
+                        return;
+                      }
+                    },
+                    title: "Simpan"),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -210,6 +238,7 @@ class _PasanganModalState extends State<PasanganModal> {
                       _textField(
                           title: 'No. Kad Pengenalan',
                           controller: icNoCtrl,
+                          isMandatory: _isNewForm(),
                           readOnly: _isReadOnly()),
                       _textField(title: 'No Telefon', controller: noTelCtrl),
                       _textField(
@@ -223,19 +252,26 @@ class _PasanganModalState extends State<PasanganModal> {
                           title: 'Masih Hidup',
                           initialValue: "Ya",
                           isDropdown: true,
+                          controller: isAliveCtrl,
                           onTap: () {
                             SwitchModal(
                                 label: "Pilih status",
                                 onFindGroupValue: (data) {
                                   var a = data
                                       .where((val) =>
-                                          val.code?.contains("1") ?? false)
+                                          val.code?.contains(
+                                              spouseData?.isAlive ?? "*_*") ??
+                                          false)
                                       .toList();
                                   return a.firstOrNull;
                                 },
                                 getTitle: (data) => data.desc!,
                                 onChange: (val) {
-                                  spouseData!.copyWith();
+                                  if (val == null) return;
+                                  spouseData = spouseData!
+                                      .copyWith(isAlive: val.code ?? "-");
+                                  isAliveCtrl.text = val.desc ?? "-";
+                                  setState(() {});
                                 }).show(context);
                           }),
                       _dropdownJenisPekerjaan(),
@@ -284,6 +320,7 @@ class _PasanganModalState extends State<PasanganModal> {
       {required String title,
       String? initialValue,
       bool readOnly = false,
+      bool isMandatory = false,
       bool enableDropdown = true,
       TextEditingController? controller,
       String? hintText,
@@ -305,7 +342,7 @@ class _PasanganModalState extends State<PasanganModal> {
             readOnly: true,
             fillColor: Colors.white,
             hintText: hintText,
-            initialValue: _isNewForm() ? "" : initialValue,
+            // initialValue: _isNewForm() ? "" : initialValue,
             suffixWidget: isDropdown
                 ? Icon(
                     Icons.arrow_drop_down,
@@ -323,7 +360,14 @@ class _PasanganModalState extends State<PasanganModal> {
         readOnly: readOnly,
         hintText: hintText,
         onChanged: onChanged,
-        initialValue: _isNewForm() ? "" : initialValue,
+        isMandatory: isMandatory,
+        validator: isMandatory
+            ? (value) {
+                if (value == null || value.isEmpty) return '';
+                return null;
+              }
+            : null,
+        // initialValue: _isNewForm() ? "" : initialValue,
       ),
     );
   }
@@ -338,8 +382,8 @@ class _PasanganModalState extends State<PasanganModal> {
               items: state.data,
               onFindGroupValue: (data) {
                 return data.where((val) {
-                  var a =
-                      val?.code?.contains(spouseData?.raceCode ?? "") ?? false;
+                  var a = val?.code?.contains(spouseData?.raceCode ?? "*_*") ??
+                      false;
                   return a;
                 }).firstOrNull;
               },
@@ -377,8 +421,9 @@ class _PasanganModalState extends State<PasanganModal> {
               items: state.data,
               onFindGroupValue: (data) {
                 return data.where((val) {
-                  var a = val?.code?.contains(spouseData?.genderCode ?? "") ??
-                      false;
+                  var a =
+                      val?.code?.contains(spouseData?.genderCode ?? "*_*") ??
+                          false;
                   return a;
                 }).firstOrNull;
               },
@@ -415,9 +460,9 @@ class _PasanganModalState extends State<PasanganModal> {
               items: state.data,
               onFindGroupValue: (data) {
                 return data.where((val) {
-                  var a =
-                      val?.code?.contains(spouseData?.healthLevelCode ?? "") ??
-                          false;
+                  var a = val?.code
+                          ?.contains(spouseData?.healthLevelCode ?? "*_*") ??
+                      false;
                   return a;
                 }).firstOrNull;
               },
@@ -453,7 +498,7 @@ class _PasanganModalState extends State<PasanganModal> {
               onFindGroupValue: (data) {
                 return data.where((val) {
                   var a = val?.code
-                          ?.contains(spouseData?.occupationTypeCode ?? "") ??
+                          ?.contains(spouseData?.occupationTypeCode ?? "*_*") ??
                       false;
                   return a;
                 }).firstOrNull;
@@ -520,7 +565,7 @@ class _PasanganModalState extends State<PasanganModal> {
           FileDisplay(
             title: "Slip Gaji / Penyata KWSP",
             isMandatory: true,
-            img: spouseData!.uploadIncome,
+            img: spouseData?.uploadIncome,
             onPicture: (bytes) => setState(() => setState(
                 () => spouseData = spouseData!.copyWith(uploadIncome: bytes))),
           )

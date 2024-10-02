@@ -9,8 +9,10 @@ import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/bloc/anak_tanggungan_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/dependant_input_model.dart';
+import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../../components/disability_checkbox.dart';
 import '../../../data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
 
@@ -66,9 +68,9 @@ class _AnakModalState extends State<AnakModal> {
     nameCtrl.text = setDataValue(dependantData?.name);
     icNoCtrl.text = setDataValue(dependantData?.icNo);
     emelCtrl.text = setDataValue(dependantData?.email);
-    noTelCtrl.text = setDataValue("");
+    noTelCtrl.text = setDataValue(dependantData?.phoneNo);
     hubunganCtrl.text = setDataValue(dependantData?.relationshipDesc);
-    umurCtrl.text = setDataValue("");
+    umurCtrl.text = setDataValue(dependantData?.age);
     kesihatanCtrl.text = setDataValue(dependantData?.healthLevelDesc);
     jantinaCtrl.text = setDataValue(dependantData?.genderDesc);
     bangsaCtrl.text = setDataValue(dependantData?.raceDesc);
@@ -151,17 +153,22 @@ class _AnakModalState extends State<AnakModal> {
                               ),
                               _gap(height: 14),
                               DisabilityCheckbox(
-                                  initVal: isOKU,
+                                  initVal: (dependantData?.isOku == "1"),
                                   onCheck: (val) {
-                                    setState(() => isOKU = val);
+                                    setState(() {
+                                      dependantData = dependantData!
+                                          .copyWith(isOku: val ? "1" : "0");
+                                    });
                                   }),
                               Visibility(
-                                visible: isOKU,
+                                visible: (dependantData?.isOku == "1"),
                                 child: CardDisplay(
                                   title: "",
-                                  img: okuCard,
-                                  onPicture: (bytes) =>
-                                      setState(() => okuCard = bytes),
+                                  img: dependantData?.uploadOkuCard,
+                                  onPicture: (bytes) => setState(() {
+                                    dependantData = dependantData!
+                                        .copyWith(uploadOkuCard: bytes);
+                                  }),
                                 ),
                               ),
                               const SizedBox(height: 10)
@@ -174,8 +181,36 @@ class _AnakModalState extends State<AnakModal> {
                 )
               ],
             ),
-            bottomNavigationBar: BottomBarButton(
-                onTap: () => Navigator.pop(context), title: "Simpan"),
+            bottomNavigationBar:
+                BlocListener<AnakTanggunganBloc, AnakTanggunganState>(
+              listener: (context, state) {
+                if (state is DependantNoChanges) {
+                  CustomFlushbar.of(context).showInfo(msg: state.msg);
+                } else if (state is DependantLoading) {
+                  EasyLoading.show();
+                } else if (state is DependantSuccess) {
+                  EasyLoading.dismiss();
+                  CustomFlushbar.of(context)
+                      .showSuccess(msg: "Berjaya menmyimpan data");
+                } else if (state is DependantError) {
+                  EasyLoading.dismiss();
+                  CustomFlushbar.of(context).showFailed(msg: state.msg);
+                }
+              },
+              child: BottomBarButton(
+                  onTap: () {
+                    setState(() {
+                      dependantData = dependantData!.copyWith(
+                          name: nameCtrl.text,
+                          icNo: icNoCtrl.text,
+                          email: emelCtrl.text,
+                          phoneNo: noTelCtrl.text,
+                          age: umurCtrl.text);
+                    });
+                    _tanggunganBloc.add(SaveChildData(data: dependantData!));
+                  },
+                  title: "Simpan"),
+            ),
           ),
         );
       },

@@ -9,8 +9,8 @@ sealed class AnakTanggunganEvent extends Equatable {
 
 class SetAnakTanggungData extends AnakTanggunganEvent {
   final ResidentInfoData data;
-
-  const SetAnakTanggungData({required this.data});
+  final String censusCode;
+  const SetAnakTanggungData({required this.data, required this.censusCode});
 }
 
 class SaveChildData extends AnakTanggunganEvent {

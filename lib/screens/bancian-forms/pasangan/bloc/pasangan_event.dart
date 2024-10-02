@@ -9,8 +9,8 @@ sealed class PasanganEvent extends Equatable {
 
 class SetPasanganData extends PasanganEvent {
   final ResidentInfoData data;
-
-  const SetPasanganData({required this.data});
+  final String censusCode;
+  const SetPasanganData({required this.data, required this.censusCode});
 }
 
 class SavePasanganData extends PasanganEvent {

@@ -44,9 +44,8 @@ class _PenghuniFormOldState extends State<PenghuniFormOld> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => BancianMainScreen(
+                                builder: (_) => const BancianMainScreen(
                                       isNewForm: true,
-                                      imgs: widget.imgs,
                                     )));
                       },
                       child: const Row(

@@ -79,12 +79,12 @@ class _QrScanScreenState extends State<QrScanScreen> {
               dimmedBtnLabel: "Tidak",
               onDimmedBtn: () {
                 Navigator.pop(context);
-                Future.delayed(const Duration(milliseconds: 500), () {
-                  controller?.pauseCamera();
-                  const BancianRegisterQr()
-                      .show(context)
-                      .then((val) => controller?.resumeCamera());
-                });
+                // Future.delayed(const Duration(milliseconds: 500), () {
+                //   controller?.pauseCamera();
+                //   const BancianRegisterQr()
+                //       .show(context)
+                //       .then((val) => controller?.resumeCamera());
+                // });
               },
             ).show(context).then((val) => controller?.resumeCamera());
           } else if (state is QrNotFound) {

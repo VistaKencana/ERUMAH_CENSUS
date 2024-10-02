@@ -1,7 +1,9 @@
 import 'package:camera/camera.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
 import 'package:eperumahan_bancian/services/camera_service/camera_overlay.dart';
 import 'package:eperumahan_bancian/services/draw_watermark.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image/image.dart' as imag;
 import 'package:flutter/material.dart';
@@ -233,7 +235,17 @@ class _CameraWidgetState extends State<CameraWidget> {
 
                   Uint8List uintImg = await rawImg.readAsBytes();
                   if (widget.addWatermark) {
-                    uintImg = await DrawWatermark.onRunDraw(bytes: uintImg);
+                    if (context.mounted) {
+                      String pprUnit = context
+                              .read<BancianBloc>()
+                              .unitData
+                              .unit
+                              ?.housingProject
+                              ?.desc ??
+                          "";
+                      uintImg = await DrawWatermark.onRunDraw(
+                          bytes: uintImg, text: pprUnit);
+                    }
                   }
 
                   closeLoading();

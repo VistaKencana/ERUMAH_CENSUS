@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
@@ -14,6 +12,7 @@ import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/tanggun
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_result.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/models/status_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +27,7 @@ import 'bancian_image_preview.dart';
 
 class BancianMainScreen extends StatefulWidget {
   final bool? isNewForm;
-  final List<Uint8List> imgs;
-  const BancianMainScreen({super.key, this.isNewForm, required this.imgs});
+  const BancianMainScreen({super.key, this.isNewForm});
 
   @override
   State<BancianMainScreen> createState() => _BancianMainScreenState();
@@ -38,11 +36,13 @@ class BancianMainScreen extends StatefulWidget {
 class _BancianMainScreenState extends State<BancianMainScreen> {
   late DropdownBloc _dropdownBloc;
   late BancianBloc _bancianBloc;
+  late StatusInputModel statusData;
   @override
   void initState() {
     super.initState();
     _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
     _bancianBloc = BlocProvider.of<BancianBloc>(context, listen: false);
+    statusData = _bancianBloc.statusData!;
   }
 
   _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
@@ -143,7 +143,8 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                 _borangTile(
                     label: "Maklumat Penghuni",
                     screen: PenghuniForm(
-                        isNewForm: widget.isNewForm, imgs: widget.imgs)),
+                        isNewForm: widget.isNewForm,
+                        imgs: statusData.getFiles())),
                 // screen: PenghuniForm(isEdit: widget.isEdit)),
                 _borangTile(
                     label: "Maklumat Pasangan", screen: const PasanganForm()),
@@ -216,15 +217,17 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                     height: 100,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
-                      children: List.generate(widget.imgs.length, (index) {
+                      children:
+                          List.generate(statusData.getFiles().length, (index) {
                         return GestureDetector(
                           onTap: () {
                             BancianImagePreview(
                               title: "Gambar ${index + 1}",
-                              image: widget.imgs[index],
+                              image: statusData.getFiles()[index],
                               canDelete: false,
                               onDelete: () {
-                                setState(() => widget.imgs.removeAt(index));
+                                setState(() =>
+                                    statusData.getFiles().removeAt(index));
                                 Navigator.pop(context);
                               },
                             ).show(context);
@@ -238,7 +241,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                                   color: Colors.grey,
                                   borderRadius: BorderRadius.circular(10)),
                               child: Image.memory(
-                                widget.imgs[index],
+                                statusData.getFiles()[index],
                                 fit: BoxFit.fill,
                               )),
                         );

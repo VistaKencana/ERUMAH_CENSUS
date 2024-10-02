@@ -110,13 +110,18 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
             visible: (residentData.visits?.length ?? 0) < 2,
             child: BottomBarButton(
                 onTap: () {
-                  _bancianBloc.add(SetBancianData(data: _qrBloc.residentData));
-                  _penghuniBloc
-                      .add(SetPenghuniData(data: _qrBloc.residentData));
-                  _pasanganBloc
-                      .add(SetPasanganData(data: _qrBloc.residentData));
-                  _anakTanggunganBloc
-                      .add(SetAnakTanggungData(data: _qrBloc.residentData));
+                  _bancianBloc.add(SetBancianData(
+                      data: _qrBloc.residentData,
+                      censusCode: _qrBloc.residentData.censusCode ?? ""));
+                  _penghuniBloc.add(SetPenghuniData(
+                      data: _qrBloc.residentData,
+                      censusCode: _qrBloc.residentData.censusCode ?? ""));
+                  _pasanganBloc.add(SetPasanganData(
+                      data: _qrBloc.residentData,
+                      censusCode: _qrBloc.residentData.censusCode ?? ""));
+                  _anakTanggunganBloc.add(SetAnakTanggungData(
+                      data: _qrBloc.residentData,
+                      censusCode: _qrBloc.residentData.censusCode ?? ""));
                   Navigator.push(
                       context,
                       PageTransition(

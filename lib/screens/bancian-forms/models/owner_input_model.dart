@@ -10,6 +10,7 @@ class OwnerInputModel {
   String totalHousehold;
   String email;
   String phoneNo;
+  String age;
   String occupationTypeCode; //dd
   String maritalStatusCode; //dd
   String isOku;
@@ -37,6 +38,7 @@ class OwnerInputModel {
       required this.genderCode,
       required this.email,
       required this.phoneNo,
+      required this.age,
       required this.totalHousehold,
       required this.occupationTypeCode,
       required this.maritalStatusCode,
@@ -67,6 +69,7 @@ class OwnerInputModel {
     String? totalHousehold,
     String? email,
     String? phoneNo,
+    String? age,
     String? occupationTypeCode,
     String? maritalStatusCode,
     String? isOku,
@@ -94,6 +97,7 @@ class OwnerInputModel {
       totalHousehold: totalHousehold ?? this.totalHousehold,
       email: email ?? this.email,
       phoneNo: phoneNo ?? this.phoneNo,
+      age: age ?? this.age,
       occupationTypeCode: occupationTypeCode ?? this.occupationTypeCode,
       maritalStatusCode: maritalStatusCode ?? this.maritalStatusCode,
       isOku: isOku ?? this.isOku,
@@ -120,11 +124,11 @@ class OwnerInputModel {
       'isNotOwner': isNotOwner,
       'name': name,
       'icNo': icNo,
+      'email': email,
+      'phoneNo': phoneNo,
       'raceCode': raceCode,
       'genderCode': genderCode,
       'totalHousehold': totalHousehold,
-      'email': email,
-      'phoneNo': phoneNo,
       'occupationTypeCode': occupationTypeCode,
       'maritalStatusCode': maritalStatusCode,
       'isOku': isOku,
@@ -154,6 +158,7 @@ class OwnerInputModel {
       totalHousehold: json['totalHousehold'] as String,
       email: json['email'] as String,
       phoneNo: json['phoneNo'] as String,
+      age: json['age'] as String,
       isOku: json['isOku'] as String,
       workAddress: json['workAddress'] as String,
       workSalary: json['workSalary'] as String,
@@ -183,6 +188,7 @@ class OwnerInputModel {
       totalHousehold: totalHousehold,
       email: email,
       phoneNo: phoneNo,
+      age: age,
       occupationTypeCode: occupationTypeCode,
       maritalStatusCode: maritalStatusCode,
       isOku: isOku,

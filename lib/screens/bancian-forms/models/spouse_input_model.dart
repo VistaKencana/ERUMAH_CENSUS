@@ -1,62 +1,66 @@
 import 'dart:typed_data';
 
 class SpouseInputModel {
-  final String censusCode;
-  final String icNo;
-  final String name;
-  final String email;
-  final String phoneNo;
-  final String totalHousehold;
-  final String healthLevelCode;
-  final String workAddress;
-  final String workSalary;
-  final String workAllowance;
-  final String workOtherIncome;
-  final String welfareAid;
-  final String genderCode;
-  final String raceCode;
-  final String occupationTypeCode;
-  final String maritalStatusCode;
+  final String? censusCode;
+  final String? icNo;
+  final String? name;
+  final String? email;
+  final String? phoneNo;
+  final String? age;
+  final String? totalHousehold;
+  final String? healthLevelCode;
+  final String? workAddress;
+  final String? workSalary;
+  final String? workAllowance;
+  final String? workOtherIncome;
+  final String? welfareAid;
+  final String? genderCode;
+  final String? raceCode;
+  final String? occupationTypeCode;
+  final String? maritalStatusCode;
   final String isOku;
+  final String isAlive;
   final Uint8List? uploadIncome;
   final Uint8List? uploadIcFront;
   final Uint8List? uploadIcBack;
   final Uint8List? uploadOkuCard;
   //dd (optional)
-  String raceDesc;
-  String genderDesc;
-  String occupationTypeDesc;
-  String maritalStatusDesc;
-  String healthLevelDesc;
+  String? raceDesc;
+  String? genderDesc;
+  String? occupationTypeDesc;
+  String? maritalStatusDesc;
+  String? healthLevelDesc;
 
   SpouseInputModel({
-    required this.censusCode,
-    required this.icNo,
-    required this.name,
-    required this.email,
-    required this.phoneNo,
-    required this.totalHousehold,
-    required this.healthLevelCode,
-    required this.workAddress,
-    required this.workSalary,
-    required this.workAllowance,
-    required this.workOtherIncome,
-    required this.welfareAid,
-    required this.genderCode,
-    required this.raceCode,
-    required this.occupationTypeCode,
-    required this.maritalStatusCode,
-    required this.isOku,
+    this.censusCode,
+    this.icNo,
+    this.name,
+    this.email,
+    this.phoneNo,
+    this.age,
+    this.totalHousehold,
+    this.healthLevelCode,
+    this.workAddress,
+    this.workSalary,
+    this.workAllowance,
+    this.workOtherIncome,
+    this.welfareAid,
+    this.genderCode,
+    this.raceCode,
+    this.occupationTypeCode,
+    this.maritalStatusCode,
+    this.isOku = "0",
+    this.isAlive = "1",
     this.uploadIncome,
     this.uploadIcFront,
     this.uploadIcBack,
     this.uploadOkuCard,
     //dd (optional)
-    required this.raceDesc,
-    required this.genderDesc,
-    required this.maritalStatusDesc,
-    required this.occupationTypeDesc,
-    required this.healthLevelDesc,
+    this.raceDesc,
+    this.genderDesc,
+    this.maritalStatusDesc,
+    this.occupationTypeDesc,
+    this.healthLevelDesc,
   });
 
   SpouseInputModel copyWith({
@@ -65,6 +69,7 @@ class SpouseInputModel {
     String? name,
     String? email,
     String? phoneNo,
+    String? age,
     String? totalHousehold,
     String? healthLevelCode,
     String? workAddress,
@@ -77,6 +82,7 @@ class SpouseInputModel {
     String? occupationTypeCode,
     String? maritalStatusCode,
     String? isOku,
+    String? isAlive,
     Uint8List? uploadIncome,
     Uint8List? uploadIcFront,
     Uint8List? uploadIcBack,
@@ -93,6 +99,7 @@ class SpouseInputModel {
       name: name ?? this.name,
       email: email ?? this.email,
       phoneNo: phoneNo ?? this.phoneNo,
+      age: age ?? this.age,
       totalHousehold: totalHousehold ?? this.totalHousehold,
       healthLevelCode: healthLevelCode ?? this.healthLevelCode,
       workAddress: workAddress ?? this.workAddress,
@@ -105,6 +112,7 @@ class SpouseInputModel {
       occupationTypeCode: occupationTypeCode ?? this.occupationTypeCode,
       maritalStatusCode: maritalStatusCode ?? this.maritalStatusCode,
       isOku: isOku ?? this.isOku,
+      isAlive: isAlive ?? this.isAlive,
       uploadIncome: uploadIncome ?? this.uploadIncome,
       uploadIcFront: uploadIcFront ?? this.uploadIcFront,
       uploadIcBack: uploadIcBack ?? this.uploadIcBack,
@@ -119,22 +127,23 @@ class SpouseInputModel {
 
   Map<String, String> toJson() {
     return {
-      'censusCode': censusCode,
-      'icNo': icNo,
-      'name': name,
-      'email': email,
-      'phoneNo': phoneNo,
-      'totalHousehold': totalHousehold,
-      'healthLevelCode': healthLevelCode,
-      'workAddress': workAddress,
-      'workSalary': workSalary,
-      'workAllowance': workAllowance,
-      'workOtherIncome': workOtherIncome,
-      'welfareAid': welfareAid,
-      'genderCode': genderCode,
-      'raceCode': raceCode,
-      'occupationTypeCode': occupationTypeCode,
-      'maritalStatusCode': maritalStatusCode,
+      'censusCode': censusCode ?? "",
+      'icNo': icNo ?? "",
+      'name': name ?? "",
+      'email': email ?? "",
+      'phoneNo': phoneNo ?? "",
+      'isAlive': isAlive,
+      'totalHousehold': totalHousehold ?? "",
+      'healthLevelCode': healthLevelCode ?? "",
+      'workAddress': workAddress ?? "",
+      'workSalary': workSalary ?? "",
+      'workAllowance': workAllowance ?? "",
+      'workOtherIncome': workOtherIncome ?? "",
+      'welfareAid': welfareAid ?? "",
+      'genderCode': genderCode ?? "",
+      'raceCode': raceCode ?? "",
+      'occupationTypeCode': occupationTypeCode ?? "",
+      'maritalStatusCode': maritalStatusCode ?? "",
       'isOku': isOku,
     };
   }
@@ -156,6 +165,7 @@ class SpouseInputModel {
       name: json['name'] as String,
       email: json['email'] as String,
       phoneNo: json['phoneNo'] as String,
+      age: json['age'] as String,
       totalHousehold: json['totalHousehold'] as String,
       healthLevelCode: json['healthLevelCode'] as String,
       workAddress: json['workAddress'] as String,
@@ -173,6 +183,7 @@ class SpouseInputModel {
       maritalStatusDesc: json['maritalStatusDesc'] as String,
       healthLevelDesc: json['healthLevelDesc'] as String,
       isOku: json['isOku'] as String,
+      isAlive: json['isAlive'] as String,
     );
   }
 }

@@ -16,6 +16,7 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
     on<SavePasanganData>(_onSavePasanganData);
   }
 
+  String censusCode = "";
   final repo = ApplicationRepository();
   final applog = const AppLog(classname: "PasanganBloc");
   ResidentInfoData unitData = ResidentInfoData();
@@ -29,6 +30,7 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
     if (data.isNotEmpty) {
       existData.addAll(data.map((e) => SpouseInputModel.fromJson(e)).toList());
     }
+    censusCode = event.censusCode;
     applog.logDebug(
         tag: "_onSetPasanganData", msg: "Pasangan: ${existData.length}");
     emit(PasanganLoaded(spouseData: existData));
@@ -41,8 +43,21 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
         tag: "Select Spouse", msg: selectedSpouse!.toJson().toString());
   }
 
+  addNewPasangan() {
+    selectedSpouse = SpouseInputModel(censusCode: censusCode);
+    applog.logDebug(
+        tag: "Add Spouse", msg: selectedSpouse!.toJson().toString());
+  }
+
   _onSavePasanganData(
       SavePasanganData event, Emitter<PasanganState> emit) async {
+    var origin = selectedSpouse!.toJson().toString();
+    var newData = event.data.toJson().toString();
+    if (origin.contains(newData)) {
+      emit(const PasanganNoChanges(msg: "Tiada Perubahan Dibuat"));
+      emit(PasanganLoaded(spouseData: existData));
+      return;
+    }
     emit(PasanganLoading());
     applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
     try {

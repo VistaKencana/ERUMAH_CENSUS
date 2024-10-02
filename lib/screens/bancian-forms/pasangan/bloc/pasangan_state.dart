@@ -24,3 +24,9 @@ final class PasanganError extends PasanganState {
 
   const PasanganError({required this.msg});
 }
+
+class PasanganNoChanges extends PasanganState {
+  final String msg;
+
+  const PasanganNoChanges({required this.msg});
+}

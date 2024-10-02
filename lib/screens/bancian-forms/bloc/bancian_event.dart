@@ -9,6 +9,10 @@ sealed class BancianEvent extends Equatable {
 
 class SetBancianData extends BancianEvent {
   final ResidentInfoData data;
+  final String censusCode;
 
-  const SetBancianData({required this.data});
+  const SetBancianData({
+    required this.data,
+    required this.censusCode,
+  });
 }

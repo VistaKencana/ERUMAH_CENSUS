@@ -142,7 +142,10 @@ class ResidentInfoData {
       'totalHousehold': owner?.totalHousehold,
       'email': owner?.email,
       'phoneNo': owner?.phoneNo,
-      'isOku': owner?.isOku,
+      "age": owner?.age,
+      'isOku': (owner?.isOku == null || (owner?.isOku?.isEmpty ?? true))
+          ? "0"
+          : owner?.isOku,
       'workAddress': owner?.occupation?.workplace?.address,
       'workSalary': owner?.income?.basicSalary,
       'workAllowance': owner?.income?.allowance,
@@ -171,7 +174,7 @@ class ResidentInfoData {
     return dependants?.others == null || (dependants?.others?.isEmpty ?? true)
         ? <Map<String, dynamic>>[]
         : List<Map<String, dynamic>>.from(
-            dependants!.others!.map((x) => x.toJson()));
+            dependants!.others!.map((x) => x.toDepandantJson()));
   }
 
   List<Map<String, dynamic>> toListSpouseJson() {
@@ -230,7 +233,7 @@ class SpouseData {
   String? email;
   String? age;
   String? phoneNo;
-  String? isDead;
+  String? isAlive;
 
   GeneralData? race;
   GeneralData? gender;
@@ -245,7 +248,7 @@ class SpouseData {
     this.email,
     this.age,
     this.phoneNo,
-    this.isDead,
+    this.isAlive,
     this.race,
     this.gender,
     this.healthLevel,
@@ -261,7 +264,7 @@ class SpouseData {
     String? email,
     String? age,
     String? phoneNo,
-    String? isDead,
+    String? isAlive,
     GeneralData? race,
     GeneralData? gender,
     GeneralData? healthLevel,
@@ -275,7 +278,7 @@ class SpouseData {
         email: email ?? this.email,
         age: age ?? this.age,
         phoneNo: phoneNo ?? this.phoneNo,
-        isDead: isDead ?? this.isDead,
+        isAlive: isAlive ?? this.isAlive,
         race: race ?? this.race,
         gender: gender ?? this.gender,
         healthLevel: healthLevel ?? this.healthLevel,
@@ -290,7 +293,7 @@ class SpouseData {
         email: json["email"],
         age: json["age"],
         phoneNo: json["phoneNo"],
-        isDead: json["isDead"],
+        isAlive: json["isAlive"],
         race: json["race"] == null ? null : GeneralData.fromJson(json["race"]),
         gender: json["gender"] == null
             ? null
@@ -312,7 +315,7 @@ class SpouseData {
         "email": email,
         "age": age,
         "phoneNo": phoneNo,
-        "isDead": isDead,
+        "isAlive": isAlive,
         "race": race?.toJson(),
         "gender": gender?.toJson(),
         "healthLevel": healthLevel?.toJson(),
@@ -328,6 +331,7 @@ class SpouseData {
       'icNo': icNo,
       'name': name,
       'email': email,
+      "age": age,
       "phoneNo": phoneNo,
       'totalHousehold': totalHousehold,
       'healthLevelCode': healthLevel?.code ?? "",
@@ -345,7 +349,9 @@ class SpouseData {
       'occupationTypeCode': occupation?.typeCode ?? "",
       'maritalStatusCode': "",
       'maritalStatusDesc': "",
-      'isOku': isOku,
+      'isOku': (isOku == null || (isOku?.isEmpty ?? true)) ? "0" : isOku,
+      'isAlive':
+          (isAlive == null || (isAlive?.isEmpty ?? true)) ? "1" : isAlive,
     };
   }
 }
@@ -444,6 +450,8 @@ class DependantsData {
       'icNo': icNo,
       'name': name,
       'email': email,
+      "age": age,
+      "phoneNo": phoneNo,
       'relationshipCode': relationship?.code ?? "",
       'relationshipDesc': relationship?.desc ?? "",
       'healthLevelCode': healthLevel?.code ?? "",
@@ -452,7 +460,7 @@ class DependantsData {
       'genderDesc': gender?.desc ?? "",
       'raceCode': race?.code ?? "",
       'raceDesc': race?.desc ?? "",
-      'isOku': isOku ?? "0",
+      'isOku': (isOku == null || (isOku?.isEmpty ?? true)) ? "0" : isOku,
     };
   }
 }

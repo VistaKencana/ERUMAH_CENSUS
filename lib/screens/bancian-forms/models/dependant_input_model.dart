@@ -5,6 +5,8 @@ class DependantInputModel {
   final String icNo;
   final String name;
   final String email;
+  final String phoneNo;
+  final String age;
   final String relationshipCode;
   final String relationshipDesc;
   final String healthLevelCode;
@@ -24,6 +26,8 @@ class DependantInputModel {
     required this.icNo,
     required this.name,
     required this.email,
+    required this.phoneNo,
+    required this.age,
     required this.relationshipCode,
     required this.relationshipDesc,
     required this.healthLevelCode,
@@ -44,6 +48,8 @@ class DependantInputModel {
     String? icNo,
     String? name,
     String? email,
+    String? phoneNo,
+    String? age,
     String? relationshipCode,
     String? relationshipDesc,
     String? healthLevelCode,
@@ -63,6 +69,8 @@ class DependantInputModel {
       icNo: icNo ?? this.icNo,
       name: name ?? this.name,
       email: email ?? this.email,
+      phoneNo: phoneNo ?? this.phoneNo,
+      age: age ?? this.age,
       relationshipCode: relationshipCode ?? this.relationshipCode,
       relationshipDesc: relationshipDesc ?? this.relationshipDesc,
       healthLevelCode: healthLevelCode ?? this.healthLevelCode,
@@ -84,6 +92,7 @@ class DependantInputModel {
       'censusCode': censusCode,
       'icNo': icNo,
       'name': name,
+      'phoneNo': phoneNo,
       'email': email,
       'relationshipCode': relationshipCode,
       'healthLevelCode': healthLevelCode,
@@ -109,6 +118,8 @@ class DependantInputModel {
       icNo: json['icNo'] ?? "",
       name: json['name'] ?? "",
       email: json['email'] ?? "",
+      phoneNo: json['phoneNo'] ?? "",
+      age: json['age'] ?? "",
       relationshipCode: json['relationshipCode'] ?? "",
       relationshipDesc: json['relationshipDesc'] ?? "",
       healthLevelCode: json['healthLevelCode'] ?? "",

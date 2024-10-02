@@ -21,4 +21,14 @@ class DependantLoading extends AnakTanggunganState {}
 
 class DependantSuccess extends AnakTanggunganState {}
 
-class DependantError extends AnakTanggunganState {}
+class DependantError extends AnakTanggunganState {
+  final String msg;
+
+  const DependantError({required this.msg});
+}
+
+class DependantNoChanges extends AnakTanggunganState {
+  final String msg;
+
+  const DependantNoChanges({required this.msg});
+}

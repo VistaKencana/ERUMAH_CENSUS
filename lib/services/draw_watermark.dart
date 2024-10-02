@@ -26,10 +26,11 @@ class DrawWatermark {
   }
 
   ///Note: [onRunDraw] Running on Isolate.run
-  static Future<Uint8List> onRunDraw({required Uint8List bytes}) async {
+  static Future<Uint8List> onRunDraw(
+      {required Uint8List bytes, required String text}) async {
     //The insideFont variable is declare inside function to fix the LateInitializationError
     final insideFont = _bitMapFont;
-    return await Isolate.run(() async => bgProcessImg(bytes, insideFont));
+    return await Isolate.run(() async => bgProcessImg(bytes, insideFont, text));
   }
 
   ///Note: [onSpawnDraw] Running on Isolate.spawn
@@ -63,23 +64,40 @@ class DrawWatermark {
   }
 
 /*FUNCTION TO RUN*/
-  static Future<Uint8List> bgProcessImg(
-      Uint8List bytes, imag.BitmapFont bitmap) async {
+  static Future<Uint8List> bgProcessImg(Uint8List bytes, imag.BitmapFont bitmap,
+      [String? textVal, WatermarkSize size = WatermarkSize.small]) async {
     imag.Image imgs = imag.decodeImage(bytes)!;
-    // final text = DateTime.now().toString();
+
+    // Resize the image to the specified dimensions
+    final resizedImage = imag.copyResize(imgs,
+        width: size.dimensionWidth, height: size.dimensionHeight);
+
+    // Get the current timestamp for the watermark
     final now = DateTime.now();
     final text = DateFormat('yyyy-MM-dd  hh:mm:ss a').format(now);
 
-    final imgWidth = imgs.width;
-    final imgHeight = imgs.height;
+    final imgWidth = resizedImage.width;
+    final imgHeight = resizedImage.height;
 
+    // Position the text in the bottom area of the resized image
     final x = (imgWidth ~/ 5);
-    final y = imgHeight - 150;
+    final y = imgHeight - 180;
 
-    final drawImg = imag.drawString(imgs, text,
-        font: bitmap, color: _bgGetColor(), x: x, y: y);
-    final bmp = imag.encodeBmp(drawImg);
+    // New text, if passed in, otherwise use the default text
+    final newText = textVal ?? "";
 
+    // Draw the watermark text onto the resized image
+    imag.drawString(
+      resizedImage,
+      "$text\n$newText",
+      font: bitmap, // Use the specified bitmap font (arial48)
+      color: _bgGetColor(), // Use white or another color
+      x: x,
+      y: y,
+    );
+
+    // Encode the image as JPEG or BMP and return it
+    final bmp = imag.encodeBmp(resizedImage);
     return Uint8List.fromList(bmp);
   }
 
@@ -103,4 +121,18 @@ enum OpenSansFont {
 
   final String path;
   const OpenSansFont({required this.path});
+}
+
+enum WatermarkSize {
+  extraSmall(dimensionWidth: 2160, dimensionHeight: 3840),
+  small(dimensionWidth: 1440, dimensionHeight: 2560),
+  medium(dimensionWidth: 1080, dimensionHeight: 1920),
+  large(dimensionWidth: 720, dimensionHeight: 1280),
+  extraLarge(dimensionWidth: 540, dimensionHeight: 960),
+  ;
+
+  final int dimensionWidth;
+  final int dimensionHeight;
+  const WatermarkSize(
+      {required this.dimensionWidth, required this.dimensionHeight});
 }
