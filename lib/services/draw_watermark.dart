@@ -97,8 +97,10 @@ class DrawWatermark {
     );
 
     // Encode the image as JPEG or BMP and return it
-    final bmp = imag.encodeBmp(resizedImage);
-    return Uint8List.fromList(bmp);
+    // final bmp = imag.encodeBmp(resizedImage);
+    // return Uint8List.fromList(bmp);
+    final jpg = imag.encodeJpg(resizedImage);
+    return Uint8List.fromList(jpg);
   }
 
   static imag.Color _bgGetColor([Color color = Colors.white]) =>

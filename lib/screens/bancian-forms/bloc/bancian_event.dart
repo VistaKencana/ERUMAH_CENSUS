@@ -16,3 +16,9 @@ class SetBancianData extends BancianEvent {
     required this.censusCode,
   });
 }
+
+class SaveBancianData extends BancianEvent {
+  final StatusInputModel data;
+
+  const SaveBancianData({required this.data});
+}

@@ -17,12 +17,14 @@ import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../components/borang_listtile.dart';
 import '../../components/bottombar_button.dart';
 import '../../components/custom_appbar.dart';
 import '../../config/constants/app_colors.dart';
+import '../../services/flushbar/custom_flushbar.dart';
 import 'bancian_image_preview.dart';
 
 class BancianMainScreen extends StatefulWidget {
@@ -37,6 +39,9 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
   late DropdownBloc _dropdownBloc;
   late BancianBloc _bancianBloc;
   late StatusInputModel statusData;
+  final statusCtrl = TextEditingController();
+  final remarkCtrl = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -88,185 +93,223 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
           centerTitle: false,
           onPressedBack: _onPop,
         ),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Visibility(
-                  visible: _isNewForm(),
-                  child: Chip(
-                    label: Text(
-                      "Borang Baharu",
-                      style: appTextStyle(size: 14, color: Colors.white),
-                    ),
-                    side: BorderSide.none,
-                    shape: const StadiumBorder(),
-                    color: const WidgetStatePropertyAll(Colors.blue),
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(vertical: 12),
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          const Icon(Icons.location_on),
-                          Text(
-                            _bancianBloc.unitData.unit?.housingProject?.desc ??
-                                "-",
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(width: size.width * .1),
-                          Text(
-                            "Unit No:${_bancianBloc.unitData.unit?.no ?? "-"}",
-                            style:
-                                TextStyle(color: AppColors.dimmedPurple.color),
-                          )
-                        ],
+        body: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Visibility(
+                    visible: _isNewForm(),
+                    child: Chip(
+                      label: Text(
+                        "Borang Baharu",
+                        style: appTextStyle(size: 14, color: Colors.white),
                       ),
-                      // const SizedBox(height: 10),
-                      // const Text("Lawatan 2"),
-                    ],
-                  ),
-                ),
-                _borangTile(
-                    label: "Maklumat Penghuni",
-                    screen: PenghuniForm(
-                        isNewForm: widget.isNewForm,
-                        imgs: statusData.getFiles())),
-                // screen: PenghuniForm(isEdit: widget.isEdit)),
-                _borangTile(
-                    label: "Maklumat Pasangan", screen: const PasanganForm()),
-                // _borangTile(
-                //     label: "Maklumat Pendapatan",
-                //     screen: const PendapatanForm()),
-                _borangTile(
-                    label: "Maklumat Anak & Tanggungan",
-                    screen: const TanggunganForm()),
-                _gap(size: 20),
-                _section("Cap Jari"),
-                SectionContainer(
-                  border: Border.all(color: Colors.grey),
-                  padding: EdgeInsets.zero,
-                  margin: EdgeInsets.zero,
-                  child: ListTile(
-                    tileColor: Colors.white,
-                    leading: const Icon(Icons.fingerprint),
-                    title: const Text("Sahkan Cap Jari"),
-                    onTap: () => _go(const BancianFingerprint()),
-                  ),
-                ),
-                _gap(),
-                _section("Status Bancian"),
-                // const BancianStatusField(
-                //   initialVal: "Bancian Berjaya",
-                // ),
-                BlocListener<DropdownBloc, DropdownState>(
-                  listener: (context, state) {
-                    if (state is DropdownSuccess) {
-                      if (state.type == DdType.censusStatus) {
-                        setState(() {});
-                        CustomDropdownSheet(
-                          label: "Pilih status",
-                          items: state.data,
-                          // onFindGroupValue: (data) {
-                          //   return data.where((val) {
-                          //     var a = val?.desc
-                          //             ?.toLowerCase()
-                          //             .contains("selesai") ??
-                          //         false;
-                          //     return a;
-                          //   }).firstOrNull;
-                          // },
-                          getTitle: (data) => data?.desc ?? "-",
-                          onChange: (val) {},
-                        ).show(context);
-                      }
-                    }
-                  },
-                  child: CustomTextField(
-                    hintText: "Pilih status",
-                    readOnly: true,
-                    suffixIcon: Icons.arrow_drop_down,
-                    onTap: () {
-                      _dropdownBloc.add(
-                          const FetchDdFormData(type: DdType.censusStatus));
-                    },
-                  ),
-                ),
-
-                _gap(),
-                _section("Gambar"),
-                SectionContainer(
-                  border: Border.all(color: Colors.grey),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                  margin: const EdgeInsets.only(top: 5),
-                  child: SizedBox(
-                    height: 100,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children:
-                          List.generate(statusData.getFiles().length, (index) {
-                        return GestureDetector(
-                          onTap: () {
-                            BancianImagePreview(
-                              title: "Gambar ${index + 1}",
-                              image: statusData.getFiles()[index],
-                              canDelete: false,
-                              onDelete: () {
-                                setState(() =>
-                                    statusData.getFiles().removeAt(index));
-                                Navigator.pop(context);
-                              },
-                            ).show(context);
-                          },
-                          child: Container(
-                              width: 120,
-                              height: 100,
-                              margin: const EdgeInsets.only(right: 12),
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Image.memory(
-                                statusData.getFiles()[index],
-                                fit: BoxFit.fill,
-                              )),
-                        );
-                      }),
+                      side: BorderSide.none,
+                      shape: const StadiumBorder(),
+                      color: const WidgetStatePropertyAll(Colors.blue),
                     ),
                   ),
-                ),
-                _gap(),
-                _section("Catatan"),
-                const CustomFormField(
-                  maxLines: 3,
-                  hintText: "Sila tulis catatan",
-                  contentPadding:
-                      EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
-                ),
-                _gap(size: 20),
-              ],
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            const Icon(Icons.location_on),
+                            Text(
+                              _bancianBloc
+                                      .unitData.unit?.housingProject?.desc ??
+                                  "-",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(width: size.width * .1),
+                            Text(
+                              "Unit No:${_bancianBloc.unitData.unit?.no ?? "-"}",
+                              style: TextStyle(
+                                  color: AppColors.dimmedPurple.color),
+                            )
+                          ],
+                        ),
+                        // const SizedBox(height: 10),
+                        // const Text("Lawatan 2"),
+                      ],
+                    ),
+                  ),
+                  _borangTile(
+                      label: "Maklumat Penghuni",
+                      screen: PenghuniForm(
+                          isNewForm: widget.isNewForm,
+                          imgs: statusData.getFiles())),
+                  _borangTile(
+                      label: "Maklumat Pasangan", screen: const PasanganForm()),
+                  _borangTile(
+                      label: "Maklumat Anak & Tanggungan",
+                      screen: const TanggunganForm()),
+                  _gap(size: 20),
+                  _section("Cap Jari"),
+                  SectionContainer(
+                    border: Border.all(color: Colors.grey),
+                    padding: EdgeInsets.zero,
+                    margin: EdgeInsets.zero,
+                    child: ListTile(
+                      tileColor: Colors.white,
+                      leading: const Icon(Icons.fingerprint),
+                      title: const Text("Sahkan Cap Jari"),
+                      onTap: () => _go(const BancianFingerprint()),
+                    ),
+                  ),
+                  _gap(),
+                  _section("Status Bancian"),
+                  BlocListener<DropdownBloc, DropdownState>(
+                    listener: (context, state) {
+                      if (state is DropdownSuccess) {
+                        if (state.type == DdType.censusStatus) {
+                          setState(() {});
+                          CustomDropdownSheet(
+                            label: "Pilih status",
+                            items: state.data,
+                            onFindGroupValue: (data) {
+                              return data.where((val) {
+                                var a = val?.code?.contains(
+                                        statusData.statusCode ?? "*_*") ??
+                                    false;
+                                return a;
+                              }).firstOrNull;
+                            },
+                            getTitle: (data) => data?.desc ?? "-",
+                            onChange: (val) {
+                              if (val == null) return;
+                              statusData =
+                                  statusData.copyWith(statusCode: val.code);
+                              statusCtrl.text = val.desc ?? "";
+                            },
+                          ).show(context);
+                        }
+                      }
+                    },
+                    child: CustomTextField(
+                      hintText: "Pilih status",
+                      readOnly: true,
+                      controller: statusCtrl,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return '';
+                        return null;
+                      },
+                      suffixIcon: Icons.arrow_drop_down,
+                      onTap: () {
+                        _dropdownBloc.add(
+                            const FetchDdFormData(type: DdType.censusStatus));
+                      },
+                    ),
+                  ),
+                  _gap(),
+                  _section("Gambar"),
+                  SectionContainer(
+                    border: Border.all(color: Colors.grey),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                    margin: const EdgeInsets.only(top: 5),
+                    child: SizedBox(
+                      height: 100,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: List.generate(statusData.getFiles().length,
+                            (index) {
+                          return GestureDetector(
+                            onTap: () {
+                              BancianImagePreview(
+                                title: "Gambar ${index + 1}",
+                                image: statusData.getFiles()[index],
+                                canDelete: false,
+                                onDelete: () {
+                                  setState(() =>
+                                      statusData.getFiles().removeAt(index));
+                                  Navigator.pop(context);
+                                },
+                              ).show(context);
+                            },
+                            child: Container(
+                                width: 120,
+                                height: 100,
+                                margin: const EdgeInsets.only(right: 12),
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Image.memory(
+                                  statusData.getFiles()[index],
+                                  fit: BoxFit.fill,
+                                )),
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+                  _gap(),
+                  _section("Catatan"),
+                  CustomFormField(
+                    maxLines: 3,
+                    controller: remarkCtrl,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return '';
+                      return null;
+                    },
+                    hintText: "Sila tulis catatan",
+                    contentPadding: const EdgeInsets.only(
+                        top: 10, left: 10, right: 10, bottom: 10),
+                  ),
+                  _gap(size: 20),
+                ],
+              ),
             ),
           ),
         ),
-        bottomNavigationBar: BottomBarButton(
-          title: "Selesai Bancian",
-          onTap: () {
-            _go(const BancianResult());
+        bottomNavigationBar: BlocListener<BancianBloc, BancianState>(
+          listener: (context, state) {
+            if (state is BancianLoading) {
+              EasyLoading.show();
+            } else if (state is BancianSuccess) {
+              EasyLoading.dismiss();
+              CustomFlushbar.of(context)
+                  .showSuccess(msg: "Berjaya menmyimpan data");
+              _go(const BancianResult());
+            } else if (state is BancianError) {
+              EasyLoading.dismiss();
+              CustomFlushbar.of(context).showFailed(msg: state.msg);
+            }
           },
+          child: BottomBarButton(
+            title: "Selesai Bancian",
+            onTap: () {
+              setState(() {
+                statusData = statusData.copyWith(
+                  remark: remarkCtrl.text,
+                );
+              });
+              //if add new data
+              if (formKey.currentState!.validate() == false) {
+                //Trigger if form is not validate
+                CustomFlushbar.of(context)
+                    .showWarning(msg: "Sila isi maklumat diperlukan");
+                return;
+              } else {
+                _bancianBloc.add(SaveBancianData(data: statusData));
+              }
+            },
+          ),
         ),
       )),
     );

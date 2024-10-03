@@ -3,16 +3,15 @@ import 'dart:typed_data';
 class StatusInputModel {
   String censusCode;
   String isFingerPrintVerified;
-  String statusCode;
-  String email;
+  String? statusCode;
+
   String remark;
   List<Uint8List> images;
 
   StatusInputModel({
     required this.censusCode,
-    required this.isFingerPrintVerified,
-    required this.statusCode,
-    required this.email,
+    this.isFingerPrintVerified = "0",
+    this.statusCode,
     required this.remark,
     this.images = const [],
   });
@@ -31,7 +30,6 @@ class StatusInputModel {
       isFingerPrintVerified:
           isFingerPrintVerified ?? this.isFingerPrintVerified,
       statusCode: statusCode ?? this.statusCode,
-      email: email ?? this.email,
       remark: remark ?? this.remark,
       images: images ?? this.images,
     );
@@ -42,8 +40,7 @@ class StatusInputModel {
     return {
       'censusCode': censusCode,
       'isFingerPrintVerified': isFingerPrintVerified,
-      'statusCode': statusCode,
-      'email': email,
+      'statusCode': statusCode ?? "",
       'remark': remark,
     };
   }
@@ -58,7 +55,6 @@ class StatusInputModel {
       censusCode: json['censusCode'] as String,
       isFingerPrintVerified: json['isFingerPrintVerified'] as String,
       statusCode: json['statusCode'] as String,
-      email: json['email'] as String,
       remark: json['remark'] as String,
     );
   }
