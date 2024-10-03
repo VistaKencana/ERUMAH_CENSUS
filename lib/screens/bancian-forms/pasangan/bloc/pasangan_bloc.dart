@@ -14,6 +14,7 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
   PasanganBloc() : super(PasanganInitial()) {
     on<SetPasanganData>(_onSetPasanganData);
     on<SavePasanganData>(_onSavePasanganData);
+    on<AddNewPasanganData>(_onAddNewPasanganData);
   }
 
   String censusCode = "";
@@ -65,12 +66,29 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
       applog.logDebug(tag: "_onSavePasanganData", msg: resp);
       existData[selectedIndex] = event.data;
       emit(PasanganSuccess());
-      emit(PasanganLoaded(spouseData: existData));
     } catch (e) {
       applog.logError(tag: "_onSavePasanganData", msg: e.toString());
       emit(PasanganError(msg: e.toString()));
-      emit(PasanganLoaded(spouseData: existData));
     } finally {
+      emit(PasanganLoaded(spouseData: existData));
+      EasyLoading.dismiss();
+    }
+  }
+
+  _onAddNewPasanganData(
+      AddNewPasanganData event, Emitter<PasanganState> emit) async {
+    emit(PasanganLoading());
+    applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
+    try {
+      final resp = await repo.storeSpouse(data: event.data);
+      applog.logDebug(tag: "_onAddNewPasanganData", msg: resp);
+      existData.add(event.data);
+      emit(PasanganSuccess());
+    } catch (e) {
+      applog.logError(tag: "_onAddNewPasanganData", msg: e.toString());
+      emit(PasanganError(msg: e.toString()));
+    } finally {
+      emit(PasanganLoaded(spouseData: existData));
       EasyLoading.dismiss();
     }
   }

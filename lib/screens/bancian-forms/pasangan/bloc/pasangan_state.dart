@@ -19,6 +19,8 @@ final class PasanganLoading extends PasanganState {}
 
 final class PasanganSuccess extends PasanganState {}
 
+final class PasanganSuccessAddNew extends PasanganState {}
+
 final class PasanganError extends PasanganState {
   final String msg;
 

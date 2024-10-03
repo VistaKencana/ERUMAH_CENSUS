@@ -1,20 +1,20 @@
 import 'dart:typed_data';
 
 class DependantInputModel {
-  final String censusCode;
-  final String icNo;
-  final String name;
-  final String email;
-  final String phoneNo;
-  final String age;
-  final String relationshipCode;
-  final String relationshipDesc;
-  final String healthLevelCode;
-  final String healthLevelDesc;
-  final String genderCode;
-  final String genderDesc;
-  final String raceCode;
-  final String raceDesc;
+  final String? censusCode;
+  final String? icNo;
+  final String? name;
+  final String? email;
+  final String? phoneNo;
+  final String? age;
+  final String? relationshipCode;
+  final String? relationshipDesc;
+  final String? healthLevelCode;
+  final String? healthLevelDesc;
+  final String? genderCode;
+  final String? genderDesc;
+  final String? raceCode;
+  final String? raceDesc;
   final String isOku;
   final Uint8List? uploadIncome;
   final Uint8List? uploadIcFront;
@@ -22,21 +22,21 @@ class DependantInputModel {
   final Uint8List? uploadOkuCard;
 
   DependantInputModel({
-    required this.censusCode,
-    required this.icNo,
-    required this.name,
-    required this.email,
-    required this.phoneNo,
-    required this.age,
-    required this.relationshipCode,
-    required this.relationshipDesc,
-    required this.healthLevelCode,
-    required this.healthLevelDesc,
-    required this.genderCode,
-    required this.genderDesc,
-    required this.raceCode,
-    required this.raceDesc,
-    required this.isOku,
+    this.censusCode,
+    this.icNo,
+    this.name,
+    this.email,
+    this.phoneNo,
+    this.age,
+    this.relationshipCode,
+    this.relationshipDesc,
+    this.healthLevelCode,
+    this.healthLevelDesc,
+    this.genderCode,
+    this.genderDesc,
+    this.raceCode,
+    this.raceDesc,
+    this.isOku = "0",
     this.uploadIncome,
     this.uploadIcFront,
     this.uploadIcBack,
@@ -89,15 +89,15 @@ class DependantInputModel {
 
   Map<String, String> toJson() {
     return {
-      'censusCode': censusCode,
-      'icNo': icNo,
-      'name': name,
-      'phoneNo': phoneNo,
-      'email': email,
-      'relationshipCode': relationshipCode,
-      'healthLevelCode': healthLevelCode,
-      'genderCode': genderCode,
-      'raceCode': raceCode,
+      'censusCode': censusCode ?? "",
+      'icNo': icNo ?? "",
+      'name': name ?? "",
+      'phoneNo': phoneNo ?? "",
+      'email': email ?? "",
+      'relationshipCode': relationshipCode ?? "",
+      'healthLevelCode': healthLevelCode ?? "",
+      'genderCode': genderCode ?? "",
+      'raceCode': raceCode ?? "",
       'isOku': isOku,
     };
   }

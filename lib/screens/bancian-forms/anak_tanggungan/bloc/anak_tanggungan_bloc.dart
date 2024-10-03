@@ -16,6 +16,8 @@ class AnakTanggunganBloc
     on<SetAnakTanggungData>(_onSetAnakTanggungData);
     on<SaveChildData>(_onSaveChildData);
     on<SaveOtherData>(_onSaveOtherData);
+    on<AddChildData>(_onAddChildData);
+    on<AddOtherData>(_onAddOtherData);
   }
 
   String censusCode = "";
@@ -80,6 +82,24 @@ class AnakTanggunganBloc
     }
   }
 
+  _onAddChildData(AddChildData event, Emitter<AnakTanggunganState> emit) async {
+    emit(DependantLoading());
+    applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
+    try {
+      final resp = await repo.storeDependant(data: event.data);
+      applog.logDebug(tag: "_onAddChildData", msg: resp);
+      existChild.add(event.data);
+      selectedData = event.data;
+      emit(DependantSuccessAddNew());
+    } catch (e) {
+      applog.logError(tag: "_onAddChildData", msg: e.toString());
+      emit(DependantError(msg: e.toString()));
+    } finally {
+      emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));
+      EasyLoading.dismiss();
+    }
+  }
+
   _onSaveOtherData(
       SaveOtherData event, Emitter<AnakTanggunganState> emit) async {
     var origin = selectedData!.toJson().toString();
@@ -106,10 +126,44 @@ class AnakTanggunganBloc
     }
   }
 
+  _onAddOtherData(AddOtherData event, Emitter<AnakTanggunganState> emit) async {
+    emit(DependantLoading());
+    applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
+    try {
+      final resp = await repo.storeDependant(data: event.data);
+      applog.logDebug(tag: "_onAddOtherData", msg: resp);
+      selectedData = event.data;
+      existOthers.add(event.data);
+      emit(DependantSuccessAddNew());
+    } catch (e) {
+      applog.logError(tag: "_onAddOtherData", msg: e.toString());
+      emit(DependantError(msg: e.toString()));
+    } finally {
+      emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));
+      EasyLoading.dismiss();
+    }
+  }
+
   selectDependant(DependantInputModel data, int index) {
     selectedData = data;
     selectedIndex = index;
     applog.logDebug(
         tag: "Select Dependant", msg: selectedData!.toJson().toString());
+  }
+
+  addNewChild() {
+    //Setting new object for new child
+    selectedData = DependantInputModel(
+        censusCode: censusCode,
+        relationshipCode: "RSP001",
+        relationshipDesc: "Anak");
+    applog.logDebug(tag: "Add Child", msg: selectedData!.toJson().toString());
+  }
+
+  addNewDependant() {
+    //Setting new object for new dependant
+    selectedData = DependantInputModel(censusCode: censusCode);
+    applog.logDebug(
+        tag: "Add Dependant", msg: selectedData!.toJson().toString());
   }
 }

@@ -21,6 +21,8 @@ class DependantLoading extends AnakTanggunganState {}
 
 class DependantSuccess extends AnakTanggunganState {}
 
+class DependantSuccessAddNew extends AnakTanggunganState {}
+
 class DependantError extends AnakTanggunganState {
   final String msg;
 

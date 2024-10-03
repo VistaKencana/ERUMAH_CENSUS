@@ -53,18 +53,21 @@ class _AnakModalState extends State<AnakModal> {
   final kesihatanCtrl = TextEditingController();
   final jantinaCtrl = TextEditingController();
   final bangsaCtrl = TextEditingController();
-
+  final formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
     _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
     _tanggunganBloc =
         BlocProvider.of<AnakTanggunganBloc>(context, listen: false);
-    dependantData = _tanggunganBloc.selectedData!.copyWith();
     initVal();
   }
 
   initVal() {
+    if (_isEdit()) {
+      _tanggunganBloc.addNewChild();
+    }
+    dependantData = _tanggunganBloc.selectedData!.copyWith();
     nameCtrl.text = setDataValue(dependantData?.name);
     icNoCtrl.text = setDataValue(dependantData?.icNo);
     emelCtrl.text = setDataValue(dependantData?.email);
@@ -82,138 +85,163 @@ class _AnakModalState extends State<AnakModal> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      expand: false,
-      initialChildSize: 0.94,
-      maxChildSize: 0.94,
-      builder: (context, sc) {
-        return Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius:
-                BorderRadiusDirectional.vertical(top: Radius.circular(16)),
-          ),
-          child: Scaffold(
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _header(),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        KadPengenalanTile(
-                          frontCard: dependantData?.uploadIcFront,
-                          onFrontCard: (bytes) {
-                            setState(() => frontCard = bytes);
-                          },
-                          backCard: dependantData?.uploadIcBack,
-                          onBackCard: (bytes) {
-                            setState(() => backCard = bytes);
-                          },
-                        ),
-                        const Divider(height: 0, indent: 20, endIndent: 20),
-                        _gap(height: 22),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _textField(
-                                  title: 'Nama Anak',
-                                  controller: nameCtrl,
-                                  width: double.infinity,
-                                  readOnly: _isReadOnly()),
-                              _gap(height: 14),
-                              TwoColumnForm(
-                                children: [
-                                  _dropdownHubungan(),
-                                  _textField(
-                                      title: 'No. Kad Pengenalan',
-                                      controller: icNoCtrl,
-                                      readOnly: _isReadOnly()),
-                                  _textField(
-                                      title: 'Emel', controller: emelCtrl),
-                                  _textField(
-                                      title: 'Umur(Tahun)',
-                                      controller: umurCtrl,
-                                      readOnly: _isReadOnly()),
-                                  _dropdownKesihatan(),
-                                  _textField(
-                                      title: 'No. Telefon',
-                                      controller: noTelCtrl,
-                                      readOnly: _isReadOnly()),
-                                  _dropdownJantina(),
-                                  _dropdownBangsa(),
-                                ],
-                              ),
-                              _gap(height: 14),
-                              DisabilityCheckbox(
-                                  initVal: (dependantData?.isOku == "1"),
-                                  onCheck: (val) {
-                                    setState(() {
-                                      dependantData = dependantData!
-                                          .copyWith(isOku: val ? "1" : "0");
-                                    });
-                                  }),
-                              Visibility(
-                                visible: (dependantData?.isOku == "1"),
-                                child: CardDisplay(
-                                  title: "",
-                                  img: dependantData?.uploadOkuCard,
-                                  onPicture: (bytes) => setState(() {
-                                    dependantData = dependantData!
-                                        .copyWith(uploadOkuCard: bytes);
-                                  }),
-                                ),
-                              ),
-                              const SizedBox(height: 10)
-                            ],
+    return Form(
+      key: formKey,
+      child: DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.94,
+        maxChildSize: 0.94,
+        builder: (context, sc) {
+          return Container(
+            clipBehavior: Clip.antiAlias,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius:
+                  BorderRadiusDirectional.vertical(top: Radius.circular(16)),
+            ),
+            child: Scaffold(
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _header(),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          KadPengenalanTile(
+                            frontCard: dependantData?.uploadIcFront,
+                            onFrontCard: (bytes) {
+                              setState(() => frontCard = bytes);
+                            },
+                            backCard: dependantData?.uploadIcBack,
+                            onBackCard: (bytes) {
+                              setState(() => backCard = bytes);
+                            },
                           ),
-                        ),
-                      ],
+                          const Divider(height: 0, indent: 20, endIndent: 20),
+                          _gap(height: 22),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _textField(
+                                    title: 'Nama Anak',
+                                    isMandatory: _isEdit(),
+                                    controller: nameCtrl,
+                                    width: double.infinity,
+                                    readOnly: _isReadOnly()),
+                                _gap(height: 14),
+                                TwoColumnForm(
+                                  children: [
+                                    if (!_isEdit()) _dropdownHubungan(),
+                                    _textField(
+                                        title: 'No. Kad Pengenalan',
+                                        controller: icNoCtrl,
+                                        isMandatory: _isEdit(),
+                                        readOnly: _isReadOnly()),
+                                    _textField(
+                                        title: 'Emel', controller: emelCtrl),
+                                    _textField(
+                                        title: 'Umur(Tahun)',
+                                        controller: umurCtrl,
+                                        readOnly: _isReadOnly()),
+                                    _dropdownKesihatan(),
+                                    _textField(
+                                        title: 'No. Telefon',
+                                        controller: noTelCtrl,
+                                        readOnly: _isReadOnly()),
+                                    _dropdownJantina(),
+                                    _dropdownBangsa(),
+                                  ],
+                                ),
+                                _gap(height: 14),
+                                DisabilityCheckbox(
+                                    initVal: (dependantData?.isOku == "1"),
+                                    onCheck: (val) {
+                                      setState(() {
+                                        dependantData = dependantData!
+                                            .copyWith(isOku: val ? "1" : "0");
+                                      });
+                                    }),
+                                Visibility(
+                                  visible: (dependantData?.isOku == "1"),
+                                  child: CardDisplay(
+                                    title: "",
+                                    img: dependantData?.uploadOkuCard,
+                                    onPicture: (bytes) => setState(() {
+                                      dependantData = dependantData!
+                                          .copyWith(uploadOkuCard: bytes);
+                                    }),
+                                  ),
+                                ),
+                                const SizedBox(height: 10)
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
+              bottomNavigationBar:
+                  BlocListener<AnakTanggunganBloc, AnakTanggunganState>(
+                listener: (context, state) {
+                  if (state is DependantNoChanges) {
+                    CustomFlushbar.of(context).showInfo(msg: state.msg);
+                  } else if (state is DependantLoading) {
+                    EasyLoading.show();
+                  } else if (state is DependantSuccess) {
+                    EasyLoading.dismiss();
+                    CustomFlushbar.of(context)
+                        .showSuccess(msg: "Berjaya menmyimpan data");
+                  } else if (state is DependantSuccessAddNew) {
+                    EasyLoading.dismiss();
+                    Navigator.pop(context);
+                    CustomFlushbar.of(context)
+                        .showSuccess(msg: "Berjaya menmyimpan data");
+                  } else if (state is DependantError) {
+                    EasyLoading.dismiss();
+                    CustomFlushbar.of(context).showFailed(msg: state.msg);
+                  }
+                },
+                child: BottomBarButton(
+                    onTap: () {
+                      setState(() {
+                        dependantData = dependantData!.copyWith(
+                            name: nameCtrl.text,
+                            icNo: icNoCtrl.text,
+                            email: emelCtrl.text,
+                            phoneNo: noTelCtrl.text,
+                            age: umurCtrl.text);
+                      });
+
+                      //if update data
+                      if (!_isEdit()) {
+                        _tanggunganBloc
+                            .add(SaveChildData(data: dependantData!));
+                        return;
+                      }
+                      //if add new data
+                      if (formKey.currentState!.validate() == false) {
+                        //Trigger if form is not validate
+                        CustomFlushbar.of(context)
+                            .showWarning(msg: "Sila isi maklumat diperlukan");
+                        return;
+                      } else {
+                        _tanggunganBloc.add(AddChildData(data: dependantData!));
+                      }
+                    },
+                    title: "Simpan"),
+              ),
             ),
-            bottomNavigationBar:
-                BlocListener<AnakTanggunganBloc, AnakTanggunganState>(
-              listener: (context, state) {
-                if (state is DependantNoChanges) {
-                  CustomFlushbar.of(context).showInfo(msg: state.msg);
-                } else if (state is DependantLoading) {
-                  EasyLoading.show();
-                } else if (state is DependantSuccess) {
-                  EasyLoading.dismiss();
-                  CustomFlushbar.of(context)
-                      .showSuccess(msg: "Berjaya menmyimpan data");
-                } else if (state is DependantError) {
-                  EasyLoading.dismiss();
-                  CustomFlushbar.of(context).showFailed(msg: state.msg);
-                }
-              },
-              child: BottomBarButton(
-                  onTap: () {
-                    setState(() {
-                      dependantData = dependantData!.copyWith(
-                          name: nameCtrl.text,
-                          icNo: icNoCtrl.text,
-                          email: emelCtrl.text,
-                          phoneNo: noTelCtrl.text,
-                          age: umurCtrl.text);
-                    });
-                    _tanggunganBloc.add(SaveChildData(data: dependantData!));
-                  },
-                  title: "Simpan"),
-            ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -245,7 +273,7 @@ class _AnakModalState extends State<AnakModal> {
   _gap({double height = 10}) => SizedBox(height: height);
   _textField(
       {required String title,
-      // String? initialValue,
+      bool isMandatory = false,
       bool readOnly = false,
       bool enableDropdown = true,
       TextEditingController? controller,
@@ -260,7 +288,13 @@ class _AnakModalState extends State<AnakModal> {
           child: CustomFormField(
             title: title,
             onChanged: onChanged,
-            controller: controller,
+            controller: controller, isMandatory: isMandatory,
+            validator: isMandatory
+                ? (value) {
+                    if (value == null || value.isEmpty) return '';
+                    return null;
+                  }
+                : null,
             onTap: () {
               if (onTap == null || !enableDropdown) return;
               onTap();
@@ -283,54 +317,19 @@ class _AnakModalState extends State<AnakModal> {
         title: title,
         onTap: onTap,
         controller: controller,
+        isMandatory: isMandatory,
+        validator: isMandatory
+            ? (value) {
+                if (value == null || value.isEmpty) return '';
+                return null;
+              }
+            : null,
         readOnly: readOnly,
         hintText: hintText,
         onChanged: onChanged,
-        // initialValue: _isEdit() ? "" : initialValue,
       ),
     );
   }
-  // _textField(
-  //     {required String title,
-  //     String? initialValue,
-  //     bool readOnly = false,
-  //     bool enableDropdown = true,
-  //     String? hintText,
-  //     double? width,
-  //     void Function()? onTap,
-  //     bool isDropdown = false}) {
-  //   if (isDropdown) {
-  //     return SizedBox(
-  //         width: width ?? MediaQuery.sizeOf(context).width * 0.4,
-  //         child: CustomFormField(
-  //           title: title,
-  //           onTap: () {
-  //             if (onTap == null || !enableDropdown) return;
-  //             onTap();
-  //           },
-  //           readOnly: true,
-  //           fillColor: Colors.white,
-  //           hintText: hintText,
-  //           initialValue: _isEdit() ? "" : initialValue,
-  //           suffixWidget: isDropdown
-  //               ? Icon(
-  //                   Icons.arrow_drop_down,
-  //                   color: readOnly ? Colors.grey : Colors.black,
-  //                 )
-  //               : null,
-  //         ));
-  //   }
-  //   return SizedBox(
-  //     width: width ?? MediaQuery.sizeOf(context).width * 0.4,
-  //     child: CustomFormField(
-  //       title: title,
-  //       onTap: onTap,
-  //       readOnly: readOnly,
-  //       hintText: hintText,
-  //       initialValue: _isEdit() ? "" : initialValue,
-  //     ),
-  //   );
-  // }
 
   _dropdownHubungan() {
     return BlocListener<DropdownBloc, DropdownState>(
@@ -342,8 +341,8 @@ class _AnakModalState extends State<AnakModal> {
               items: state.data,
               onFindGroupValue: (data) {
                 return data.where((val) {
-                  var a = val?.code
-                          ?.contains(dependantData?.relationshipCode ?? "") ??
+                  var a = val?.code?.contains(
+                          dependantData?.relationshipCode ?? "*_*") ??
                       false;
                   return a;
                 }).firstOrNull;
@@ -363,6 +362,7 @@ class _AnakModalState extends State<AnakModal> {
         title: 'Hubungan Dengan Penyewa',
         isDropdown: true,
         readOnly: _isReadOnly(),
+        isMandatory: _isEdit(),
         controller: hubunganCtrl,
         enableDropdown: _isEdit(),
         onTap: () {
@@ -383,7 +383,7 @@ class _AnakModalState extends State<AnakModal> {
               onFindGroupValue: (data) {
                 return data.where((val) {
                   var a = val?.code
-                          ?.contains(dependantData?.healthLevelCode ?? "") ??
+                          ?.contains(dependantData?.healthLevelCode ?? "*_*") ??
                       false;
                   return a;
                 }).firstOrNull;
@@ -401,6 +401,7 @@ class _AnakModalState extends State<AnakModal> {
       },
       child: _textField(
           title: 'Tahap Kesihatan',
+          isMandatory: _isEdit(),
           isDropdown: true,
           onTap: () {
             _dropdownBloc.add(const FetchDdFormData(type: DdType.healthLevel));
@@ -420,7 +421,7 @@ class _AnakModalState extends State<AnakModal> {
               onFindGroupValue: (data) {
                 return data.where((val) {
                   var a =
-                      val?.code?.contains(dependantData?.genderCode ?? "") ??
+                      val?.code?.contains(dependantData?.genderCode ?? "*_*") ??
                           false;
                   return a;
                 }).firstOrNull;
@@ -439,6 +440,7 @@ class _AnakModalState extends State<AnakModal> {
       child: _textField(
         title: 'Jantina',
         controller: jantinaCtrl,
+        isMandatory: _isEdit(),
         readOnly: _isReadOnly(),
         enableDropdown: _isEdit(),
         isDropdown: true,
@@ -459,8 +461,9 @@ class _AnakModalState extends State<AnakModal> {
               items: state.data,
               onFindGroupValue: (data) {
                 return data.where((val) {
-                  var a = val?.code?.contains(dependantData?.raceCode ?? "") ??
-                      false;
+                  var a =
+                      val?.code?.contains(dependantData?.raceCode ?? "*_*") ??
+                          false;
                   return a;
                 }).firstOrNull;
               },
@@ -478,6 +481,7 @@ class _AnakModalState extends State<AnakModal> {
       child: _textField(
         title: 'Bangsa',
         controller: bangsaCtrl,
+        isMandatory: _isEdit(),
         readOnly: _isReadOnly(),
         enableDropdown: _isEdit(),
         isDropdown: true,

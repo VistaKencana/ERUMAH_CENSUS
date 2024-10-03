@@ -85,7 +85,7 @@ class _TanggunganFormState extends State<TanggunganForm> {
                           state.childData.length,
                           (index) => _customTile(
                                 title: "Anak ${index + 1}",
-                                name: state.childData[index].name,
+                                name: state.childData[index].name ?? "",
                                 onTap: () {
                                   _tanggunganBloc.selectDependant(
                                       state.childData[index], index);
@@ -139,7 +139,7 @@ class _TanggunganFormState extends State<TanggunganForm> {
                           (index) => _customTile(
                                 isAnak: false,
                                 title: "Tanggungan ${index + 1}",
-                                name: state.otherData[index].name,
+                                name: state.otherData[index].name ?? "",
                                 onTap: () {
                                   _tanggunganBloc.selectDependant(
                                       state.otherData[index], index);

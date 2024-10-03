@@ -12,7 +12,6 @@ import 'package:eperumahan_bancian/data/api/repositories/bloc/dropddown_bloc/dro
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/spouse_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/bloc/pasangan_bloc.dart';
-import 'package:eperumahan_bancian/services/app_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -99,8 +98,8 @@ class _PasanganModalState extends State<PasanganModal> {
     lainPendapatanCtrl.text = setDataValue(spouseData?.workOtherIncome);
     bantuanCtrl.text = setDataValue(spouseData?.welfareAid);
     kesihatanCtrl.text = setDataValue(spouseData?.healthLevelDesc);
-    isAliveCtrl.text = setDataValue(
-        (spouseData?.isAlive.contains("0") ?? false) ? "Tidak" : "Ya");
+    isAliveCtrl.text =
+        (spouseData?.isAlive.contains("0") ?? false) ? "Tidak" : "Ya";
   }
 
   String setDataValue(String? val, {String? defaultVal}) {
@@ -117,6 +116,12 @@ class _PasanganModalState extends State<PasanganModal> {
           EasyLoading.dismiss();
           CustomFlushbar.of(context)
               .showSuccess(msg: "Berjaya menmyimpan data");
+        } else if (state is PasanganSuccessAddNew) {
+          EasyLoading.dismiss();
+          Navigator.pop(context);
+          CustomFlushbar.of(context)
+              .showSuccess(msg: "Berjaya menmyimpan data");
+          // .then((val) => Navigator.pop(context));
         } else if (state is PasanganError) {
           EasyLoading.dismiss();
           CustomFlushbar.of(context).showFailed(msg: state.msg);
@@ -160,10 +165,7 @@ class _PasanganModalState extends State<PasanganModal> {
                             workOtherIncome: lainPendapatanCtrl.text,
                             welfareAid: bantuanCtrl.text);
                       });
-                      AppLog.instantLog(
-                          tag: "Cubaan",
-                          classname: "Pasangan",
-                          msg: spouseData!.toJson().toString());
+
                       //if update data
                       if (!_isNewForm()) {
                         _pasanganBloc.add(SavePasanganData(data: spouseData!));
@@ -171,9 +173,13 @@ class _PasanganModalState extends State<PasanganModal> {
                       }
                       //if add new data
                       if (formKey.currentState!.validate() == false) {
+                        //Trigger if form is not validate
                         CustomFlushbar.of(context)
-                            .showFailed(msg: "Sila isi maklumat diperlukan");
+                            .showWarning(msg: "Sila isi maklumat diperlukan");
                         return;
+                      } else {
+                        _pasanganBloc
+                            .add(AddNewPasanganData(data: spouseData!));
                       }
                     },
                     title: "Simpan"),
@@ -229,6 +235,7 @@ class _PasanganModalState extends State<PasanganModal> {
                   _textField(
                       title: 'Nama Penuh',
                       controller: nameCtrl,
+                      isMandatory: _isNewForm(),
                       width: double.infinity,
                       readOnly: _isReadOnly()),
                   _gap(height: 14),
@@ -252,6 +259,7 @@ class _PasanganModalState extends State<PasanganModal> {
                           title: 'Masih Hidup',
                           initialValue: "Ya",
                           isDropdown: true,
+                          isMandatory: _isNewForm(),
                           controller: isAliveCtrl,
                           onTap: () {
                             SwitchModal(
@@ -339,6 +347,13 @@ class _PasanganModalState extends State<PasanganModal> {
               if (onTap == null || !enableDropdown) return;
               onTap();
             },
+            isMandatory: isMandatory,
+            validator: isMandatory
+                ? (value) {
+                    if (value == null || value.isEmpty) return '';
+                    return null;
+                  }
+                : null,
             readOnly: true,
             fillColor: Colors.white,
             hintText: hintText,
@@ -480,6 +495,7 @@ class _PasanganModalState extends State<PasanganModal> {
       child: _textField(
           title: 'Tahap Kesihatan',
           isDropdown: true,
+          isMandatory: _isNewForm(),
           onTap: () {
             _dropdownBloc.add(const FetchDdFormData(type: DdType.healthLevel));
           },
@@ -517,6 +533,7 @@ class _PasanganModalState extends State<PasanganModal> {
       child: _textField(
           title: 'Jenis Pekerjaan',
           isDropdown: true,
+          isMandatory: _isNewForm(),
           onTap: () {
             _dropdownBloc
                 .add(const FetchDdFormData(type: DdType.occupationType));
