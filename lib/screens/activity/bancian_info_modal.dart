@@ -107,7 +107,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
             ),
           ),
           bottomNavigationBar: Visibility(
-            visible: (residentData.visits?.length ?? 0) < 2,
+            // visible: (residentData.visits?.length ?? 0) < 2,
             child: BottomBarButton(
                 onTap: () {
                   _bancianBloc.add(SetBancianData(

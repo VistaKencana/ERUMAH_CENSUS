@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'config/constants/app_size.dart';
+import 'config/providers/app_provider.dart';
 import 'data/hive-manager/hive_manager.dart';
 import 'services/easyloading_config.dart';
 import 'services/mobile_info.dart';
@@ -33,7 +34,9 @@ Future<void> main() async {
     ]),
   ]);
   runApp(MultiBlocProvider(
-      providers: [...AppBlocs.listOfBloc], child: const MyApp()));
+    providers: [...AppBlocs.listOfBloc, ...AppProviders.providers],
+    child: const MyApp(),
+  ));
 }
 
 _requestPermission() async {

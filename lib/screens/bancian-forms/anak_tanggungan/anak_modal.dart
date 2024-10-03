@@ -14,7 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../../components/disability_checkbox.dart';
-import '../../../data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
+// import '../../../data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
+import '../../../data/api/repositories/provider/dropdown_provider.dart';
 
 class AnakModal extends StatefulWidget {
   final bool? isEdit;
@@ -37,7 +38,7 @@ class AnakModal extends StatefulWidget {
 class _AnakModalState extends State<AnakModal> {
   _isEdit() => (widget.isEdit != null && widget.isEdit == true);
   _isReadOnly() => _isEdit() ? false : true;
-  late DropdownBloc _dropdownBloc;
+  // late DropdownBloc _dropdownBloc;
   late AnakTanggunganBloc _tanggunganBloc;
   Uint8List? frontCard;
   Uint8List? backCard;
@@ -57,7 +58,7 @@ class _AnakModalState extends State<AnakModal> {
   @override
   void initState() {
     super.initState();
-    _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
+    // _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
     _tanggunganBloc =
         BlocProvider.of<AnakTanggunganBloc>(context, listen: false);
     initVal();
@@ -332,63 +333,98 @@ class _AnakModalState extends State<AnakModal> {
   }
 
   _dropdownHubungan() {
-    return BlocListener<DropdownBloc, DropdownState>(
-      listener: (context, state) {
-        if (state is DropdownSuccess) {
-          if (state.type == DdType.relationship) {
-            CustomDropdownSheet(
-              label: "Hubungan Dengan Penyewa",
-              items: state.data,
-              onFindGroupValue: (data) {
-                return data.where((val) {
-                  var a = val?.code?.contains(
-                          dependantData?.relationshipCode ?? "*_*") ??
-                      false;
-                  return a;
-                }).firstOrNull;
-              },
-              getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {
-                if (val == null) return;
-                dependantData = dependantData!.copyWith(
-                    relationshipCode: val.code, relationshipDesc: val.desc);
-                hubunganCtrl.text = val.desc ?? "";
-              },
-            ).show(context);
-          }
-        }
+    return _textField(
+      title: 'Hubungan Dengan Penyewa',
+      isDropdown: true,
+      readOnly: _isReadOnly(),
+      isMandatory: _isEdit(),
+      controller: hubunganCtrl,
+      enableDropdown: _isEdit(),
+      onTap: () {
+        final ddR = context.read<DropdownProvider>();
+        ddR.fetchDropdownData(DdType.relationship).then((val) {
+          CustomDropdownSheet(
+            label: "Hubungan Dengan Penyewa",
+            items: ddR.relationshipList,
+            onFindGroupValue: (data) {
+              return data.where((val) {
+                var a = val.code
+                        ?.contains(dependantData?.relationshipCode ?? "*_*") ??
+                    false;
+                return a;
+              }).firstOrNull;
+            },
+            getTitle: (data) => data.desc ?? "-",
+            onChange: (val) {
+              if (val == null) return;
+              dependantData = dependantData!.copyWith(
+                  relationshipCode: val.code, relationshipDesc: val.desc);
+              hubunganCtrl.text = val.desc ?? "";
+            },
+          ).show(context);
+        });
       },
-      child: _textField(
-        title: 'Hubungan Dengan Penyewa',
-        isDropdown: true,
-        readOnly: _isReadOnly(),
-        isMandatory: _isEdit(),
-        controller: hubunganCtrl,
-        enableDropdown: _isEdit(),
-        onTap: () {
-          _dropdownBloc.add(const FetchDdFormData(type: DdType.relationship));
-        },
-      ),
     );
+    // return BlocListener<DropdownBloc, DropdownState>(
+    //   listener: (context, state) {
+    //     if (state is DropdownSuccess) {
+    //       if (state.type == DdType.relationship) {
+    //         CustomDropdownSheet(
+    //           label: "Hubungan Dengan Penyewa",
+    //           items: state.data,
+    //           onFindGroupValue: (data) {
+    //             return data.where((val) {
+    //               var a = val?.code?.contains(
+    //                       dependantData?.relationshipCode ?? "*_*") ??
+    //                   false;
+    //               return a;
+    //             }).firstOrNull;
+    //           },
+    //           getTitle: (data) => data?.desc ?? "-",
+    //           onChange: (val) {
+    //             if (val == null) return;
+    //             dependantData = dependantData!.copyWith(
+    //                 relationshipCode: val.code, relationshipDesc: val.desc);
+    //             hubunganCtrl.text = val.desc ?? "";
+    //           },
+    //         ).show(context);
+    //       }
+    //     }
+    //   },
+    //   child: _textField(
+    //     title: 'Hubungan Dengan Penyewa',
+    //     isDropdown: true,
+    //     readOnly: _isReadOnly(),
+    //     isMandatory: _isEdit(),
+    //     controller: hubunganCtrl,
+    //     enableDropdown: _isEdit(),
+    //     onTap: () {
+    //       _dropdownBloc.add(const FetchDdFormData(type: DdType.relationship));
+    //     },
+    //   ),
+    // );
   }
 
   _dropdownKesihatan() {
-    return BlocListener<DropdownBloc, DropdownState>(
-      listener: (context, state) {
-        if (state is DropdownSuccess) {
-          if (state.type == DdType.healthLevel) {
+    return _textField(
+        title: 'Tahap Kesihatan',
+        isMandatory: _isEdit(),
+        isDropdown: true,
+        onTap: () {
+          final ddR = context.read<DropdownProvider>();
+          ddR.fetchDropdownData(DdType.healthLevel).then((val) {
             CustomDropdownSheet(
               label: "Pilih Tahap Kesihatan",
-              items: state.data,
+              items: ddR.healthLevelList,
               onFindGroupValue: (data) {
                 return data.where((val) {
-                  var a = val?.code
+                  var a = val.code
                           ?.contains(dependantData?.healthLevelCode ?? "*_*") ??
                       false;
                   return a;
                 }).firstOrNull;
               },
-              getTitle: (data) => data?.desc ?? "-",
+              getTitle: (data) => data.desc ?? "-",
               onChange: (val) {
                 if (val == null) return;
                 dependantData = dependantData!.copyWith(
@@ -396,48 +432,48 @@ class _AnakModalState extends State<AnakModal> {
                 kesihatanCtrl.text = val.desc ?? "";
               },
             ).show(context);
-          }
-        }
-      },
-      child: _textField(
-          title: 'Tahap Kesihatan',
-          isMandatory: _isEdit(),
-          isDropdown: true,
-          onTap: () {
-            _dropdownBloc.add(const FetchDdFormData(type: DdType.healthLevel));
-          },
-          controller: kesihatanCtrl),
-    );
+          });
+        },
+        controller: kesihatanCtrl);
+    // return BlocListener<DropdownBloc, DropdownState>(
+    //   listener: (context, state) {
+    //     if (state is DropdownSuccess) {
+    //       if (state.type == DdType.healthLevel) {
+    //         CustomDropdownSheet(
+    //           label: "Pilih Tahap Kesihatan",
+    //           items: state.data,
+    //           onFindGroupValue: (data) {
+    //             return data.where((val) {
+    //               var a = val?.code
+    //                       ?.contains(dependantData?.healthLevelCode ?? "*_*") ??
+    //                   false;
+    //               return a;
+    //             }).firstOrNull;
+    //           },
+    //           getTitle: (data) => data?.desc ?? "-",
+    //           onChange: (val) {
+    //             if (val == null) return;
+    //             dependantData = dependantData!.copyWith(
+    //                 healthLevelCode: val.code, healthLevelDesc: val.desc);
+    //             kesihatanCtrl.text = val.desc ?? "";
+    //           },
+    //         ).show(context);
+    //       }
+    //     }
+    //   },
+    //   child: _textField(
+    //       title: 'Tahap Kesihatan',
+    //       isMandatory: _isEdit(),
+    //       isDropdown: true,
+    //       onTap: () {
+    //         _dropdownBloc.add(const FetchDdFormData(type: DdType.healthLevel));
+    //       },
+    //       controller: kesihatanCtrl),
+    // );
   }
 
   _dropdownJantina() {
-    return BlocListener<DropdownBloc, DropdownState>(
-      listener: (context, state) {
-        if (state is DropdownSuccess) {
-          if (state.type == DdType.gender) {
-            CustomDropdownSheet(
-              label: "Pilih Jantina",
-              items: state.data,
-              onFindGroupValue: (data) {
-                return data.where((val) {
-                  var a =
-                      val?.code?.contains(dependantData?.genderCode ?? "*_*") ??
-                          false;
-                  return a;
-                }).firstOrNull;
-              },
-              getTitle: (data) => data?.desc ?? "-",
-              onChange: (val) {
-                if (val == null) return;
-                dependantData = dependantData!
-                    .copyWith(genderCode: val.code, genderDesc: val.desc);
-                jantinaCtrl.text = val.desc ?? "";
-              },
-            ).show(context);
-          }
-        }
-      },
-      child: _textField(
+    return _textField(
         title: 'Jantina',
         controller: jantinaCtrl,
         isMandatory: _isEdit(),
@@ -445,50 +481,138 @@ class _AnakModalState extends State<AnakModal> {
         enableDropdown: _isEdit(),
         isDropdown: true,
         onTap: () {
-          _dropdownBloc.add(const FetchDdFormData(type: DdType.gender));
-        },
-      ),
-    );
-  }
-
-  _dropdownBangsa() {
-    return BlocListener<DropdownBloc, DropdownState>(
-      listener: (context, state) {
-        if (state is DropdownSuccess) {
-          if (state.type == DdType.race) {
+          final ddR = context.read<DropdownProvider>();
+          ddR.fetchDropdownData(DdType.gender).then((val) {
             CustomDropdownSheet(
-              label: "Pilih Bangsa",
-              items: state.data,
+              label: "Pilih Jantina",
+              items: ddR.genderList,
               onFindGroupValue: (data) {
                 return data.where((val) {
                   var a =
-                      val?.code?.contains(dependantData?.raceCode ?? "*_*") ??
+                      val.code?.contains(dependantData?.genderCode ?? "*_*") ??
                           false;
                   return a;
                 }).firstOrNull;
               },
-              getTitle: (data) => data?.desc ?? "-",
+              getTitle: (data) => data.desc ?? "-",
               onChange: (val) {
                 if (val == null) return;
                 dependantData = dependantData!
-                    .copyWith(raceCode: val.code, raceDesc: val.desc);
-                bangsaCtrl.text = val.desc ?? "";
+                    .copyWith(genderCode: val.code, genderDesc: val.desc);
+                jantinaCtrl.text = val.desc ?? "";
               },
             ).show(context);
-          }
-        }
+          });
+        });
+    // return BlocListener<DropdownBloc, DropdownState>(
+    //   listener: (context, state) {
+    //     if (state is DropdownSuccess) {
+    //       if (state.type == DdType.gender) {
+    //         CustomDropdownSheet(
+    //           label: "Pilih Jantina",
+    //           items: state.data,
+    //           onFindGroupValue: (data) {
+    //             return data.where((val) {
+    //               var a =
+    //                   val?.code?.contains(dependantData?.genderCode ?? "*_*") ??
+    //                       false;
+    //               return a;
+    //             }).firstOrNull;
+    //           },
+    //           getTitle: (data) => data?.desc ?? "-",
+    //           onChange: (val) {
+    //             if (val == null) return;
+    //             dependantData = dependantData!
+    //                 .copyWith(genderCode: val.code, genderDesc: val.desc);
+    //             jantinaCtrl.text = val.desc ?? "";
+    //           },
+    //         ).show(context);
+    //       }
+    //     }
+    //   },
+    //   child: _textField(
+    //     title: 'Jantina',
+    //     controller: jantinaCtrl,
+    //     isMandatory: _isEdit(),
+    //     readOnly: _isReadOnly(),
+    //     enableDropdown: _isEdit(),
+    //     isDropdown: true,
+    //     onTap: () {
+    //       _dropdownBloc.add(const FetchDdFormData(type: DdType.gender));
+    //     },
+    //   ),
+    // );
+  }
+
+  _dropdownBangsa() {
+    return _textField(
+      title: 'Bangsa',
+      controller: bangsaCtrl,
+      isMandatory: _isEdit(),
+      readOnly: _isReadOnly(),
+      enableDropdown: _isEdit(),
+      isDropdown: true,
+      onTap: () {
+        final ddR = context.read<DropdownProvider>();
+        ddR.fetchDropdownData(DdType.race).then((val) {
+          CustomDropdownSheet(
+            label: "Pilih Jantina",
+            items: ddR.raceList,
+            onFindGroupValue: (data) {
+              return data.where((val) {
+                var a = val.code?.contains(dependantData?.raceCode ?? "*_*") ??
+                    false;
+                return a;
+              }).firstOrNull;
+            },
+            getTitle: (data) => data.desc ?? "-",
+            onChange: (val) {
+              if (val == null) return;
+              dependantData = dependantData!
+                  .copyWith(raceCode: val.code, raceDesc: val.desc);
+              bangsaCtrl.text = val.desc ?? "";
+            },
+          ).show(context);
+        });
       },
-      child: _textField(
-        title: 'Bangsa',
-        controller: bangsaCtrl,
-        isMandatory: _isEdit(),
-        readOnly: _isReadOnly(),
-        enableDropdown: _isEdit(),
-        isDropdown: true,
-        onTap: () {
-          _dropdownBloc.add(const FetchDdFormData(type: DdType.race));
-        },
-      ),
     );
+    // return BlocListener<DropdownBloc, DropdownState>(
+    //   listener: (context, state) {
+    //     if (state is DropdownSuccess) {
+    //       if (state.type == DdType.race) {
+    //         CustomDropdownSheet(
+    //           label: "Pilih Bangsa",
+    //           items: state.data,
+    //           onFindGroupValue: (data) {
+    //             return data.where((val) {
+    //               var a =
+    //                   val?.code?.contains(dependantData?.raceCode ?? "*_*") ??
+    //                       false;
+    //               return a;
+    //             }).firstOrNull;
+    //           },
+    //           getTitle: (data) => data?.desc ?? "-",
+    //           onChange: (val) {
+    //             if (val == null) return;
+    //             dependantData = dependantData!
+    //                 .copyWith(raceCode: val.code, raceDesc: val.desc);
+    //             bangsaCtrl.text = val.desc ?? "";
+    //           },
+    //         ).show(context);
+    //       }
+    //     }
+    //   },
+    //   child: _textField(
+    //     title: 'Bangsa',
+    //     controller: bangsaCtrl,
+    //     isMandatory: _isEdit(),
+    //     readOnly: _isReadOnly(),
+    //     enableDropdown: _isEdit(),
+    //     isDropdown: true,
+    //     onTap: () {
+    //       _dropdownBloc.add(const FetchDdFormData(type: DdType.race));
+    //     },
+    //   ),
+    // );
   }
 }

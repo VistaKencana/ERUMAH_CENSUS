@@ -1,3 +1,4 @@
+import 'package:eperumahan_bancian/data/api/repositories/application_repository.dart';
 import 'package:eperumahan_bancian/data/api/repositories/model/zone_model.dart';
 import 'package:eperumahan_bancian/data/api/repositories/qr_repository.dart';
 import 'package:eperumahan_bancian/screens/qr-home/models/resident_info_model.dart';
@@ -22,6 +23,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
   }
 
   final repo = QrRepository();
+  final repoAppl = ApplicationRepository();
   final log = const AppLog(classname: "QrBloc");
   ResidentInfoData residentData = ResidentInfoData();
   String qrCode = "";
@@ -46,14 +48,31 @@ class QrBloc extends Bloc<QrEvent, QrState> {
 
     try {
       this.qrCode = qrCode;
+      //Fetch qr code data
       final resp = await repo.scanQrCode(qrCode: event.qrCode);
       residentData = resp;
+
+      //If from home will compare with selected property
       if (!isFromHome) {
         if (residentData.unit!.no != selectedProperty.unitNo) {
           String errMsg =
               "QR diimbas dimiliki oleh unit ${residentData.unit!.no} yang tidak sama seperti yang dipilih";
           emit(QrNotTally(msg: errMsg));
           return;
+        }
+      }
+
+      //Get census code if not exist
+      if (residentData.censusCode == null || residentData.censusCode!.isEmpty) {
+        try {
+          log.logDebug(
+              tag: "_onScanQrcode",
+              msg: "Fetch cencus code for qr:${event.qrCode}");
+          final cencusCode =
+              await repoAppl.getCensusCode(qrcCode: event.qrCode);
+          residentData = residentData.copyWith(censusCode: cencusCode);
+        } catch (e) {
+          log.logError(tag: "_onScanQrcode", msg: e.toString());
         }
       }
 

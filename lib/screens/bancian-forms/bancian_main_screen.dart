@@ -5,8 +5,9 @@ import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/custom_textfield.dart';
 import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
-import 'package:eperumahan_bancian/data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
+// import 'package:eperumahan_bancian/data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
+import 'package:eperumahan_bancian/data/api/repositories/provider/dropdown_provider.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/tanggungan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dart';
@@ -36,7 +37,7 @@ class BancianMainScreen extends StatefulWidget {
 }
 
 class _BancianMainScreenState extends State<BancianMainScreen> {
-  late DropdownBloc _dropdownBloc;
+  // late DropdownBloc _dropdownBloc;
   late BancianBloc _bancianBloc;
   late StatusInputModel statusData;
   final statusCtrl = TextEditingController();
@@ -45,7 +46,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
   @override
   void initState() {
     super.initState();
-    _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
+    // _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
     _bancianBloc = BlocProvider.of<BancianBloc>(context, listen: false);
     statusData = _bancianBloc.statusData!;
   }
@@ -153,11 +154,14 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                       screen: PenghuniForm(
                           isNewForm: widget.isNewForm,
                           imgs: statusData.getFiles())),
-                  _borangTile(
-                      label: "Maklumat Pasangan", screen: const PasanganForm()),
-                  _borangTile(
-                      label: "Maklumat Anak & Tanggungan",
-                      screen: const TanggunganForm()),
+                  if (!_isNewForm())
+                    _borangTile(
+                        label: "Maklumat Pasangan",
+                        screen: const PasanganForm()),
+                  if (!_isNewForm())
+                    _borangTile(
+                        label: "Maklumat Anak & Tanggungan",
+                        screen: const TanggunganForm()),
                   _gap(size: 20),
                   _section("Cap Jari"),
                   SectionContainer(
@@ -173,48 +177,82 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                   ),
                   _gap(),
                   _section("Status Bancian"),
-                  BlocListener<DropdownBloc, DropdownState>(
-                    listener: (context, state) {
-                      if (state is DropdownSuccess) {
-                        if (state.type == DdType.censusStatus) {
-                          setState(() {});
-                          CustomDropdownSheet(
-                            label: "Pilih status",
-                            items: state.data,
-                            onFindGroupValue: (data) {
-                              return data.where((val) {
-                                var a = val?.code?.contains(
-                                        statusData.statusCode ?? "*_*") ??
-                                    false;
-                                return a;
-                              }).firstOrNull;
-                            },
-                            getTitle: (data) => data?.desc ?? "-",
-                            onChange: (val) {
-                              if (val == null) return;
-                              statusData =
-                                  statusData.copyWith(statusCode: val.code);
-                              statusCtrl.text = val.desc ?? "";
-                            },
-                          ).show(context);
-                        }
-                      }
+                  CustomTextField(
+                    hintText: "Pilih status",
+                    readOnly: true,
+                    controller: statusCtrl,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return '';
+                      return null;
                     },
-                    child: CustomTextField(
-                      hintText: "Pilih status",
-                      readOnly: true,
-                      controller: statusCtrl,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) return '';
-                        return null;
-                      },
-                      suffixIcon: Icons.arrow_drop_down,
-                      onTap: () {
-                        _dropdownBloc.add(
-                            const FetchDdFormData(type: DdType.censusStatus));
-                      },
-                    ),
+                    suffixIcon: Icons.arrow_drop_down,
+                    onTap: () {
+                      final ddR = context.read<DropdownProvider>();
+                      ddR.fetchDropdownData(DdType.censusStatus).then((val) {
+                        CustomDropdownSheet(
+                          label: "Pilih status",
+                          items: ddR.censusStatusList,
+                          onFindGroupValue: (data) {
+                            return data.where((val) {
+                              var a = val.code?.contains(
+                                      statusData.statusCode ?? "*_*") ??
+                                  false;
+                              return a;
+                            }).firstOrNull;
+                          },
+                          getTitle: (data) => data.desc ?? "-",
+                          onChange: (val) {
+                            if (val == null) return;
+                            statusData =
+                                statusData.copyWith(statusCode: val.code);
+                            statusCtrl.text = val.desc ?? "";
+                          },
+                        ).show(context);
+                      });
+                    },
                   ),
+                  // BlocListener<DropdownBloc, DropdownState>(
+                  //   listener: (context, state) {
+                  //     if (state is DropdownSuccess) {
+                  //       if (state.type == DdType.censusStatus) {
+                  //         setState(() {});
+                  //         CustomDropdownSheet(
+                  //           label: "Pilih status",
+                  //           items: state.data,
+                  //           onFindGroupValue: (data) {
+                  //             return data.where((val) {
+                  //               var a = val?.code?.contains(
+                  //                       statusData.statusCode ?? "*_*") ??
+                  //                   false;
+                  //               return a;
+                  //             }).firstOrNull;
+                  //           },
+                  //           getTitle: (data) => data?.desc ?? "-",
+                  //           onChange: (val) {
+                  //             if (val == null) return;
+                  //             statusData =
+                  //                 statusData.copyWith(statusCode: val.code);
+                  //             statusCtrl.text = val.desc ?? "";
+                  //           },
+                  //         ).show(context);
+                  //       }
+                  //     }
+                  //   },
+                  //   child: CustomTextField(
+                  //     hintText: "Pilih status",
+                  //     readOnly: true,
+                  //     controller: statusCtrl,
+                  //     validator: (value) {
+                  //       if (value == null || value.isEmpty) return '';
+                  //       return null;
+                  //     },
+                  //     suffixIcon: Icons.arrow_drop_down,
+                  //     onTap: () {
+                  //       _dropdownBloc.add(
+                  //           const FetchDdFormData(type: DdType.censusStatus));
+                  //     },
+                  //   ),
+                  // ),
                   _gap(),
                   _section("Gambar"),
                   SectionContainer(
@@ -279,6 +317,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
         ),
         bottomNavigationBar: BlocListener<BancianBloc, BancianState>(
           listener: (context, state) {
+            if (_isNewForm()) return;
             if (state is BancianLoading) {
               EasyLoading.show();
             } else if (state is BancianSuccess) {
