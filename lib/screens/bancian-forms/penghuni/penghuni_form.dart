@@ -59,17 +59,22 @@ class _PenghuniFormState extends State<PenghuniForm> {
   final elaunCtrl = TextEditingController();
   final lainPendapatanCtrl = TextEditingController();
   final bantuanCtrl = TextEditingController();
-
+  final formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
     // _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
     _penghuniBloc = BlocProvider.of<PenghuniBloc>(context, listen: false);
-    ownerData = _penghuniBloc.existData!.copyWith();
+
     initVal();
   }
 
   initVal() {
+    if (_isNewForm()) {
+      ownerData = _penghuniBloc.notOwnerData!.copyWith();
+    } else {
+      ownerData = _penghuniBloc.existData!.copyWith();
+    }
     nameCtrl.text = setDataValue(ownerData?.name);
     bilIsiRumahCtrl.text =
         setDataValue(ownerData?.totalHousehold, defaultVal: "0");
@@ -89,179 +94,194 @@ class _PenghuniFormState extends State<PenghuniForm> {
   }
 
   String setDataValue(String? val, {String? defaultVal}) {
-    return _isNewForm() ? "" : val ?? (defaultVal ?? "");
+    return val ?? (defaultVal ?? "");
+    // return _isNewForm() ? "" : val ?? (defaultVal ?? "");
   }
 
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.sizeOf(context);
-    return BgImage(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: CustomAppBar(
-          title: "",
-          actions: _isNewForm()
-              ? []
-              : [
-                  PopupMenuButton<int>(
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 1,
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => const BancianMainScreen(
-                                        isNewForm: true,
-                                      )));
-                        },
-                        child: const Row(
-                          children: [
-                            Icon(Icons.report),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text("Lapor Penghuni")
-                          ],
-                        ),
-                      ),
-                    ],
-                    offset: const Offset(0, 50),
-                    color: Colors.white,
-                    elevation: 2,
-                  ),
-                ],
-        ),
-        body: BlocListener<PenghuniBloc, PenghuniState>(
-          listener: (context, state) {
-            if (state is PenghuniLoading) {
-              EasyLoading.show();
-            } else if (state is PenghuniSuccess) {
-              EasyLoading.dismiss();
-              CustomFlushbar.of(context)
-                  .showSuccess(msg: "Berjaya menmyimpan data");
-            } else if (state is PenghuniError) {
-              EasyLoading.dismiss();
-              CustomFlushbar.of(context).showFailed(msg: state.msg);
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 6.0, bottom: 18),
-                    child: Text(
-                      "Maklumat Penghuni",
-                      style:
-                          appTextStyle(size: 25, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  KadPengenalanTile(
-                    frontCard: ownerData?.uploadIcFront,
-                    onFrontCard: (bytes) {
-                      setState(() => ownerData =
-                          ownerData!.copyWith(uploadIcFront: bytes));
-                    },
-                    backCard: ownerData?.uploadIcBack,
-                    onBackCard: (bytes) {
-                      setState(() =>
-                          ownerData = ownerData!.copyWith(uploadIcBack: bytes));
-                    },
-                  ),
-                  SectionContainer(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _textField(
-                            title: 'Nama Penuh',
-                            controller: nameCtrl,
-                            // initialValue:
-                            //     _isNewForm() ? "" : ownerData?.name ?? "",
-                            width: double.infinity,
-                            readOnly: _isReadOnly()),
-                        _gap(),
-                        TwoColumnForm(
-                          children: [
-                            _textField(
-                                title: 'Bilangan Isi Rumah',
-                                controller: bilIsiRumahCtrl),
-                            _textField(
-                                title: 'No. Kad Pengenalan',
-                                controller: icNoCtrl,
-                                readOnly: _isReadOnly()),
-                            _textField(title: 'Emel', controller: emelCtrl),
-                            _textField(
-                                title: 'Umur(Tahun)',
-                                controller: umurCtrl,
-                                readOnly: _isReadOnly()),
-                            _textField(
-                                title: 'No Telefon', controller: noTelCtrl),
-                            _dropdownJantina(),
-                            _dropdownBangsa(),
-                            _dropdownJenisPekerjaan(),
-                            _dropdownStatusPerkahwinan(),
-                          ],
-                        ),
-                        _gap(),
-                        DisabilityCheckbox(
-                            initVal: (ownerData?.isOku == "1"),
-                            onCheck: (val) {
-                              setState(() {
-                                ownerData =
-                                    ownerData!.copyWith(isOku: val ? "1" : "0");
-                              });
-                            }),
-                        Visibility(
-                          visible: (ownerData?.isOku == "1"),
-                          child: CardDisplay(
-                            title: "",
-                            img: ownerData?.uploadOkuCard,
-                            onPicture: (bytes) => setState(() {
-                              ownerData =
-                                  ownerData!.copyWith(uploadOkuCard: bytes);
-                            }),
+    return Form(
+      key: formKey,
+      child: BgImage(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: CustomAppBar(
+            title: "",
+            actions: _isNewForm()
+                ? []
+                : [
+                    PopupMenuButton<int>(
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: 1,
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const BancianMainScreen(
+                                          isNewForm: true,
+                                        )));
+                          },
+                          child: const Row(
+                            children: [
+                              Icon(Icons.report),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("Lapor Penghuni")
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 10),
                       ],
+                      offset: const Offset(0, 50),
+                      color: Colors.white,
+                      elevation: 2,
                     ),
-                  ),
-                  SectionContainer(
-                    child: Column(
-                      children: [
-                        _headerTitle(),
-                        maklumatPendapatan(),
-                      ],
+                  ],
+          ),
+          body: BlocListener<PenghuniBloc, PenghuniState>(
+            listener: (context, state) {
+              if (state is PenghuniLoading) {
+                EasyLoading.show();
+              } else if (state is PenghuniSuccess) {
+                EasyLoading.dismiss();
+                CustomFlushbar.of(context)
+                    .showSuccess(msg: "Berjaya menmyimpan data");
+              } else if (state is PenghuniNoChanges) {
+                CustomFlushbar.of(context).showInfo(msg: state.msg);
+              } else if (state is PenghuniError) {
+                EasyLoading.dismiss();
+                CustomFlushbar.of(context).showFailed(msg: state.msg);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6.0, bottom: 18),
+                      child: Text(
+                        "Maklumat Penghuni",
+                        style:
+                            appTextStyle(size: 25, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  )
-                ],
+                    KadPengenalanTile(
+                      frontCard: ownerData?.uploadIcFront,
+                      onFrontCard: (bytes) {
+                        setState(() => ownerData =
+                            ownerData!.copyWith(uploadIcFront: bytes));
+                      },
+                      backCard: ownerData?.uploadIcBack,
+                      onBackCard: (bytes) {
+                        setState(() => ownerData =
+                            ownerData!.copyWith(uploadIcBack: bytes));
+                      },
+                    ),
+                    SectionContainer(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _textField(
+                              title: 'Nama Penuh',
+                              controller: nameCtrl,
+                              isMandatory: _isNewForm(),
+                              // initialValue:
+                              //     _isNewForm() ? "" : ownerData?.name ?? "",
+                              width: double.infinity,
+                              readOnly: _isReadOnly()),
+                          _gap(),
+                          TwoColumnForm(
+                            children: [
+                              _textField(
+                                  title: 'Bilangan Isi Rumah',
+                                  controller: bilIsiRumahCtrl),
+                              _textField(
+                                  title: 'No. Kad Pengenalan',
+                                  controller: icNoCtrl,
+                                  isMandatory: _isNewForm(),
+                                  readOnly: _isReadOnly()),
+                              _textField(title: 'Emel', controller: emelCtrl),
+                              _textField(
+                                  title: 'Umur(Tahun)',
+                                  controller: umurCtrl,
+                                  readOnly: _isReadOnly()),
+                              _textField(
+                                title: 'No Telefon',
+                                controller: noTelCtrl,
+                                isMandatory: _isNewForm(),
+                              ),
+                              _dropdownJantina(),
+                              _dropdownBangsa(),
+                              _dropdownJenisPekerjaan(),
+                              _dropdownStatusPerkahwinan(),
+                            ],
+                          ),
+                          _gap(),
+                          DisabilityCheckbox(
+                              initVal: (ownerData?.isOku == "1"),
+                              onCheck: (val) {
+                                setState(() {
+                                  ownerData = ownerData!
+                                      .copyWith(isOku: val ? "1" : "0");
+                                });
+                              }),
+                          Visibility(
+                            visible: (ownerData?.isOku == "1"),
+                            child: CardDisplay(
+                              title: "",
+                              img: ownerData?.uploadOkuCard,
+                              onPicture: (bytes) => setState(() {
+                                ownerData =
+                                    ownerData!.copyWith(uploadOkuCard: bytes);
+                              }),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
+                    SectionContainer(
+                      child: Column(
+                        children: [
+                          _headerTitle(),
+                          maklumatPendapatan(),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
+          bottomNavigationBar: BottomBarButton(
+              onTap: () {
+                setState(() {
+                  ownerData = ownerData!.copyWith(
+                      name: nameCtrl.text,
+                      totalHousehold: bilIsiRumahCtrl.text,
+                      icNo: icNoCtrl.text,
+                      email: emelCtrl.text,
+                      phoneNo: noTelCtrl.text,
+                      workAddress: majikanAddressCtrl.text,
+                      workSalary: gajiPokokCtrl.text,
+                      workAllowance: elaunCtrl.text,
+                      workOtherIncome: lainPendapatanCtrl.text,
+                      welfareAid: bantuanCtrl.text);
+                });
+                if (_isNewForm()) {
+                  _penghuniBloc.add(SaveBukanPenghuniData(data: ownerData!));
+                } else {
+                  _penghuniBloc.add(SavePenghuniData(data: ownerData!));
+                }
+              },
+              title: "Simpan"),
         ),
-        bottomNavigationBar: BottomBarButton(
-            onTap: () {
-              setState(() {
-                ownerData = ownerData!.copyWith(
-                    name: nameCtrl.text,
-                    totalHousehold: bilIsiRumahCtrl.text,
-                    icNo: icNoCtrl.text,
-                    email: emelCtrl.text,
-                    phoneNo: noTelCtrl.text,
-                    workAddress: majikanAddressCtrl.text,
-                    workSalary: gajiPokokCtrl.text,
-                    workAllowance: elaunCtrl.text,
-                    workOtherIncome: lainPendapatanCtrl.text,
-                    welfareAid: bantuanCtrl.text);
-              });
-              _penghuniBloc.add(SavePenghuniData(data: ownerData!));
-              // Navigator.pop(context);
-            },
-            title: "Simpan"),
       ),
     );
   }
@@ -314,7 +334,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
 
   _textField(
       {required String title,
-      // String? initialValue,
+      bool isMandatory = false,
       bool readOnly = false,
       bool enableDropdown = true,
       TextEditingController? controller,
@@ -334,6 +354,13 @@ class _PenghuniFormState extends State<PenghuniForm> {
               if (onTap == null || !enableDropdown) return;
               onTap();
             },
+            isMandatory: isMandatory,
+            validator: isMandatory
+                ? (value) {
+                    if (value == null || value.isEmpty) return '';
+                    return null;
+                  }
+                : null,
             readOnly: true,
             fillColor: Colors.white,
             hintText: hintText,
@@ -354,7 +381,13 @@ class _PenghuniFormState extends State<PenghuniForm> {
         controller: controller,
         readOnly: readOnly,
         hintText: hintText,
-        onChanged: onChanged,
+        onChanged: onChanged, isMandatory: isMandatory,
+        validator: isMandatory
+            ? (value) {
+                if (value == null || value.isEmpty) return '';
+                return null;
+              }
+            : null,
         // initialValue: _isNewForm() ? "" : initialValue,
       ),
     );
@@ -363,6 +396,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
   _dropdownJantina() {
     return _textField(
       title: 'Jantina',
+      isMandatory: _isNewForm(),
       controller: jantinaCtrl,
       readOnly: _isReadOnly(),
       enableDropdown: _isNewForm(),
@@ -375,9 +409,8 @@ class _PenghuniFormState extends State<PenghuniForm> {
             items: ddR.genderList,
             onFindGroupValue: (data) {
               return data.where((val) {
-                var a = val.code
-                        ?.toLowerCase()
-                        .contains(ownerData?.genderCode.toLowerCase() ?? "") ??
+                var a = val.code?.toLowerCase().contains(
+                        ownerData?.genderCode?.toLowerCase() ?? "*_*") ??
                     false;
                 return a;
               }).firstOrNull;
@@ -393,44 +426,6 @@ class _PenghuniFormState extends State<PenghuniForm> {
         });
       },
     );
-    // return BlocListener<DropdownBloc, DropdownState>(
-    //   listener: (context, state) {
-    //     if (_isNewForm()) return;
-    //     if (state is DropdownSuccess) {
-    //       if (state.type == DdType.gender) {
-    //         CustomDropdownSheet(
-    //           label: "Pilih Jantina",
-    //           items: state.data,
-    //           onFindGroupValue: (data) {
-    //             return data.where((val) {
-    //               var a = val?.code?.toLowerCase().contains(
-    //                       ownerData?.genderCode.toLowerCase() ?? "") ??
-    //                   false;
-    //               return a;
-    //             }).firstOrNull;
-    //           },
-    //           getTitle: (data) => data?.desc ?? "-",
-    //           onChange: (val) {
-    //             if (val == null) return;
-    //             ownerData = ownerData!
-    //                 .copyWith(genderCode: val.code, genderDesc: val.desc);
-    //             jantinaCtrl.text = val.desc ?? "";
-    //           },
-    //         ).show(context);
-    //       }
-    //     }
-    //   },
-    //   child: _textField(
-    //     title: 'Jantina',
-    //     controller: jantinaCtrl,
-    //     readOnly: _isReadOnly(),
-    //     enableDropdown: _isNewForm(),
-    //     isDropdown: true,
-    //     onTap: () {
-    //       _dropdownBloc.add(const FetchDdFormData(type: DdType.gender));
-    //     },
-    //   ),
-    // );
   }
 
   _dropdownBangsa() {
@@ -438,6 +433,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
       title: 'Bangsa',
       controller: bangsaCtrl,
       readOnly: _isReadOnly(),
+      isMandatory: _isNewForm(),
       enableDropdown: _isNewForm(),
       isDropdown: true,
       onTap: () {
@@ -448,9 +444,8 @@ class _PenghuniFormState extends State<PenghuniForm> {
             items: ddR.raceList,
             onFindGroupValue: (data) {
               return data.where((val) {
-                var a = val.code
-                        ?.toLowerCase()
-                        .contains(ownerData?.raceCode.toLowerCase() ?? "") ??
+                var a = val.code?.toLowerCase().contains(
+                        ownerData?.raceCode?.toLowerCase() ?? "*_*") ??
                     false;
                 return a;
               }).firstOrNull;
@@ -466,45 +461,6 @@ class _PenghuniFormState extends State<PenghuniForm> {
         });
       },
     );
-    // return BlocListener<DropdownBloc, DropdownState>(
-    //   listener: (context, state) {
-    //     if (state is DropdownSuccess) {
-    //       if (_isNewForm()) return;
-    //       if (state.type == DdType.race) {
-    //         CustomDropdownSheet(
-    //           label: "Pilih Bangsa",
-    //           items: state.data,
-    //           onFindGroupValue: (data) {
-    //             return data.where((val) {
-    //               var a = val?.code
-    //                       ?.toLowerCase()
-    //                       .contains(ownerData?.raceCode.toLowerCase() ?? "") ??
-    //                   false;
-    //               return a;
-    //             }).firstOrNull;
-    //           },
-    //           getTitle: (data) => data?.desc ?? "-",
-    //           onChange: (val) {
-    //             if (val == null) return;
-    //             ownerData =
-    //                 ownerData!.copyWith(raceCode: val.code, raceDesc: val.desc);
-    //             bangsaCtrl.text = val.desc ?? "";
-    //           },
-    //         ).show(context);
-    //       }
-    //     }
-    //   },
-    //   child: _textField(
-    //     title: 'Bangsa',
-    //     controller: bangsaCtrl,
-    //     readOnly: _isReadOnly(),
-    //     enableDropdown: _isNewForm(),
-    //     isDropdown: true,
-    //     onTap: () {
-    //       _dropdownBloc.add(const FetchDdFormData(type: DdType.race));
-    //     },
-    //   ),
-    // );
   }
 
   _dropdownJenisPekerjaan() {
@@ -512,6 +468,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
       title: 'Jenis Pekerjaan',
       controller: jenisKerjaCtrl,
       isDropdown: true,
+      isMandatory: _isNewForm(),
       onTap: () {
         final ddR = context.read<DropdownProvider>();
         ddR.fetchDropdownData(DdType.occupationType).then((val) {
@@ -521,7 +478,8 @@ class _PenghuniFormState extends State<PenghuniForm> {
             onFindGroupValue: (data) {
               return data.where((val) {
                 var a = val.code?.toLowerCase().contains(
-                        ownerData?.occupationTypeCode.toLowerCase() ?? "") ??
+                        ownerData?.occupationTypeCode?.toLowerCase() ??
+                            "*_*") ??
                     false;
                 return a;
               }).firstOrNull;
@@ -537,48 +495,13 @@ class _PenghuniFormState extends State<PenghuniForm> {
         });
       },
     );
-    // return BlocListener<DropdownBloc, DropdownState>(
-    //   listener: (context, state) {
-    //     if (state is DropdownSuccess) {
-    //       if (_isNewForm()) return;
-    //       if (state.type == DdType.occupationType) {
-    //         CustomDropdownSheet(
-    //           label: "Pilih Jenis Pekerjaan",
-    //           items: state.data,
-    //           onFindGroupValue: (data) {
-    //             return data.where((val) {
-    //               var a = val?.code?.toLowerCase().contains(
-    //                       ownerData?.occupationTypeCode.toLowerCase() ?? "") ??
-    //                   false;
-    //               return a;
-    //             }).firstOrNull;
-    //           },
-    //           getTitle: (data) => data?.desc ?? "-",
-    //           onChange: (val) {
-    //             if (val == null) return;
-    //             ownerData = ownerData!.copyWith(
-    //                 occupationTypeCode: val.code, occupationTypeDesc: val.desc);
-    //             jenisKerjaCtrl.text = val.desc ?? "";
-    //           },
-    //         ).show(context);
-    //       }
-    //     }
-    //   },
-    //   child: _textField(
-    //     title: 'Jenis Pekerjaan',
-    //     controller: jenisKerjaCtrl,
-    //     isDropdown: true,
-    //     onTap: () {
-    //       _dropdownBloc.add(const FetchDdFormData(type: DdType.occupationType));
-    //     },
-    //   ),
-    // );
   }
 
   _dropdownStatusPerkahwinan() {
     return _textField(
       title: 'Status Perkahwinan',
       controller: statusKahwinCtrl,
+      isMandatory: _isNewForm(),
       isDropdown: true,
       onTap: () {
         final ddR = context.read<DropdownProvider>();
@@ -589,7 +512,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
             onFindGroupValue: (data) {
               return data.where((val) {
                 var a = val.code?.toLowerCase().contains(
-                        ownerData?.maritalStatusCode.toLowerCase() ?? "") ??
+                        ownerData?.maritalStatusCode?.toLowerCase() ?? "*_*") ??
                     false;
                 return a;
               }).firstOrNull;
@@ -605,42 +528,6 @@ class _PenghuniFormState extends State<PenghuniForm> {
         });
       },
     );
-    // return BlocListener<DropdownBloc, DropdownState>(
-    //   listener: (context, state) {
-    //     if (state is DropdownSuccess) {
-    //       if (_isNewForm()) return;
-    //       if (state.type == DdType.maritalStatus) {
-    //         CustomDropdownSheet(
-    //           label: 'Status Perkahwinan',
-    //           items: state.data,
-    //           onFindGroupValue: (data) {
-    //             return data.where((val) {
-    //               var a = val?.code?.toLowerCase().contains(
-    //                       ownerData?.maritalStatusCode.toLowerCase() ?? "") ??
-    //                   false;
-    //               return a;
-    //             }).firstOrNull;
-    //           },
-    //           getTitle: (data) => data?.desc ?? "-",
-    //           onChange: (val) {
-    //             if (val == null) return;
-    //             ownerData = ownerData!.copyWith(
-    //                 maritalStatusCode: val.code, maritalStatusDesc: val.desc);
-    //             statusKahwinCtrl.text = val.desc ?? "";
-    //           },
-    //         ).show(context);
-    //       }
-    //     }
-    //   },
-    //   child: _textField(
-    //     title: 'Status Perkahwinan',
-    //     controller: statusKahwinCtrl,
-    //     isDropdown: true,
-    //     onTap: () {
-    //       _dropdownBloc.add(const FetchDdFormData(type: DdType.maritalStatus));
-    //     },
-    //   ),
-    // );
   }
 
   _headerTitle() {

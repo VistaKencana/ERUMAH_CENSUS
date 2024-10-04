@@ -20,6 +20,7 @@ class BancianBloc extends Bloc<BancianEvent, BancianState> {
   final repo = ApplicationRepository();
   ResidentInfoData unitData = ResidentInfoData();
   StatusInputModel? statusData;
+  StatusInputModel? statusNotOwnerData;
   _onSetBancianData(SetBancianData event, Emitter<BancianState> emit) {
     unitData = event.data;
     statusData = StatusInputModel(
@@ -45,5 +46,15 @@ class BancianBloc extends Bloc<BancianEvent, BancianState> {
 
   setImages({required List<Uint8List> imgs}) {
     statusData = statusData!.copyWith(images: imgs);
+  }
+
+  initNotOwner() {
+    statusNotOwnerData = StatusInputModel(
+        censusCode: unitData.censusCode ?? '',
+        isFingerPrintVerified: "0",
+        remark: "",
+        images: statusData?.images ?? []);
+    applog.logDebug(
+        tag: "Init Not Owner", msg: statusNotOwnerData!.toJson().toString());
   }
 }

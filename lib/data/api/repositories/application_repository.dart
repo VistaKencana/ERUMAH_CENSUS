@@ -22,6 +22,8 @@ class ApplicationRepository {
   }
 
   Future<String> storeOwner({required OwnerInputModel data}) async {
+    //Set isNotOwner = false; 0-false , 1-true
+    data = data.copyWith(isNotOwner: "0");
     List<http.MultipartFile> files = [];
     int cnt = 0;
     for (var entry in data.getFiles().entries) {
@@ -43,6 +45,7 @@ class ApplicationRepository {
   }
 
   Future<String> storeNotOwner({required OwnerInputModel data}) async {
+    //Set isNotOwner = true; 0-false , 1-true
     data = data.copyWith(isNotOwner: "1");
     List<http.MultipartFile> files = [];
     int cnt = 0;

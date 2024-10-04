@@ -1,62 +1,62 @@
 import 'dart:typed_data';
 
 class OwnerInputModel {
-  String censusCode;
-  String isNotOwner;
-  String name;
-  String icNo;
-  String raceCode; //dd
-  String genderCode; //dd
-  String totalHousehold;
-  String email;
-  String phoneNo;
-  String age;
-  String occupationTypeCode; //dd
-  String maritalStatusCode; //dd
-  String isOku;
-  String workAddress;
-  String workSalary;
-  String workAllowance;
-  String workOtherIncome;
-  String welfareAid;
+  String? censusCode;
+  String? isNotOwner;
+  String? name;
+  String? icNo;
+  String? raceCode; //dd
+  String? genderCode; //dd
+  String? totalHousehold;
+  String? email;
+  String? phoneNo;
+  String? age;
+  String? occupationTypeCode; //dd
+  String? maritalStatusCode; //dd
+  String? isOku;
+  String? workAddress;
+  String? workSalary;
+  String? workAllowance;
+  String? workOtherIncome;
+  String? welfareAid;
   Uint8List? uploadIncome;
   Uint8List? uploadIcFront;
   Uint8List? uploadIcBack;
   Uint8List? uploadOkuCard;
   //dd (optional)
-  String raceDesc;
-  String genderDesc;
-  String occupationTypeDesc;
-  String maritalStatusDesc;
+  String? raceDesc;
+  String? genderDesc;
+  String? occupationTypeDesc;
+  String? maritalStatusDesc;
 
   OwnerInputModel(
-      {required this.censusCode,
-      required this.isNotOwner,
-      required this.name,
-      required this.icNo,
-      required this.raceCode,
-      required this.genderCode,
-      required this.email,
-      required this.phoneNo,
-      required this.age,
-      required this.totalHousehold,
-      required this.occupationTypeCode,
-      required this.maritalStatusCode,
-      required this.isOku,
-      required this.workAddress,
-      required this.workSalary,
-      required this.workAllowance,
-      required this.workOtherIncome,
-      required this.welfareAid,
+      {this.censusCode,
+      this.isNotOwner,
+      this.name,
+      this.icNo,
+      this.raceCode,
+      this.genderCode,
+      this.email,
+      this.phoneNo,
+      this.age,
+      this.totalHousehold,
+      this.occupationTypeCode,
+      this.maritalStatusCode,
+      this.isOku,
+      this.workAddress,
+      this.workSalary,
+      this.workAllowance,
+      this.workOtherIncome,
+      this.welfareAid,
       this.uploadIncome,
       this.uploadIcFront,
       this.uploadIcBack,
       this.uploadOkuCard,
       //dd (optional)
-      required this.raceDesc,
-      required this.genderDesc,
-      required this.maritalStatusDesc,
-      required this.occupationTypeDesc});
+      this.raceDesc,
+      this.genderDesc,
+      this.maritalStatusDesc,
+      this.occupationTypeDesc});
 
   // CopyWith method
   OwnerInputModel copyWith({
@@ -120,23 +120,23 @@ class OwnerInputModel {
   // ToJson method
   Map<String, String> toJson() {
     return {
-      'censusCode': censusCode,
-      'isNotOwner': isNotOwner,
-      'name': name,
-      'icNo': icNo,
-      'email': email,
-      'phoneNo': phoneNo,
-      'raceCode': raceCode,
-      'genderCode': genderCode,
-      'totalHousehold': totalHousehold,
-      'occupationTypeCode': occupationTypeCode,
-      'maritalStatusCode': maritalStatusCode,
-      'isOku': isOku,
-      'workAddress': workAddress,
-      'workSalary': workSalary,
-      'workAllowance': workAllowance,
-      'workOtherIncome': workOtherIncome,
-      'welfareAid': welfareAid
+      'censusCode': censusCode ?? "",
+      'isNotOwner': isNotOwner ?? "",
+      'name': name ?? "",
+      'icNo': icNo ?? "",
+      'email': email ?? "",
+      'phoneNo': phoneNo ?? "",
+      'raceCode': raceCode ?? "",
+      'genderCode': genderCode ?? "",
+      'totalHousehold': totalHousehold ?? "",
+      'occupationTypeCode': occupationTypeCode ?? "",
+      'maritalStatusCode': maritalStatusCode ?? "",
+      'isOku': isOku ?? "",
+      'workAddress': workAddress ?? "",
+      'workSalary': workSalary ?? "",
+      'workAllowance': workAllowance ?? "",
+      'workOtherIncome': workOtherIncome ?? "",
+      'welfareAid': welfareAid ?? "",
     };
   }
 

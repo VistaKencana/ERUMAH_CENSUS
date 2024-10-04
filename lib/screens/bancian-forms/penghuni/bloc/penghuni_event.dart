@@ -18,3 +18,8 @@ class SavePenghuniData extends PenghuniEvent {
 
   const SavePenghuniData({required this.data});
 }
+class SaveBukanPenghuniData extends PenghuniEvent {
+  final OwnerInputModel data;
+
+  const SaveBukanPenghuniData({required this.data});
+}

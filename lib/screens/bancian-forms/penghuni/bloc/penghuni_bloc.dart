@@ -14,17 +14,23 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
   PenghuniBloc() : super(PenghuniInitial()) {
     on<SetPenghuniData>(_onSetPenghuniData);
     on<SavePenghuniData>(_onSavePenghuniData);
+    on<SaveBukanPenghuniData>(_onSaveBukanPenghuniData);
   }
   String censusCode = "";
   ResidentInfoData unitData = ResidentInfoData();
   OwnerInputModel? existData;
+  OwnerInputModel? notOwnerData;
   final repo = ApplicationRepository();
   final applog = const AppLog(classname: "PenghuniBloc");
   _onSetPenghuniData(SetPenghuniData event, Emitter<PenghuniState> emit) {
     unitData = event.data;
+    //[Owner] Setting current model
     existData = null;
     existData = OwnerInputModel.fromJson(unitData.toOwnerJson());
     censusCode = event.censusCode;
+    //[Not Owner] Setting  model
+    notOwnerData = OwnerInputModel(
+        censusCode: event.censusCode, isNotOwner: "1", totalHousehold: "0");
     applog.logDebug(
         tag: "_onSetPenghuniData",
         msg: existData?.toJson().toString() ?? "No data");
@@ -32,6 +38,13 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
 
   _onSavePenghuniData(
       SavePenghuniData event, Emitter<PenghuniState> emit) async {
+    var origin = existData!.toJson().toString();
+    var newData = event.data.toJson().toString();
+    if (origin.contains(newData)) {
+      emit(const PenghuniNoChanges(msg: "Tiada Perubahan Dibuat"));
+      emit(PenghuniInitial());
+      return;
+    }
     emit(PenghuniLoading());
     applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
     try {
@@ -41,6 +54,34 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
       emit(PenghuniSuccess());
     } catch (e) {
       applog.logError(tag: "_onSavePenghuniData", msg: e.toString());
+      emit(PenghuniError(msg: e.toString()));
+    } finally {
+      EasyLoading.dismiss();
+    }
+  }
+
+  bool isNotOwnerisFilled() {
+    return notOwnerData?.name?.isNotEmpty ?? false;
+  }
+
+  _onSaveBukanPenghuniData(
+      SaveBukanPenghuniData event, Emitter<PenghuniState> emit) async {
+    var origin = notOwnerData!.toJson().toString();
+    var newData = event.data.toJson().toString();
+    if (origin.contains(newData)) {
+      emit(const PenghuniNoChanges(msg: "Tiada Perubahan Dibuat"));
+      emit(PenghuniInitial());
+      return;
+    }
+    emit(PenghuniLoading());
+    applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
+    try {
+      final resp = await repo.storeNotOwner(data: event.data);
+      applog.logDebug(tag: "_onSaveBukanPenghuniData", msg: resp);
+      notOwnerData = event.data;
+      emit(PenghuniSuccess());
+    } catch (e) {
+      applog.logError(tag: "_onSaveBukanPenghuniData", msg: e.toString());
       emit(PenghuniError(msg: e.toString()));
     } finally {
       EasyLoading.dismiss();

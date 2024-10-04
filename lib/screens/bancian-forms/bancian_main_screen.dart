@@ -5,7 +5,6 @@ import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/custom_textfield.dart';
 import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
-// import 'package:eperumahan_bancian/data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
 import 'package:eperumahan_bancian/data/api/repositories/provider/dropdown_provider.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
@@ -15,6 +14,7 @@ import 'package:eperumahan_bancian/screens/bancian-forms/bancian_result.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/status_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/bloc/penghuni_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,15 +43,20 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
   final statusCtrl = TextEditingController();
   final remarkCtrl = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
   @override
   void initState() {
     super.initState();
     // _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
     _bancianBloc = BlocProvider.of<BancianBloc>(context, listen: false);
-    statusData = _bancianBloc.statusData!;
+    if (_isNewForm()) {
+      _bancianBloc.initNotOwner();
+      statusData = _bancianBloc.statusNotOwnerData!;
+    } else {
+      statusData = _bancianBloc.statusData!;
+    }
   }
 
-  _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
   _onPop() async {
     if (_isNewForm()) {
       Navigator.pop(context);
@@ -144,8 +149,6 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                             )
                           ],
                         ),
-                        // const SizedBox(height: 10),
-                        // const Text("Lawatan 2"),
                       ],
                     ),
                   ),
@@ -211,48 +214,6 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                       });
                     },
                   ),
-                  // BlocListener<DropdownBloc, DropdownState>(
-                  //   listener: (context, state) {
-                  //     if (state is DropdownSuccess) {
-                  //       if (state.type == DdType.censusStatus) {
-                  //         setState(() {});
-                  //         CustomDropdownSheet(
-                  //           label: "Pilih status",
-                  //           items: state.data,
-                  //           onFindGroupValue: (data) {
-                  //             return data.where((val) {
-                  //               var a = val?.code?.contains(
-                  //                       statusData.statusCode ?? "*_*") ??
-                  //                   false;
-                  //               return a;
-                  //             }).firstOrNull;
-                  //           },
-                  //           getTitle: (data) => data?.desc ?? "-",
-                  //           onChange: (val) {
-                  //             if (val == null) return;
-                  //             statusData =
-                  //                 statusData.copyWith(statusCode: val.code);
-                  //             statusCtrl.text = val.desc ?? "";
-                  //           },
-                  //         ).show(context);
-                  //       }
-                  //     }
-                  //   },
-                  //   child: CustomTextField(
-                  //     hintText: "Pilih status",
-                  //     readOnly: true,
-                  //     controller: statusCtrl,
-                  //     validator: (value) {
-                  //       if (value == null || value.isEmpty) return '';
-                  //       return null;
-                  //     },
-                  //     suffixIcon: Icons.arrow_drop_down,
-                  //     onTap: () {
-                  //       _dropdownBloc.add(
-                  //           const FetchDdFormData(type: DdType.censusStatus));
-                  //     },
-                  //   ),
-                  // ),
                   _gap(),
                   _section("Gambar"),
                   SectionContainer(
@@ -345,6 +306,14 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                     .showWarning(msg: "Sila isi maklumat diperlukan");
                 return;
               } else {
+                if (_isNewForm() &&
+                    context.read<PenghuniBloc>().isNotOwnerisFilled() ==
+                        false) {
+                  CustomFlushbar.of(context)
+                      .showWarning(msg: "Sila isi maklumat penghuni");
+                  return;
+                }
+                //Call API
                 _bancianBloc.add(SaveBancianData(data: statusData));
               }
             },
