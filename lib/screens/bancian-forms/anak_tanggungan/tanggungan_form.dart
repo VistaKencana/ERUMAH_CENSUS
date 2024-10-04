@@ -2,8 +2,10 @@ import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/anak_modal.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/bloc/anak_tanggungan_bloc.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/capture_card/capture_card_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
 
 import 'tanggungan_modal.dart';
 
@@ -57,9 +59,18 @@ class _TanggunganFormState extends State<TanggunganForm> {
           children: [
             ListTile(
               onTap: () {
-                const AnakModal(
-                  isEdit: true,
-                ).show(context);
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: CaptureCardScreen(onNext: (frontImg, backImg) {
+                          context.read<AnakTanggunganBloc>().addNewChild(
+                              frontImg: frontImg, backImg: backImg);
+                          Navigator.pop(context);
+                          const AnakModal(
+                            isEdit: true,
+                          ).show(context);
+                        }),
+                        type: PageTransitionType.bottomToTop));
               },
               contentPadding: const EdgeInsets.all(12),
               leading: Container(
@@ -109,9 +120,18 @@ class _TanggunganFormState extends State<TanggunganForm> {
           children: [
             ListTile(
               onTap: () {
-                const TanggunganModal(
-                  isEdit: true,
-                ).show(context);
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: CaptureCardScreen(onNext: (frontImg, backImg) {
+                          context.read<AnakTanggunganBloc>().addNewDependant(
+                              frontImg: frontImg, backImg: backImg);
+                          Navigator.pop(context);
+                          const TanggunganModal(
+                            isEdit: true,
+                          ).show(context);
+                        }),
+                        type: PageTransitionType.bottomToTop));
               },
               contentPadding: const EdgeInsets.all(12),
               leading: Container(

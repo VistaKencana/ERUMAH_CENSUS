@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:eperumahan_bancian/screens/bancian-forms/models/spouse_input_model.dart';
 import 'package:eperumahan_bancian/services/app_log.dart';
 import 'package:equatable/equatable.dart';
@@ -44,8 +46,12 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
         tag: "Select Spouse", msg: selectedSpouse!.toJson().toString());
   }
 
-  addNewPasangan() {
-    selectedSpouse = SpouseInputModel(censusCode: censusCode);
+  addNewPasangan({
+    required Uint8List frontImg,
+    required Uint8List backImg,
+  }) {
+    selectedSpouse = SpouseInputModel(
+        censusCode: censusCode, uploadIcFront: frontImg, uploadIcBack: backImg);
     applog.logDebug(
         tag: "Add Spouse", msg: selectedSpouse!.toJson().toString());
   }

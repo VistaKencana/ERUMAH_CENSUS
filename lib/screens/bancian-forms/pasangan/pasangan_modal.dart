@@ -77,9 +77,9 @@ class _PasanganModalState extends State<PasanganModal> {
   }
 
   initVal() {
-    if (_isNewForm()) {
-      _pasanganBloc.addNewPasangan();
-    }
+    // if (_isNewForm()) {
+    //   _pasanganBloc.addNewPasangan();
+    // }
     spouseData = _pasanganBloc.selectedSpouse!.copyWith();
     nameCtrl.text = setDataValue(spouseData?.name);
     bilIsiRumahCtrl.text =

@@ -1,8 +1,10 @@
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/capture_card/capture_card_screen.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/bloc/pasangan_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../../components/bottombar_button.dart';
 import '../../../components/custom_appbar.dart';
@@ -35,7 +37,16 @@ class _PasanganFormState extends State<PasanganForm> {
             children: [
               ListTile(
                 onTap: () {
-                  const PasanganModal(isNewForm: true).show(context);
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: CaptureCardScreen(onNext: (frontImg, backImg) {
+                            context.read<PasanganBloc>().addNewPasangan(
+                                frontImg: frontImg, backImg: backImg);
+                            Navigator.pop(context);
+                            const PasanganModal(isNewForm: true).show(context);
+                          }),
+                          type: PageTransitionType.bottomToTop));
                 },
                 contentPadding: const EdgeInsets.all(12),
                 leading: Container(

@@ -8,12 +8,15 @@ class CardDisplay extends StatefulWidget {
   final String title;
   final Uint8List? img;
   final IconData? icon;
+  final double? height, width;
   final void Function(Uint8List? img) onPicture;
   const CardDisplay(
       {super.key,
       required this.title,
       required this.onPicture,
       this.img,
+      this.height,
+      this.width,
       this.icon});
 
   @override
@@ -38,8 +41,8 @@ class _CardDisplayState extends State<CardDisplay> {
             borderType: BorderType.RRect,
             child: Container(
               clipBehavior: Clip.antiAlias,
-              width: MediaQuery.sizeOf(context).width * .43,
-              height: MediaQuery.sizeOf(context).height * .15,
+              width: widget.width ?? MediaQuery.sizeOf(context).width * .43,
+              height: widget.height ?? MediaQuery.sizeOf(context).height * .15,
               decoration: BoxDecoration(
                 color: const Color(0xFFF7F6FB),
                 borderRadius: BorderRadius.circular(12),

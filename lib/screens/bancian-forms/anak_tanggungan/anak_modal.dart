@@ -65,9 +65,9 @@ class _AnakModalState extends State<AnakModal> {
   }
 
   initVal() {
-    if (_isEdit()) {
-      _tanggunganBloc.addNewChild();
-    }
+    // if (_isEdit()) {
+    //   _tanggunganBloc.addNewChild();
+    // }
     dependantData = _tanggunganBloc.selectedData!.copyWith();
     nameCtrl.text = setDataValue(dependantData?.name);
     icNoCtrl.text = setDataValue(dependantData?.icNo);

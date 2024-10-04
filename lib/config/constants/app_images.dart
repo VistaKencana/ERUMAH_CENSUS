@@ -15,6 +15,7 @@ enum AppImages {
   successFP(path: "assets/images/fp_success.png"),
   failedFP(path: "assets/images/fp_failed.png"),
   custService(path: "assets/images/customer_service.png"),
+  captureCard(path: "assets/images/capture_card.png"),
   ;
 
   final String path;

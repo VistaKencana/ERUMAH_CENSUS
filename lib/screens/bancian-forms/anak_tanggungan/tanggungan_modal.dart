@@ -66,9 +66,9 @@ class _TanggunganModalState extends State<TanggunganModal> {
   }
 
   initVal() {
-    if (_isEdit()) {
-      _tanggunganBloc.addNewDependant();
-    }
+    // if (_isEdit()) {
+    //   _tanggunganBloc.addNewDependant();
+    // }
     dependantData = _tanggunganBloc.selectedData!.copyWith();
     nameCtrl.text = setDataValue(dependantData?.name);
     icNoCtrl.text = setDataValue(dependantData?.icNo);

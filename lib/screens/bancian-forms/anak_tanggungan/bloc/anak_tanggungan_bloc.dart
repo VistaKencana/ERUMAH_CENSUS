@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:eperumahan_bancian/screens/bancian-forms/models/dependant_input_model.dart';
 import 'package:eperumahan_bancian/screens/qr-home/models/resident_info_model.dart';
 import 'package:eperumahan_bancian/services/app_log.dart';
@@ -151,18 +153,27 @@ class AnakTanggunganBloc
         tag: "Select Dependant", msg: selectedData!.toJson().toString());
   }
 
-  addNewChild() {
+  addNewChild({
+    required Uint8List frontImg,
+    required Uint8List backImg,
+  }) {
     //Setting new object for new child
     selectedData = DependantInputModel(
         censusCode: censusCode,
         relationshipCode: "RSP001",
-        relationshipDesc: "Anak");
+        relationshipDesc: "Anak",
+        uploadIcFront: frontImg,
+        uploadIcBack: backImg);
     applog.logDebug(tag: "Add Child", msg: selectedData!.toJson().toString());
   }
 
-  addNewDependant() {
+  addNewDependant({
+    required Uint8List frontImg,
+    required Uint8List backImg,
+  }) {
     //Setting new object for new dependant
-    selectedData = DependantInputModel(censusCode: censusCode);
+    selectedData = DependantInputModel(
+        censusCode: censusCode, uploadIcFront: frontImg, uploadIcBack: backImg);
     applog.logDebug(
         tag: "Add Dependant", msg: selectedData!.toJson().toString());
   }
