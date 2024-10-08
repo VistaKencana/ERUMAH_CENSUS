@@ -200,13 +200,19 @@ class _PenghuniFormState extends State<PenghuniForm> {
                             children: [
                               _textField(
                                   title: 'Bilangan Isi Rumah',
+                                  keyboardType: TextInputType.number,
                                   controller: bilIsiRumahCtrl),
                               _textField(
                                   title: 'No. Kad Pengenalan',
                                   controller: icNoCtrl,
                                   isMandatory: _isNewForm(),
+                                  keyboardType: TextInputType.number,
                                   readOnly: _isReadOnly()),
-                              _textField(title: 'Emel', controller: emelCtrl),
+                              _textField(
+                                title: 'Emel',
+                                controller: emelCtrl,
+                                keyboardType: TextInputType.emailAddress,
+                              ),
                               _textField(
                                   title: 'Umur(Tahun)',
                                   controller: umurCtrl,
@@ -214,6 +220,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                               _textField(
                                 title: 'No Telefon',
                                 controller: noTelCtrl,
+                                keyboardType: TextInputType.phone,
                                 isMandatory: _isNewForm(),
                               ),
                               _dropdownJantina(),
@@ -341,6 +348,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
       String? hintText,
       void Function(String)? onChanged,
       double? width,
+      TextInputType keyboardType = TextInputType.text,
       void Function()? onTap,
       bool isDropdown = false}) {
     if (isDropdown) {
@@ -380,6 +388,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
         onTap: onTap,
         controller: controller,
         readOnly: readOnly,
+        keyboardType: keyboardType,
         hintText: hintText,
         onChanged: onChanged, isMandatory: isMandatory,
         validator: isMandatory

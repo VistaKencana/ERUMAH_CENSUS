@@ -142,18 +142,24 @@ class _AnakModalState extends State<AnakModal> {
                                     _textField(
                                         title: 'No. Kad Pengenalan',
                                         controller: icNoCtrl,
+                                        keyboardType: TextInputType.number,
                                         isMandatory: _isEdit(),
                                         readOnly: _isReadOnly()),
                                     _textField(
-                                        title: 'Emel', controller: emelCtrl),
+                                      title: 'Emel',
+                                      controller: emelCtrl,
+                                      keyboardType: TextInputType.emailAddress,
+                                    ),
                                     _textField(
                                         title: 'Umur(Tahun)',
                                         controller: umurCtrl,
+                                        keyboardType: TextInputType.number,
                                         readOnly: _isReadOnly()),
                                     _dropdownKesihatan(),
                                     _textField(
                                         title: 'No. Telefon',
                                         controller: noTelCtrl,
+                                        keyboardType: TextInputType.phone,
                                         readOnly: _isReadOnly()),
                                     _dropdownJantina(),
                                     _dropdownBangsa(),
@@ -281,6 +287,7 @@ class _AnakModalState extends State<AnakModal> {
       String? hintText,
       void Function(String)? onChanged,
       double? width,
+      TextInputType keyboardType = TextInputType.text,
       void Function()? onTap,
       bool isDropdown = false}) {
     if (isDropdown) {
@@ -319,6 +326,7 @@ class _AnakModalState extends State<AnakModal> {
         onTap: onTap,
         controller: controller,
         isMandatory: isMandatory,
+        keyboardType: keyboardType,
         validator: isMandatory
             ? (value) {
                 if (value == null || value.isEmpty) return '';

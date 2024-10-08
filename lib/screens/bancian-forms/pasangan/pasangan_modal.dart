@@ -241,16 +241,26 @@ class _PasanganModalState extends State<PasanganModal> {
                   _gap(height: 14),
                   TwoColumnForm(
                     children: [
-                      _textField(title: 'Emel', controller: emelCtrl),
+                      _textField(
+                        title: 'Emel',
+                        controller: emelCtrl,
+                        keyboardType: TextInputType.emailAddress,
+                      ),
                       _textField(
                           title: 'No. Kad Pengenalan',
                           controller: icNoCtrl,
+                          keyboardType: TextInputType.number,
                           isMandatory: _isNewForm(),
                           readOnly: _isReadOnly()),
-                      _textField(title: 'No Telefon', controller: noTelCtrl),
+                      _textField(
+                        title: 'No Telefon',
+                        keyboardType: TextInputType.phone,
+                        controller: noTelCtrl,
+                      ),
                       _textField(
                           title: 'Umur(Tahun)',
                           controller: umurCtrl,
+                          keyboardType: TextInputType.number,
                           readOnly: _isReadOnly()),
                       _dropdownKesihatan(),
                       _dropdownJantina(),
@@ -334,6 +344,7 @@ class _PasanganModalState extends State<PasanganModal> {
       String? hintText,
       void Function(String)? onChanged,
       double? width,
+      TextInputType keyboardType = TextInputType.text,
       void Function()? onTap,
       bool isDropdown = false}) {
     if (isDropdown) {
@@ -372,6 +383,7 @@ class _PasanganModalState extends State<PasanganModal> {
         title: title,
         onTap: onTap,
         controller: controller,
+        keyboardType: keyboardType,
         readOnly: readOnly,
         hintText: hintText,
         onChanged: onChanged,

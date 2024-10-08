@@ -59,7 +59,18 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
 
   _onPop() async {
     if (_isNewForm()) {
-      Navigator.pop(context);
+      CustomAlertDialog(
+        title: "Berhenti banci?",
+        subtitle:
+            "Adakah anda akan berhenti membuat bancian untuk bukan pemilik?",
+        colorBtnLabel: "Ya",
+        onColorBtn: () {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        },
+        dimmedBtnLabel: "Kembali",
+        onDimmedBtn: () => Navigator.pop(context),
+      ).show(context);
       return;
     }
     final isFromHome = await QrNavigationPref.isFromHome();
@@ -306,15 +317,24 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                     .showWarning(msg: "Sila isi maklumat diperlukan");
                 return;
               } else {
-                if (_isNewForm() &&
-                    context.read<PenghuniBloc>().isNotOwnerisFilled() ==
-                        false) {
-                  CustomFlushbar.of(context)
-                      .showWarning(msg: "Sila isi maklumat penghuni");
-                  return;
-                }
-                //Call API
-                _bancianBloc.add(SaveBancianData(data: statusData));
+                CustomAlertDialog(
+                  title: "Peringatan !",
+                  subtitle: "Sila pastikan semua maklumat adalah betul",
+                  colorBtnLabel: "Teruskan",
+                  onColorBtn: () {
+                    if (_isNewForm() &&
+                        context.read<PenghuniBloc>().isNotOwnerisFilled() ==
+                            false) {
+                      CustomFlushbar.of(context)
+                          .showWarning(msg: "Sila isi maklumat penghuni");
+                      return;
+                    }
+                    //Call API
+                    _bancianBloc.add(SaveBancianData(data: statusData));
+                  },
+                  dimmedBtnLabel: "Kembali",
+                  onDimmedBtn: () => Navigator.pop(context),
+                ).show(context);
               }
             },
           ),
