@@ -91,7 +91,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
                   return Stack(
                     children: [
                       Positioned(
-                        left: cWidth * 0.06,
+                        left: cWidth * 0.04,
                         top: 23,
                         bottom: 23,
                         child: VerticalDivider(
