@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: constraint.maxHeight * .04),
                       Text(
-                        "E-PERUMAHAN",
+                        "PENGURUSAN PERUMAHAN",
                         style:
                             appTextStyle(size: 24, fontWeight: FontWeight.w700),
                       ),
