@@ -33,6 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
         } else if (state is AuthLoginSuccess) {
           EasyLoading.dismiss()
               .then((val) => Navigator.pushNamed(context, RoutesName.home));
+        } else if (state is AuthTimeoutSuccess) {
+          EasyLoading.dismiss().then((val) => Navigator.pop(context));
         } else if (state is AuthLoginError) {
           EasyLoading.dismiss();
           CustomFlushbar.of(context).showFailed(msg: state.msg);
@@ -71,6 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         "PENGURUSAN PERUMAHAN",
                         style:
                             appTextStyle(size: 24, fontWeight: FontWeight.w700),
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 2),
                       Text(

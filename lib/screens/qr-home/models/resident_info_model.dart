@@ -124,11 +124,11 @@ class ResidentInfoData {
         "censusStatusCode": censusStatusCode,
         "unit": unit?.toJson(),
         "owner": owner?.toJson(),
-        "spouse": spouse == null
+        "spouse": (spouse == null || (spouse?.isEmpty ?? true))
             ? []
             : List<dynamic>.from(spouse!.map((x) => x.toJson())),
         "dependants": dependants?.toJson(),
-        "visits": visits == null
+        "visits": (visits == null || (visits?.isEmpty ?? true))
             ? []
             : List<dynamic>.from(visits!.map((x) => x.toJson())),
       };
@@ -137,29 +137,29 @@ class ResidentInfoData {
     return {
       'censusCode': censusCode, //Get from resident data
       'isNotOwner': "0", //0-false 1- true
-      'name': owner?.name,
-      'icNo': owner?.icNo,
-      'totalHousehold': owner?.totalHousehold,
-      'email': owner?.email,
-      'phoneNo': owner?.phoneNo,
-      "age": owner?.age,
+      'name': owner?.name ?? "",
+      'icNo': owner?.icNo ?? "",
+      'totalHousehold': owner?.totalHousehold ?? "",
+      'email': owner?.email ?? "",
+      'phoneNo': owner?.phoneNo ?? "",
+      "age": owner?.age ?? "",
       'isOku': (owner?.isOku == null || (owner?.isOku?.isEmpty ?? true))
           ? "0"
-          : owner?.isOku,
-      'workAddress': owner?.occupation?.workplace?.address,
-      'workSalary': owner?.income?.basicSalary,
-      'workAllowance': owner?.income?.allowance,
-      'workOtherIncome': owner?.income?.other,
-      'welfareAid': owner?.income?.welfareAid,
+          : owner?.isOku ?? "",
+      'workAddress': owner?.occupation?.workplace?.address ?? "",
+      'workSalary': owner?.income?.basicSalary ?? "",
+      'workAllowance': owner?.income?.allowance ?? "",
+      'workOtherIncome': owner?.income?.other ?? "",
+      'welfareAid': owner?.income?.welfareAid ?? "",
       //dropdown
-      'genderDesc': owner?.gender?.desc,
-      'genderCode': owner?.gender?.code,
-      'raceDesc': owner?.race?.desc,
-      'raceCode': owner?.race?.code,
-      'occupationTypeDesc': owner?.occupation?.type,
-      'occupationTypeCode': owner?.occupation?.typeCode,
-      'maritalStatusDesc': owner?.maritalStatus?.desc,
-      'maritalStatusCode': owner?.maritalStatus?.code,
+      'genderDesc': owner?.gender?.desc ?? "",
+      'genderCode': owner?.gender?.code ?? "",
+      'raceDesc': owner?.race?.desc ?? "",
+      'raceCode': owner?.race?.code ?? "",
+      'occupationTypeDesc': owner?.occupation?.type ?? "",
+      'occupationTypeCode': owner?.occupation?.typeCode ?? "",
+      'maritalStatusDesc': owner?.maritalStatus?.desc ?? "",
+      'maritalStatusCode': owner?.maritalStatus?.code ?? "",
     };
   }
 
@@ -218,10 +218,10 @@ class DependantsModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "child": child == null
+        "child": (child == null || (child?.isEmpty ?? true))
             ? []
             : List<dynamic>.from(child!.map((x) => x.toJson())),
-        "others": others == null
+        "others": (others == null || (others?.isEmpty ?? true))
             ? []
             : List<dynamic>.from(others!.map((x) => x.toJson())),
       };
@@ -328,17 +328,17 @@ class SpouseData {
       {String? censCode, String? totalHousehold}) {
     return {
       'censusCode': censCode,
-      'icNo': icNo,
-      'name': name,
-      'email': email,
-      "age": age,
-      "phoneNo": phoneNo,
-      'totalHousehold': totalHousehold,
+      'icNo': icNo ?? "",
+      'name': name ?? "",
+      'email': email ?? "",
+      "age": age ?? "",
+      "phoneNo": phoneNo ?? "",
+      'totalHousehold': totalHousehold ?? "",
       'healthLevelCode': healthLevel?.code ?? "",
       'healthLevelDesc': healthLevel?.desc ?? "",
       'workAddress': occupation?.workplace?.address ?? "",
-      'workSalary': income?.basicSalary,
-      'workAllowance': income?.allowance,
+      'workSalary': income?.basicSalary ?? "",
+      'workAllowance': income?.allowance ?? "",
       'workOtherIncome': income?.other ?? "",
       'welfareAid': income?.welfareAid ?? "",
       'genderCode': gender?.code ?? "",
@@ -447,11 +447,11 @@ class DependantsData {
   Map<String, dynamic> toDepandantJson({String? censusCode}) {
     return {
       'censusCode': censusCode,
-      'icNo': icNo,
-      'name': name,
-      'email': email,
-      "age": age,
-      "phoneNo": phoneNo,
+      'icNo': icNo ?? "",
+      'name': name ?? "",
+      'email': email ?? "",
+      "age": age ?? "",
+      "phoneNo": phoneNo ?? "",
       'relationshipCode': relationship?.code ?? "",
       'relationshipDesc': relationship?.desc ?? "",
       'healthLevelCode': healthLevel?.code ?? "",

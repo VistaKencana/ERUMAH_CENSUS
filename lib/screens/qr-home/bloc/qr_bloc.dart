@@ -72,7 +72,11 @@ class QrBloc extends Bloc<QrEvent, QrState> {
               await repoAppl.getCensusCode(qrcCode: event.qrCode);
           residentData = residentData.copyWith(censusCode: cencusCode);
         } catch (e) {
-          log.logError(tag: "_onScanQrcode", msg: e.toString());
+          emit(const QrError(msg: "Error on fetch census code"));
+          log.logError(
+              tag: "_onScanQrcode Fethc census code", msg: e.toString());
+          EasyLoading.dismiss();
+          return;
         }
       }
 

@@ -13,6 +13,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
     on<UserLogin>(_onUserLogin);
     on<UserLogout>(_onUserLogout);
+    on<UserLoginTimeout>(_onUserLoginTimeout);
   }
 
   final repo = AuthRepository();
@@ -23,6 +24,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await repo.userLogin(userCode: event.userCode, password: event.pwd);
       await LoginPreference().saveData(model: resp);
       emit(AuthLoginSuccess());
+    } on SocketException {
+      emit(const AuthLoginError(msg: "No internet connection"));
+    } catch (e) {
+      emit(AuthLoginError(msg: e.toString()));
+    }
+  }
+
+  _onUserLoginTimeout(UserLoginTimeout event, Emitter<AuthState> emit) async {
+    emit(AuthLoginLoading());
+    try {
+      final resp =
+          await repo.userLogin(userCode: event.userCode, password: event.pwd);
+      await LoginPreference().saveData(model: resp);
+      emit(AuthTimeoutSuccess());
     } on SocketException {
       emit(const AuthLoginError(msg: "No internet connection"));
     } catch (e) {

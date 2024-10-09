@@ -27,16 +27,22 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
   SpouseInputModel? selectedSpouse;
   int selectedIndex = 0;
   _onSetPasanganData(SetPasanganData event, Emitter<PasanganState> emit) {
-    unitData = event.data;
-    existData.clear();
-    final data = unitData.toListSpouseJson();
-    if (data.isNotEmpty) {
-      existData.addAll(data.map((e) => SpouseInputModel.fromJson(e)).toList());
+    try {
+      unitData = event.data;
+      existData.clear();
+      final data = unitData.toListSpouseJson();
+      if (data.isNotEmpty) {
+        existData
+            .addAll(data.map((e) => SpouseInputModel.fromJson(e)).toList());
+      }
+      censusCode = event.censusCode;
+      applog.logDebug(
+          tag: "_onSetPasanganData", msg: "Pasangan: ${existData.length}");
+      emit(PasanganLoaded(spouseData: existData));
+    } catch (e) {
+      applog.logError(tag: "_onSetPasanganData", msg: e.toString());
+      emit(PasanganLoaded(spouseData: existData));
     }
-    censusCode = event.censusCode;
-    applog.logDebug(
-        tag: "_onSetPasanganData", msg: "Pasangan: ${existData.length}");
-    emit(PasanganLoaded(spouseData: existData));
   }
 
   selectPasangan(SpouseInputModel data, int index) {

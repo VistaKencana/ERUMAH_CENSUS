@@ -55,6 +55,7 @@ class AnakTanggunganBloc
       emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));
     } catch (e) {
       applog.logError(tag: "_onSetAnakTanggungData", msg: e.toString());
+      emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));
     }
   }
 

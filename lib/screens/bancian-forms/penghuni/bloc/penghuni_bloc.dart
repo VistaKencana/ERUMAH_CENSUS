@@ -23,17 +23,21 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
   final repo = ApplicationRepository();
   final applog = const AppLog(classname: "PenghuniBloc");
   _onSetPenghuniData(SetPenghuniData event, Emitter<PenghuniState> emit) {
-    unitData = event.data;
-    //[Owner] Setting current model
-    existData = null;
-    existData = OwnerInputModel.fromJson(unitData.toOwnerJson());
-    censusCode = event.censusCode;
-    //[Not Owner] Setting  model
-    notOwnerData = OwnerInputModel(
-        censusCode: event.censusCode, isNotOwner: "1", totalHousehold: "0");
-    applog.logDebug(
-        tag: "_onSetPenghuniData",
-        msg: existData?.toJson().toString() ?? "No data");
+    try {
+      unitData = event.data;
+      //[Owner] Setting current model
+      existData = null;
+      existData = OwnerInputModel.fromJson(unitData.toOwnerJson());
+      censusCode = event.censusCode;
+      //[Not Owner] Setting  model
+      notOwnerData = OwnerInputModel(
+          censusCode: event.censusCode, isNotOwner: "1", totalHousehold: "0");
+      applog.logDebug(
+          tag: "_onSetPenghuniData",
+          msg: existData?.toJson().toString() ?? "No data");
+    } catch (e) {
+      applog.logError(tag: "_onSetPenghuniData", msg: e.toString());
+    }
   }
 
   _onSavePenghuniData(

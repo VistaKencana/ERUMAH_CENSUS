@@ -16,4 +16,13 @@ class UserLogin extends AuthEvent {
   });
 }
 
+class UserLoginTimeout extends AuthEvent {
+  final String userCode, pwd;
+
+  const UserLoginTimeout({
+    required this.userCode,
+    required this.pwd,
+  });
+}
+
 class UserLogout extends AuthEvent {}

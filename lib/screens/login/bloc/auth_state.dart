@@ -13,6 +13,8 @@ final class AuthLoginLoading extends AuthState {}
 
 final class AuthLoginSuccess extends AuthState {}
 
+final class AuthTimeoutSuccess extends AuthState {}
+
 final class AuthLoginError extends AuthState {
   final String msg;
   const AuthLoginError({required this.msg});

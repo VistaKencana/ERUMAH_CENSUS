@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
+import 'package:eperumahan_bancian/components/timeout_screen.dart';
 import 'package:eperumahan_bancian/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import "dart:developer" as dev;
 import 'package:http_parser/http_parser.dart';
-import '../../config/routes/routes_name.dart';
+import 'package:page_transition/page_transition.dart';
 import '../hive-manager/repository/login_pref.dart';
 
 class ApiClient {
@@ -180,14 +180,11 @@ class ApiClient {
     if (!isExist) return null;
     final token = LoginPreference().isTokenExpired();
     if (token == null) {
-      CustomAlertDialog(
-        title: 'Session Expired',
-        subtitle: 'Please login again',
-        colorBtnLabel: 'Okay',
-        barrierDismissible: false,
-        onColorBtn: () => Navigator.popUntil(navigatorKey.currentContext!,
-            ModalRoute.withName(RoutesName.login)),
-      ).show(navigatorKey.currentContext!);
+      Navigator.pushReplacement(
+          navigatorKey.currentContext!,
+          PageTransition(
+              child: const TimeoutScreen(),
+              type: PageTransitionType.rightToLeft));
       throw TokenExpiredException();
     }
     return token;
