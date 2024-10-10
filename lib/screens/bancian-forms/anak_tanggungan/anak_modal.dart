@@ -1,7 +1,6 @@
-import 'dart:typed_data';
-
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/components/card_display.dart';
+import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
@@ -14,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../../components/disability_checkbox.dart';
-// import '../../../data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
 import '../../../data/api/repositories/provider/dropdown_provider.dart';
 
 class AnakModal extends StatefulWidget {
@@ -38,11 +36,9 @@ class AnakModal extends StatefulWidget {
 class _AnakModalState extends State<AnakModal> {
   _isEdit() => (widget.isEdit != null && widget.isEdit == true);
   _isReadOnly() => _isEdit() ? false : true;
-  // late DropdownBloc _dropdownBloc;
+
   late AnakTanggunganBloc _tanggunganBloc;
-  Uint8List? frontCard;
-  Uint8List? backCard;
-  Uint8List? okuCard;
+
   bool isOKU = false;
   DependantInputModel? dependantData;
   final nameCtrl = TextEditingController();
@@ -84,6 +80,20 @@ class _AnakModalState extends State<AnakModal> {
     return _isEdit() ? "" : val ?? (defaultVal ?? "");
   }
 
+  _exitWarning() {
+    CustomAlertDialog(
+      title: "Berhenti banci anak?",
+      subtitle: "Adakah anda akan berhenti membuat bancian untuk anak?",
+      colorBtnLabel: "Ya",
+      onColorBtn: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+      dimmedBtnLabel: "Kembali",
+      onDimmedBtn: () => Navigator.pop(context),
+    ).show(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -115,11 +125,13 @@ class _AnakModalState extends State<AnakModal> {
                           KadPengenalanTile(
                             frontCard: dependantData?.uploadIcFront,
                             onFrontCard: (bytes) {
-                              setState(() => frontCard = bytes);
+                              setState(() => dependantData = dependantData!
+                                  .copyWith(uploadIcFront: bytes));
                             },
                             backCard: dependantData?.uploadIcBack,
                             onBackCard: (bytes) {
-                              setState(() => backCard = bytes);
+                              setState(() => dependantData =
+                                  dependantData!.copyWith(uploadIcBack: bytes));
                             },
                           ),
                           const Divider(height: 0, indent: 20, endIndent: 20),
@@ -263,8 +275,7 @@ class _AnakModalState extends State<AnakModal> {
           ),
           const Spacer(),
           GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: const Icon(Icons.close)),
+              onTap: () => _exitWarning(), child: const Icon(Icons.close)),
           const SizedBox(width: 15)
         ],
       ),

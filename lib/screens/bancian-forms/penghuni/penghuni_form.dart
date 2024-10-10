@@ -101,8 +101,8 @@ class _PenghuniFormState extends State<PenghuniForm> {
 
   _exitWarning() {
     CustomAlertDialog(
-      title: "Berhenti banci penhuni?",
-      subtitle: "Adakah anda akan berhenti membuat bancian untuk penhuni?",
+      title: "Berhenti banci penghuni?",
+      subtitle: "Adakah anda akan berhenti membuat bancian untuk penghuni?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
         Navigator.pop(context);

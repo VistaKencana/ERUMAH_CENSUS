@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/components/card_display.dart';
+import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../../components/custom_dropdown_sheet.dart';
 import '../../../components/disability_checkbox.dart';
-// import '../../../data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
 import '../../../data/api/repositories/dropdown_repository.dart';
 import '../../../data/api/repositories/provider/dropdown_provider.dart';
 import '../../../services/flushbar/custom_flushbar.dart';
@@ -59,7 +59,6 @@ class _TanggunganModalState extends State<TanggunganModal> {
   @override
   void initState() {
     super.initState();
-    // _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
     _tanggunganBloc =
         BlocProvider.of<AnakTanggunganBloc>(context, listen: false);
     initVal();
@@ -83,6 +82,20 @@ class _TanggunganModalState extends State<TanggunganModal> {
 
   String setDataValue(String? val, {String? defaultVal}) {
     return _isEdit() ? "" : val ?? (defaultVal ?? "");
+  }
+
+  _exitWarning() {
+    CustomAlertDialog(
+      title: "Berhenti banci tanggungan?",
+      subtitle: "Adakah anda akan berhenti membuat bancian untuk tanggungan?",
+      colorBtnLabel: "Ya",
+      onColorBtn: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+      dimmedBtnLabel: "Kembali",
+      onDimmedBtn: () => Navigator.pop(context),
+    ).show(context);
   }
 
   @override
@@ -114,11 +127,15 @@ class _TanggunganModalState extends State<TanggunganModal> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           KadPengenalanTile(
+                            frontCard: dependantData!.uploadIcFront,
                             onFrontCard: (bytes) {
-                              setState(() => frontCard = bytes);
+                              setState(() => dependantData = dependantData!
+                                  .copyWith(uploadIcFront: bytes));
                             },
+                            backCard: dependantData!.uploadIcBack,
                             onBackCard: (bytes) {
-                              setState(() => backCard = bytes);
+                              setState(() => dependantData =
+                                  dependantData!.copyWith(uploadIcBack: bytes));
                             },
                           ),
                           const Divider(height: 0, indent: 20, endIndent: 20),
@@ -259,8 +276,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
           ),
           const Spacer(),
           GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: const Icon(Icons.close)),
+              onTap: () => _exitWarning(), child: const Icon(Icons.close)),
           const SizedBox(width: 15)
         ],
       ),

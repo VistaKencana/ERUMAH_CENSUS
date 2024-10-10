@@ -1,14 +1,12 @@
-import 'dart:typed_data';
-
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/components/card_display.dart';
+import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/switch_modal.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
-// import 'package:eperumahan_bancian/data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/spouse_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/bloc/pasangan_bloc.dart';
@@ -42,12 +40,8 @@ class PasanganModal extends StatefulWidget {
 class _PasanganModalState extends State<PasanganModal> {
   bool _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
   bool _isReadOnly() => _isNewForm() ? false : true;
-  Uint8List? frontCard;
-  Uint8List? backCard;
-  Uint8List? okuCard;
-  Uint8List? slipGajiImg;
+
   bool isOKU = false;
-  // late DropdownBloc _dropdownBloc;
   late PasanganBloc _pasanganBloc;
   SpouseInputModel? spouseData;
   final nameCtrl = TextEditingController();
@@ -104,6 +98,20 @@ class _PasanganModalState extends State<PasanganModal> {
 
   String setDataValue(String? val, {String? defaultVal}) {
     return _isNewForm() ? "" : val ?? (defaultVal ?? "");
+  }
+
+  _exitWarning() {
+    CustomAlertDialog(
+      title: "Berhenti banci pasangan?",
+      subtitle: "Adakah anda akan berhenti membuat bancian untuk pasangan?",
+      colorBtnLabel: "Ya",
+      onColorBtn: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+      dimmedBtnLabel: "Kembali",
+      onDimmedBtn: () => Navigator.pop(context),
+    ).show(context);
   }
 
   @override
@@ -202,8 +210,7 @@ class _PasanganModalState extends State<PasanganModal> {
           ),
           const Spacer(),
           GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: const Icon(Icons.close)),
+              onTap: () => _exitWarning(), child: const Icon(Icons.close)),
           const SizedBox(width: 15),
         ],
       ),
@@ -219,11 +226,13 @@ class _PasanganModalState extends State<PasanganModal> {
             KadPengenalanTile(
               frontCard: spouseData?.uploadIcFront,
               onFrontCard: (bytes) {
-                setState(() => frontCard = bytes);
+                setState(() =>
+                    spouseData = spouseData!.copyWith(uploadIcFront: bytes));
               },
               backCard: spouseData?.uploadIcBack,
               onBackCard: (bytes) {
-                setState(() => backCard = bytes);
+                setState(() =>
+                    spouseData = spouseData!.copyWith(uploadIcBack: bytes));
               },
             ),
             const Divider(height: 0, indent: 20, endIndent: 20),
@@ -315,7 +324,7 @@ class _PasanganModalState extends State<PasanganModal> {
                       visible: (spouseData?.isOku == "1"),
                       child: CardDisplay(
                         title: "",
-                        img: okuCard,
+                        img: spouseData!.uploadOkuCard,
                         onPicture: (bytes) => setState(() {
                           spouseData =
                               spouseData!.copyWith(uploadOkuCard: bytes);
