@@ -11,6 +11,7 @@ import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/config/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'config/constants/app_size.dart';
 import 'config/providers/app_provider.dart';
@@ -64,18 +65,20 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     AppSize().initialize(context);
-    return MaterialApp(
-      title: 'ePerumahan Bancian',
-      debugShowCheckedModeBanner: false,
-      navigatorKey: navigatorKey,
-      //THEME
-      themeMode: ThemeMode.light,
-      theme: AppThemes.lightTheme,
-      darkTheme: AppThemes.darkTheme,
-      //ROUTES
-      initialRoute: RoutesName.splash,
-      onGenerateRoute: RoutesGenerator.generateRoutes,
-      builder: EasyLoading.init(),
+    return ScreenUtilInit(
+      child: MaterialApp(
+        title: 'ePerumahan Bancian',
+        debugShowCheckedModeBanner: false,
+        navigatorKey: navigatorKey,
+        //THEME
+        themeMode: ThemeMode.light,
+        theme: AppThemes.lightTheme,
+        darkTheme: AppThemes.darkTheme,
+        //ROUTES
+        initialRoute: RoutesName.splash,
+        onGenerateRoute: RoutesGenerator.generateRoutes,
+        builder: EasyLoading.init(),
+      ),
     );
   }
 }

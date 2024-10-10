@@ -67,6 +67,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
               title: "Imbasan QR Berjaya",
               subtitle: "Adakah nombor unit sama dengan yang anda imbas?",
               unitNumber: state.data?.unit?.no ?? "",
+              lokasiPpr: state.data?.unit?.housingProject?.desc ?? "",
               colorBtnLabel: "Ya, Teruskan Bancian",
               onColorBtn: () {
                 Navigator.pop(context);

@@ -6,6 +6,7 @@ class QrConfirmationDialog extends StatefulWidget {
   final String title;
   final String subtitle;
   final String unitNumber;
+  final String lokasiPpr;
   final String colorBtnLabel;
   final String? dimmedBtnLabel;
   final QrConfirmationPosition position;
@@ -17,6 +18,7 @@ class QrConfirmationDialog extends StatefulWidget {
       required this.title,
       required this.subtitle,
       required this.unitNumber,
+      required this.lokasiPpr,
       this.onColorBtn,
       this.onDimmedBtn,
       required this.colorBtnLabel,
@@ -79,6 +81,10 @@ class _CustomAlertDialogState extends State<QrConfirmationDialog> {
             widget.unitNumber,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
+        ),
+        Text(
+          widget.lokasiPpr,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 10),

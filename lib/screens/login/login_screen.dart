@@ -6,6 +6,7 @@ import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../components/bg_image.dart';
@@ -60,7 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             appTextStyle(size: 20, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 15),
-                      FittedBox(
+                      AspectRatio(
+                        aspectRatio: 30 / 9,
                         child: Image.asset(
                           AppImages.dbklLogo.path,
                           fit: BoxFit.contain,
@@ -71,8 +73,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: constraint.maxHeight * .04),
                       Text(
                         "PENGURUSAN PERUMAHAN",
-                        style:
-                            appTextStyle(size: 24, fontWeight: FontWeight.w700),
+                        style: appTextStyle(
+                            size: 20.sp, fontWeight: FontWeight.w700),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 2),
@@ -81,10 +83,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: appTextStyle(fontWeight: FontWeight.w600),
                       ),
                       SizedBox(height: constraint.maxHeight * .03),
-                      Image.asset(
-                        AppImages.icLogMasuk.path,
-                        width: 172,
-                        height: 48,
+                      AspectRatio(
+                        aspectRatio: 16 / 1.5,
+                        child: Image.asset(
+                          AppImages.icLogMasuk.path,
+                        ),
                       ),
                       const SizedBox(height: 10),
                       CustomTextField(

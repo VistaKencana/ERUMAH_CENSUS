@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:eperumahan_bancian/services/doc_scanner.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CardDisplay extends StatefulWidget {
   final String title;
@@ -42,7 +43,7 @@ class _CardDisplayState extends State<CardDisplay> {
             child: Container(
               clipBehavior: Clip.antiAlias,
               width: widget.width ?? MediaQuery.sizeOf(context).width * .43,
-              height: widget.height ?? MediaQuery.sizeOf(context).height * .15,
+              height: widget.height ?? MediaQuery.sizeOf(context).height * .16,
               decoration: BoxDecoration(
                 color: const Color(0xFFF7F6FB),
                 borderRadius: BorderRadius.circular(12),
@@ -61,13 +62,13 @@ class _CardDisplayState extends State<CardDisplay> {
                             color: Colors.black45,
                           ),
                           const SizedBox(height: 4),
-                          const Center(
+                          Center(
                             child: Text(
                               'Buka kamera & Ambil Gambar',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.grey,
-                                fontSize: 16,
+                                fontSize: 14.sp,
                               ),
                             ),
                           ),

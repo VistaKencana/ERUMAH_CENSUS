@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../../../components/custom_alertdialog.dart';
 import '../../../components/custom_appbar.dart';
 import '../../../components/custom_dropdown_sheet.dart';
 // import '../../../data/api/repositories/bloc/dropddown_bloc/dropdown_bloc.dart';
@@ -98,196 +99,220 @@ class _PenghuniFormState extends State<PenghuniForm> {
     // return _isNewForm() ? "" : val ?? (defaultVal ?? "");
   }
 
+  _exitWarning() {
+    CustomAlertDialog(
+      title: "Berhenti banci penhuni?",
+      subtitle: "Adakah anda akan berhenti membuat bancian untuk penhuni?",
+      colorBtnLabel: "Ya",
+      onColorBtn: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+      dimmedBtnLabel: "Kembali",
+      onDimmedBtn: () => Navigator.pop(context),
+    ).show(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.sizeOf(context);
-    return Form(
-      key: formKey,
-      child: BgImage(
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: CustomAppBar(
-            title: "",
-            actions: _isNewForm()
-                ? []
-                : [
-                    PopupMenuButton<int>(
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          value: 1,
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const BancianMainScreen(
-                                          isNewForm: true,
-                                        )));
-                          },
-                          child: const Row(
-                            children: [
-                              Icon(Icons.report),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text("Lapor Penghuni")
-                            ],
-                          ),
-                        ),
-                      ],
-                      offset: const Offset(0, 50),
-                      color: Colors.white,
-                      elevation: 2,
-                    ),
-                  ],
-          ),
-          body: BlocListener<PenghuniBloc, PenghuniState>(
-            listener: (context, state) {
-              if (state is PenghuniLoading) {
-                EasyLoading.show();
-              } else if (state is PenghuniSuccess) {
-                EasyLoading.dismiss();
-                CustomFlushbar.of(context)
-                    .showSuccess(msg: "Berjaya menmyimpan data");
-              } else if (state is PenghuniNoChanges) {
-                CustomFlushbar.of(context).showInfo(msg: state.msg);
-              } else if (state is PenghuniError) {
-                EasyLoading.dismiss();
-                CustomFlushbar.of(context).showFailed(msg: state.msg);
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 6.0, bottom: 18),
-                      child: Text(
-                        "Maklumat Penghuni",
-                        style:
-                            appTextStyle(size: 25, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    KadPengenalanTile(
-                      frontCard: ownerData?.uploadIcFront,
-                      onFrontCard: (bytes) {
-                        setState(() => ownerData =
-                            ownerData!.copyWith(uploadIcFront: bytes));
-                      },
-                      backCard: ownerData?.uploadIcBack,
-                      onBackCard: (bytes) {
-                        setState(() => ownerData =
-                            ownerData!.copyWith(uploadIcBack: bytes));
-                      },
-                    ),
-                    SectionContainer(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _textField(
-                              title: 'Nama Penuh',
-                              controller: nameCtrl,
-                              isMandatory: _isNewForm(),
-                              // initialValue:
-                              //     _isNewForm() ? "" : ownerData?.name ?? "",
-                              width: double.infinity,
-                              readOnly: _isReadOnly()),
-                          _gap(),
-                          TwoColumnForm(
-                            children: [
-                              _textField(
-                                  title: 'Bilangan Isi Rumah',
-                                  keyboardType: TextInputType.number,
-                                  controller: bilIsiRumahCtrl),
-                              _textField(
-                                  title: 'No. Kad Pengenalan',
-                                  controller: icNoCtrl,
-                                  isMandatory: _isNewForm(),
-                                  keyboardType: TextInputType.number,
-                                  readOnly: _isReadOnly()),
-                              _textField(
-                                title: 'Emel',
-                                controller: emelCtrl,
-                                keyboardType: TextInputType.emailAddress,
-                              ),
-                              _textField(
-                                  title: 'Umur(Tahun)',
-                                  controller: umurCtrl,
-                                  readOnly: _isReadOnly()),
-                              _textField(
-                                title: 'No Telefon',
-                                controller: noTelCtrl,
-                                keyboardType: TextInputType.phone,
-                                isMandatory: _isNewForm(),
-                              ),
-                              _dropdownJantina(),
-                              _dropdownBangsa(),
-                              _dropdownJenisPekerjaan(),
-                              _dropdownStatusPerkahwinan(),
-                            ],
-                          ),
-                          _gap(),
-                          DisabilityCheckbox(
-                              initVal: (ownerData?.isOku == "1"),
-                              onCheck: (val) {
-                                setState(() {
-                                  ownerData = ownerData!
-                                      .copyWith(isOku: val ? "1" : "0");
-                                });
-                              }),
-                          Visibility(
-                            visible: (ownerData?.isOku == "1"),
-                            child: CardDisplay(
-                              title: "",
-                              img: ownerData?.uploadOkuCard,
-                              onPicture: (bytes) => setState(() {
-                                ownerData =
-                                    ownerData!.copyWith(uploadOkuCard: bytes);
-                              }),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (didPop) return;
+        _exitWarning();
+      },
+      child: Form(
+        key: formKey,
+        child: BgImage(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: CustomAppBar(
+              title: "",
+              onPressedBack: () {
+                _exitWarning();
+              },
+              actions: _isNewForm()
+                  ? []
+                  : [
+                      PopupMenuButton<int>(
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            value: 1,
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const BancianMainScreen(
+                                            isNewForm: true,
+                                          )));
+                            },
+                            child: const Row(
+                              children: [
+                                Icon(Icons.report),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text("Lapor Penghuni")
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 10),
                         ],
+                        offset: const Offset(0, 50),
+                        color: Colors.white,
+                        elevation: 2,
                       ),
-                    ),
-                    SectionContainer(
-                      child: Column(
-                        children: [
-                          _headerTitle(),
-                          maklumatPendapatan(),
-                        ],
+                    ],
+            ),
+            body: BlocListener<PenghuniBloc, PenghuniState>(
+              listener: (context, state) {
+                if (state is PenghuniLoading) {
+                  EasyLoading.show();
+                } else if (state is PenghuniSuccess) {
+                  EasyLoading.dismiss();
+                  CustomFlushbar.of(context)
+                      .showSuccess(msg: "Berjaya menmyimpan data");
+                } else if (state is PenghuniNoChanges) {
+                  CustomFlushbar.of(context).showInfo(msg: state.msg);
+                } else if (state is PenghuniError) {
+                  EasyLoading.dismiss();
+                  CustomFlushbar.of(context).showFailed(msg: state.msg);
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6.0, bottom: 18),
+                        child: Text(
+                          "Maklumat Penghuni",
+                          style: appTextStyle(
+                              size: 25, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    )
-                  ],
+                      KadPengenalanTile(
+                        frontCard: ownerData?.uploadIcFront,
+                        onFrontCard: (bytes) {
+                          setState(() => ownerData =
+                              ownerData!.copyWith(uploadIcFront: bytes));
+                        },
+                        backCard: ownerData?.uploadIcBack,
+                        onBackCard: (bytes) {
+                          setState(() => ownerData =
+                              ownerData!.copyWith(uploadIcBack: bytes));
+                        },
+                      ),
+                      SectionContainer(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _textField(
+                                title: 'Nama Penuh',
+                                controller: nameCtrl,
+                                isMandatory: _isNewForm(),
+                                // initialValue:
+                                //     _isNewForm() ? "" : ownerData?.name ?? "",
+                                width: double.infinity,
+                                readOnly: _isReadOnly()),
+                            _gap(),
+                            TwoColumnForm(
+                              children: [
+                                _textField(
+                                    title: 'Bilangan Isi Rumah',
+                                    keyboardType: TextInputType.number,
+                                    controller: bilIsiRumahCtrl),
+                                _textField(
+                                    title: 'No. Kad Pengenalan',
+                                    controller: icNoCtrl,
+                                    isMandatory: _isNewForm(),
+                                    keyboardType: TextInputType.number,
+                                    readOnly: _isReadOnly()),
+                                _textField(
+                                  title: 'Emel',
+                                  controller: emelCtrl,
+                                  keyboardType: TextInputType.emailAddress,
+                                ),
+                                _textField(
+                                    title: 'Umur(Tahun)',
+                                    controller: umurCtrl,
+                                    readOnly: _isReadOnly()),
+                                _textField(
+                                  title: 'No Telefon',
+                                  controller: noTelCtrl,
+                                  keyboardType: TextInputType.phone,
+                                  isMandatory: _isNewForm(),
+                                ),
+                                _dropdownJantina(),
+                                _dropdownBangsa(),
+                                _dropdownJenisPekerjaan(),
+                                _dropdownStatusPerkahwinan(),
+                              ],
+                            ),
+                            _gap(),
+                            DisabilityCheckbox(
+                                initVal: (ownerData?.isOku == "1"),
+                                onCheck: (val) {
+                                  setState(() {
+                                    ownerData = ownerData!
+                                        .copyWith(isOku: val ? "1" : "0");
+                                  });
+                                }),
+                            Visibility(
+                              visible: (ownerData?.isOku == "1"),
+                              child: CardDisplay(
+                                title: "",
+                                img: ownerData?.uploadOkuCard,
+                                onPicture: (bytes) => setState(() {
+                                  ownerData =
+                                      ownerData!.copyWith(uploadOkuCard: bytes);
+                                }),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
+                      SectionContainer(
+                        child: Column(
+                          children: [
+                            _headerTitle(),
+                            maklumatPendapatan(),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
+            bottomNavigationBar: BottomBarButton(
+                onTap: () {
+                  setState(() {
+                    ownerData = ownerData!.copyWith(
+                        name: nameCtrl.text,
+                        totalHousehold: bilIsiRumahCtrl.text,
+                        icNo: icNoCtrl.text,
+                        email: emelCtrl.text,
+                        phoneNo: noTelCtrl.text,
+                        workAddress: majikanAddressCtrl.text,
+                        workSalary: gajiPokokCtrl.text,
+                        workAllowance: elaunCtrl.text,
+                        workOtherIncome: lainPendapatanCtrl.text,
+                        welfareAid: bantuanCtrl.text);
+                  });
+                  if (_isNewForm()) {
+                    _penghuniBloc.add(SaveBukanPenghuniData(data: ownerData!));
+                  } else {
+                    _penghuniBloc.add(SavePenghuniData(data: ownerData!));
+                  }
+                },
+                title: "Simpan"),
           ),
-          bottomNavigationBar: BottomBarButton(
-              onTap: () {
-                setState(() {
-                  ownerData = ownerData!.copyWith(
-                      name: nameCtrl.text,
-                      totalHousehold: bilIsiRumahCtrl.text,
-                      icNo: icNoCtrl.text,
-                      email: emelCtrl.text,
-                      phoneNo: noTelCtrl.text,
-                      workAddress: majikanAddressCtrl.text,
-                      workSalary: gajiPokokCtrl.text,
-                      workAllowance: elaunCtrl.text,
-                      workOtherIncome: lainPendapatanCtrl.text,
-                      welfareAid: bantuanCtrl.text);
-                });
-                if (_isNewForm()) {
-                  _penghuniBloc.add(SaveBukanPenghuniData(data: ownerData!));
-                } else {
-                  _penghuniBloc.add(SavePenghuniData(data: ownerData!));
-                }
-              },
-              title: "Simpan"),
         ),
       ),
     );

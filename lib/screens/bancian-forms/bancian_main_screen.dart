@@ -154,10 +154,16 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                             ),
                             SizedBox(width: size.width * .1),
                             Text(
+                              _bancianBloc.unitData.unit?.status ?? "-",
+                              style: TextStyle(
+                                  color: AppColors.dimmedPurple.color),
+                            ),
+                            SizedBox(width: size.width * .1),
+                            Text(
                               "Unit No:${_bancianBloc.unitData.unit?.no ?? "-"}",
                               style: TextStyle(
                                   color: AppColors.dimmedPurple.color),
-                            )
+                            ),
                           ],
                         ),
                       ],

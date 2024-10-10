@@ -21,6 +21,7 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
   late TextEditingController zoneCtrl, areaCtrl, blockCtrl;
   late PropertyBloc _propertyBloc;
   late QrBloc _qrBloc;
+  bool _hideLevel = true;
   @override
   void initState() {
     super.initState();
@@ -30,6 +31,10 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
     zoneCtrl = TextEditingController();
     areaCtrl = TextEditingController();
     blockCtrl = TextEditingController();
+  }
+
+  void hideLevel(bool val) {
+    _hideLevel = val;
   }
 
   @override
@@ -94,8 +99,7 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
                                           });
                                           _propertyBloc
                                               .add(FetchArea(zoneData: val));
-                                          // _qrBloc.setPropertyData(
-                                          //     selectedZone: val);
+                                          hideLevel(true);
                                         }).show(context);
                                   },
                                 ),
@@ -117,8 +121,7 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
                                         });
                                         _propertyBloc
                                             .add(FetchBlock(areaData: val));
-                                        // _qrBloc.setPropertyData(
-                                        //     selectedArea: val);
+                                        hideLevel(true);
                                       },
                                       onQuery: (data, query) {
                                         final result = data.where((area) {
@@ -146,8 +149,7 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
                                         if (val == null) return;
                                         _propertyBloc.add(
                                             FetchFloorAndUnit(blockData: val));
-                                        // _qrBloc.setPropertyData(
-                                        //     selectedBlock: val);
+                                        hideLevel(true);
                                         setState(() =>
                                             blockCtrl.text = val.blockNo!);
                                       },
@@ -200,13 +202,54 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: List.generate(
-                              20,
+                              _propertyBloc.listFloor.length,
                               (index) => Padding(
                                 padding: EdgeInsets.only(
                                     left: (index == 0) ? 14 : 0, right: 8),
                                 child: TingkatChip(
-                                  isSelected: index == 0,
-                                  title: "${index + 1}",
+                                  isSelected: propertyWatch.selectedFloor ==
+                                      _propertyBloc.listFloor[index],
+                                  title:
+                                      "${_propertyBloc.listFloor[index].floorNo}",
+                                  onPressed: () {
+                                    _propertyBloc.add(ChangePropertyFloor(
+                                        floorData:
+                                            _propertyBloc.listFloor[index]));
+                                    hideLevel(false);
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else if (!_hideLevel) {
+                      return Container(
+                        color: Colors.white,
+                        height: 65,
+                        width: double.infinity,
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: List.generate(
+                              _propertyBloc.listFloor.length,
+                              (index) => Padding(
+                                padding: EdgeInsets.only(
+                                    left: (index == 0) ? 14 : 0, right: 8),
+                                child: TingkatChip(
+                                  isSelected: propertyWatch.selectedFloor ==
+                                      _propertyBloc.listFloor[index],
+                                  title:
+                                      "${_propertyBloc.listFloor[index].floorNo}",
+                                  onPressed: () {
+                                    _propertyBloc.add(ChangePropertyFloor(
+                                        floorData:
+                                            _propertyBloc.listFloor[index]));
+                                    hideLevel(false);
+                                    setState(() {});
+                                  },
                                 ),
                               ),
                             ),

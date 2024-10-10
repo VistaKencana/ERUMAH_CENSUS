@@ -180,7 +180,7 @@ class ApiClient {
     if (!isExist) return null;
     final token = LoginPreference().isTokenExpired();
     if (token == null) {
-      Navigator.pushReplacement(
+      Navigator.push(
           navigatorKey.currentContext!,
           PageTransition(
               child: const TimeoutScreen(),

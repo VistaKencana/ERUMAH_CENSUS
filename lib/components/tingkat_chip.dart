@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 class TingkatChip extends StatelessWidget {
   final String title;
   final bool isSelected;
-  const TingkatChip({super.key, required this.title, this.isSelected = true});
+  final void Function()? onPressed;
+  const TingkatChip(
+      {super.key, required this.title, this.isSelected = true, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return ActionChip(
-      onPressed: () {},
+      onPressed: onPressed,
       color: WidgetStatePropertyAll(
           isSelected ? AppColors.primary.color : Colors.white),
       label: ConstrainedBox(

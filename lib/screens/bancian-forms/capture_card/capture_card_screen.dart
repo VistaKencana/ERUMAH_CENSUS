@@ -104,7 +104,7 @@ class _CaptureCardScreenState extends State<CaptureCardScreen> {
             SizedBox(height: MediaQuery.sizeOf(context).height * .08),
             Center(
               child: AspectRatio(
-                  aspectRatio: 10 / 9,
+                  aspectRatio: 12 / 9,
                   child: Image.asset(AppImages.captureCard.path)),
             ),
             SizedBox(height: MediaQuery.sizeOf(context).height * .06),

@@ -241,11 +241,11 @@ class _PasanganModalState extends State<PasanganModal> {
                   _gap(height: 14),
                   TwoColumnForm(
                     children: [
-                      _textField(
-                        title: 'Emel',
-                        controller: emelCtrl,
-                        keyboardType: TextInputType.emailAddress,
-                      ),
+                      // _textField(
+                      //   title: 'Emel',
+                      //   controller: emelCtrl,
+                      //   keyboardType: TextInputType.emailAddress,
+                      // ),
                       _textField(
                           title: 'No. Kad Pengenalan',
                           controller: icNoCtrl,
