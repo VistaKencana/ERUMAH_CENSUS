@@ -18,23 +18,32 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
   }
   String censusCode = "";
   ResidentInfoData unitData = ResidentInfoData();
-  OwnerInputModel? existData;
-  OwnerInputModel? notOwnerData;
+  OwnerInputModel? _existData;
+  OwnerInputModel? _notOwnerData;
   final repo = ApplicationRepository();
   final applog = const AppLog(classname: "PenghuniBloc");
+
+  OwnerInputModel get existData {
+    return _existData ?? OwnerInputModel();
+  }
+
+  OwnerInputModel get notOwnerData {
+    return _notOwnerData ?? OwnerInputModel();
+  }
+
   _onSetPenghuniData(SetPenghuniData event, Emitter<PenghuniState> emit) {
     try {
       unitData = event.data;
       //[Owner] Setting current model
-      existData = null;
-      existData = OwnerInputModel.fromJson(unitData.toOwnerJson());
+      _existData = null;
+      _existData = OwnerInputModel.fromJson(unitData.toOwnerJson());
       censusCode = event.censusCode;
       //[Not Owner] Setting  model
-      notOwnerData = OwnerInputModel(
+      _notOwnerData = OwnerInputModel(
           censusCode: event.censusCode, isNotOwner: "1", totalHousehold: "0");
       applog.logDebug(
           tag: "_onSetPenghuniData",
-          msg: existData?.toJson().toString() ?? "No data");
+          msg: _existData?.toJson().toString() ?? "No data");
     } catch (e) {
       applog.logError(tag: "_onSetPenghuniData", msg: e.toString());
     }
@@ -42,19 +51,22 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
 
   _onSavePenghuniData(
       SavePenghuniData event, Emitter<PenghuniState> emit) async {
-    var origin = existData!.toJson().toString();
-    var newData = event.data.toJson().toString();
+    //Validate if there is changes
+    var origin =
+        _existData!.copyWith(isChangeOnImage: false).toValidate().toString();
+    var newData = event.data.toValidate().toString();
     if (origin.contains(newData)) {
       emit(const PenghuniNoChanges(msg: "Tiada Perubahan Dibuat"));
       emit(PenghuniInitial());
       return;
     }
+    //Start call API
     emit(PenghuniLoading());
     applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
     try {
       final resp = await repo.storeOwner(data: event.data);
       applog.logDebug(tag: "_onSavePenghuniData", msg: resp);
-      existData = event.data;
+      _existData = event.data;
       emit(PenghuniSuccess());
     } catch (e) {
       applog.logError(tag: "_onSavePenghuniData", msg: e.toString());
@@ -65,24 +77,28 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
   }
 
   bool isNotOwnerisFilled() {
-    return notOwnerData?.name?.isNotEmpty ?? false;
+    return _notOwnerData?.name?.isNotEmpty ?? false;
   }
 
   _onSaveBukanPenghuniData(
       SaveBukanPenghuniData event, Emitter<PenghuniState> emit) async {
-    var origin = notOwnerData!.toJson().toString();
-    var newData = event.data.toJson().toString();
+    //Validate if there is changes
+    var origin =
+        _notOwnerData!.copyWith(isChangeOnImage: false).toValidate().toString();
+    var newData = event.data.toValidate().toString();
     if (origin.contains(newData)) {
       emit(const PenghuniNoChanges(msg: "Tiada Perubahan Dibuat"));
       emit(PenghuniInitial());
       return;
     }
+
+    //Start call API
     emit(PenghuniLoading());
     applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
     try {
       final resp = await repo.storeNotOwner(data: event.data);
       applog.logDebug(tag: "_onSaveBukanPenghuniData", msg: resp);
-      notOwnerData = event.data;
+      _notOwnerData = event.data;
       emit(PenghuniSuccess());
     } catch (e) {
       applog.logError(tag: "_onSaveBukanPenghuniData", msg: e.toString());

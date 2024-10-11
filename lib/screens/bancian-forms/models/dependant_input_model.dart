@@ -20,6 +20,8 @@ class DependantInputModel {
   final Uint8List? uploadIcFront;
   final Uint8List? uploadIcBack;
   final Uint8List? uploadOkuCard;
+  //Used for validation
+  final bool isChangeOnImage;
 
   DependantInputModel({
     this.censusCode,
@@ -41,6 +43,8 @@ class DependantInputModel {
     this.uploadIcFront,
     this.uploadIcBack,
     this.uploadOkuCard,
+    //Used for validation
+    this.isChangeOnImage = false,
   });
 
   DependantInputModel copyWith({
@@ -63,6 +67,7 @@ class DependantInputModel {
     Uint8List? uploadIcFront,
     Uint8List? uploadIcBack,
     Uint8List? uploadOkuCard,
+    bool? isChangeOnImage,
   }) {
     return DependantInputModel(
       censusCode: censusCode ?? this.censusCode,
@@ -84,6 +89,7 @@ class DependantInputModel {
       uploadIcFront: uploadIcFront ?? this.uploadIcFront,
       uploadIcBack: uploadIcBack ?? this.uploadIcBack,
       uploadOkuCard: uploadOkuCard ?? this.uploadOkuCard,
+      isChangeOnImage: isChangeOnImage ?? this.isChangeOnImage,
     );
   }
 
@@ -99,6 +105,22 @@ class DependantInputModel {
       'genderCode': genderCode ?? "",
       'raceCode': raceCode ?? "",
       'isOku': isOku,
+    };
+  }
+
+  Map<String, String> toValidate() {
+    return {
+      'censusCode': censusCode ?? "",
+      'icNo': icNo ?? "",
+      'name': name ?? "",
+      'phoneNo': phoneNo ?? "",
+      'email': email ?? "",
+      'relationshipCode': relationshipCode ?? "",
+      'healthLevelCode': healthLevelCode ?? "",
+      'genderCode': genderCode ?? "",
+      'raceCode': raceCode ?? "",
+      'isOku': isOku,
+      'isChangeOnImage': "$isChangeOnImage",
     };
   }
 

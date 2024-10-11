@@ -61,6 +61,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
   final lainPendapatanCtrl = TextEditingController();
   final bantuanCtrl = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -72,9 +73,9 @@ class _PenghuniFormState extends State<PenghuniForm> {
 
   initVal() {
     if (_isNewForm()) {
-      ownerData = _penghuniBloc.notOwnerData!.copyWith();
+      ownerData = _penghuniBloc.notOwnerData.copyWith(isChangeOnImage: false);
     } else {
-      ownerData = _penghuniBloc.existData!.copyWith();
+      ownerData = _penghuniBloc.existData.copyWith(isChangeOnImage: false);
     }
     nameCtrl.text = setDataValue(ownerData?.name);
     bilIsiRumahCtrl.text =
@@ -170,6 +171,8 @@ class _PenghuniFormState extends State<PenghuniForm> {
                   EasyLoading.show();
                 } else if (state is PenghuniSuccess) {
                   EasyLoading.dismiss();
+                  setState(() =>
+                      ownerData = ownerData!.copyWith(isChangeOnImage: false));
                   CustomFlushbar.of(context)
                       .showSuccess(msg: "Berjaya menmyimpan data");
                 } else if (state is PenghuniNoChanges) {
@@ -198,13 +201,13 @@ class _PenghuniFormState extends State<PenghuniForm> {
                       KadPengenalanTile(
                         frontCard: ownerData?.uploadIcFront,
                         onFrontCard: (bytes) {
-                          setState(() => ownerData =
-                              ownerData!.copyWith(uploadIcFront: bytes));
+                          setState(() => ownerData = ownerData!.copyWith(
+                              uploadIcFront: bytes, isChangeOnImage: true));
                         },
                         backCard: ownerData?.uploadIcBack,
                         onBackCard: (bytes) {
-                          setState(() => ownerData =
-                              ownerData!.copyWith(uploadIcBack: bytes));
+                          setState(() => ownerData = ownerData!.copyWith(
+                              uploadIcBack: bytes, isChangeOnImage: true));
                         },
                       ),
                       SectionContainer(
@@ -268,8 +271,9 @@ class _PenghuniFormState extends State<PenghuniForm> {
                                 title: "",
                                 img: ownerData?.uploadOkuCard,
                                 onPicture: (bytes) => setState(() {
-                                  ownerData =
-                                      ownerData!.copyWith(uploadOkuCard: bytes);
+                                  ownerData = ownerData!.copyWith(
+                                      uploadOkuCard: bytes,
+                                      isChangeOnImage: true);
                                 }),
                               ),
                             ),
@@ -294,16 +298,17 @@ class _PenghuniFormState extends State<PenghuniForm> {
                 onTap: () {
                   setState(() {
                     ownerData = ownerData!.copyWith(
-                        name: nameCtrl.text,
-                        totalHousehold: bilIsiRumahCtrl.text,
-                        icNo: icNoCtrl.text,
-                        email: emelCtrl.text,
-                        phoneNo: noTelCtrl.text,
-                        workAddress: majikanAddressCtrl.text,
-                        workSalary: gajiPokokCtrl.text,
-                        workAllowance: elaunCtrl.text,
-                        workOtherIncome: lainPendapatanCtrl.text,
-                        welfareAid: bantuanCtrl.text);
+                      name: nameCtrl.text,
+                      totalHousehold: bilIsiRumahCtrl.text,
+                      icNo: icNoCtrl.text,
+                      email: emelCtrl.text,
+                      phoneNo: noTelCtrl.text,
+                      workAddress: majikanAddressCtrl.text,
+                      workSalary: gajiPokokCtrl.text,
+                      workAllowance: elaunCtrl.text,
+                      workOtherIncome: lainPendapatanCtrl.text,
+                      welfareAid: bantuanCtrl.text,
+                    );
                   });
                   if (_isNewForm()) {
                     _penghuniBloc.add(SaveBukanPenghuniData(data: ownerData!));

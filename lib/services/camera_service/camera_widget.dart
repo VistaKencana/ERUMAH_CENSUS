@@ -250,7 +250,8 @@ class _CameraWidgetState extends State<CameraWidget> {
 
                   closeLoading();
                   widget.onTakePicture(uintImg);
-                  // controller!.resumePreview();
+                  // controller!.resumePreview();\
+                  if (controller == null) return;
                   await controller!.setFocusMode(FocusMode.auto);
                   await controller!.setExposureMode(ExposureMode.auto);
                 },

@@ -61,8 +61,9 @@ class AnakTanggunganBloc
 
   _onSaveChildData(
       SaveChildData event, Emitter<AnakTanggunganState> emit) async {
-    var origin = selectedData!.toJson().toString();
-    var newData = event.data.toJson().toString();
+    var origin =
+        selectedData!.copyWith(isChangeOnImage: false).toValidate().toString();
+    var newData = event.data.toValidate().toString();
     if (origin.contains(newData)) {
       emit(const DependantNoChanges(msg: "Tiada Perubahan Dibuat"));
       emit(AnakTanggunganLoaded(childData: existChild, otherData: existOthers));

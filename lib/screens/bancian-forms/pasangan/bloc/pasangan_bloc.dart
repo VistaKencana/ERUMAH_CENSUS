@@ -64,8 +64,11 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
 
   _onSavePasanganData(
       SavePasanganData event, Emitter<PasanganState> emit) async {
-    var origin = selectedSpouse!.toJson().toString();
-    var newData = event.data.toJson().toString();
+    var origin = selectedSpouse!
+        .copyWith(isChangeOnImage: false)
+        .toValidate()
+        .toString();
+    var newData = event.data.toValidate().toString();
     if (origin.contains(newData)) {
       emit(const PasanganNoChanges(msg: "Tiada Perubahan Dibuat"));
       emit(PasanganLoaded(spouseData: existData));

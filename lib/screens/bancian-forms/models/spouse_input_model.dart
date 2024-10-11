@@ -30,6 +30,8 @@ class SpouseInputModel {
   String? occupationTypeDesc;
   String? maritalStatusDesc;
   String? healthLevelDesc;
+  //For validate changes
+  bool isChangeOnImage;
 
   SpouseInputModel({
     this.censusCode,
@@ -61,6 +63,8 @@ class SpouseInputModel {
     this.maritalStatusDesc,
     this.occupationTypeDesc,
     this.healthLevelDesc,
+    //For validate changes
+    this.isChangeOnImage = false,
   });
 
   SpouseInputModel copyWith({
@@ -92,6 +96,7 @@ class SpouseInputModel {
     String? occupationTypeDesc,
     String? maritalStatusDesc,
     String? healthLevelDesc,
+    bool? isChangeOnImage,
   }) {
     return SpouseInputModel(
       censusCode: censusCode ?? this.censusCode,
@@ -122,6 +127,7 @@ class SpouseInputModel {
       occupationTypeDesc: occupationTypeDesc ?? this.occupationTypeDesc,
       maritalStatusDesc: maritalStatusDesc ?? this.maritalStatusDesc,
       healthLevelDesc: healthLevelDesc ?? this.healthLevelDesc,
+      isChangeOnImage: isChangeOnImage ?? this.isChangeOnImage,
     );
   }
 
@@ -145,6 +151,30 @@ class SpouseInputModel {
       'occupationTypeCode': occupationTypeCode ?? "",
       'maritalStatusCode': maritalStatusCode ?? "",
       'isOku': isOku,
+    };
+  }
+
+  Map<String, String> toValidate() {
+    return {
+      'censusCode': censusCode ?? "",
+      'icNo': icNo ?? "",
+      'name': name ?? "",
+      'email': email ?? "",
+      'phoneNo': phoneNo ?? "",
+      'isAlive': isAlive,
+      'totalHousehold': totalHousehold ?? "",
+      'healthLevelCode': healthLevelCode ?? "",
+      'workAddress': workAddress ?? "",
+      'workSalary': workSalary ?? "",
+      'workAllowance': workAllowance ?? "",
+      'workOtherIncome': workOtherIncome ?? "",
+      'welfareAid': welfareAid ?? "",
+      'genderCode': genderCode ?? "",
+      'raceCode': raceCode ?? "",
+      'occupationTypeCode': occupationTypeCode ?? "",
+      'maritalStatusCode': maritalStatusCode ?? "",
+      'isOku': isOku,
+      'isChangeOnImage': "$isChangeOnImage",
     };
   }
 

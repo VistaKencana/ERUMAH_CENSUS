@@ -130,12 +130,16 @@ class _TanggunganModalState extends State<TanggunganModal> {
                             frontCard: dependantData!.uploadIcFront,
                             onFrontCard: (bytes) {
                               setState(() => dependantData = dependantData!
-                                  .copyWith(uploadIcFront: bytes));
+                                  .copyWith(
+                                      uploadIcFront: bytes,
+                                      isChangeOnImage: true));
                             },
                             backCard: dependantData!.uploadIcBack,
                             onBackCard: (bytes) {
-                              setState(() => dependantData =
-                                  dependantData!.copyWith(uploadIcBack: bytes));
+                              setState(() => dependantData = dependantData!
+                                  .copyWith(
+                                      uploadIcBack: bytes,
+                                      isChangeOnImage: true));
                             },
                           ),
                           const Divider(height: 0, indent: 20, endIndent: 20),
@@ -159,22 +163,22 @@ class _TanggunganModalState extends State<TanggunganModal> {
                                         controller: icNoCtrl,
                                         keyboardType: TextInputType.number,
                                         readOnly: _isReadOnly()),
-                                    _textField(
-                                      title: 'Emel',
-                                      controller: emelCtrl,
-                                      keyboardType: TextInputType.emailAddress,
-                                    ),
+                                    // _textField(
+                                    //   title: 'Emel',
+                                    //   controller: emelCtrl,
+                                    //   keyboardType: TextInputType.emailAddress,
+                                    // ),
                                     _textField(
                                         title: 'Umur(Tahun)',
                                         controller: umurCtrl,
                                         keyboardType: TextInputType.number,
                                         readOnly: _isReadOnly()),
                                     _dropdownKesihatan(),
-                                    _textField(
-                                        title: 'No. Telefon',
-                                        controller: noTelCtrl,
-                                        keyboardType: TextInputType.phone,
-                                        readOnly: _isReadOnly()),
+                                    // _textField(
+                                    //     title: 'No. Telefon',
+                                    //     controller: noTelCtrl,
+                                    //     keyboardType: TextInputType.phone,
+                                    //     readOnly: _isReadOnly()),
                                     _dropdownJantina(),
                                     _dropdownBangsa(),
                                   ],
@@ -194,8 +198,9 @@ class _TanggunganModalState extends State<TanggunganModal> {
                                     title: "",
                                     img: dependantData?.uploadOkuCard,
                                     onPicture: (bytes) => setState(() {
-                                      dependantData = dependantData!
-                                          .copyWith(uploadOkuCard: bytes);
+                                      dependantData = dependantData!.copyWith(
+                                          uploadOkuCard: bytes,
+                                          isChangeOnImage: true);
                                     }),
                                   ),
                                 ),
@@ -218,6 +223,8 @@ class _TanggunganModalState extends State<TanggunganModal> {
                     EasyLoading.show();
                   } else if (state is DependantSuccess) {
                     EasyLoading.dismiss();
+                    setState(() => dependantData =
+                        dependantData!.copyWith(isChangeOnImage: false));
                     CustomFlushbar.of(context)
                         .showSuccess(msg: "Berjaya menmyimpan data");
                   } else if (state is DependantSuccessAddNew) {

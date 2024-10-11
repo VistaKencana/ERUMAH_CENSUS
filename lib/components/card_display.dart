@@ -1,9 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:dotted_border/dotted_border.dart';
-import 'package:eperumahan_bancian/services/doc_scanner.dart';
+import 'package:eperumahan_bancian/components/ic_camera.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bancian_image_preview.dart';
+// import 'package:eperumahan_bancian/services/doc_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:page_transition/page_transition.dart';
 
 class CardDisplay extends StatefulWidget {
   final String title;
@@ -25,14 +28,41 @@ class CardDisplay extends StatefulWidget {
 }
 
 class _CardDisplayState extends State<CardDisplay> {
+  _openCamera() {
+    Navigator.push(
+        context,
+        PageTransition(
+            child: IcCamera(
+              onTakePicture: (img) {
+                widget.onPicture(img);
+                Navigator.pop(context);
+              },
+            ),
+            type: PageTransitionType.rightToLeft));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         GestureDetector(
           onTap: () async {
-            final img = await DocScanner.openScanner();
-            widget.onPicture(img);
+            // final img = await DocScanner.openScanner();
+            // widget.onPicture(img);
+            if (widget.img == null) {
+              _openCamera();
+            } else {
+              BancianImagePreview(
+                image: widget.img!,
+                title: "",
+                canDelete: false,
+                canEdit: true,
+                onEdit: () {
+                  Navigator.pop(context);
+                  _openCamera();
+                },
+              ).show(context);
+            }
           },
           child: DottedBorder(
             color: Colors.grey,

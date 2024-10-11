@@ -28,6 +28,8 @@ class OwnerInputModel {
   String? genderDesc;
   String? occupationTypeDesc;
   String? maritalStatusDesc;
+  //Used for validation
+  bool isChangeOnImage;
 
   OwnerInputModel(
       {this.censusCode,
@@ -56,7 +58,9 @@ class OwnerInputModel {
       this.raceDesc,
       this.genderDesc,
       this.maritalStatusDesc,
-      this.occupationTypeDesc});
+      this.occupationTypeDesc,
+      //Used for validation
+      this.isChangeOnImage = false});
 
   // CopyWith method
   OwnerInputModel copyWith({
@@ -86,6 +90,7 @@ class OwnerInputModel {
     String? genderDesc,
     String? occupationTypeDesc,
     String? maritalStatusDesc,
+    bool? isChangeOnImage,
   }) {
     return OwnerInputModel(
       censusCode: censusCode ?? this.censusCode,
@@ -114,6 +119,7 @@ class OwnerInputModel {
       genderDesc: genderDesc ?? this.genderDesc,
       occupationTypeDesc: occupationTypeDesc ?? this.occupationTypeDesc,
       maritalStatusDesc: maritalStatusDesc ?? this.maritalStatusDesc,
+      isChangeOnImage: isChangeOnImage ?? this.isChangeOnImage,
     );
   }
 
@@ -137,6 +143,29 @@ class OwnerInputModel {
       'workAllowance': workAllowance ?? "",
       'workOtherIncome': workOtherIncome ?? "",
       'welfareAid': welfareAid ?? "",
+    };
+  }
+
+  Map<String, String> toValidate() {
+    return {
+      'censusCode': censusCode ?? "",
+      'isNotOwner': isNotOwner ?? "",
+      'name': name ?? "",
+      'icNo': icNo ?? "",
+      'email': email ?? "",
+      'phoneNo': phoneNo ?? "",
+      'raceCode': raceCode ?? "",
+      'genderCode': genderCode ?? "",
+      'totalHousehold': totalHousehold ?? "",
+      'occupationTypeCode': occupationTypeCode ?? "",
+      'maritalStatusCode': maritalStatusCode ?? "",
+      'isOku': isOku ?? "",
+      'workAddress': workAddress ?? "",
+      'workSalary': workSalary ?? "",
+      'workAllowance': workAllowance ?? "",
+      'workOtherIncome': workOtherIncome ?? "",
+      'welfareAid': welfareAid ?? "",
+      'isChangeOnImage': "$isChangeOnImage",
     };
   }
 

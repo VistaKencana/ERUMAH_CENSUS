@@ -74,7 +74,7 @@ class _PasanganModalState extends State<PasanganModal> {
     // if (_isNewForm()) {
     //   _pasanganBloc.addNewPasangan();
     // }
-    spouseData = _pasanganBloc.selectedSpouse!.copyWith();
+    spouseData = _pasanganBloc.selectedSpouse!.copyWith(isChangeOnImage: false);
     nameCtrl.text = setDataValue(spouseData?.name);
     bilIsiRumahCtrl.text =
         setDataValue(spouseData?.totalHousehold, defaultVal: "0");
@@ -124,6 +124,7 @@ class _PasanganModalState extends State<PasanganModal> {
           EasyLoading.dismiss();
           CustomFlushbar.of(context)
               .showSuccess(msg: "Berjaya menmyimpan data");
+          spouseData = spouseData!.copyWith(isChangeOnImage: false);
         } else if (state is PasanganSuccessAddNew) {
           EasyLoading.dismiss();
           Navigator.pop(context);
@@ -226,13 +227,13 @@ class _PasanganModalState extends State<PasanganModal> {
             KadPengenalanTile(
               frontCard: spouseData?.uploadIcFront,
               onFrontCard: (bytes) {
-                setState(() =>
-                    spouseData = spouseData!.copyWith(uploadIcFront: bytes));
+                setState(() => spouseData = spouseData!
+                    .copyWith(uploadIcFront: bytes, isChangeOnImage: true));
               },
               backCard: spouseData?.uploadIcBack,
               onBackCard: (bytes) {
-                setState(() =>
-                    spouseData = spouseData!.copyWith(uploadIcBack: bytes));
+                setState(() => spouseData = spouseData!
+                    .copyWith(uploadIcBack: bytes, isChangeOnImage: true));
               },
             ),
             const Divider(height: 0, indent: 20, endIndent: 20),
