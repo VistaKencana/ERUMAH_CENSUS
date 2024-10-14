@@ -71,7 +71,7 @@ class _BancianResultState extends State<BancianResult> {
                               width: double.infinity,
                               child: ElevatedButton(
                                   onPressed: () => _goToSearch(),
-                                  child: const Text("Kembali "))),
+                                  child: const Text("Teruskan Bancian"))),
                           SizedBox(height: constraint.maxHeight * .02),
                         ],
                       ),
