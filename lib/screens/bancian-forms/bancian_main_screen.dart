@@ -44,6 +44,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
   final remarkCtrl = TextEditingController();
   final formKey = GlobalKey<FormState>();
   _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
+
   @override
   void initState() {
     super.initState();
@@ -194,8 +195,14 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                       tileColor: Colors.white,
                       leading: const Icon(Icons.fingerprint),
                       title: const Text("Sahkan Cap Jari"),
+                      trailing: Icon(
+                        isVerifyFP ? Icons.check_circle : Icons.warning,
+                        color: isVerifyFP ? Colors.green : Colors.amber,
+                      ),
                       onTap: () => _go(BancianFingerprint(
-                        onVerifyFP: (val) {},
+                        onVerifyFP: (val) {
+                          setState(() => isVerifyFP = val);
+                        },
                       )),
                     ),
                   ),
@@ -319,8 +326,8 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
             onTap: () {
               setState(() {
                 statusData = statusData.copyWith(
-                  remark: remarkCtrl.text,
-                );
+                    remark: remarkCtrl.text,
+                    isFingerPrintVerified: isVerifyFP ? "1" : "0");
               });
               //if add new data
               if (formKey.currentState!.validate() == false) {

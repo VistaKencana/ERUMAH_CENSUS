@@ -29,10 +29,17 @@ class MyKadController {
   MyKidModel? get getMyKid => _myKidModel;
 
   // Initialize the StreamController & MyKadReader
-  void init({required bool verifyFP, required BuildContext context}) {
+  void init({required bool verifyFP, required BuildContext context}) async {
     if (controller == null) {
       controller = StreamController<ReaderResponse>.broadcast();
-      MyKadReader.callSDK();
+      await MyKadReader.callSDK();
+
+      /* --- Start M11 settings ---*/
+      if (!context.mounted) return;
+      await initFP(context);
+      /* --- End M11 settings   ---*/
+
+      if (!context.mounted) return;
       MyKadReader.sdkListener(
         context: context,
         onIdle: () {
@@ -90,6 +97,18 @@ class MyKadController {
     await MyKadReader.readFingerprint();
   }
 
+  Future initFP(BuildContext context) async {
+    showLoading(context);
+    setMessage(msg: "Initialize Fingerprint Hardware...");
+    await MyKadReader.turnOnFP();
+    await addDelay(milisec: 2500);
+    await MyKadReader.disconnectFPScanner();
+    await addDelay();
+    await MyKadReader.connectFPScanner();
+    if (!context.mounted) return;
+    closeLoading(context);
+  }
+
   Future tryAgain() async {
     setMessage(msg: "Initialize Fingerprint Hardware...");
     await MyKadReader.disconnectFPScanner();
@@ -129,5 +148,37 @@ class MyKadController {
     await MyKadReader.turnOffFP();
     await addDelay();
     await MyKadReader.disposeListener();
+  }
+
+  void closeLoading(BuildContext context) => Navigator.pop(context);
+
+  Future<dynamic> showLoading(BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.3),
+      builder: (context) => PopScope(
+        canPop: false,
+        onPopInvoked: (val) async {},
+        child: GestureDetector(
+          onTap: () {},
+          child: Material(
+              color: Colors.black.withOpacity(0.6),
+              child: Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    padding: const EdgeInsets.all(15),
+                    color: Colors.white,
+                    child: const CircularProgressIndicator(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              )),
+        ),
+      ),
+    );
   }
 }
