@@ -4,35 +4,32 @@ import 'package:eperumahan_bancian/components/timeout_screen.dart';
 import 'package:eperumahan_bancian/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-<<<<<<< HEAD
-=======
 import "dart:developer" as dev;
 import 'package:http_parser/http_parser.dart';
 import 'package:page_transition/page_transition.dart';
 import '../hive-manager/repository/login_pref.dart';
->>>>>>> 2270c4eed2573746fc07cd6cfff9364894abf627
 
 class ApiClient {
-  // Private constructor
-  // ApiClient._();
-  // ApiClient._(this.baseUrl);
-  // Singleton instance variable
-  // static ApiClient? _instance;
-  // Static method to access the singleton instance
-  // static ApiClient getInstance({required String baseUrl}) {
-  //   _instance ??= ApiClient._(baseUrl);
-  //   return _instance!;
-  // }
   static final ApiClient _instance = ApiClient._internal();
+  String? _baseUrl;
 
   factory ApiClient() {
     return _instance;
+  }
+  static Future<void> init(String baseUrl) async {
+    if (_instance._baseUrl == null) {
+      _instance._baseUrl = baseUrl;
+    } else {
+      dev.log("Base URL has already been set!", name: "API Service");
+    }
   }
 
   ApiClient._internal();
 
   // Base URL
-  String baseUrl = "https://capitalpark.fastsystem.com.my";
+  String get baseUrl => (_instance._baseUrl != null)
+      ? _instance._baseUrl!
+      : throw Exception("Please Initialize the Base URL in main.dart");
 
   // Common headers
   final Map<String, String> _commonHeaders = {
@@ -47,7 +44,7 @@ class ApiClient {
       String? authToken,
       bool includeToken = true,
       Map<String, String>? headers}) async {
-    final getToken = getAuthToken();
+    final getToken = getAuthToken(includeToken);
     final token = includeToken ? (authToken ?? getToken) : null;
     final header = await _mergeHeaders(headers, token);
     final response = await http
@@ -62,7 +59,7 @@ class ApiClient {
       String? authToken,
       bool includeToken = true,
       Map<String, String>? headers}) async {
-    final getToken = getAuthToken();
+    final getToken = getAuthToken(includeToken);
     final token = includeToken ? (authToken ?? getToken) : null;
     final header = await _mergeHeaders(headers, token);
     final response = await http.post(
@@ -79,7 +76,7 @@ class ApiClient {
       bool includeToken = true,
       String? authToken,
       Map<String, String>? headers}) async {
-    final getToken = getAuthToken();
+    final getToken = getAuthToken(includeToken);
     final token = includeToken ? (authToken ?? getToken) : null;
     final header = await _mergeHeaders(headers, token);
     final response = await http.put(
@@ -95,7 +92,7 @@ class ApiClient {
       String? authToken,
       bool includeToken = true,
       Map<String, String>? headers}) async {
-    final getToken = getAuthToken();
+    final getToken = getAuthToken(includeToken);
     final token = includeToken ? (authToken ?? getToken) : null;
     final header = await _mergeHeaders(headers, token);
     final response = await http.delete(
@@ -110,18 +107,15 @@ class ApiClient {
       Map<String, String>? body,
       String? baseUrl,
       String? authToken,
-<<<<<<< HEAD
-      Map<String, String>? body}) async {
-=======
       bool includeToken = true,
       Map<String, String>? headers}) async {
     final getToken = getAuthToken(includeToken);
     final token = includeToken ? (authToken ?? getToken) : null;
     final header = await _mergeHeaders(headers, token);
 
->>>>>>> 2270c4eed2573746fc07cd6cfff9364894abf627
     var url = Uri.parse("${baseUrl ?? this.baseUrl}$endpoint");
     final request = http.MultipartRequest('POST', url);
+    request.headers.addAll(header);
     if (body != null) {
       request.fields.addAll(body);
     }
@@ -180,15 +174,6 @@ class ApiClient {
   }
 
   //GET TOKEN FROM PREFERENCE
-<<<<<<< HEAD
-  String? getAuthToken() {
-    // final isExist = LoginPreference().isTokenExist();
-    // if (!isExist) return null;
-    // final token = LoginPreference().isTokenExpired();
-    // if (token == null) throw TokenExpiredException();
-    // return token;
-    return null;
-=======
   String? getAuthToken(bool includToken) {
     if (!includToken) return null;
     final isExist = LoginPreference().isTokenExist();
@@ -203,7 +188,6 @@ class ApiClient {
       throw TokenExpiredException();
     }
     return token;
->>>>>>> 2270c4eed2573746fc07cd6cfff9364894abf627
   }
 }
 

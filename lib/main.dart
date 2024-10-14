@@ -1,13 +1,10 @@
 import 'dart:async';
-<<<<<<< HEAD
-=======
 import 'package:eperumahan_bancian/config/blocs/app_blocs.dart';
 import 'package:eperumahan_bancian/data/api/api_client.dart';
 import 'package:eperumahan_bancian/data/api/api_env.dart';
 import 'package:eperumahan_bancian/services/app_info.dart';
 import 'package:eperumahan_bancian/services/draw_watermark.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
->>>>>>> 2270c4eed2573746fc07cd6cfff9364894abf627
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:eperumahan_bancian/config/routes/routes_generator.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
@@ -20,21 +17,13 @@ import 'config/constants/app_size.dart';
 import 'config/providers/app_provider.dart';
 import 'data/hive-manager/hive_manager.dart';
 import 'services/easyloading_config.dart';
+import 'services/mobile_info.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyLoadingConfig.init();
+  await ApiClient.init(ApiEnv.dev.baseUrl);
   await _requestPermission();
-<<<<<<< HEAD
-  await HiveBoxPreference.init();
-  await Permission.storage.request();
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  runApp(const MyApp());
-=======
   await Future.wait([
     AppInfo.init(),
     DrawWatermark.initializeFont(),
@@ -49,18 +38,29 @@ Future<void> main() async {
     providers: [...AppBlocs.listOfBloc, ...AppProviders.providers],
     child: const MyApp(),
   ));
->>>>>>> 2270c4eed2573746fc07cd6cfff9364894abf627
 }
 
 _requestPermission() async {
   var status = await Permission.camera.status;
   if (!status.isGranted) {
-    Permission.camera.request();
+    await Permission.camera.request();
   }
+  await Permission.storage.request();
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    MobileInfo.init(context);
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -22,6 +22,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final userIdCtrl = TextEditingController(text: "CU001");
+  final pwdCtrl = TextEditingController(text: "123456");
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
@@ -31,6 +34,8 @@ class _LoginScreenState extends State<LoginScreen> {
         } else if (state is AuthLoginSuccess) {
           EasyLoading.dismiss()
               .then((val) => Navigator.pushNamed(context, RoutesName.home));
+        } else if (state is AuthTimeoutSuccess) {
+          EasyLoading.dismiss().then((val) => Navigator.pop(context));
         } else if (state is AuthLoginError) {
           EasyLoading.dismiss();
           CustomFlushbar.of(context).showFailed(msg: state.msg);
@@ -56,7 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             appTextStyle(size: 20, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 15),
-                      FittedBox(
+                      AspectRatio(
+                        aspectRatio: 30 / 9,
                         child: Image.asset(
                           AppImages.dbklLogo.path,
                           fit: BoxFit.contain,
@@ -66,9 +72,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: constraint.maxHeight * .04),
                       Text(
-                        "E-PERUMAHAN",
-                        style:
-                            appTextStyle(size: 24, fontWeight: FontWeight.w700),
+                        "PENGURUSAN PERUMAHAN",
+                        style: appTextStyle(
+                            size: 20.sp, fontWeight: FontWeight.w700),
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 2),
                       Text(
@@ -76,10 +83,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: appTextStyle(fontWeight: FontWeight.w600),
                       ),
                       SizedBox(height: constraint.maxHeight * .03),
-                      Image.asset(
-                        AppImages.icLogMasuk.path,
-                        width: 172,
-                        height: 48,
+                      AspectRatio(
+                        aspectRatio: 16 / 1.5,
+                        child: Image.asset(
+                          AppImages.icLogMasuk.path,
+                        ),
                       ),
                       const SizedBox(height: 10),
                       CustomTextField(
