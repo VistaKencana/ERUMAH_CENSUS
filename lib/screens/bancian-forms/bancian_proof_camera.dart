@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_image_preview.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_main_screen.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
-import 'package:eperumahan_bancian/services/camera_service/camera_widget.dart';
+import 'package:eperumahan_bancian/services/camera_service/screenshot_camera_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
@@ -35,8 +35,7 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
         foregroundColor: Colors.white,
         backgroundColor: Colors.transparent,
       ),
-      body: CameraWidget(
-        addWatermark: true,
+      body: ScreenshotCameraWidget(
         onTakePicture: (Uint8List uintImg) async {
           _controller.jumpTo(maxSize);
           if (imgs.length >= maxImage) return;
