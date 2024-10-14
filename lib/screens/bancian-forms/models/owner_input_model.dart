@@ -13,6 +13,7 @@ class OwnerInputModel {
   String? age;
   String? occupationTypeCode; //dd
   String? maritalStatusCode; //dd
+  String? healthLevelCode; //dd
   String? isOku;
   String? workAddress;
   String? workSalary;
@@ -28,6 +29,7 @@ class OwnerInputModel {
   String? genderDesc;
   String? occupationTypeDesc;
   String? maritalStatusDesc;
+  String? healthLevelDesc;
   //Used for validation
   bool isChangeOnImage;
 
@@ -44,6 +46,7 @@ class OwnerInputModel {
       this.totalHousehold,
       this.occupationTypeCode,
       this.maritalStatusCode,
+      this.healthLevelCode,
       this.isOku,
       this.workAddress,
       this.workSalary,
@@ -59,6 +62,7 @@ class OwnerInputModel {
       this.genderDesc,
       this.maritalStatusDesc,
       this.occupationTypeDesc,
+      this.healthLevelDesc,
       //Used for validation
       this.isChangeOnImage = false});
 
@@ -76,6 +80,7 @@ class OwnerInputModel {
     String? age,
     String? occupationTypeCode,
     String? maritalStatusCode,
+    String? healthLevelCode,
     String? isOku,
     String? workAddress,
     String? workSalary,
@@ -90,6 +95,7 @@ class OwnerInputModel {
     String? genderDesc,
     String? occupationTypeDesc,
     String? maritalStatusDesc,
+    String? healthLevelDesc,
     bool? isChangeOnImage,
   }) {
     return OwnerInputModel(
@@ -105,6 +111,7 @@ class OwnerInputModel {
       age: age ?? this.age,
       occupationTypeCode: occupationTypeCode ?? this.occupationTypeCode,
       maritalStatusCode: maritalStatusCode ?? this.maritalStatusCode,
+      healthLevelCode: healthLevelCode ?? this.healthLevelCode,
       isOku: isOku ?? this.isOku,
       workAddress: workAddress ?? this.workAddress,
       workSalary: workSalary ?? this.workSalary,
@@ -119,6 +126,7 @@ class OwnerInputModel {
       genderDesc: genderDesc ?? this.genderDesc,
       occupationTypeDesc: occupationTypeDesc ?? this.occupationTypeDesc,
       maritalStatusDesc: maritalStatusDesc ?? this.maritalStatusDesc,
+      healthLevelDesc: healthLevelDesc ?? this.healthLevelDesc,
       isChangeOnImage: isChangeOnImage ?? this.isChangeOnImage,
     );
   }
@@ -137,6 +145,7 @@ class OwnerInputModel {
       'totalHousehold': totalHousehold ?? "",
       'occupationTypeCode': occupationTypeCode ?? "",
       'maritalStatusCode': maritalStatusCode ?? "",
+      'healthLevelCode': healthLevelCode ?? "",
       'isOku': isOku ?? "",
       'workAddress': workAddress ?? "",
       'workSalary': workSalary ?? "",
@@ -159,6 +168,7 @@ class OwnerInputModel {
       'totalHousehold': totalHousehold ?? "",
       'occupationTypeCode': occupationTypeCode ?? "",
       'maritalStatusCode': maritalStatusCode ?? "",
+      'healthLevelCode': healthLevelCode ?? "",
       'isOku': isOku ?? "",
       'workAddress': workAddress ?? "",
       'workSalary': workSalary ?? "",
@@ -202,6 +212,8 @@ class OwnerInputModel {
       genderCode: json['genderCode'] as String,
       raceDesc: json['raceDesc'] as String,
       raceCode: json['raceCode'] as String,
+      healthLevelDesc: json['healthLevelDesc'] as String,
+      healthLevelCode: json['healthLevelCode'] as String,
     );
   }
 
@@ -234,6 +246,8 @@ class OwnerInputModel {
       genderDesc: genderDesc,
       occupationTypeDesc: occupationTypeDesc,
       maritalStatusDesc: maritalStatusDesc,
+      healthLevelCode: healthLevelCode,
+      healthLevelDesc: healthLevelDesc,
     );
   }
 }

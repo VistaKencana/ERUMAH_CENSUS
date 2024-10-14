@@ -55,6 +55,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
   final bangsaCtrl = TextEditingController();
   final jenisKerjaCtrl = TextEditingController();
   final statusKahwinCtrl = TextEditingController();
+  final kesihatanCtrl = TextEditingController();
   final majikanAddressCtrl = TextEditingController();
   final gajiPokokCtrl = TextEditingController();
   final elaunCtrl = TextEditingController();
@@ -93,6 +94,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     elaunCtrl.text = setDataValue(ownerData?.workAllowance);
     lainPendapatanCtrl.text = setDataValue(ownerData?.workOtherIncome);
     bantuanCtrl.text = setDataValue(ownerData?.welfareAid);
+    kesihatanCtrl.text = setDataValue(ownerData?.healthLevelDesc);
   }
 
   String setDataValue(String? val, {String? defaultVal}) {
@@ -254,6 +256,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                                 _dropdownBangsa(),
                                 _dropdownJenisPekerjaan(),
                                 _dropdownStatusPerkahwinan(),
+                                _dropdownKesihatan(),
                               ],
                             ),
                             _gap(),
@@ -567,6 +570,38 @@ class _PenghuniFormState extends State<PenghuniForm> {
         });
       },
     );
+  }
+
+  _dropdownKesihatan() {
+    return _textField(
+        title: 'Tahap Kesihatan',
+        isMandatory: _isNewForm(),
+        isDropdown: true,
+        onTap: () {
+          final ddR = context.read<DropdownProvider>();
+          ddR.fetchDropdownData(DdType.healthLevel).then((val) {
+            CustomDropdownSheet(
+              label: "Pilih Tahap Kesihatan",
+              items: ddR.healthLevelList,
+              onFindGroupValue: (data) {
+                return data.where((val) {
+                  var a =
+                      val.code?.contains(ownerData?.healthLevelCode ?? "*_*") ??
+                          false;
+                  return a;
+                }).firstOrNull;
+              },
+              getTitle: (data) => data.desc ?? "-",
+              onChange: (val) {
+                if (val == null) return;
+                ownerData = ownerData!.copyWith(
+                    healthLevelCode: val.code, healthLevelDesc: val.desc);
+                kesihatanCtrl.text = val.desc ?? "";
+              },
+            ).show(context);
+          });
+        },
+        controller: kesihatanCtrl);
   }
 
   _headerTitle() {

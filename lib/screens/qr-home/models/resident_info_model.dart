@@ -156,6 +156,8 @@ class ResidentInfoData {
       'genderCode': owner?.gender?.code ?? "",
       'raceDesc': owner?.race?.desc ?? "",
       'raceCode': owner?.race?.code ?? "",
+      'healthLevelDesc': owner?.healthLevel?.desc ?? "",
+      'healthLevelCode': owner?.healthLevel?.code ?? "",
       'occupationTypeDesc': owner?.occupation?.type ?? "",
       'occupationTypeCode': owner?.occupation?.typeCode ?? "",
       'maritalStatusDesc': owner?.maritalStatus?.desc ?? "",
