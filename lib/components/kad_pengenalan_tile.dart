@@ -5,18 +5,22 @@ import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class KadPengenalanTile extends StatefulWidget {
+  final Uint8List? frontCard;
+  final Uint8List? backCard;
   final void Function(Uint8List bytes) onFrontCard;
   final void Function(Uint8List bytes) onBackCard;
   const KadPengenalanTile(
-      {super.key, required this.onFrontCard, required this.onBackCard});
+      {super.key,
+      required this.onFrontCard,
+      required this.onBackCard,
+      this.frontCard,
+      this.backCard});
 
   @override
   State<KadPengenalanTile> createState() => _KadPengenalanTileState();
 }
 
 class _KadPengenalanTileState extends State<KadPengenalanTile> {
-  Uint8List? frontCard;
-  Uint8List? backCard;
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -53,20 +57,20 @@ class _KadPengenalanTileState extends State<KadPengenalanTile> {
                     children: [
                       CardDisplay(
                         title: "Kad Pengenalan Depan",
-                        img: frontCard,
+                        img: widget.frontCard,
                         onPicture: (bytes) {
                           if (bytes == null) return;
-                          setState(() => frontCard = bytes);
+                          // setState(() => frontCard = bytes);
                           widget.onFrontCard(bytes);
                         },
                       ),
                       const SizedBox(width: 10),
                       CardDisplay(
                         title: "Kad Pengenalan Belakang",
-                        img: backCard,
+                        img: widget.backCard,
                         onPicture: (bytes) {
                           if (bytes == null) return;
-                          setState(() => backCard = bytes);
+                          // setState(() => backCard = bytes);
                           widget.onBackCard(bytes);
                         },
                       ),

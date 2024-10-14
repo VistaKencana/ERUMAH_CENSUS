@@ -1,8 +1,11 @@
-import 'package:eperumahan_bancian/components/custom_dialog_loading.dart';
 import 'package:eperumahan_bancian/components/custom_textfield.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/qr/bancian_ppr_search.dart';
+import 'package:eperumahan_bancian/screens/qr-home/bloc/qr_bloc.dart';
+import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:page_transition/page_transition.dart';
 
 class BancianRegisterQr extends StatefulWidget {
@@ -24,6 +27,15 @@ class BancianRegisterQr extends StatefulWidget {
 }
 
 class _BancianRegisterQrState extends State<BancianRegisterQr> {
+  late QrBloc _qrBloc;
+  final unitCtrl = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _qrBloc = BlocProvider.of<QrBloc>(context, listen: false);
+    unitCtrl.text = _qrBloc.selectedProperty.unitNo ?? "";
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraint) {
@@ -57,19 +69,30 @@ class _BancianRegisterQrState extends State<BancianRegisterQr> {
               Icons.qr_code_2,
               size: 100,
             ),
-            const Text("Qwer-123asd-58974"),
+            Text(_qrBloc.qrCode),
             _gap(height: 16),
             CustomTextField(
               title: "Unit Rumah",
               hintText: "Sila Pilih Unit Rumah",
+              controller: unitCtrl,
               suffixIcon: Icons.arrow_drop_down,
               fillColor: Colors.white,
               onTap: () {
+                if (!_qrBloc.isFromHome) {
+                  CustomFlushbar.of(context)
+                      .showWarning(msg: "Unit rumah sudah dipilih");
+                  return;
+                }
+
                 Navigator.push(
                     context,
                     PageTransition(
                       child: BancianPprSearch(
-                        onSelect: (data) {},
+                        onSelect: (data) {
+                          setState(() {
+                            unitCtrl.text = data.unitNo ?? "";
+                          });
+                        },
                       ),
                       type: PageTransitionType.topToBottom,
                     ));
@@ -77,32 +100,30 @@ class _BancianRegisterQrState extends State<BancianRegisterQr> {
               readOnly: true,
             ),
             _gap(height: 40),
-            SizedBox(
-              height: 50,
-              width: double.maxFinite,
-              child: ElevatedButton(
-                  onPressed: () {
-                    final dialogController = LoadingDialogController();
-                    CustomDialogLoading.show(
-                      context,
-                      controller: dialogController,
-                      succesMsg: "QR Berjaya Didaftar",
-                      isDissmissable: false,
-                      onFinish: (state) {
-                        Navigator.pop(context);
-                        Future.delayed(const Duration(milliseconds: 180), () {
-                          Navigator.pop(context);
-                        });
-                      },
-                    );
-                    Future.delayed(const Duration(seconds: 2), () {
-                      dialogController.updateState(DialogState.success);
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50))),
-                  child: const Text("Daftar QR")),
+            BlocListener<QrBloc, QrState>(
+              listener: (context, state) {
+                if (state is QrRegLoading) {
+                  EasyLoading.show();
+                } else if (state is QrRegSuccess) {
+                  EasyLoading.dismiss().then((val) => Navigator.pop(context));
+                } else if (state is QrRegError) {
+                  EasyLoading.dismiss();
+                  CustomFlushbar.of(context).showFailed(
+                      msg: state.msg, duration: const Duration(seconds: 3));
+                }
+              },
+              child: SizedBox(
+                height: 50,
+                width: double.maxFinite,
+                child: ElevatedButton(
+                    onPressed: () {
+                      _qrBloc.add(const RegisterQrcode());
+                    },
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50))),
+                    child: const Text("Daftar QR")),
+              ),
             )
           ],
         ),

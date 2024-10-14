@@ -18,6 +18,23 @@ class KawasanModal extends StatefulWidget {
 
 class _KawasanModalState extends State<KawasanModal> {
   String currValue = "PPR Sri Selangor 1";
+  List<String> listOfPpr = [
+    'PPR DESA TUN RAZAK',
+    'PPR JELATEK',
+    'PPR DESA TUN RAZAK',
+    'PPR SERI PANTAI',
+    'PPR GOMBAK SETIA',
+    'PPR WANGSA SARI',
+    'PPR KG LIMAU',
+    'PPR SERI ANGGERIK',
+    'PPR SALAK SELATAN',
+    'PPR KERINCI LEMBAH PANTAI',
+    'PPR BERINGIN',
+    'PPR PEKAN BATU',
+    'PPR KG. BATU MUDA',
+    'PPR HILIRAN AMPANG',
+    'PPR PUDU ULU',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +61,12 @@ class _KawasanModalState extends State<KawasanModal> {
               controller: sc,
               child: Column(
                 children: List.generate(
-                  20,
+                  listOfPpr.length,
                   (index) => RadioListTile<String>(
                       controlAffinity: ListTileControlAffinity.trailing,
                       groupValue: currValue,
                       value: "PPR Sri Selangor ${index + 1}",
-                      title: Text("PPR Sri Selangor ${index + 1}"),
+                      title: Text(listOfPpr[index]),
                       onChanged: (val) {
                         setState(() {
                           currValue = val!;

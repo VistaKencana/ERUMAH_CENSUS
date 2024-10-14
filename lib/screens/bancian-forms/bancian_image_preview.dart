@@ -5,14 +5,18 @@ import 'package:flutter/material.dart';
 class BancianImagePreview extends StatefulWidget {
   final Uint8List image;
   final String title;
-  final void Function() onDelete;
+  final void Function()? onDelete;
+  final void Function()? onEdit;
   final bool canDelete;
+  final bool canEdit;
   const BancianImagePreview(
       {super.key,
       required this.image,
       required this.title,
-      required this.canDelete,
-      required this.onDelete});
+      this.canDelete = true,
+      this.onDelete,
+      this.onEdit,
+      this.canEdit = false});
 
   @override
   State<BancianImagePreview> createState() => _BancianImagePreviewState();
@@ -53,10 +57,12 @@ class _BancianImagePreviewState extends State<BancianImagePreview> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      AspectRatio(
-                        aspectRatio: 10 / 10,
-                        child: Image.memory(widget.image),
-                      )
+                      InteractiveViewer(
+                        child: AspectRatio(
+                          aspectRatio: 10 / 10,
+                          child: Image.memory(widget.image),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -77,10 +83,26 @@ class _BancianImagePreviewState extends State<BancianImagePreview> {
                   child: _iconButton(
                     isFilled: true,
                     iconData: Icons.delete,
-                    onTap: widget.onDelete,
+                    onTap: () {
+                      if (widget.onDelete == null) return;
+                      widget.onDelete!();
+                    },
                     title: "Buang",
                   ),
-                )
+                ),
+                SizedBox(width: widget.canEdit ? 30 : 0),
+                Visibility(
+                  visible: widget.canEdit,
+                  child: _iconButton(
+                    isFilled: true,
+                    iconData: Icons.edit,
+                    onTap: () {
+                      if (widget.onEdit == null) return;
+                      widget.onEdit!();
+                    },
+                    title: "Ubah",
+                  ),
+                ),
               ],
             )
           ],

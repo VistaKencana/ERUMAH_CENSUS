@@ -1,7 +1,11 @@
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/anak_modal.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/bloc/anak_tanggungan_bloc.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/capture_card/capture_card_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
 
 import 'tanggungan_modal.dart';
 
@@ -14,6 +18,14 @@ class TanggunganForm extends StatefulWidget {
 
 class _TanggunganFormState extends State<TanggunganForm> {
   List<String> tabName = ["Anak", "Tanggungan"];
+  late AnakTanggunganBloc _tanggunganBloc;
+  @override
+  void initState() {
+    super.initState();
+    _tanggunganBloc =
+        BlocProvider.of<AnakTanggunganBloc>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -47,9 +59,18 @@ class _TanggunganFormState extends State<TanggunganForm> {
           children: [
             ListTile(
               onTap: () {
-                const AnakModal(
-                  isEdit: true,
-                ).show(context);
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: CaptureCardScreen(onNext: (frontImg, backImg) {
+                          context.read<AnakTanggunganBloc>().addNewChild(
+                              frontImg: frontImg, backImg: backImg);
+                          Navigator.pop(context);
+                          const AnakModal(
+                            isEdit: true,
+                          ).show(context);
+                        }),
+                        type: PageTransitionType.bottomToTop));
               },
               contentPadding: const EdgeInsets.all(12),
               leading: Container(
@@ -65,8 +86,26 @@ class _TanggunganFormState extends State<TanggunganForm> {
               title: const Text("Tambah anak"),
             ),
             const Divider(height: 0),
-            _customTile(title: "Anak 1", name: "Liyana Aina"),
-            _customTile(title: "Anak 2", name: "Nur Fatin")
+            // _customTile(title: "Anak 1", name: "Liyana Aina"),
+            // _customTile(title: "Anak 2", name: "Nur Fatin")
+            BlocBuilder<AnakTanggunganBloc, AnakTanggunganState>(
+              builder: (context, state) {
+                if (state is AnakTanggunganLoaded) {
+                  return Column(
+                      children: List.generate(
+                          state.childData.length,
+                          (index) => _customTile(
+                                title: "Anak ${index + 1}",
+                                name: state.childData[index].name ?? "",
+                                onTap: () {
+                                  _tanggunganBloc.selectDependant(
+                                      state.childData[index], index);
+                                },
+                              )));
+                }
+                return const SizedBox();
+              },
+            ),
           ],
         ),
       ),
@@ -81,9 +120,18 @@ class _TanggunganFormState extends State<TanggunganForm> {
           children: [
             ListTile(
               onTap: () {
-                const TanggunganModal(
-                  isEdit: true,
-                ).show(context);
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: CaptureCardScreen(onNext: (frontImg, backImg) {
+                          context.read<AnakTanggunganBloc>().addNewDependant(
+                              frontImg: frontImg, backImg: backImg);
+                          Navigator.pop(context);
+                          const TanggunganModal(
+                            isEdit: true,
+                          ).show(context);
+                        }),
+                        type: PageTransitionType.bottomToTop));
               },
               contentPadding: const EdgeInsets.all(12),
               leading: Container(
@@ -99,9 +147,28 @@ class _TanggunganFormState extends State<TanggunganForm> {
               title: const Text("Tambah tanggungan"),
             ),
             const Divider(height: 0),
-            _customTile(
-                title: "Tanggungan 1", name: "Liyana Aina", isAnak: false),
-            _customTile(title: "Tanggungan 2", name: "Nur Fatin", isAnak: false)
+            // _customTile(
+            //     title: "Tanggungan 1", name: "Liyana Aina", isAnak: false),
+            // _customTile(title: "Tanggungan 2", name: "Nur Fatin", isAnak: false)
+            BlocBuilder<AnakTanggunganBloc, AnakTanggunganState>(
+              builder: (context, state) {
+                if (state is AnakTanggunganLoaded) {
+                  return Column(
+                      children: List.generate(
+                          state.otherData.length,
+                          (index) => _customTile(
+                                isAnak: false,
+                                title: "Tanggungan ${index + 1}",
+                                name: state.otherData[index].name ?? "",
+                                onTap: () {
+                                  _tanggunganBloc.selectDependant(
+                                      state.otherData[index], index);
+                                },
+                              )));
+                }
+                return const SizedBox();
+              },
+            ),
           ],
         ),
       ),
@@ -109,12 +176,18 @@ class _TanggunganFormState extends State<TanggunganForm> {
   }
 
   _customTile(
-      {required String title, required String name, bool isAnak = true}) {
+      {required String title,
+      required String name,
+      bool isAnak = true,
+      void Function()? onTap}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         ListTile(
           onTap: () {
+            if (onTap != null) {
+              onTap();
+            }
             isAnak
                 ? const AnakModal().show(context)
                 : const TanggunganModal().show(context);

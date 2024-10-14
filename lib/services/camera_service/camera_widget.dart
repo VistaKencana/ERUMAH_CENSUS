@@ -1,15 +1,22 @@
-import 'dart:typed_data';
-
 import 'package:camera/camera.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
 import 'package:eperumahan_bancian/services/camera_service/camera_overlay.dart';
+import 'package:eperumahan_bancian/services/draw_watermark.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image/image.dart' as imag;
 import 'package:flutter/material.dart';
 
 class CameraWidget extends StatefulWidget {
+  final bool addWatermark;
   final void Function(Uint8List uintImg) onTakePicture;
   final CameraOverlay? overlay;
-  const CameraWidget({super.key, required this.onTakePicture, this.overlay});
+  const CameraWidget(
+      {super.key,
+      required this.onTakePicture,
+      this.overlay,
+      this.addWatermark = false});
 
   @override
   State<CameraWidget> createState() => _CameraWidgetState();
@@ -226,10 +233,25 @@ class _CameraWidgetState extends State<CameraWidget> {
                   // controller!.pausePreview();
                   final rawImg = await controller!.takePicture();
 
-                  final uintImg = await rawImg.readAsBytes();
+                  Uint8List uintImg = await rawImg.readAsBytes();
+                  if (widget.addWatermark) {
+                    if (context.mounted) {
+                      String pprUnit = context
+                              .read<BancianBloc>()
+                              .unitData
+                              .unit
+                              ?.housingProject
+                              ?.desc ??
+                          "";
+                      uintImg = await DrawWatermark.onRunDraw(
+                          bytes: uintImg, text: pprUnit);
+                    }
+                  }
+
                   closeLoading();
                   widget.onTakePicture(uintImg);
-                  // controller!.resumePreview();
+                  // controller!.resumePreview();\
+                  if (controller == null) return;
                   await controller!.setFocusMode(FocusMode.auto);
                   await controller!.setExposureMode(ExposureMode.auto);
                 },

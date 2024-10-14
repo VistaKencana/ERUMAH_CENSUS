@@ -1,9 +1,14 @@
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/capture_card/capture_card_screen.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/bloc/pasangan_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_modal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../../components/bottombar_button.dart';
 import '../../../components/custom_appbar.dart';
+import '../models/spouse_input_model.dart';
 
 class PasanganForm extends StatefulWidget {
   const PasanganForm({super.key});
@@ -13,6 +18,14 @@ class PasanganForm extends StatefulWidget {
 }
 
 class _PasanganFormState extends State<PasanganForm> {
+  late PasanganBloc _pasanganBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _pasanganBloc = BlocProvider.of<PasanganBloc>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +37,16 @@ class _PasanganFormState extends State<PasanganForm> {
             children: [
               ListTile(
                 onTap: () {
-                  const PasanganModal(isNewForm: true).show(context);
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: CaptureCardScreen(onNext: (frontImg, backImg) {
+                            context.read<PasanganBloc>().addNewPasangan(
+                                frontImg: frontImg, backImg: backImg);
+                            Navigator.pop(context);
+                            const PasanganModal(isNewForm: true).show(context);
+                          }),
+                          type: PageTransitionType.bottomToTop));
                 },
                 contentPadding: const EdgeInsets.all(12),
                 leading: Container(
@@ -40,8 +62,20 @@ class _PasanganFormState extends State<PasanganForm> {
                 title: const Text("Tambah pasangan"),
               ),
               const Divider(height: 0),
-              _pasanganTile(name: "Siti Nabila", index: 1),
-              _pasanganTile(name: "Nur Saleha", index: 2)
+              BlocBuilder<PasanganBloc, PasanganState>(
+                builder: (context, state) {
+                  if (state is PasanganLoaded) {
+                    return Column(
+                      children: List.generate(
+                          state.spouseData.length,
+                          (index) => _pasanganTile(
+                              data: state.spouseData[index], index: index)),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              ),
             ],
           ),
         ),
@@ -51,12 +85,13 @@ class _PasanganFormState extends State<PasanganForm> {
     );
   }
 
-  _pasanganTile({required String name, required int index}) {
+  _pasanganTile({required SpouseInputModel data, required int index}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         ListTile(
           onTap: () {
+            _pasanganBloc.selectPasangan(data, index);
             const PasanganModal(
               isNewForm: false,
             ).show(context);
@@ -65,8 +100,8 @@ class _PasanganFormState extends State<PasanganForm> {
           leading: const CircleAvatar(
             child: Icon(Icons.person),
           ),
-          title: Text("Pasangan $index"),
-          subtitle: Text(name),
+          title: Text("Pasangan ${index + 1}"),
+          subtitle: Text(data.name ?? ""),
         ),
         const Divider(
           height: 0,

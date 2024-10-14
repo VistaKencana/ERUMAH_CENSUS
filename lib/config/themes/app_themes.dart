@@ -17,6 +17,9 @@ class AppThemes {
       filled: true,
       hintStyle:
           const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+      disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: AppColors.lightGrey.color)),
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: AppColors.lightGrey.color)),

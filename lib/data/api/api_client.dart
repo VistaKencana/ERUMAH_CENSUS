@@ -1,5 +1,16 @@
 import 'dart:convert';
+import 'dart:typed_data';
+import 'package:eperumahan_bancian/components/timeout_screen.dart';
+import 'package:eperumahan_bancian/main.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+<<<<<<< HEAD
+=======
+import "dart:developer" as dev;
+import 'package:http_parser/http_parser.dart';
+import 'package:page_transition/page_transition.dart';
+import '../hive-manager/repository/login_pref.dart';
+>>>>>>> 2270c4eed2573746fc07cd6cfff9364894abf627
 
 class ApiClient {
   // Private constructor
@@ -93,23 +104,67 @@ class ApiClient {
     return response;
   }
 
-  Future<http.Response> uploadFile(
-      {String? baseUrl,
+  Future<http.Response> postFormData(
+      {required String endpoint,
       required List<http.MultipartFile> files,
-      required String endpoint,
+      Map<String, String>? body,
+      String? baseUrl,
       String? authToken,
+<<<<<<< HEAD
       Map<String, String>? body}) async {
+=======
+      bool includeToken = true,
+      Map<String, String>? headers}) async {
+    final getToken = getAuthToken(includeToken);
+    final token = includeToken ? (authToken ?? getToken) : null;
+    final header = await _mergeHeaders(headers, token);
+
+>>>>>>> 2270c4eed2573746fc07cd6cfff9364894abf627
     var url = Uri.parse("${baseUrl ?? this.baseUrl}$endpoint");
     final request = http.MultipartRequest('POST', url);
     if (body != null) {
       request.fields.addAll(body);
     }
-    for (var file in files) {
-      request.files.add(file);
+    if (files.isNotEmpty) {
+      request.files.addAll(files);
     }
 
     final response = await http.Response.fromStream(await request.send());
+
+    if (response.statusCode != 200) {
+      // Log or handle error case
+      debugPrint("Error uploading: ${response.statusCode}, ${response.body}");
+      throw Exception(response.body);
+    }
+
     return response;
+  }
+
+  http.MultipartFile emptyMultipartFile({required String fieldName}) {
+    return http.MultipartFile.fromBytes(
+      fieldName,
+      [],
+      filename: '',
+      contentType: MediaType('image', 'jpg'),
+    );
+  }
+
+  http.MultipartFile bytesToMultipartFile({
+    required String fieldName,
+    required Uint8List bytes,
+    String? filename,
+  }) {
+    int length = bytes.length;
+    Stream<List<int>> byteStream = Stream.fromIterable([bytes]);
+    http.ByteStream stream = http.ByteStream(byteStream);
+    filename = filename ?? 'image.jpg';
+    debugPrint("${(length / 1024) / 1024} mb");
+    return http.MultipartFile(
+      fieldName,
+      stream,
+      length,
+      filename: filename,
+    );
   }
 
   Future<Map<String, String>> _mergeHeaders(
@@ -125,6 +180,7 @@ class ApiClient {
   }
 
   //GET TOKEN FROM PREFERENCE
+<<<<<<< HEAD
   String? getAuthToken() {
     // final isExist = LoginPreference().isTokenExist();
     // if (!isExist) return null;
@@ -132,6 +188,22 @@ class ApiClient {
     // if (token == null) throw TokenExpiredException();
     // return token;
     return null;
+=======
+  String? getAuthToken(bool includToken) {
+    if (!includToken) return null;
+    final isExist = LoginPreference().isTokenExist();
+    if (!isExist) return null;
+    final token = LoginPreference().isTokenExpired();
+    if (token == null) {
+      Navigator.push(
+          navigatorKey.currentContext!,
+          PageTransition(
+              child: const TimeoutScreen(),
+              type: PageTransitionType.rightToLeft));
+      throw TokenExpiredException();
+    }
+    return token;
+>>>>>>> 2270c4eed2573746fc07cd6cfff9364894abf627
   }
 }
 

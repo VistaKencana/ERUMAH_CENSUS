@@ -1,6 +1,15 @@
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
+import 'package:eperumahan_bancian/screens/activity/bancian_info_tile.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/bloc/anak_tanggungan_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_proof_camera.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/bloc/pasangan_bloc.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/bloc/penghuni_bloc.dart';
+import 'package:eperumahan_bancian/screens/qr-home/bloc/qr_bloc.dart';
+import 'package:eperumahan_bancian/screens/qr-home/models/resident_info_model.dart';
+import 'package:eperumahan_bancian/services/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../config/constants/app_colors.dart';
 
@@ -21,11 +30,28 @@ class BancianInfosModal extends StatefulWidget {
 }
 
 class _BancianInfosModalState extends State<BancianInfosModal> {
+  late QrBloc _qrBloc;
   String currValue = "Bancian Biasa";
+  late BancianBloc _bancianBloc;
+  late PenghuniBloc _penghuniBloc;
+  late PasanganBloc _pasanganBloc;
+  late AnakTanggunganBloc _anakTanggunganBloc;
   List<String> statusFilter = [
     "Bancian Biasa",
     "Tiada Penghuni",
   ];
+  late ResidentInfoData residentData;
+  @override
+  void initState() {
+    super.initState();
+    _qrBloc = BlocProvider.of<QrBloc>(context, listen: false);
+    _bancianBloc = BlocProvider.of<BancianBloc>(context, listen: false);
+    _penghuniBloc = BlocProvider.of<PenghuniBloc>(context, listen: false);
+    _pasanganBloc = BlocProvider.of<PasanganBloc>(context, listen: false);
+    _anakTanggunganBloc =
+        BlocProvider.of<AnakTanggunganBloc>(context, listen: false);
+    residentData = _qrBloc.residentData;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +63,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
         child: Scaffold(
           body: SingleChildScrollView(
+            controller: sc,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +79,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
                 Padding(
                   padding: const EdgeInsets.only(left: 12, bottom: 5),
                   child: Text(
-                    'REKOD BANCIAN',
+                    'UNIT: ${residentData.unit!.no}',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -64,83 +91,90 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
                   return Stack(
                     children: [
                       Positioned(
-                        left: cWidth * 0.05,
-                        top: 22,
-                        bottom: 20,
+                        left: cWidth * 0.04,
+                        top: 23,
+                        bottom: 23,
                         child: VerticalDivider(
                           width: 10,
                           color: AppColors.darkGrey.color,
                         ),
                       ),
-                      Column(
-                        children: [
-                          _newInfoTile(lawatan: 1),
-                          _newInfoTile(lawatan: 2),
-                          _newInfoTile(lawatan: 3, isComplete: false),
-                        ],
-                      ),
+                      _visitsData()
                     ],
                   );
                 })
               ],
             ),
           ),
-          bottomNavigationBar: BottomBarButton(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: const BancianProofCamera(),
-                        type: PageTransitionType.rightToLeft));
-              },
-              title: "Teruskan Bancian"),
+          bottomNavigationBar: Visibility(
+            // visible: (residentData.visits?.length ?? 0) < 2,
+            child: BottomBarButton(
+                onTap: () {
+                  _bancianBloc.add(SetBancianData(
+                      data: _qrBloc.residentData,
+                      censusCode: _qrBloc.residentData.censusCode ?? ""));
+                  _penghuniBloc.add(SetPenghuniData(
+                      data: _qrBloc.residentData,
+                      censusCode: _qrBloc.residentData.censusCode ?? ""));
+                  _pasanganBloc.add(SetPasanganData(
+                      data: _qrBloc.residentData,
+                      censusCode: _qrBloc.residentData.censusCode ?? ""));
+                  _anakTanggunganBloc.add(SetAnakTanggungData(
+                      data: _qrBloc.residentData,
+                      censusCode: _qrBloc.residentData.censusCode ?? ""));
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const BancianProofCamera(),
+                          type: PageTransitionType.rightToLeft));
+                },
+                title: "Teruskan Bancian"),
+          ),
         ),
       ),
     );
   }
 
-  _newInfoTile({required int lawatan, bool isComplete = true}) {
-    return ExpansionTile(
-      shape: const Border(),
-      expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      expandedAlignment: Alignment.centerLeft,
-      childrenPadding: const EdgeInsets.only(left: 80, bottom: 10, top: 10),
-      leading: Container(
-        decoration: BoxDecoration(
-          color: isComplete ? AppColors.primary.color : AppColors.midGrey.color,
-          shape: BoxShape.circle,
-        ),
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.only(top: 4),
-        child: Text(
-          "$lawatan",
-          textAlign: TextAlign.center,
-          style: appTextStyle(color: isComplete ? Colors.white : Colors.black),
-        ),
-        // child: const Icon(Icons.receipt),
+  Widget _visitsData() {
+    int visitsLen = residentData.visits?.length ?? 0;
+    final data = residentData.visits!;
+
+    if (visitsLen <= 0) {
+      return Column(
+        children: [
+          BancianInfoTile(
+              status: "BELUM DIBANCI",
+              lawatan: "1",
+              isComplete: false,
+              date: FormatDate.formatTo(
+                  date: DateTime.now().toString(), format: "d MMMM y"),
+              remarks: "-"),
+        ],
+      );
+    }
+
+    return Column(children: [
+      ...List.generate(
+        visitsLen,
+        (index) => BancianInfoTile(
+            status: data[index].status ?? "-",
+            lawatan: data[index].round ?? "0",
+            isComplete:
+                (data[index].status ?? "").toLowerCase().contains("selesai"),
+            date: FormatDate.formatTo(
+                date: DateTime.now().toString(), format: "d MMMM y"),
+            remarks: data[index].remark ?? ""),
       ),
-      // contentPadding: EdgeInsets.zero,
-      // isThreeLine: true,
-      dense: true,
-      title: Text("LAWATAN $lawatan"),
-      subtitle: Text(!isComplete ? "Status: -" : "Status: Tidak Lengkap"),
-      trailing: isComplete
-          ? null
-          : Chip(
-              color: WidgetStatePropertyAll(
-                  isComplete ? Colors.green : Colors.grey),
-              label: Text(
-                isComplete ? "SELESAI" : "BELUM DIBANCI",
-                style: appTextStyle(
-                    size: 10, fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-              shape: const StadiumBorder(),
-              side: BorderSide.none,
-            ),
-      children: const [
-        Text("Catatan:"),
-        Text("Tiada penghuni dirumah"),
-      ],
-    );
+      Visibility(
+        visible: (residentData.visits?.length ?? 0) < 1,
+        child: BancianInfoTile(
+            status: "BELUM DIBANCI",
+            lawatan: (visitsLen + 1).toString(),
+            isComplete: false,
+            date: FormatDate.formatTo(
+                date: DateTime.now().toString(), format: "d MMMM y"),
+            remarks: "-"),
+      )
+    ]);
   }
 }

@@ -1,4 +1,6 @@
 import 'package:eperumahan_bancian/components/transition_appbar.dart';
+import 'package:eperumahan_bancian/data/hive-manager/repository/login_pref.dart';
+import 'package:eperumahan_bancian/screens/login/bloc/auth_bloc.dart';
 import 'package:eperumahan_bancian/screens/profile/profile_change_pwd_screen.dart';
 import 'package:eperumahan_bancian/screens/profile/profile_update_screen.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Icons.person,
                 ),
               ),
-              name: "Ahmad Hazim",
+              name: LoginPreference().getUsername() ?? "-",
             ),
           ),
         ];

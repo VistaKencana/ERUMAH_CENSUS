@@ -17,6 +17,7 @@ class CustomTextField extends StatelessWidget {
   final TextStyle? labelStyle;
   final TextStyle? hintStyle;
   final TextStyle? titleStyle;
+  final TextStyle? style;
   final String? Function(String? value)? validator;
   final void Function()? onTap;
   final void Function(String value)? onChanged;
@@ -39,6 +40,7 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.prefixIcon,
     this.prefixWidget,
+    this.style,
     this.suffixIcon,
     this.suffixWidget,
     this.textCapitalization = TextCapitalization.none,
@@ -91,12 +93,14 @@ class CustomTextField extends StatelessWidget {
           readOnly: readOnly,
           validator: validator,
           onTap: onTap,
+          style: style,
           onChanged: onChanged,
           inputFormatters: inputFormatters,
           maxLines: maxLines,
           decoration: InputDecoration(
             filled: true,
             hintText: hintText,
+            errorStyle: errorStyle,
             fillColor: fillColor,
             enabledBorder: addBorder
                 ? OutlineInputBorder(
