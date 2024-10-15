@@ -1,4 +1,5 @@
 import 'package:eperumahan_bancian/components/transition_appbar.dart';
+import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/login_pref.dart';
 import 'package:eperumahan_bancian/screens/login/bloc/auth_bloc.dart';
 import 'package:eperumahan_bancian/screens/profile/profile_change_pwd_screen.dart';
@@ -26,6 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             //To avoid extra scrolling Absorber & Injector
             handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
             sliver: TransitionAppBar(
+              foregroundColor: AppColors.primary.color,
               onEdit: () {
                 Navigator.push(
                     context,

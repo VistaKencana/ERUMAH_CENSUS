@@ -2,6 +2,7 @@ import 'package:eperumahan_bancian/config/routes/routes_error.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/screens/activity/activity_search_screen.dart';
 import 'package:eperumahan_bancian/screens/home_screen.dart';
+import 'package:eperumahan_bancian/screens/landing/landing_screen.dart';
 import 'package:eperumahan_bancian/screens/login/login_screen.dart';
 import 'package:eperumahan_bancian/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +15,17 @@ class RoutesGenerator {
         return MaterialPageRoute(
             settings: const RouteSettings(name: RoutesName.splash),
             builder: (context) => const SplashScreen());
+      case RoutesName.landing:
+        return PageTransition(
+            settings: const RouteSettings(name: RoutesName.landing),
+            type: PageTransitionType.fade,
+            duration: const Duration(milliseconds: 2500),
+            child: const LandingScreen());
       case RoutesName.login:
         return PageTransition(
             settings: const RouteSettings(name: RoutesName.login),
-            type: PageTransitionType.fade,
-            duration: const Duration(milliseconds: 2500),
+            type: PageTransitionType.rightToLeft,
+            duration: const Duration(milliseconds: 600),
             child: const LoginScreen());
       case RoutesName.home:
         return PageTransition(

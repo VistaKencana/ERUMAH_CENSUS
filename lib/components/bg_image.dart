@@ -15,7 +15,7 @@ class BgImage extends StatelessWidget {
           height: size.height,
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage(AppImages.bg.path), fit: BoxFit.fill)),
+                  image: AssetImage(AppImages.comp2Bg.path), fit: BoxFit.fill)),
         ),
         child,
       ],

@@ -1,13 +1,14 @@
+import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomNav extends StatelessWidget {
-  final Color bgColor;
+  final Color? bgColor;
   final int itemCount;
   final Widget Function(int) generator;
   const CustomBottomNav(
     this.generator, {
     super.key,
-    this.bgColor = const Color(0xFF312D81),
+    this.bgColor,
     required this.itemCount,
   });
 
@@ -16,7 +17,7 @@ class CustomBottomNav extends StatelessWidget {
     return Container(
       height: 60,
       width: double.infinity,
-      color: bgColor,
+      color: bgColor ?? AppColors.primary.color,
       child: Row(children: List.generate(itemCount, generator)),
     );
   }
@@ -25,7 +26,7 @@ class CustomBottomNav extends StatelessWidget {
 class NavItem extends StatelessWidget {
   final Widget icon;
   final String label;
-  final Color selectedBgColor;
+  final Color? selectedBgColor;
   final Color selectedColor;
   final bool isSelected;
   final Color unselectedBgColor;
@@ -34,7 +35,7 @@ class NavItem extends StatelessWidget {
   const NavItem({
     super.key,
     required this.icon,
-    this.selectedBgColor = const Color(0xFF403C97),
+    this.selectedBgColor,
     this.selectedColor = Colors.white,
     required this.isSelected,
     this.unselectedBgColor = Colors.transparent,
@@ -54,7 +55,9 @@ class NavItem extends StatelessWidget {
       child: Container(
         height: 60,
         width: size.width / itemCount,
-        color: isSelected ? selectedBgColor : unselectedBgColor,
+        color: isSelected
+            ? (selectedBgColor ?? Colors.white.withOpacity(.1))
+            : unselectedBgColor,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,

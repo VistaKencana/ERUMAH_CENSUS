@@ -1,3 +1,4 @@
+import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:eperumahan_bancian/components/validator.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/login/bloc/auth_bloc.dart';
@@ -46,35 +47,36 @@ class _LoginScreenState extends State<LoginScreen> {
         child: BgImage(
           child: Scaffold(
             backgroundColor: Colors.transparent,
+            appBar: const CustomAppBar(title: ""),
             body: SafeArea(
               child: LayoutBuilder(builder: (context, constraint) {
                 return SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
-                      horizontal: constraint.maxWidth * .1,
+                      horizontal: constraint.maxWidth * .08,
                       vertical: constraint.maxHeight * .04),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Image.asset(
+                        AppImages.dbklLogo.path,
+                        fit: BoxFit.contain,
+                        height: constraint.maxHeight * .1,
+                        width: constraint.maxWidth * .15,
+                      ),
+                      // Text(
+                      //   "Selamat Datang",
+                      //   style:
+                      //       appTextStyle(size: 20, fontWeight: FontWeight.w600),
+                      // ),
+
+                      SizedBox(height: constraint.maxHeight * .1),
                       Text(
                         "Selamat Datang",
-                        style:
-                            appTextStyle(size: 20, fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 15),
-                      AspectRatio(
-                        aspectRatio: 30 / 9,
-                        child: Image.asset(
-                          AppImages.dbklLogo.path,
-                          fit: BoxFit.contain,
-                          height: constraint.maxHeight * .2,
-                          width: constraint.maxWidth * .4,
-                        ),
-                      ),
-                      SizedBox(height: constraint.maxHeight * .04),
-                      Text(
-                        "PENGURUSAN PERUMAHAN",
                         style: appTextStyle(
-                            size: 20.sp, fontWeight: FontWeight.w700),
+                            color: AppColors.primary.color,
+                            size: 30.sp,
+                            fontWeight: FontWeight.w700),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 2),
@@ -82,13 +84,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         "DEWAN BANDARAYA KUALA LUMPUR",
                         style: appTextStyle(fontWeight: FontWeight.w600),
                       ),
-                      SizedBox(height: constraint.maxHeight * .03),
-                      AspectRatio(
-                        aspectRatio: 16 / 1.5,
-                        child: Image.asset(
-                          AppImages.icLogMasuk.path,
-                        ),
-                      ),
+                      // SizedBox(height: constraint.maxHeight * .03),
+                      // AspectRatio(
+                      //   aspectRatio: 16 / 1.5,
+                      //   child: Image.asset(
+                      //     AppImages.icLogMasuk.path,
+                      //   ),
+                      // ),
                       const SizedBox(height: 10),
                       CustomTextField(
                         title: "ID Pengguna:",

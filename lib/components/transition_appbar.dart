@@ -1,3 +1,4 @@
+import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class TransitionAppBar extends SliverPersistentHeader {
@@ -115,7 +116,7 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
             duration: const Duration(milliseconds: 100),
             height: appBarHeight,
             constraints: const BoxConstraints(maxHeight: 200),
-            color: const Color(0xFF312D81),
+            color: AppColors.primary.color,
           ),
           Padding(
             padding: leadingMargin,

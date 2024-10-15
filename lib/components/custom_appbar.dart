@@ -53,7 +53,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       }
                       Navigator.pop(context);
                     },
-                    icon: const Icon(Icons.chevron_left))
+                    icon: const Icon(Icons.arrow_back))
                 : null,
             backgroundColor: Colors.transparent,
             foregroundColor:
