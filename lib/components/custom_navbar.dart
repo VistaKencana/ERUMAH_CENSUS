@@ -17,17 +17,18 @@ class CustomBottomNav extends StatelessWidget {
     return Container(
       height: 60,
       width: double.infinity,
-      color: bgColor ?? AppColors.primary.color,
+      color: bgColor ?? Colors.white,
+      // color: bgColor ?? AppColors.primary.color,
       child: Row(children: List.generate(itemCount, generator)),
     );
   }
 }
 
 class NavItem extends StatelessWidget {
-  final Widget icon;
+  final Icon icon;
   final String label;
   final Color? selectedBgColor;
-  final Color selectedColor;
+  final Color? selectedColor;
   final bool isSelected;
   final Color unselectedBgColor;
   final int itemCount;
@@ -36,7 +37,7 @@ class NavItem extends StatelessWidget {
     super.key,
     required this.icon,
     this.selectedBgColor,
-    this.selectedColor = Colors.white,
+    this.selectedColor,
     required this.isSelected,
     this.unselectedBgColor = Colors.transparent,
     required this.label,
@@ -55,19 +56,39 @@ class NavItem extends StatelessWidget {
       child: Container(
         height: 60,
         width: size.width / itemCount,
-        color: isSelected
-            ? (selectedBgColor ?? Colors.white.withOpacity(.1))
-            : unselectedBgColor,
+        decoration: BoxDecoration(
+          border: const Border(top: BorderSide(color: Colors.black12)),
+          color: isSelected
+              ? (selectedBgColor ?? Colors.white.withOpacity(.1))
+              : unselectedBgColor,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            icon,
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color:
+                    AppColors.brightBlue.color.withOpacity(isSelected ? .2 : 0),
+              ),
+              child: Icon(
+                icon.icon,
+                color: isSelected
+                    ? AppColors.brightBlue.color
+                    : AppColors.brightBlue.color.withOpacity(.5),
+                size: icon.size,
+              ),
+            ),
             Text(label,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: TextStyle(color: selectedColor, fontSize: 12))
+                style: TextStyle(
+                    color: selectedColor ?? AppColors.brightBlue.color,
+                    fontSize: 12))
           ],
         ),
       ),

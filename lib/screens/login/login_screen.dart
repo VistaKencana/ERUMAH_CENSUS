@@ -99,14 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         hintText: "Tulis id pengguna disini",
                         validator: (value) => Validator.validateText(value,
                             err: "Sila isi ID Pengguna"),
-                        prefixWidget: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Image.asset(
-                            AppImages.icId.path,
-                            width: 20,
-                            height: 20,
-                          ),
-                        ),
+                        prefixIcon: Icons.person,
                       ),
                       const SizedBox(height: 10),
                       CustomTextField(
@@ -117,14 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: (value) => Validator.validatePassword(value,
                             length: 6, err: "Sila isi kata laluan"),
                         titleStyle: appTextStyle(fontWeight: FontWeight.w600),
-                        prefixWidget: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Image.asset(
-                            AppImages.icLock.path,
-                            width: 20,
-                            height: 20,
-                          ),
-                        ),
+                        prefixIcon: Icons.key,
                       ),
                       Align(
                         alignment: Alignment.centerLeft,

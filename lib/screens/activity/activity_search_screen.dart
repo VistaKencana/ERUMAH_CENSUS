@@ -1,5 +1,5 @@
 import 'package:eperumahan_bancian/components/activity_appbar.dart';
-import 'package:eperumahan_bancian/components/bg_image.dart';
+// import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/data/api/repositories/bloc/property_bloc/property_bloc.dart';
@@ -34,9 +34,8 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
   Widget build(BuildContext context) {
     final propertyWatch = BlocProvider.of<PropertyBloc>(context);
     Size size = MediaQuery.sizeOf(context);
-    return BgImage(
-        child: Scaffold(
-      backgroundColor: Colors.transparent,
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: ActivityAppbar(
         onOpenFloor: () {
           CustomDropdownSheet(
@@ -145,7 +144,7 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
           )
         ],
       ),
-    ));
+    );
   }
 
   _infoContainer({required String val, required String title}) {

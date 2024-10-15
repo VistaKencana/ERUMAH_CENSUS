@@ -50,6 +50,7 @@ class _LandingScreenState extends State<LandingScreen> {
                   SizedBox(height: constraint.maxHeight * .06),
                   SizedBox(
                       height: 50,
+                      width: double.infinity,
                       child: ElevatedButton(
                           onPressed: () {
                             Navigator.pushNamed(context, RoutesName.login);

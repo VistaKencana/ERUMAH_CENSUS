@@ -16,6 +16,7 @@ class SplashScreen extends StatelessWidget {
       Navigator.pushNamedAndRemoveUntil(
           context, RoutesName.landing, (route) => false);
       if (isLoggedIn) {
+        Navigator.pushNamed(context, RoutesName.login);
         Navigator.pushNamed(context, RoutesName.home);
       }
     });
