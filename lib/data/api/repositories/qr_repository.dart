@@ -5,11 +5,14 @@ import 'package:eperumahan_bancian/data/api/api_client.dart';
 import 'package:eperumahan_bancian/screens/qr-home/models/resident_info_model.dart';
 import 'response_validator.dart';
 
+enum Searchtype { qrCode, unitCode }
+
 class QrRepository {
   final client = ApiClient();
 
-  Future<ResidentInfoData> scanQrCode({required String qrCode}) async {
-    final body = {"qrCode": qrCode};
+  Future<ResidentInfoData> scanQrCode(
+      {Searchtype type = Searchtype.qrCode, required String code}) async {
+    final body = {"type": type.name, "code": code};
     final resp = await client.post(endpoint: "/appl/view", body: body);
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
