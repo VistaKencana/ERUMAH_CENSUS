@@ -49,7 +49,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     try {
       this.qrCode = qrCode;
       //Fetch qr code data
-      final resp = await repo.scanQrCode(qrCode: event.qrCode);
+      final resp = await repo.scanQrCode(code: event.qrCode);
       residentData = resp;
 
       //If from home will compare with selected property
@@ -69,7 +69,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
               tag: "_onScanQrcode",
               msg: "Fetch cencus code for qr:${event.qrCode}");
           final cencusCode =
-              await repoAppl.getCensusCode(qrcCode: event.qrCode);
+              await repoAppl.getCensusCode(unitCode: residentData.unit!.code!);
           residentData = residentData.copyWith(censusCode: cencusCode);
         } catch (e) {
           emit(const QrError(msg: "Error on fetch census code"));

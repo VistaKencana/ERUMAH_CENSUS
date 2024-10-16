@@ -12,8 +12,8 @@ import 'response_validator.dart';
 class ApplicationRepository {
   final client = ApiClient();
 
-  Future<String> getCensusCode({required String qrcCode}) async {
-    final body = {"qrCode": qrcCode};
+  Future<String> getCensusCode({required String unitCode}) async {
+    final body = {"unitCode": unitCode};
     final resp = await client.post(endpoint: "/appl/store", body: body);
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
