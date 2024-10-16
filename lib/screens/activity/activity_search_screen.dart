@@ -30,18 +30,30 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
   final scrollController = ScrollController();
   late PropertyBloc _propertyBloc;
   late QrBloc _qrBloc;
-  double scrollOffset = 0.0;
+  // double scrollOffset = 0.0;
 
   @override
   void initState() {
     super.initState();
     _propertyBloc = BlocProvider.of<PropertyBloc>(context, listen: false);
     _qrBloc = BlocProvider.of<QrBloc>(context, listen: false);
-    scrollController.addListener(() {
-      setState(() {
-        scrollOffset = scrollController.offset;
-      });
-    });
+    // scrollController.addListener(_onScroll);
+  }
+
+  // void _onScroll() {
+  //   double newScrollOffset = scrollController.offset;
+  //   if (newScrollOffset != scrollOffset) {
+  //     setState(() {
+  //       scrollOffset = newScrollOffset;
+  //     });
+  //   }
+  // }
+
+  @override
+  void dispose() {
+    // scrollController.removeListener(_onScroll);
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -81,9 +93,9 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
                 centerTitle: true,
                 title: Text(
                   _propertyBloc.selectedArea.desc ?? "-",
-                  style: TextStyle(
-                      color: Colors.black.withOpacity(
-                          (scrollOffset / 80).clamp(0, 1).toDouble())),
+                  // style: TextStyle(
+                  //     color: Colors.black.withOpacity(
+                  //         (scrollOffset / 80).clamp(0, 1).toDouble())),
                 ),
                 leading: Padding(
                   padding: const EdgeInsets.only(left: 16),
@@ -211,6 +223,19 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
                             );
                           } else if (state is PropertySuccess ||
                               state is UnitSuccess) {
+                            if (propertyWatch.listProperty.isEmpty) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(height: size.height * .1),
+                                  const Icon(Icons.house_outlined),
+                                  const Center(
+                                      child: Text("Tiada Unit di tingkat ini")),
+                                  SizedBox(height: size.height * .1),
+                                ],
+                              );
+                            }
                             return ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -302,6 +327,8 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
                 onPressed: () {
                   _propertyBloc.add(ChangePropertyFloor(
                       floorData: _propertyBloc.listFloor[index]));
+                  scrollController
+                      .jumpTo(scrollController.position.minScrollExtent);
                   setState(() {});
                 },
               ),

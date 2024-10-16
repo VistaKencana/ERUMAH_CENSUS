@@ -20,6 +20,7 @@ enum AppImages {
   landing(path: "assets/images/landing.jpg"),
   comp2Bg(path: "assets/images/comp2_bg.png"),
   activityHeader(path: "assets/images/activity_header.png"),
+  activityBg(path: "assets/images/activity_bg.png"),
   ;
 
   final String path;

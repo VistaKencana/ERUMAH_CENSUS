@@ -3,7 +3,8 @@ import '../config/constants/app_images.dart';
 
 class BgImage extends StatelessWidget {
   final Widget child;
-  const BgImage({super.key, required this.child});
+  final String? assetName;
+  const BgImage({super.key, required this.child, this.assetName});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,8 @@ class BgImage extends StatelessWidget {
           height: size.height,
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage(AppImages.comp2Bg.path), fit: BoxFit.fill)),
+                  image: AssetImage(assetName ?? AppImages.comp2Bg.path),
+                  fit: BoxFit.fill)),
         ),
         child,
       ],

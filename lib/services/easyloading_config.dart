@@ -4,7 +4,7 @@ class EasyLoadingConfig {
   static Future<void> init() async {
     EasyLoading.instance
       ..displayDuration = const Duration(milliseconds: 2000)
-      ..indicatorType = EasyLoadingIndicatorType.chasingDots
+      ..indicatorType = EasyLoadingIndicatorType.circle
       ..loadingStyle = EasyLoadingStyle.dark
       ..indicatorSize = 45.0
       ..radius = 10.0
