@@ -13,6 +13,14 @@ final class QrLoading extends QrState {}
 
 final class QrRegLoading extends QrState {}
 
+final class UnitCodeLoading extends QrState {}
+
+final class UnitCodeSuccess extends QrState {
+  final ResidentInfoData? data;
+
+  const UnitCodeSuccess({this.data});
+}
+
 final class QrSuccess extends QrState {
   final ResidentInfoData? data;
 
@@ -25,6 +33,12 @@ final class QrError extends QrState {
   final String msg;
 
   const QrError({required this.msg});
+}
+
+final class UnitCodeError extends QrState {
+  final String msg;
+
+  const UnitCodeError({required this.msg});
 }
 
 final class QrRegError extends QrState {

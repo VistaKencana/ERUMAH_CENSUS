@@ -19,3 +19,10 @@ class RegisterQrcode extends QrEvent {
 }
 
 class UpdateQrcode extends QrEvent {}
+
+class SelectHouseUnit extends QrEvent {
+  final String unitCode;
+  final bool isFromHome;
+
+  const SelectHouseUnit({required this.unitCode, required this.isFromHome});
+}

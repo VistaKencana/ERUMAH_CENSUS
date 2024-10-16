@@ -62,6 +62,7 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                     color: Colors.white,
+                    border: Border.all(),
                     borderRadius: BorderRadius.circular(16)),
                 child: Column(
                   children: [

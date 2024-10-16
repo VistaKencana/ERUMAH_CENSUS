@@ -20,6 +20,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     on<ScanQrcode>(_onScanQrcode);
     on<RegisterQrcode>(_onRegisterQrcode);
     on<UpdateQrcode>(_onUpdateQrcode);
+    on<SelectHouseUnit>(_onSelectHouseUnit);
   }
 
   final repo = QrRepository();
@@ -87,6 +88,66 @@ class QrBloc extends Bloc<QrEvent, QrState> {
         emit(QrNotFound(msg: e.toString()));
       } else {
         emit(QrError(msg: e.toString()));
+      }
+    } finally {
+      EasyLoading.dismiss();
+    }
+  }
+
+  _onSelectHouseUnit(SelectHouseUnit event, Emitter<QrState> emit) async {
+    emit(UnitCodeLoading());
+    // final unitCode = event.unitCode;
+    // if (qrCode.isEmpty) {
+    //   emit(const QrError(msg: "Failed to detect Qr Code"));
+    //   return;
+    // }
+    isFromHome = event.isFromHome;
+    if (isFromHome) clearPropertyData();
+
+    try {
+      // this.qrCode = qrCode;
+      log.logDebug(
+          tag: "_onSelectHouseUnit", msg: "Fetch unit data:${event.unitCode}");
+      //Fetch qr code data
+      final resp = await repo.scanQrCode(
+          type: Searchtype.unitCode, code: event.unitCode);
+      residentData = resp;
+
+      //If from home will compare with selected property
+      // if (!isFromHome) {
+      //   if (residentData.unit!.no != selectedProperty.unitNo) {
+      //     String errMsg =
+      //         "QR diimbas dimiliki oleh unit ${residentData.unit!.no} yang tidak sama seperti yang dipilih";
+      //     emit(QrNotTally(msg: errMsg));
+      //     return;
+      //   }
+      // }
+
+      //Get census code if not exist
+      if (residentData.censusCode == null || residentData.censusCode!.isEmpty) {
+        try {
+          log.logDebug(
+              tag: "_onSelectHouseUnit",
+              msg: "Fetch cencus code for unitCode:${event.unitCode}");
+          final cencusCode =
+              await repoAppl.getCensusCode(unitCode: residentData.unit!.code!);
+          residentData = residentData.copyWith(censusCode: cencusCode);
+        } catch (e) {
+          emit(const UnitCodeError(msg: "Error on fetch census code"));
+          log.logError(
+              tag: "_onSelectHouseUnit Fethc census code", msg: e.toString());
+          EasyLoading.dismiss();
+          return;
+        }
+      }
+
+      emit(UnitCodeSuccess(data: residentData));
+    } catch (e) {
+      log.logError(tag: '_onSelectHouseUnit', msg: e.toString());
+      if (e.toString().toLowerCase().contains("not found")) {
+        emit(UnitCodeError(msg: e.toString()));
+      } else {
+        emit(UnitCodeError(msg: e.toString()));
       }
     } finally {
       EasyLoading.dismiss();

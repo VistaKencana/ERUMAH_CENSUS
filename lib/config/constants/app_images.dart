@@ -17,8 +17,9 @@ enum AppImages {
   custService(path: "assets/images/customer_service.png"),
   captureCard(path: "assets/images/capture_card.png"),
   noConnection(path: "assets/images/no_internet.png"),
-  landing(path: "assets/images/landing.png"),
+  landing(path: "assets/images/landing.jpg"),
   comp2Bg(path: "assets/images/comp2_bg.png"),
+  activityHeader(path: "assets/images/activity_header.png"),
   ;
 
   final String path;

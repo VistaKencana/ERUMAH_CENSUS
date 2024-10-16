@@ -1,4 +1,6 @@
-import 'package:eperumahan_bancian/components/transition_appbar.dart';
+// import 'package:eperumahan_bancian/components/transition_appbar.dart';
+import 'package:eperumahan_bancian/components/custom_appbar.dart';
+import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/login_pref.dart';
 import 'package:eperumahan_bancian/screens/login/bloc/auth_bloc.dart';
 import 'package:eperumahan_bancian/screens/profile/profile_change_pwd_screen.dart';
@@ -20,94 +22,197 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NestedScrollView(headerSliverBuilder: (context, innerScroll) {
-        return [
-          SliverOverlapAbsorber(
-            //To avoid extra scrolling Absorber & Injector
-            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-            sliver: TransitionAppBar(
-              onEdit: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: const ProfileUpdateScreen(),
-                        type: PageTransitionType.rightToLeft));
-              },
-              delegate: TemparoryDelegate(),
-              leading: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 2),
-                    shape: BoxShape.circle,
-                    color: Colors.grey.shade200),
-                child: const Icon(
-                  Icons.person,
+        appBar: const CustomAppBar(
+          title: "Profile",
+          automaticallyImplyLeading: false,
+          centerTitle: false,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const ProfileUpdateScreen(),
+                          type: PageTransitionType.rightToLeft));
+                },
+                child: Container(
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 16, top: 30, bottom: 25),
+                  color: AppColors.brightBlue.color.withOpacity(.2),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundColor: AppColors.brightBlue.color,
+                        foregroundColor: Colors.white,
+                        child: const Icon(
+                          Icons.person,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            LoginPreference().getUsername() ?? "-",
+                            style: appTextStyle(
+                                size: 20, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            LoginPreference().getUserId() ?? "-",
+                            style: appTextStyle(),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      const Icon(Icons.chevron_right),
+                    ],
+                  ),
                 ),
               ),
-              name: LoginPreference().getUsername() ?? "-",
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 30),
+                    Text(
+                      "Umum",
+                      style: appTextStyle(size: 18, color: Colors.blueGrey),
+                    ),
+                    _tile(
+                        title: "Ubah Kata Laluan",
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: const ProfileChangePwdScreen(),
+                                  type: PageTransitionType.rightToLeft));
+                        },
+                        leading: const Icon(Icons.lock)),
+                    _tile(
+                        title: "Log Keluar",
+                        onTap: () {
+                          _showLogoutAlert();
+                        },
+                        leading: const Icon(Icons.exit_to_app)),
+                  ],
+                ),
+              )
+            ],
           ),
-        ];
-      }, body: Builder(builder: (context) {
-        return CustomScrollView(slivers: [
-          SliverOverlapInjector(
-            //To avoid extra scrolling Absorber & Injector
-            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+        )
+        // NestedScrollView(headerSliverBuilder: (context, innerScroll) {
+        //   return [
+        //     SliverOverlapAbsorber(
+        //       //To avoid extra scrolling Absorber & Injector
+        //       handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+        //       sliver: TransitionAppBar(
+        //         onEdit: () {
+        //           Navigator.push(
+        //               context,
+        //               PageTransition(
+        //                   child: const ProfileUpdateScreen(),
+        //                   type: PageTransitionType.rightToLeft));
+        //         },
+        //         delegate: TemparoryDelegate(),
+        //         leading: Container(
+        //           padding: const EdgeInsets.all(10),
+        //           decoration: BoxDecoration(
+        //               border: Border.all(color: Colors.white, width: 2),
+        //               shape: BoxShape.circle,
+        //               color: Colors.grey.shade200),
+        //           child: const Icon(
+        //             Icons.person,
+        //           ),
+        //         ),
+        //         name: LoginPreference().getUsername() ?? "-",
+        //       ),
+        //     ),
+        //   ];
+        // }, body: Builder(builder: (context) {
+        //   return CustomScrollView(slivers: [
+        //     SliverOverlapInjector(
+        //       //To avoid extra scrolling Absorber & Injector
+        //       handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+        //     ),
+        //     SliverList(
+        //         delegate: SliverChildListDelegate([
+        //       Padding(
+        //         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        //         child: Column(
+        //           crossAxisAlignment: CrossAxisAlignment.start,
+        //           children: [
+        //             const Text(
+        //               "Tetapan",
+        //               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        //             ),
+        //             const SizedBox(height: 10),
+        //             _profileTile(
+        //               icon: Icons.lock_outline_rounded,
+        //               title: "Ubah Kata Laluan",
+        //               onTap: () {
+        //                 Navigator.push(
+        //                     context,
+        //                     PageTransition(
+        //                         child: const ProfileChangePwdScreen(),
+        //                         type: PageTransitionType.rightToLeft));
+        //               },
+        //             ),
+        //             const SizedBox(height: 10),
+        //             _profileTile(
+        //               icon: Icons.power_settings_new,
+        //               title: "Log Keluar",
+        //               onTap: () {
+        //                 _showLogoutAlert();
+        //               },
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ]))
+        //   ]);
+        // })),
+        );
+  }
+
+  _tile({required String title, Widget? leading, void Function()? onTap}) {
+    return Column(
+      children: [
+        ListTile(
+          onTap: onTap,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+          leading: leading,
+          title: Text(title),
+          trailing: const Icon(
+            Icons.chevron_right,
+            size: 20,
+            color: Colors.grey,
           ),
-          SliverList(
-              delegate: SliverChildListDelegate([
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Tetapan",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  _profileTile(
-                    icon: Icons.lock_outline_rounded,
-                    title: "Ubah Kata Laluan",
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              child: const ProfileChangePwdScreen(),
-                              type: PageTransitionType.rightToLeft));
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  _profileTile(
-                    icon: Icons.power_settings_new,
-                    title: "Log Keluar",
-                    onTap: () {
-                      _showLogoutAlert();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ]))
-        ]);
-      })),
+        ),
+        const Divider(height: 0)
+      ],
     );
   }
 
-  _profileTile(
-      {required String title,
-      required IconData icon,
-      required void Function() onTap}) {
-    return ListTile(
-      onTap: onTap,
-      title: Text(title),
-      leading: Icon(icon),
-      tileColor: Colors.grey.shade200,
-      trailing: const Icon(Icons.chevron_right),
-      contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-    );
-  }
+  // _profileTile(
+  //     {required String title,
+  //     required IconData icon,
+  //     required void Function() onTap}) {
+  //   return ListTile(
+  //     onTap: onTap,
+  //     title: Text(title),
+  //     leading: Icon(icon),
+  //     tileColor: Colors.grey.shade200,
+  //     trailing: const Icon(Icons.chevron_right),
+  //     contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+  //   );
+  // }
 
   _showLogoutAlert() async {
     return await CustomAlertDialog(

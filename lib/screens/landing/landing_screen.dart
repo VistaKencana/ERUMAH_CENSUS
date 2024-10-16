@@ -20,8 +20,10 @@ class _LandingScreenState extends State<LandingScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-                borderRadius:
-                    BorderRadius.only(bottomLeft: Radius.circular(140.r)),
+                borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(12), right: Radius.circular(12)),
+                // borderRadius:
+                //     BorderRadius.only(bottomLeft: Radius.circular(20.r)),
                 child: Image.asset(AppImages.landing.path)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
