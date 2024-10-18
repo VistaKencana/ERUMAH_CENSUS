@@ -379,7 +379,7 @@ class _AnakModalState extends State<AnakModal> {
                   ? (dependantData?.relationshipCode?.toLowerCase() ?? "*_*")
                   : "*_*";
               final result = data.where((val) {
-                var a = val.code?.contains(searchData) ?? false;
+                var a = val.code?.toLowerCase().contains(searchData) ?? false;
                 return a;
               }).firstOrNull;
 
@@ -453,7 +453,7 @@ class _AnakModalState extends State<AnakModal> {
                     ? (dependantData?.healthLevelCode?.toLowerCase() ?? "*_*")
                     : "*_*";
                 final result = data.where((val) {
-                  var a = val.code?.contains(searchData) ?? false;
+                  var a = val.code?.toLowerCase().contains(searchData) ?? false;
                   return a;
                 }).firstOrNull;
                 return result;

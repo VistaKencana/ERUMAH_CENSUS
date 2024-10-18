@@ -380,7 +380,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
                   ? (dependantData?.relationshipCode?.toLowerCase() ?? "*_*")
                   : "*_*";
               final result = data.where((val) {
-                var a = val.code?.contains(searchData) ?? false;
+                var a = val.code?.toLowerCase().contains(searchData) ?? false;
                 return a;
               }).firstOrNull;
 
@@ -454,7 +454,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
                     ? (dependantData?.healthLevelCode?.toLowerCase() ?? "*_*")
                     : "*_*";
                 final result = data.where((val) {
-                  var a = val.code?.contains(searchData) ?? false;
+                  var a = val.code?.toLowerCase().contains(searchData) ?? false;
                   return a;
                 }).firstOrNull;
                 return result;
