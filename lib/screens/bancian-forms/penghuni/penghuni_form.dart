@@ -450,12 +450,16 @@ class _PenghuniFormState extends State<PenghuniForm> {
             label: "Pilih Jantina",
             items: ddR.genderList,
             onFindGroupValue: (data) {
-              return data.where((val) {
-                var a = val.code?.toLowerCase().contains(
-                        ownerData?.genderCode?.toLowerCase() ?? "*_*") ??
-                    false;
+              final searchData = (ownerData?.genderCode != null &&
+                      (ownerData?.genderCode?.isNotEmpty ?? false))
+                  ? (ownerData?.genderCode?.toLowerCase() ?? "*_*")
+                  : "*_*";
+              final result = data.where((val) {
+                var a = val.code?.toLowerCase().contains(searchData) ?? false;
                 return a;
               }).firstOrNull;
+
+              return result;
             },
             getTitle: (data) => data.desc ?? "-",
             onChange: (val) {
@@ -485,12 +489,18 @@ class _PenghuniFormState extends State<PenghuniForm> {
             label: "Pilih Bangsa",
             items: ddR.raceList,
             onFindGroupValue: (data) {
-              return data.where((val) {
-                var a = val.code?.toLowerCase().contains(
-                        ownerData?.raceCode?.toLowerCase() ?? "*_*") ??
-                    false;
+              //Query data
+              final searchData = (ownerData?.raceCode != null &&
+                      (ownerData?.raceCode?.isNotEmpty ?? false))
+                  ? (ownerData?.raceCode?.toLowerCase() ?? "*_*")
+                  : "*_*";
+              //Search
+              final result = data.where((val) {
+                var a = val.code?.toLowerCase().contains(searchData) ?? false;
                 return a;
               }).firstOrNull;
+              //return searched data
+              return result;
             },
             getTitle: (data) => data.desc ?? "-",
             onChange: (val) {
@@ -518,13 +528,15 @@ class _PenghuniFormState extends State<PenghuniForm> {
             label: "Pilih Bangsa",
             items: ddR.occupationTypeList,
             onFindGroupValue: (data) {
-              return data.where((val) {
-                var a = val.code?.toLowerCase().contains(
-                        ownerData?.occupationTypeCode?.toLowerCase() ??
-                            "*_*") ??
-                    false;
+              final searchData = (ownerData?.occupationTypeCode != null &&
+                      (ownerData?.occupationTypeCode?.isNotEmpty ?? false))
+                  ? (ownerData?.occupationTypeCode?.toLowerCase() ?? "*_*")
+                  : "*_*";
+              final result = data.where((val) {
+                var a = val.code?.toLowerCase().contains(searchData) ?? false;
                 return a;
               }).firstOrNull;
+              return result;
             },
             getTitle: (data) => data.desc ?? "-",
             onChange: (val) {
@@ -552,12 +564,15 @@ class _PenghuniFormState extends State<PenghuniForm> {
             label: 'Status Perkahwinan',
             items: ddR.maritalStatusList,
             onFindGroupValue: (data) {
-              return data.where((val) {
-                var a = val.code?.toLowerCase().contains(
-                        ownerData?.maritalStatusCode?.toLowerCase() ?? "*_*") ??
-                    false;
+              final searchData = (ownerData?.maritalStatusCode != null &&
+                      (ownerData?.maritalStatusCode?.isNotEmpty ?? false))
+                  ? (ownerData?.maritalStatusCode?.toLowerCase() ?? "*_*")
+                  : "*_*";
+              final result = data.where((val) {
+                var a = val.code?.toLowerCase().contains(searchData) ?? false;
                 return a;
               }).firstOrNull;
+              return result;
             },
             getTitle: (data) => data.desc ?? "-",
             onChange: (val) {
@@ -584,12 +599,15 @@ class _PenghuniFormState extends State<PenghuniForm> {
               label: "Pilih Tahap Kesihatan",
               items: ddR.healthLevelList,
               onFindGroupValue: (data) {
-                return data.where((val) {
-                  var a =
-                      val.code?.contains(ownerData?.healthLevelCode ?? "*_*") ??
-                          false;
+                final searchData = (ownerData?.healthLevelCode != null &&
+                        (ownerData?.healthLevelCode?.isNotEmpty ?? false))
+                    ? (ownerData?.healthLevelCode?.toLowerCase() ?? "*_*")
+                    : "*_*";
+                final result = data.where((val) {
+                  var a = val.code?.contains(searchData) ?? false;
                   return a;
                 }).firstOrNull;
+                return result;
               },
               getTitle: (data) => data.desc ?? "-",
               onChange: (val) {
