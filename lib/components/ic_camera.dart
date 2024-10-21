@@ -29,11 +29,11 @@ class _IcCameraState extends State<IcCamera> {
       ),
       body: CameraWidget(
         overlay: const CameraOverlay(
-          aspectRatio: 5 / 3,
+          aspectRatio: 6 / 3,
           padding: 30,
         ),
         onTakePicture: (img) async {
-          final croppedImg = cropImage(img, 2.35, 50);
+          final croppedImg = cropImage(img, 2.3, 50);
           final result = await imageCropper(croppedImg);
           widget.onTakePicture(result);
         },
@@ -79,7 +79,7 @@ class _IcCameraState extends State<IcCamera> {
       height: overlayHeight.round(),
     );
 
-    final bmp = imag.encodeBmp(croppedImage);
+    final bmp = imag.encodeJpg(croppedImage);
     return Uint8List.fromList(bmp);
   }
 

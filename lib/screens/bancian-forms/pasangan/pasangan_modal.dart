@@ -423,11 +423,15 @@ class _PasanganModalState extends State<PasanganModal> {
             label: "Pilih Bangsa",
             items: ddR.raceList,
             onFindGroupValue: (data) {
-              return data.where((val) {
-                var a =
-                    val.code?.contains(spouseData?.raceCode ?? "*_*") ?? false;
+              final searchData = (spouseData?.raceCode != null &&
+                      (spouseData?.raceCode?.isNotEmpty ?? false))
+                  ? (spouseData?.raceCode?.toLowerCase() ?? "*_*")
+                  : "*_*";
+              final result = data.where((val) {
+                var a = val.code?.toLowerCase().contains(searchData) ?? false;
                 return a;
               }).firstOrNull;
+              return result;
             },
             getTitle: (data) => data.desc ?? "-",
             onChange: (val) {
@@ -491,11 +495,16 @@ class _PasanganModalState extends State<PasanganModal> {
               label: "Pilih Jantina",
               items: ddR.genderList,
               onFindGroupValue: (data) {
-                return data.where((val) {
-                  var a = val.code?.contains(spouseData?.genderCode ?? "*_*") ??
-                      false;
+                final searchData = (spouseData?.genderCode != null &&
+                        (spouseData?.genderCode?.isNotEmpty ?? false))
+                    ? (spouseData?.genderCode?.toLowerCase() ?? "*_*")
+                    : "*_*";
+                final result = data.where((val) {
+                  var a = val.code?.toLowerCase().contains(searchData) ?? false;
                   return a;
                 }).firstOrNull;
+
+                return result;
               },
               getTitle: (data) => data.desc ?? "-",
               onChange: (val) {
@@ -558,12 +567,15 @@ class _PasanganModalState extends State<PasanganModal> {
               label: "Pilih Tahap Kesihatan",
               items: ddR.healthLevelList,
               onFindGroupValue: (data) {
-                return data.where((val) {
-                  var a = val.code
-                          ?.contains(spouseData?.healthLevelCode ?? "*_*") ??
-                      false;
+                final searchData = (spouseData?.healthLevelCode != null &&
+                        (spouseData?.healthLevelCode?.isNotEmpty ?? false))
+                    ? (spouseData?.healthLevelCode?.toLowerCase() ?? "*_*")
+                    : "*_*";
+                final result = data.where((val) {
+                  var a = val.code?.toLowerCase().contains(searchData) ?? false;
                   return a;
                 }).firstOrNull;
+                return result;
               },
               getTitle: (data) => data.desc ?? "-",
               onChange: (val) {
@@ -625,12 +637,15 @@ class _PasanganModalState extends State<PasanganModal> {
               label: "Pilih Jenis Pekerjaan",
               items: ddR.occupationTypeList,
               onFindGroupValue: (data) {
-                return data.where((val) {
-                  var a = val.code
-                          ?.contains(spouseData?.occupationTypeCode ?? "*_*") ??
-                      false;
+                final searchData = (spouseData?.occupationTypeCode != null &&
+                        (spouseData?.occupationTypeCode?.isNotEmpty ?? false))
+                    ? (spouseData?.occupationTypeCode?.toLowerCase() ?? "*_*")
+                    : "*_*";
+                final result = data.where((val) {
+                  var a = val.code?.toLowerCase().contains(searchData) ?? false;
                   return a;
                 }).firstOrNull;
+                return result;
               },
               getTitle: (data) => data.desc ?? "-",
               onChange: (val) {

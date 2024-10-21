@@ -374,12 +374,16 @@ class _AnakModalState extends State<AnakModal> {
             label: "Hubungan Dengan Penyewa",
             items: ddR.relationshipList,
             onFindGroupValue: (data) {
-              return data.where((val) {
-                var a = val.code
-                        ?.contains(dependantData?.relationshipCode ?? "*_*") ??
-                    false;
+              final searchData = (dependantData?.relationshipCode != null &&
+                      (dependantData?.relationshipCode?.isNotEmpty ?? false))
+                  ? (dependantData?.relationshipCode?.toLowerCase() ?? "*_*")
+                  : "*_*";
+              final result = data.where((val) {
+                var a = val.code?.toLowerCase().contains(searchData) ?? false;
                 return a;
               }).firstOrNull;
+
+              return result;
             },
             getTitle: (data) => data.desc ?? "-",
             onChange: (val) {
@@ -444,12 +448,15 @@ class _AnakModalState extends State<AnakModal> {
               label: "Pilih Tahap Kesihatan",
               items: ddR.healthLevelList,
               onFindGroupValue: (data) {
-                return data.where((val) {
-                  var a = val.code
-                          ?.contains(dependantData?.healthLevelCode ?? "*_*") ??
-                      false;
+                final searchData = (dependantData?.healthLevelCode != null &&
+                        (dependantData?.healthLevelCode?.isNotEmpty ?? false))
+                    ? (dependantData?.healthLevelCode?.toLowerCase() ?? "*_*")
+                    : "*_*";
+                final result = data.where((val) {
+                  var a = val.code?.toLowerCase().contains(searchData) ?? false;
                   return a;
                 }).firstOrNull;
+                return result;
               },
               getTitle: (data) => data.desc ?? "-",
               onChange: (val) {
@@ -514,12 +521,16 @@ class _AnakModalState extends State<AnakModal> {
               label: "Pilih Jantina",
               items: ddR.genderList,
               onFindGroupValue: (data) {
-                return data.where((val) {
-                  var a =
-                      val.code?.contains(dependantData?.genderCode ?? "*_*") ??
-                          false;
+                final searchData = (dependantData?.genderCode != null &&
+                        (dependantData?.genderCode?.isNotEmpty ?? false))
+                    ? (dependantData?.genderCode?.toLowerCase() ?? "*_*")
+                    : "*_*";
+                final result = data.where((val) {
+                  var a = val.code?.toLowerCase().contains(searchData) ?? false;
                   return a;
                 }).firstOrNull;
+
+                return result;
               },
               getTitle: (data) => data.desc ?? "-",
               onChange: (val) {
@@ -583,14 +594,21 @@ class _AnakModalState extends State<AnakModal> {
         final ddR = context.read<DropdownProvider>();
         ddR.fetchDropdownData(DdType.race).then((val) {
           CustomDropdownSheet(
-            label: "Pilih Jantina",
+            label: "Pilih Bangsa",
             items: ddR.raceList,
             onFindGroupValue: (data) {
-              return data.where((val) {
-                var a = val.code?.contains(dependantData?.raceCode ?? "*_*") ??
-                    false;
+              //Query data
+              final searchData = (dependantData?.raceCode != null &&
+                      (dependantData?.raceCode?.isNotEmpty ?? false))
+                  ? (dependantData?.raceCode?.toLowerCase() ?? "*_*")
+                  : "*_*";
+              //Search
+              final result = data.where((val) {
+                var a = val.code?.toLowerCase().contains(searchData) ?? false;
                 return a;
               }).firstOrNull;
+              //return searched data
+              return result;
             },
             getTitle: (data) => data.desc ?? "-",
             onChange: (val) {
