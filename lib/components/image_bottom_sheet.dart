@@ -38,6 +38,7 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
     return DraggableScrollableSheet(
       expand: false,
       controller: widget.controller,
@@ -93,8 +94,8 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
                     return GestureDetector(
                       onTap: () => widget.controller.jumpTo(widget.minSize),
                       child: Container(
-                        width: 120,
-                        height: 100,
+                        width: size.width * .26,
+                        height: size.height * .12,
                         margin: const EdgeInsets.only(left: 12),
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.black87, width: 3),
@@ -113,8 +114,8 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
                       }
                     },
                     child: Container(
-                        width: 120,
-                        height: 100,
+                        width: size.width * .26,
+                        height: size.height * .12,
                         margin: const EdgeInsets.only(left: 12),
                         clipBehavior: Clip.hardEdge,
                         decoration: BoxDecoration(
