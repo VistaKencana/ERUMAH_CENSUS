@@ -525,7 +525,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
         final ddR = context.read<DropdownProvider>();
         ddR.fetchDropdownData(DdType.occupationType).then((val) {
           CustomDropdownSheet(
-            label: "Pilih Bangsa",
+            label: "Pilih Jenis Pekerjaan",
             items: ddR.occupationTypeList,
             onFindGroupValue: (data) {
               final searchData = (ownerData?.occupationTypeCode != null &&

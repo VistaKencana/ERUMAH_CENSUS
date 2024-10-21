@@ -192,19 +192,25 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                     padding: EdgeInsets.zero,
                     margin: EdgeInsets.zero,
                     child: ListTile(
-                      tileColor: Colors.white,
-                      leading: const Icon(Icons.fingerprint),
-                      title: const Text("Sahkan Cap Jari"),
-                      trailing: Icon(
-                        isVerifyFP ? Icons.check_circle : Icons.warning,
-                        color: isVerifyFP ? Colors.green : Colors.amber,
-                      ),
-                      onTap: () => _go(BancianFingerprint(
-                        onVerifyFP: (val) {
-                          setState(() => isVerifyFP = val);
-                        },
-                      )),
-                    ),
+                        tileColor: Colors.white,
+                        leading: const Icon(Icons.fingerprint),
+                        title: const Text("Sahkan Cap Jari"),
+                        trailing: Icon(
+                          isVerifyFP ? Icons.check_circle : Icons.warning,
+                          color: isVerifyFP ? Colors.green : Colors.amber,
+                        ),
+                        onTap: () {
+                          if (isVerifyFP) {
+                            CustomFlushbar.of(context)
+                                .showInfo(msg: "Mykad telah berjaya disahkan");
+                            return;
+                          }
+                          _go(BancianFingerprint(
+                            onVerifyFP: (val) {
+                              setState(() => isVerifyFP = val);
+                            },
+                          ));
+                        }),
                   ),
                   _gap(),
                   _section("Status Bancian"),
@@ -313,8 +319,8 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
               EasyLoading.dismiss();
               CustomFlushbar.of(context)
                   .showSuccess(msg: "Berjaya menmyimpan data");
-              _go(const BancianResult(
-                isVerify: false,
+              _go(BancianResult(
+                isVerify: isVerifyFP,
               ));
             } else if (state is BancianError) {
               EasyLoading.dismiss();
