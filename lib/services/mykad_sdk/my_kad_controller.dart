@@ -158,7 +158,7 @@ class MyKadController {
       barrierColor: Colors.black.withOpacity(0.3),
       builder: (context) => PopScope(
         canPop: false,
-        onPopInvoked: (val) async {},
+        onPopInvokedWithResult: (didPop, result) async {},
         child: GestureDetector(
           onTap: () {},
           child: Material(

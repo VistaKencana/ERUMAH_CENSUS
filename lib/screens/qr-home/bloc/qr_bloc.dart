@@ -113,7 +113,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
       String errMsg = e.toString().toLowerCase();
       log.logError(tag: "QrRegister", msg: errMsg);
       if (errMsg.contains("true")) {
-        if (errMsg.contains("qrcoderegistered")) {
+        if (errMsg.contains("duplicateqrcode")) {
           emit(const QrRegError(
               msg: "Kod QR ini telah didaftarkan ke unit lain"));
           return;

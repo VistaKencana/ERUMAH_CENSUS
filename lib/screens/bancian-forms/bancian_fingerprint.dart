@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:eperumahan_bancian/components/blinking_text.dart';
 import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_constants.dart';
@@ -123,7 +125,7 @@ class _BancianFingerprintState extends State<BancianFingerprint>
       barrierColor: Colors.black.withOpacity(0.3),
       builder: (context) => PopScope(
         canPop: false,
-        onPopInvoked: (val) async {},
+        onPopInvokedWithResult: (didPop, result) async {},
         child: GestureDetector(
           onTap: () {},
           child: Material(

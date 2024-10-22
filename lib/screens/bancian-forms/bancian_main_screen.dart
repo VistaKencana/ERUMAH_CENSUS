@@ -101,7 +101,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
     Size size = MediaQuery.sizeOf(context);
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
         _onPop();
       },
@@ -244,6 +244,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                                 statusData.copyWith(statusCode: val.code);
                             statusCtrl.text = val.desc ?? "";
                           },
+                          // ignore: use_build_context_synchronously
                         ).show(context);
                       });
                     },
