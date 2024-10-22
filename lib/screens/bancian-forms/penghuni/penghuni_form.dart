@@ -56,6 +56,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
   final jenisKerjaCtrl = TextEditingController();
   final statusKahwinCtrl = TextEditingController();
   final kesihatanCtrl = TextEditingController();
+  final namaMajikanCtrl = TextEditingController();
   final majikanAddressCtrl = TextEditingController();
   final gajiPokokCtrl = TextEditingController();
   final elaunCtrl = TextEditingController();
@@ -89,6 +90,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     bangsaCtrl.text = setDataValue(ownerData?.raceDesc);
     jenisKerjaCtrl.text = setDataValue(ownerData?.occupationTypeDesc);
     statusKahwinCtrl.text = setDataValue(ownerData?.maritalStatusDesc);
+    namaMajikanCtrl.text = setDataValue(ownerData?.companyName);
     majikanAddressCtrl.text = setDataValue(ownerData?.workAddress);
     gajiPokokCtrl.text = setDataValue(ownerData?.workSalary);
     elaunCtrl.text = setDataValue(ownerData?.workAllowance);
@@ -287,7 +289,20 @@ class _PenghuniFormState extends State<PenghuniForm> {
                       SectionContainer(
                         child: Column(
                           children: [
-                            _headerTitle(),
+                            _headerTitle('Sijil Perkahwinan'),
+                            FileDisplay(
+                              img: ownerData!.uploadMarriageCert,
+                              onPicture: (bytes) => setState(() => setState(
+                                  () => ownerData = ownerData!
+                                      .copyWith(uploadMarriageCert: bytes))),
+                            )
+                          ],
+                        ),
+                      ),
+                      SectionContainer(
+                        child: Column(
+                          children: [
+                            _headerTitle('Maklumat Pendapatan'),
                             maklumatPendapatan(),
                           ],
                         ),
@@ -306,6 +321,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                       icNo: icNoCtrl.text,
                       email: emelCtrl.text,
                       phoneNo: noTelCtrl.text,
+                      companyName: namaMajikanCtrl.text,
                       workAddress: majikanAddressCtrl.text,
                       workSalary: gajiPokokCtrl.text,
                       workAllowance: elaunCtrl.text,
@@ -332,6 +348,12 @@ class _PenghuniFormState extends State<PenghuniForm> {
         const SizedBox(height: 10),
         Column(
           children: [
+            CustomFormField(
+              title: "Nama Majikan",
+              controller: namaMajikanCtrl,
+              contentPadding: const EdgeInsets.all(8),
+            ),
+            const SizedBox(height: 12),
             CustomFormField(
               title: "Alamat Majikan",
               controller: majikanAddressCtrl,
@@ -627,16 +649,16 @@ class _PenghuniFormState extends State<PenghuniForm> {
         controller: kesihatanCtrl);
   }
 
-  _headerTitle() {
-    return const Padding(
-      padding: EdgeInsets.only(top: 12, bottom: 6),
+  _headerTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 12, bottom: 6),
       child: Row(
         children: [
           Text(
-            'Maklumat Pendapatan',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
-          Spacer(),
+          const Spacer(),
         ],
       ),
     );

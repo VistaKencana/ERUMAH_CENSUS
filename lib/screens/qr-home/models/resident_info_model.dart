@@ -133,6 +133,7 @@ class ResidentInfoData {
             : List<dynamic>.from(visits!.map((x) => x.toJson())),
       };
 
+  //MARK: Owner JSON
   Map<String, dynamic> toOwnerJson() {
     return {
       'censusCode': censusCode, //Get from resident data
@@ -146,6 +147,7 @@ class ResidentInfoData {
       'isOku': (owner?.isOku == null || (owner?.isOku?.isEmpty ?? true))
           ? "0"
           : owner?.isOku ?? "",
+      'companyName': owner?.occupation?.workplace?.companyName ?? "",
       'workAddress': owner?.occupation?.workplace?.address ?? "",
       'workSalary': owner?.income?.basicSalary ?? "",
       'workAllowance': owner?.income?.allowance ?? "",
@@ -326,6 +328,7 @@ class SpouseData {
         "income": income?.toJson(),
       };
 
+  //MARK: To Spouse JSON
   Map<String, dynamic> toSpouseJson(
       {String? censCode, String? totalHousehold}) {
     return {
@@ -338,6 +341,7 @@ class SpouseData {
       'totalHousehold': totalHousehold ?? "",
       'healthLevelCode': healthLevel?.code ?? "",
       'healthLevelDesc': healthLevel?.desc ?? "",
+      'companyName': occupation?.workplace?.companyName ?? "",
       'workAddress': occupation?.workplace?.address ?? "",
       'workSalary': income?.basicSalary ?? "",
       'workAllowance': income?.allowance ?? "",
@@ -575,24 +579,30 @@ class OccupationData {
 }
 
 class WorkplaceData {
+  String? companyName;
   String? address;
 
   WorkplaceData({
+    this.companyName,
     this.address,
   });
 
   WorkplaceData copyWith({
+    String? companyName,
     String? address,
   }) =>
       WorkplaceData(
+        companyName: companyName ?? this.companyName,
         address: address ?? this.address,
       );
 
   factory WorkplaceData.fromJson(Map<String, dynamic> json) => WorkplaceData(
+        companyName: json["companyName"],
         address: json["address"],
       );
 
   Map<String, dynamic> toJson() => {
+        "companyName": companyName,
         "address": address,
       };
 }
