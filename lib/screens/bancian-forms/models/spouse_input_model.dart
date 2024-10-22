@@ -9,6 +9,7 @@ class SpouseInputModel {
   final String? age;
   final String? totalHousehold;
   final String? healthLevelCode;
+  final String? companyName;
   final String? workAddress;
   final String? workSalary;
   final String? workAllowance;
@@ -42,6 +43,7 @@ class SpouseInputModel {
     this.age,
     this.totalHousehold,
     this.healthLevelCode,
+    this.companyName,
     this.workAddress,
     this.workSalary,
     this.workAllowance,
@@ -76,6 +78,7 @@ class SpouseInputModel {
     String? age,
     String? totalHousehold,
     String? healthLevelCode,
+    String? companyName,
     String? workAddress,
     String? workSalary,
     String? workAllowance,
@@ -107,6 +110,7 @@ class SpouseInputModel {
       age: age ?? this.age,
       totalHousehold: totalHousehold ?? this.totalHousehold,
       healthLevelCode: healthLevelCode ?? this.healthLevelCode,
+      companyName: companyName ?? this.companyName,
       workAddress: workAddress ?? this.workAddress,
       workSalary: workSalary ?? this.workSalary,
       workAllowance: workAllowance ?? this.workAllowance,
@@ -141,6 +145,7 @@ class SpouseInputModel {
       'isAlive': isAlive,
       'totalHousehold': totalHousehold ?? "",
       'healthLevelCode': healthLevelCode ?? "",
+      'companyName': companyName ?? "",
       'workAddress': workAddress ?? "",
       'workSalary': workSalary ?? "",
       'workAllowance': workAllowance ?? "",
@@ -164,6 +169,7 @@ class SpouseInputModel {
       'isAlive': isAlive,
       'totalHousehold': totalHousehold ?? "",
       'healthLevelCode': healthLevelCode ?? "",
+      'companyName': companyName ?? "",
       'workAddress': workAddress ?? "",
       'workSalary': workSalary ?? "",
       'workAllowance': workAllowance ?? "",
@@ -198,6 +204,7 @@ class SpouseInputModel {
       age: json['age'] as String,
       totalHousehold: json['totalHousehold'] as String,
       healthLevelCode: json['healthLevelCode'] as String,
+      companyName: json['companyName'] as String,
       workAddress: json['workAddress'] as String,
       workSalary: json['workSalary'] as String,
       workAllowance: json['workAllowance'] as String,

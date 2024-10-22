@@ -20,7 +20,7 @@ class _BancianResultState extends State<BancianResult> {
     return BgImage(
       child: PopScope(
         canPop: false,
-        onPopInvoked: (didPop) async {
+        onPopInvokedWithResult: (didPop, result) async {
           if (didPop) return;
           _goToSearch();
         },

@@ -105,6 +105,7 @@ class _BancianRegisterQrState extends State<BancianRegisterQr> {
                 if (state is QrRegLoading) {
                   EasyLoading.show();
                 } else if (state is QrRegSuccess) {
+                  // ignore: use_build_context_synchronously
                   EasyLoading.dismiss().then((val) => Navigator.pop(context));
                 } else if (state is QrRegError) {
                   EasyLoading.dismiss();

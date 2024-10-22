@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
         await _showLogoutAlert();
       },
@@ -68,7 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
           } else if (state is AuthLogoutSuccess) {
             EasyLoading.dismiss().then(
               (val) => Navigator.popUntil(
-                  context, ModalRoute.withName(RoutesName.login)),
+                  // ignore: use_build_context_synchronously
+                  context,
+                  ModalRoute.withName(RoutesName.login)),
             );
           } else if (state is AuthLogoutError) {
             EasyLoading.dismiss();

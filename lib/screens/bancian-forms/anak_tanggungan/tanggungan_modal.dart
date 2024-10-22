@@ -393,6 +393,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
                   relationshipCode: val.code, relationshipDesc: val.desc);
               hubunganCtrl.text = val.desc ?? "";
             },
+            // ignore: use_build_context_synchronously
           ).show(context);
         });
       },
@@ -466,6 +467,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
                     healthLevelCode: val.code, healthLevelDesc: val.desc);
                 kesihatanCtrl.text = val.desc ?? "";
               },
+              // ignore: use_build_context_synchronously
             ).show(context);
           });
         },
@@ -540,6 +542,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
                     .copyWith(genderCode: val.code, genderDesc: val.desc);
                 jantinaCtrl.text = val.desc ?? "";
               },
+              // ignore: use_build_context_synchronously
             ).show(context);
           });
         });
@@ -618,6 +621,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
                   .copyWith(raceCode: val.code, raceDesc: val.desc);
               bangsaCtrl.text = val.desc ?? "";
             },
+            // ignore: use_build_context_synchronously
           ).show(context);
         });
       },

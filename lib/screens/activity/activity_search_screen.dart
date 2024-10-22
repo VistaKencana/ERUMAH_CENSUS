@@ -197,6 +197,7 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
                             EasyLoading.show();
                           } else if (state is UnitCodeSuccess) {
                             EasyLoading.dismiss()
+                                // ignore: use_build_context_synchronously
                                 .then((val) => BancianInfosModal.show(context));
                           } else if (state is UnitCodeError) {
                             CustomFlushbar.of(context)

@@ -34,8 +34,10 @@ class _LoginScreenState extends State<LoginScreen> {
           EasyLoading.show();
         } else if (state is AuthLoginSuccess) {
           EasyLoading.dismiss()
+              // ignore: use_build_context_synchronously
               .then((val) => Navigator.pushNamed(context, RoutesName.home));
         } else if (state is AuthTimeoutSuccess) {
+          // ignore: use_build_context_synchronously
           EasyLoading.dismiss().then((val) => Navigator.pop(context));
         } else if (state is AuthLoginError) {
           EasyLoading.dismiss();

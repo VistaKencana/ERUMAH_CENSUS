@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 
 class FileDisplay extends StatelessWidget {
   final bool isMandatory;
-  final String title;
+  final String? title;
   final Uint8List? img;
   final IconData? icon;
   final void Function(Uint8List? img) onPicture;
   const FileDisplay(
       {super.key,
       this.isMandatory = false,
-      required this.title,
+      this.title,
       this.img,
       this.icon,
       required this.onPicture});
@@ -24,9 +24,10 @@ class FileDisplay extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(title,
-                style:
-                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+            if (title != null)
+              Text(title!,
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w500)),
             if (isMandatory)
               const Text(
                 "*",

@@ -15,6 +15,7 @@ class OwnerInputModel {
   String? maritalStatusCode; //dd
   String? healthLevelCode; //dd
   String? isOku;
+  String? companyName;
   String? workAddress;
   String? workSalary;
   String? workAllowance;
@@ -24,6 +25,7 @@ class OwnerInputModel {
   Uint8List? uploadIcFront;
   Uint8List? uploadIcBack;
   Uint8List? uploadOkuCard;
+  Uint8List? uploadMarriageCert;
   //dd (optional)
   String? raceDesc;
   String? genderDesc;
@@ -48,6 +50,7 @@ class OwnerInputModel {
       this.maritalStatusCode,
       this.healthLevelCode,
       this.isOku,
+      this.companyName,
       this.workAddress,
       this.workSalary,
       this.workAllowance,
@@ -57,6 +60,7 @@ class OwnerInputModel {
       this.uploadIcFront,
       this.uploadIcBack,
       this.uploadOkuCard,
+      this.uploadMarriageCert,
       //dd (optional)
       this.raceDesc,
       this.genderDesc,
@@ -82,6 +86,7 @@ class OwnerInputModel {
     String? maritalStatusCode,
     String? healthLevelCode,
     String? isOku,
+    String? companyName,
     String? workAddress,
     String? workSalary,
     String? workAllowance,
@@ -91,6 +96,7 @@ class OwnerInputModel {
     Uint8List? uploadIcFront,
     Uint8List? uploadIcBack,
     Uint8List? uploadOkuCard,
+    Uint8List? uploadMarriageCert,
     String? raceDesc,
     String? genderDesc,
     String? occupationTypeDesc,
@@ -113,6 +119,7 @@ class OwnerInputModel {
       maritalStatusCode: maritalStatusCode ?? this.maritalStatusCode,
       healthLevelCode: healthLevelCode ?? this.healthLevelCode,
       isOku: isOku ?? this.isOku,
+      companyName: companyName ?? this.companyName,
       workAddress: workAddress ?? this.workAddress,
       workSalary: workSalary ?? this.workSalary,
       workAllowance: workAllowance ?? this.workAllowance,
@@ -122,6 +129,7 @@ class OwnerInputModel {
       uploadIcFront: uploadIcFront ?? this.uploadIcFront,
       uploadIcBack: uploadIcBack ?? this.uploadIcBack,
       uploadOkuCard: uploadOkuCard ?? this.uploadOkuCard,
+      uploadMarriageCert: uploadMarriageCert ?? this.uploadMarriageCert,
       raceDesc: raceDesc ?? this.raceDesc,
       genderDesc: genderDesc ?? this.genderDesc,
       occupationTypeDesc: occupationTypeDesc ?? this.occupationTypeDesc,
@@ -147,6 +155,7 @@ class OwnerInputModel {
       'maritalStatusCode': maritalStatusCode ?? "",
       'healthLevelCode': healthLevelCode ?? "",
       'isOku': isOku ?? "",
+      'companyName': companyName ?? "",
       'workAddress': workAddress ?? "",
       'workSalary': workSalary ?? "",
       'workAllowance': workAllowance ?? "",
@@ -170,6 +179,7 @@ class OwnerInputModel {
       'maritalStatusCode': maritalStatusCode ?? "",
       'healthLevelCode': healthLevelCode ?? "",
       'isOku': isOku ?? "",
+      'companyName': companyName ?? "",
       'workAddress': workAddress ?? "",
       'workSalary': workSalary ?? "",
       'workAllowance': workAllowance ?? "",
@@ -184,7 +194,8 @@ class OwnerInputModel {
       'uploadIncome': uploadIncome,
       'uploadIcFront': uploadIcFront,
       'uploadIcBack': uploadIcBack,
-      'uploadOkuCard': isOku == "0" ? null : uploadOkuCard
+      'uploadOkuCard': isOku == "0" ? null : uploadOkuCard,
+      'uploadMarriageCert': uploadMarriageCert
     };
   }
 
@@ -199,6 +210,7 @@ class OwnerInputModel {
       phoneNo: json['phoneNo'] as String,
       age: json['age'] as String,
       isOku: json['isOku'] as String,
+      companyName: json['companyName'] as String,
       workAddress: json['workAddress'] as String,
       workSalary: json['workSalary'] as String,
       workAllowance: json['workAllowance'] as String,
@@ -233,6 +245,7 @@ class OwnerInputModel {
       occupationTypeCode: occupationTypeCode,
       maritalStatusCode: maritalStatusCode,
       isOku: isOku,
+      companyName: companyName,
       workAddress: workAddress,
       workSalary: workSalary,
       workAllowance: workAllowance,

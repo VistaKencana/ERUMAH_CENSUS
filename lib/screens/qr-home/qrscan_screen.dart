@@ -73,6 +73,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
                 Navigator.pop(context);
                 Future.delayed(const Duration(milliseconds: 500), () {
                   controller?.pauseCamera();
+                  // ignore: use_build_context_synchronously
                   BancianInfosModal.show(context)
                       .then((val) => controller?.resumeCamera());
                 });
@@ -182,6 +183,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
         Future.delayed(const Duration(milliseconds: 150), () {
           controller?.pauseCamera();
           const BancianRegisterQr()
+              // ignore: use_build_context_synchronously
               .show(context)
               .then((val) => controller?.resumeCamera());
         });

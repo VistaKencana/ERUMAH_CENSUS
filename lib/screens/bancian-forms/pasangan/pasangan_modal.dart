@@ -54,6 +54,7 @@ class _PasanganModalState extends State<PasanganModal> {
   final bangsaCtrl = TextEditingController();
   final jenisKerjaCtrl = TextEditingController();
   final statusKahwinCtrl = TextEditingController();
+  final namaMajikanCtrl = TextEditingController();
   final majikanAddressCtrl = TextEditingController();
   final gajiPokokCtrl = TextEditingController();
   final elaunCtrl = TextEditingController();
@@ -86,6 +87,7 @@ class _PasanganModalState extends State<PasanganModal> {
     bangsaCtrl.text = setDataValue(spouseData?.raceDesc);
     jenisKerjaCtrl.text = setDataValue(spouseData?.occupationTypeDesc);
     statusKahwinCtrl.text = setDataValue(spouseData?.maritalStatusDesc);
+    namaMajikanCtrl.text = setDataValue(spouseData?.companyName);
     majikanAddressCtrl.text = setDataValue(spouseData?.workAddress);
     gajiPokokCtrl.text = setDataValue(spouseData?.workSalary);
     elaunCtrl.text = setDataValue(spouseData?.workAllowance);
@@ -168,6 +170,7 @@ class _PasanganModalState extends State<PasanganModal> {
                             icNo: icNoCtrl.text,
                             email: emelCtrl.text,
                             phoneNo: noTelCtrl.text,
+                            companyName: namaMajikanCtrl.text,
                             workAddress: majikanAddressCtrl.text,
                             workSalary: gajiPokokCtrl.text,
                             workAllowance: elaunCtrl.text,
@@ -440,6 +443,7 @@ class _PasanganModalState extends State<PasanganModal> {
                   spouseData!.copyWith(raceCode: val.code, raceDesc: val.desc);
               bangsaCtrl.text = val.desc ?? "";
             },
+            // ignore: use_build_context_synchronously
           ).show(context);
         });
       },
@@ -513,6 +517,7 @@ class _PasanganModalState extends State<PasanganModal> {
                     .copyWith(genderCode: val.code, genderDesc: val.desc);
                 jantinaCtrl.text = val.desc ?? "";
               },
+              // ignore: use_build_context_synchronously
             ).show(context);
           });
         },
@@ -584,6 +589,7 @@ class _PasanganModalState extends State<PasanganModal> {
                     healthLevelCode: val.code, healthLevelDesc: val.desc);
                 kesihatanCtrl.text = val.desc ?? "";
               },
+              // ignore: use_build_context_synchronously
             ).show(context);
           });
         },
@@ -654,6 +660,7 @@ class _PasanganModalState extends State<PasanganModal> {
                     occupationTypeCode: val.code, occupationTypeDesc: val.desc);
                 jenisKerjaCtrl.text = val.desc ?? "";
               },
+              // ignore: use_build_context_synchronously
             ).show(context);
           });
         },
@@ -709,6 +716,12 @@ class _PasanganModalState extends State<PasanganModal> {
           const SizedBox(height: 14),
           Column(
             children: [
+              CustomFormField(
+                title: "Nama Majikan",
+                controller: namaMajikanCtrl,
+                contentPadding: const EdgeInsets.all(8),
+              ),
+              const SizedBox(height: 12),
               CustomFormField(
                 title: "Alamat Majikan",
                 controller: majikanAddressCtrl,
