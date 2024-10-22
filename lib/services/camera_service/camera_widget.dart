@@ -52,6 +52,7 @@ class _CameraWidgetState extends State<CameraWidget> {
           showModalBottomSheet(
               isDismissible: false,
               enableDrag: false,
+              // ignore: use_build_context_synchronously
               context: context,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -60,7 +61,7 @@ class _CameraWidgetState extends State<CameraWidget> {
               builder: (builder) {
                 return PopScope(
                   canPop: false,
-                  onPopInvoked: (didPop) {},
+                  onPopInvokedWithResult: (didPop, result) {},
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.4,
                     child: Padding(
@@ -191,7 +192,7 @@ class _CameraWidgetState extends State<CameraWidget> {
       barrierColor: Colors.black.withOpacity(0.3),
       builder: (context) => PopScope(
         canPop: false,
-        onPopInvoked: (val) async {},
+        onPopInvokedWithResult: (didPop, result) async {},
         child: GestureDetector(
           onTap: () {},
           child: Material(

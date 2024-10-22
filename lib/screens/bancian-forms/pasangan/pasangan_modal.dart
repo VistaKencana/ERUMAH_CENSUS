@@ -440,6 +440,7 @@ class _PasanganModalState extends State<PasanganModal> {
                   spouseData!.copyWith(raceCode: val.code, raceDesc: val.desc);
               bangsaCtrl.text = val.desc ?? "";
             },
+            // ignore: use_build_context_synchronously
           ).show(context);
         });
       },
@@ -513,6 +514,7 @@ class _PasanganModalState extends State<PasanganModal> {
                     .copyWith(genderCode: val.code, genderDesc: val.desc);
                 jantinaCtrl.text = val.desc ?? "";
               },
+              // ignore: use_build_context_synchronously
             ).show(context);
           });
         },
@@ -584,6 +586,7 @@ class _PasanganModalState extends State<PasanganModal> {
                     healthLevelCode: val.code, healthLevelDesc: val.desc);
                 kesihatanCtrl.text = val.desc ?? "";
               },
+              // ignore: use_build_context_synchronously
             ).show(context);
           });
         },
@@ -654,6 +657,7 @@ class _PasanganModalState extends State<PasanganModal> {
                     occupationTypeCode: val.code, occupationTypeDesc: val.desc);
                 jenisKerjaCtrl.text = val.desc ?? "";
               },
+              // ignore: use_build_context_synchronously
             ).show(context);
           });
         },

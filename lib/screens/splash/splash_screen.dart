@@ -9,9 +9,14 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Future.delayed(const Duration(milliseconds: 1500), () {
       final isLoggedIn = LoginPreference().isTokenExpired() != null;
+
       Navigator.pushNamedAndRemoveUntil(
-          context, RoutesName.login, (route) => false);
+          // ignore: use_build_context_synchronously
+          context,
+          RoutesName.login,
+          (route) => false);
       if (isLoggedIn) {
+        // ignore: use_build_context_synchronously
         Navigator.pushNamed(context, RoutesName.home);
       }
     });

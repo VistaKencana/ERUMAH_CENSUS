@@ -121,7 +121,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     // Size size = MediaQuery.sizeOf(context);
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
         _exitWarning();
       },
@@ -468,6 +468,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                   .copyWith(genderCode: val.code, genderDesc: val.desc);
               jantinaCtrl.text = val.desc ?? "";
             },
+            // ignore: use_build_context_synchronously
           ).show(context);
         });
       },
@@ -509,6 +510,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                   ownerData!.copyWith(raceCode: val.code, raceDesc: val.desc);
               bangsaCtrl.text = val.desc ?? "";
             },
+            // ignore: use_build_context_synchronously
           ).show(context);
         });
       },
@@ -545,6 +547,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                   occupationTypeCode: val.code, occupationTypeDesc: val.desc);
               jenisKerjaCtrl.text = val.desc ?? "";
             },
+            // ignore: use_build_context_synchronously
           ).show(context);
         });
       },
@@ -581,6 +584,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                   maritalStatusCode: val.code, maritalStatusDesc: val.desc);
               statusKahwinCtrl.text = val.desc ?? "";
             },
+            // ignore: use_build_context_synchronously
           ).show(context);
         });
       },
@@ -616,6 +620,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                     healthLevelCode: val.code, healthLevelDesc: val.desc);
                 kesihatanCtrl.text = val.desc ?? "";
               },
+              // ignore: use_build_context_synchronously
             ).show(context);
           });
         },

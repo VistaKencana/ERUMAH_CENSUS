@@ -392,6 +392,7 @@ class _AnakModalState extends State<AnakModal> {
                   relationshipCode: val.code, relationshipDesc: val.desc);
               hubunganCtrl.text = val.desc ?? "";
             },
+            // ignore: use_build_context_synchronously
           ).show(context);
         });
       },
@@ -465,6 +466,7 @@ class _AnakModalState extends State<AnakModal> {
                     healthLevelCode: val.code, healthLevelDesc: val.desc);
                 kesihatanCtrl.text = val.desc ?? "";
               },
+              // ignore: use_build_context_synchronously
             ).show(context);
           });
         },
@@ -539,6 +541,7 @@ class _AnakModalState extends State<AnakModal> {
                     .copyWith(genderCode: val.code, genderDesc: val.desc);
                 jantinaCtrl.text = val.desc ?? "";
               },
+              // ignore: use_build_context_synchronously
             ).show(context);
           });
         });
@@ -617,6 +620,7 @@ class _AnakModalState extends State<AnakModal> {
                   .copyWith(raceCode: val.code, raceDesc: val.desc);
               bangsaCtrl.text = val.desc ?? "";
             },
+            // ignore: use_build_context_synchronously
           ).show(context);
         });
       },
