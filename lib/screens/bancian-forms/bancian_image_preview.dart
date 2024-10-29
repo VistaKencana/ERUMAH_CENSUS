@@ -58,6 +58,8 @@ class _BancianImagePreviewState extends State<BancianImagePreview> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       InteractiveViewer(
+                        minScale: 1.0,
+                        maxScale: 10.0,
                         child: AspectRatio(
                           aspectRatio: 10 / 10,
                           child: Image.memory(widget.image),

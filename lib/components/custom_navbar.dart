@@ -7,7 +7,8 @@ class CustomBottomNav extends StatelessWidget {
   const CustomBottomNav(
     this.generator, {
     super.key,
-    this.bgColor = const Color(0xFF312D81),
+    // this.bgColor = const Color(0xFF312D81),
+    this.bgColor = Colors.white,
     required this.itemCount,
   });
 
@@ -16,7 +17,9 @@ class CustomBottomNav extends StatelessWidget {
     return Container(
       height: 60,
       width: double.infinity,
-      color: bgColor,
+      decoration: BoxDecoration(
+          color: bgColor,
+          border: Border(top: BorderSide(color: Colors.grey.shade300))),
       child: Row(children: List.generate(itemCount, generator)),
     );
   }
@@ -51,20 +54,31 @@ class NavItem extends StatelessWidget {
         if (isSelected) return;
         if (onTap != null) onTap!();
       },
-      child: Container(
+      child: AnimatedContainer(
         height: 60,
         width: size.width / itemCount,
-        color: isSelected ? selectedBgColor : unselectedBgColor,
+        // color: isSelected ? selectedBgColor : unselectedBgColor,
+        color: Colors.white,
+        duration: const Duration(milliseconds: 300),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            icon,
-            Text(label,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(color: selectedColor, fontSize: 12))
+            (icon is Icon)
+                ? Icon((icon as Icon).icon,
+                    color: isSelected ? selectedBgColor : Colors.black,
+                    size: (icon as Icon).size)
+                : icon,
+            Visibility(
+              visible: isSelected,
+              child: Text(label,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(
+                      color: isSelected ? selectedBgColor : Colors.black,
+                      fontSize: 12)),
+            )
           ],
         ),
       ),

@@ -91,7 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
             return NavItem(
               itemCount: BottomNavItem.values.length,
               onTap: () => _onItemTapped(index),
-              icon: data.item.icon,
+              icon: _selectedIndex == index
+                  ? data.item.activeIcon
+                  : data.item.icon,
               isSelected: _selectedIndex == index,
               label: data.item.label!,
             );

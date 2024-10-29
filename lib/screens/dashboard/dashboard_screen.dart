@@ -1,13 +1,13 @@
 import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/config/constants/app_size.dart';
+import 'package:eperumahan_bancian/screens/dashboard/dashboard_header.dart';
 import 'package:eperumahan_bancian/screens/dashboard/kawasan_modal.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../components/indicator.dart';
 import '../../config/constants/app_images.dart';
-import 'dashboard_header.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -20,153 +20,141 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return BgImage(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const DashboardHeader(),
-              const SizedBox(height: 22),
-              _title(
-                  title: "Aktiviti anda • ",
-                  subtitle:
-                      "${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())}"),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 14),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade400)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _item(
-                            title: "Unit rumah",
-                            val: "118",
-                            icon: Icons.apartment_outlined),
-                        _item(
-                            title: "Berjaya",
-                            val: "90",
-                            icon: Icons.check_circle_outline,
-                            color: Colors.green),
-                        _item(
-                            title: "KIV",
-                            val: "28",
-                            icon: Icons.error_outline,
-                            color: Colors.amber),
-                      ],
+      // bgPath: AppImages.homeBg.path,
+      child: LayoutBuilder(builder: (context, constraint) {
+        return Scaffold(
+          // backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.lightBlue.color,
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const DashboardHeader(),
+                SizedBox(height: constraint.maxHeight * .02),
+                sectionContainer(children: [
+                  Text(
+                    "Aktiviti anda",
+                    style: appTextStyle(
+                        color: AppColors.primary.color,
+                        size: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                      "${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())}",
+                      style: appTextStyle(
+                        color: AppColors.primary.color,
+                        size: 14,
+                      )),
+                  SizedBox(height: constraint.maxHeight * .03),
+                  GridView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3, // 3 items per row
+                      crossAxisSpacing: 6.0,
+                      mainAxisSpacing: 10.0,
                     ),
-                    const SizedBox(height: 8),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 28),
-              _title(title: "Carta perumahan"),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 14),
-                padding: const EdgeInsets.only(
-                    left: 16, right: 16, top: 20, bottom: 28),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade400)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _title(
-                            title: "PPR Desa Tun Razak",
-                            padding: EdgeInsets.zero),
-                        IconButton(
-                            onPressed: () {
-                              const KawasanModal().show(context);
-                            },
-                            icon: const Icon(Icons.keyboard_arrow_down_rounded))
-                      ],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Text(
-                        "Keseluruhan: 20000",
-                        style: appTextStyle(size: 13),
+                    children: [
+                      _item(
+                          title: "Unit rumah",
+                          val: "118",
+                          icon: Icons.apartment_outlined,
+                          color: const Color(0xFF8F69EE)),
+                      _item(
+                          title: "Berjaya",
+                          val: "90",
+                          icon: Icons.check_circle_rounded,
+                          color: const Color(0xFF28C194)),
+                      _item(
+                          title: "KIV",
+                          val: "28",
+                          icon: Icons.error_rounded,
+                          color: Colors.amber),
+                    ],
+                  ),
+                ]),
+                SizedBox(height: constraint.maxHeight * .02),
+                sectionContainer(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 16, bottom: 4, top: 4),
+                        child: Text(
+                          "AKTIVITI",
+                          style: appTextStyle(
+                              fontWeight: FontWeight.bold,
+                              size: 14,
+                              color: AppColors.dimmedPurple.color),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 18),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: AppSize().screenWidth! * .4,
-                          width: AppSize().screenWidth! * .4,
-                          child: PieChart(PieChartData(sections: [
-                            PieChartSectionData(value: 20, color: Colors.blue),
-                            PieChartSectionData(),
-                          ])),
+                      _title(
+                        title: "Aktiviti terkini",
+                        padding: const EdgeInsets.only(left: 16),
+                      ),
+                      _dataTile(title: "PPR Kelantan", subtitle: "Cuba2"),
+                      _dataTile(title: "PPR Kelantan", subtitle: "Cuba2"),
+                      _dataTile(title: "PPR Kelantan", subtitle: "Cuba2"),
+                    ]),
+                SizedBox(height: constraint.maxHeight * .02),
+                sectionContainer(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 16, bottom: 4, top: 4),
+                        child: Text(
+                          "SUSULAN",
+                          style: appTextStyle(
+                              fontWeight: FontWeight.bold,
+                              size: 14,
+                              color: AppColors.dimmedPurple.color),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 14),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Indicator(
-                          color: Colors.blue,
-                          text: 'Selesai',
-                          isSquare: true,
-                        ),
-                        Indicator(
-                          color: Colors.cyan,
-                          text: 'Dalam proses',
-                          isSquare: true,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 22),
-                color: Colors.grey.shade300,
-                height: 8,
-                width: double.infinity,
-              ),
-              const SizedBox(height: 4),
-              _title(title: 'Makmulat Telefon'),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 14),
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade400)),
-                child: Column(
-                  children: [
-                    listTile(title: "Admin", phoneNo: "+6034865745614"),
-                    listTile(
-                        title: "Pejabat Zon 1 ",
-                        phoneNo: "+6034865745614",
-                        addDivider: false),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 30),
-            ],
+                      ),
+                      _title(
+                        title: "Untuk susulan",
+                        padding: const EdgeInsets.only(left: 16),
+                      ),
+                      _dataTile(title: "PPR Kelantan", subtitle: "Cuba2"),
+                      _dataTile(title: "PPR Kelantan", subtitle: "Cuba2"),
+                      _dataTile(title: "PPR Kelantan", subtitle: "Cuba2"),
+                    ]),
+                const SizedBox(height: 40),
+                // cartaPerumahan(),
+                // Container(
+                //   margin: const EdgeInsets.symmetric(vertical: 22),
+                //   color: Colors.grey.shade300,
+                //   height: 8,
+                //   width: double.infinity,
+                // ),
+                // const SizedBox(height: 4),
+                // maklumatTelefon(),
+              ],
+            ),
           ),
+        );
+      }),
+    );
+  }
+
+  ListTile _dataTile({required String title, required String subtitle}) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      tileColor: Colors.white,
+      leading: Container(
+        decoration: BoxDecoration(
+          color: AppColors.midGrey.color,
+          shape: BoxShape.circle,
         ),
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.only(top: 4),
+        child: const Icon(Icons.location_on),
       ),
+      title: Text(title),
+      subtitle: Text(subtitle),
+      trailing: const Icon(Icons.chevron_right),
     );
   }
 
@@ -208,15 +196,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Color? color,
   }) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(icon, color: color),
+        Icon(icon, size: 40, color: color),
         const SizedBox(height: 6),
         Text(
           val,
-          style: appTextStyle(size: 22, fontWeight: FontWeight.bold),
+          style: appTextStyle(size: 20, fontWeight: FontWeight.bold),
         ),
-        Text(title),
+        Text(
+          title,
+          style: appTextStyle(size: 14, color: AppColors.dimmedPurple.color),
+        ),
       ],
     );
   }
@@ -252,5 +243,171 @@ class _DashboardScreenState extends State<DashboardScreen> {
       indent: 16,
       endIndent: 14,
     );
+  }
+
+  Widget sectionContainer({
+    List<Widget> children = const <Widget>[],
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    MainAxisSize mainAxisSize = MainAxisSize.max,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
+  }) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 12),
+      child: Container(
+        padding: const EdgeInsets.only(top: 18, bottom: 18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          // border: Border.all(color: Colors.grey.shade400)
+        ),
+        child: Column(
+            mainAxisAlignment: mainAxisAlignment,
+            mainAxisSize: mainAxisSize,
+            crossAxisAlignment: crossAxisAlignment,
+            children: children),
+      ),
+    );
+  }
+
+  cartaPerumahan() {
+    return Column(
+      children: [
+        const SizedBox(height: 28),
+        _title(title: "Carta perumahan"),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 14),
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 28),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade400)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _title(title: "PPR Desa Tun Razak", padding: EdgeInsets.zero),
+                  IconButton(
+                      onPressed: () {
+                        const KawasanModal().show(context);
+                      },
+                      icon: const Icon(Icons.keyboard_arrow_down_rounded))
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(20)),
+                child: Text(
+                  "Keseluruhan: 20000",
+                  style: appTextStyle(size: 13),
+                ),
+              ),
+              const SizedBox(height: 18),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: AppSize().screenWidth! * .4,
+                    width: AppSize().screenWidth! * .4,
+                    child: PieChart(PieChartData(sections: [
+                      PieChartSectionData(value: 20, color: Colors.blue),
+                      PieChartSectionData(),
+                    ])),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Indicator(
+                    color: Colors.blue,
+                    text: 'Selesai',
+                    isSquare: true,
+                  ),
+                  Indicator(
+                    color: Colors.cyan,
+                    text: 'Dalam proses',
+                    isSquare: true,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  maklumatTelefon() {
+    return Column(
+      children: [
+        _title(title: 'Makmulat Telefon'),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade400)),
+          child: Column(
+            children: [
+              listTile(title: "Admin", phoneNo: "+6034865745614"),
+              listTile(
+                  title: "Pejabat Zon 1 ",
+                  phoneNo: "+6034865745614",
+                  addDivider: false),
+            ],
+          ),
+        ),
+        const SizedBox(height: 30),
+      ],
+    );
+  }
+
+  headerNew() {
+    // SizedBox(height: constraint.maxHeight * .12),
+    // AspectRatio(
+    //   aspectRatio: 40 / 9,
+    //   child: Image.asset(
+    //     AppImages.dbklLogo.path,
+    //     fit: BoxFit.contain,
+    //     height: constraint.maxHeight * .3,
+    //     width: constraint.maxWidth * .4,
+    //   ),
+    // ),
+    // SizedBox(height: constraint.maxHeight * .02),
+    // Center(
+    //   child: Text(
+    //     "PENGURUSAN\nPERUMAHAN",
+    //     style: appTextStyle(
+    //         size: 20.sp,
+    //         fontWeight: FontWeight.w700,
+    //         color: Colors.white),
+    //     textAlign: TextAlign.center,
+    //   ),
+    // ),
+    // SizedBox(height: constraint.maxHeight * .02),
+    // Container(
+    //   margin: const EdgeInsets.symmetric(horizontal: 16),
+    //   padding: const EdgeInsets.all(14),
+    //   decoration: BoxDecoration(
+    //       color: Colors.white,
+    //       borderRadius: BorderRadius.circular(10)),
+    //   child: Row(
+    //     children: [
+    //       Icon(Icons.search, color: AppColors.darkGrey.color),
+    //       SizedBox(width: constraint.maxWidth * .04),
+    //       Text(
+    //         "Carian PPR",
+    //         style: appTextStyle(color: AppColors.darkGrey.color),
+    //       )
+    //     ],
+    //   ),
+    // ),
   }
 }

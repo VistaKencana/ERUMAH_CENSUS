@@ -7,6 +7,7 @@ enum AppColors {
   primary(color: Color(0xFF312D81)),
   dimmedPurple(color: Color(0xFF83849F)),
   brightBlue(color: Color(0xFF0446F3)),
+  lightBlue(color: Color(0xFFF0F4F7)),
   ;
 
   final Color color;

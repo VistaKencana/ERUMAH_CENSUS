@@ -292,6 +292,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                             _headerTitle('Sijil Perkahwinan'),
                             FileDisplay(
                               img: ownerData!.uploadMarriageCert,
+                              subtitle: 'Sijil Perkahwinan',
                               onPicture: (bytes) => setState(() => setState(
                                   () => ownerData = ownerData!
                                       .copyWith(uploadMarriageCert: bytes))),

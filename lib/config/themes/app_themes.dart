@@ -50,6 +50,12 @@ class AppThemes {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
     ),
+  ).copyWith(
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.android: ZoomPageTransitionsBuilder(),
+      },
+    ),
   );
   //ADD DARK THEME
   static final darkTheme = ThemeData(useMaterial3: true);
