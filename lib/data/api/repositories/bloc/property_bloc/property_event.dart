@@ -15,6 +15,8 @@ class FetchArea extends PropertyEvent {
   const FetchArea({required this.zoneData});
 }
 
+class FetchAllArea extends PropertyEvent {}
+
 class FetchBlock extends PropertyEvent {
   final AreaData areaData;
 

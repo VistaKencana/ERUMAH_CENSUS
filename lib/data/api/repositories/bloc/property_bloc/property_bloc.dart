@@ -17,6 +17,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
   PropertyBloc() : super(PropertyInitial()) {
     on<FetchZone>(_onFetchZone);
     on<FetchArea>(_onFetchArea);
+    on<FetchAllArea>(_onFetchAllArea);
     on<FetchBlock>(_onFetchBlock);
     on<FetchUnitFloor>(_onFetchUnitFloor);
     on<FetchListProperties>(_onFetchListProperties);
@@ -42,6 +43,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
 
   final repo = PropertyRepository();
   final applog = const AppLog(classname: "PropertyBloc");
+
   _onFetchZone(FetchZone event, Emitter<PropertyState> emit) async {
     emit(PropertyInitial());
     _clearAllData();
@@ -74,10 +76,40 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
     }
   }
 
+  _onFetchAllArea(FetchAllArea event, Emitter<PropertyState> emit) async {
+    emit(PropertyInitial());
+    _clearArea();
+    EasyLoading.show();
+    //Fetch zone because user dont have to choose it
+    if (listZone.isEmpty) {
+      try {
+        final resp = await repo.fetchZone();
+        listZone = resp;
+      } catch (e) {
+        applog.logError(tag: "fetchZone", msg: e.toString());
+      }
+    }
+
+    if (listArea.isNotEmpty) {
+      return;
+    }
+
+    try {
+      final resp = await repo.fetchArea(zoneCode: "");
+      listArea = resp;
+    } catch (e) {
+      applog.logError(tag: "fetchArea", msg: e.toString());
+    } finally {
+      EasyLoading.dismiss();
+    }
+  }
+
   _onFetchBlock(FetchBlock event, Emitter<PropertyState> emit) async {
     EasyLoading.show();
     _clearBlock();
     selectedArea = event.areaData;
+    selectedZone = listZone.firstWhere(
+        (val) => (val.code ?? ":(") == (selectedArea.zone?.code ?? ":)"));
     try {
       final resp = await repo.fetchBlock(housingCode: selectedArea.code!);
       listBlock = resp;
