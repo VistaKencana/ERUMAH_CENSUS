@@ -13,6 +13,7 @@ import 'package:eperumahan_bancian/screens/bancian-forms/models/status_input_mod
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/bloc/penghuni_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/subrent/subrent_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -106,6 +107,30 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
           title: "Maklumat Penghuni",
           centerTitle: false,
           onPressedBack: _onPop,
+          actions: [
+            PopupMenuButton<int>(
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 1,
+                  onTap: () {
+                    _go(const SubrentMainScreen());
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(Icons.report),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text("Lapor Penghuni")
+                    ],
+                  ),
+                ),
+              ],
+              offset: const Offset(0, 50),
+              color: Colors.white,
+              elevation: 2,
+            ),
+          ],
         ),
         body: Form(
           key: formKey,
@@ -192,8 +217,8 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                       onTap: () => _go(const BancianFingerprint()),
                     ),
                   ),
-                  _gap(),
-                  _section("Status Bancian"),
+                  // _gap(),
+                  // _section("Status Bancian"),
                   // CustomTextField(
                   //   hintText: "Pilih status",
                   //   readOnly: true,
