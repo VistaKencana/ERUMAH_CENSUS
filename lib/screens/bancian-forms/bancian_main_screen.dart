@@ -1,12 +1,9 @@
 import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
-import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
-import 'package:eperumahan_bancian/components/custom_textfield.dart';
 import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
-import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
-import 'package:eperumahan_bancian/data/api/repositories/provider/dropdown_provider.dart';
+
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/tanggungan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dart';
@@ -16,6 +13,7 @@ import 'package:eperumahan_bancian/screens/bancian-forms/models/status_input_mod
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/bloc/penghuni_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/subrent/subrent_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -112,6 +110,30 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
           title: "Maklumat Penghuni",
           centerTitle: false,
           onPressedBack: _onPop,
+          actions: [
+            PopupMenuButton<int>(
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 1,
+                  onTap: () {
+                    _go(const SubrentMainScreen());
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(Icons.report),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text("Lapor Penghuni")
+                    ],
+                  ),
+                ),
+              ],
+              offset: const Offset(0, 50),
+              color: Colors.white,
+              elevation: 2,
+            ),
+          ],
         ),
         body: Form(
           key: formKey,
@@ -212,43 +234,43 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                           ));
                         }),
                   ),
-                  _gap(),
-                  _section("Status Bancian"),
-                  CustomTextField(
-                    hintText: "Pilih status",
-                    readOnly: true,
-                    controller: statusCtrl,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) return '';
-                      return null;
-                    },
-                    suffixIcon: Icons.arrow_drop_down,
-                    onTap: () {
-                      final ddR = context.read<DropdownProvider>();
-                      ddR.fetchDropdownData(DdType.censusStatus).then((val) {
-                        CustomDropdownSheet(
-                          label: "Pilih status",
-                          items: ddR.censusStatusList,
-                          onFindGroupValue: (data) {
-                            return data.where((val) {
-                              var a = val.code?.contains(
-                                      statusData.statusCode ?? "*_*") ??
-                                  false;
-                              return a;
-                            }).firstOrNull;
-                          },
-                          getTitle: (data) => data.desc ?? "-",
-                          onChange: (val) {
-                            if (val == null) return;
-                            statusData =
-                                statusData.copyWith(statusCode: val.code);
-                            statusCtrl.text = val.desc ?? "";
-                          },
-                          // ignore: use_build_context_synchronously
-                        ).show(context);
-                      });
-                    },
-                  ),
+                  // _gap(),
+                  // _section("Status Bancian"),
+                  // CustomTextField(
+                  //   hintText: "Pilih status",
+                  //   readOnly: true,
+                  //   controller: statusCtrl,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) return '';
+                  //     return null;
+                  //   },
+                  //   suffixIcon: Icons.arrow_drop_down,
+                  //   onTap: () {
+                  //     final ddR = context.read<DropdownProvider>();
+                  //     ddR.fetchDropdownData(DdType.censusStatus).then((val) {
+                  //       CustomDropdownSheet(
+                  //         label: "Pilih status",
+                  //         items: ddR.censusStatusList,
+                  //         onFindGroupValue: (data) {
+                  //           return data.where((val) {
+                  //             var a = val.code?.contains(
+                  //                     statusData.statusCode ?? "*_*") ??
+                  //                 false;
+                  //             return a;
+                  //           }).firstOrNull;
+                  //         },
+                  //         getTitle: (data) => data.desc ?? "-",
+                  //         onChange: (val) {
+                  //           if (val == null) return;
+                  //           statusData =
+                  //               statusData.copyWith(statusCode: val.code);
+                  //           statusCtrl.text = val.desc ?? "";
+                  //         },
+                  //         // ignore: use_build_context_synchronously
+                  //       ).show(context);
+                  //     });
+                  //   },
+                  // ),
                   _gap(),
                   _section("Gambar"),
                   SectionContainer(

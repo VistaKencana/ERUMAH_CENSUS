@@ -56,60 +56,51 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, result) async {
-          if (didPop) return;
-          await _showLogoutAlert();
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        await _showLogoutAlert();
+      },
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthLogoutLoading) {
+            EasyLoading.show();
+          } else if (state is AuthLogoutSuccess) {
+            EasyLoading.dismiss().then(
+              (val) => Navigator.popUntil(
+                  // ignore: use_build_context_synchronously
+                  context,
+                  ModalRoute.withName(RoutesName.login)),
+            );
+          } else if (state is AuthLogoutError) {
+            EasyLoading.dismiss();
+            Navigator.pop(context);
+            CustomFlushbar.of(context).showFailed(msg: state.msg);
+          }
         },
-        child: BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is AuthLogoutLoading) {
-              EasyLoading.show();
-            } else if (state is AuthLogoutSuccess) {
-              EasyLoading.dismiss().then(
-                (val) => Navigator.popUntil(
-                    // ignore: use_build_context_synchronously
-                    context,
-                    ModalRoute.withName(RoutesName.login)),
-              );
-            } else if (state is AuthLogoutError) {
-              EasyLoading.dismiss();
-              Navigator.pop(context);
-              CustomFlushbar.of(context).showFailed(msg: state.msg);
-            }
-          },
-          child: Scaffold(
-            body: PageView(
-              controller: homePageController,
-              onPageChanged: _onPageChanged,
-              children: List.generate(BottomNavItem.values.length,
-                  (index) => BottomNavItem.values[index].screen),
-            ),
-            bottomNavigationBar: CustomBottomNav(
-                itemCount: BottomNavItem.values.length, (index) {
-              final data = BottomNavItem.values[index];
-              return NavItem(
-                itemCount: BottomNavItem.values.length,
-                onTap: () => _onItemTapped(index),
-                icon: data.item.icon,
-                isSelected: _selectedIndex == index,
-                label: data.item.label!,
-              );
-            }),
-
-            // bottomNavigationBar:
-            //     CustomBottomNav(itemCount: BottomNavItem.values.length, (index) {
-            //   final data = BottomNavItem.values[index];
-            //   return NavItem(
-            //     itemCount: BottomNavItem.values.length,
-            //     onTap: () => _onItemTapped(index),
-            //     icon: data.item.icon,
-            //     isSelected: _selectedIndex == index,
-            //     label: data.item.label!,
-            //   );
-            // }),
+        child: Scaffold(
+          body: PageView(
+            controller: homePageController,
+            onPageChanged: _onPageChanged,
+            children: List.generate(BottomNavItem.values.length,
+                (index) => BottomNavItem.values[index].screen),
           ),
-        ));
+          bottomNavigationBar:
+              CustomBottomNav(itemCount: BottomNavItem.values.length, (index) {
+            final data = BottomNavItem.values[index];
+            return NavItem(
+              itemCount: BottomNavItem.values.length,
+              onTap: () => _onItemTapped(index),
+              icon: _selectedIndex == index
+                  ? data.item.activeIcon
+                  : data.item.icon,
+              isSelected: _selectedIndex == index,
+              label: data.item.label!,
+            );
+          }),
+        ),
+      ),
+    );
   }
 
   _showLogoutAlert() async {

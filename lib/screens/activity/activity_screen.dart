@@ -27,7 +27,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
     super.initState();
     _propertyBloc = BlocProvider.of<PropertyBloc>(context, listen: false);
     _qrBloc = BlocProvider.of<QrBloc>(context, listen: false);
-    _propertyBloc.add(FetchZone());
+    _propertyBloc.add(FetchAllArea());
     zoneCtrl = TextEditingController();
     areaCtrl = TextEditingController();
     blockCtrl = TextEditingController();
@@ -97,39 +97,39 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             Padding(
                               padding: const EdgeInsets.all(10),
                               child: Column(children: [
-                                CustomTextField(
-                                  suffixIcon: Icons.unfold_more_rounded,
-                                  readOnly: true,
-                                  controller: zoneCtrl,
-                                  hintText: "Zon",
-                                  fillColor: Colors.white,
-                                  onTap: () {
-                                    CustomDropdownSheet(
-                                        label: "Pilih Zon",
-                                        items: propertyWatch.listZone,
-                                        groupValue: propertyWatch.selectedZone,
-                                        getTitle: (data) => data.desc ?? "-",
-                                        onQuery: (data, query) {
-                                          final result = data.where((zon) {
-                                            String value =
-                                                (zon.desc ?? "").toLowerCase();
-                                            return value.contains(
-                                                query?.toLowerCase() ?? "");
-                                          }).toList();
-                                          return result;
-                                        },
-                                        onChange: (val) {
-                                          if (val == null) return;
-                                          setState(() {
-                                            zoneCtrl.text = val.desc!;
-                                            areaCtrl.clear();
-                                            blockCtrl.clear();
-                                          });
-                                          _propertyBloc
-                                              .add(FetchArea(zoneData: val));
-                                        }).show(context);
-                                  },
-                                ),
+                                // CustomTextField(
+                                //   suffixIcon: Icons.unfold_more_rounded,
+                                //   readOnly: true,
+                                //   controller: zoneCtrl,
+                                //   hintText: "Zon",
+                                //   fillColor: Colors.white,
+                                //   onTap: () {
+                                //     CustomDropdownSheet(
+                                //         label: "Pilih Zon",
+                                //         items: propertyWatch.listZone,
+                                //         groupValue: propertyWatch.selectedZone,
+                                //         getTitle: (data) => data.desc ?? "-",
+                                //         onQuery: (data, query) {
+                                //           final result = data.where((zon) {
+                                //             String value =
+                                //                 (zon.desc ?? "").toLowerCase();
+                                //             return value.contains(
+                                //                 query?.toLowerCase() ?? "");
+                                //           }).toList();
+                                //           return result;
+                                //         },
+                                //         onChange: (val) {
+                                //           if (val == null) return;
+                                //           setState(() {
+                                //             zoneCtrl.text = val.desc!;
+                                //             areaCtrl.clear();
+                                //             blockCtrl.clear();
+                                //           });
+                                //           _propertyBloc
+                                //               .add(FetchArea(zoneData: val));
+                                //         }).show(context);
+                                //   },
+                                // ),
                                 CustomTextField(
                                   suffixIcon: Icons.unfold_more_rounded,
                                   controller: areaCtrl,

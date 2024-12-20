@@ -5,12 +5,14 @@ import 'package:eperumahan_bancian/screens/bancian-forms/bancian_proof_camera.da
 import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/bloc/pasangan_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/bloc/penghuni_bloc.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/subrent/provider/subrent_provider.dart';
 import 'package:eperumahan_bancian/screens/qr-home/bloc/qr_bloc.dart';
 import 'package:eperumahan_bancian/screens/qr-home/models/resident_info_model.dart';
 import 'package:eperumahan_bancian/services/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import '../../config/constants/app_colors.dart';
 
 class BancianInfosModal extends StatefulWidget {
@@ -36,6 +38,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
   late PenghuniBloc _penghuniBloc;
   late PasanganBloc _pasanganBloc;
   late AnakTanggunganBloc _anakTanggunganBloc;
+  late SubrentProvider subrentProvider;
   List<String> statusFilter = [
     "Bancian Biasa",
     "Tiada Penghuni",
@@ -50,6 +53,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
     _pasanganBloc = BlocProvider.of<PasanganBloc>(context, listen: false);
     _anakTanggunganBloc =
         BlocProvider.of<AnakTanggunganBloc>(context, listen: false);
+    subrentProvider = Provider.of<SubrentProvider>(context, listen: false);
     residentData = _qrBloc.residentData;
   }
 
@@ -127,6 +131,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
                       PageTransition(
                           child: const BancianProofCamera(),
                           type: PageTransitionType.rightToLeft));
+                  subrentProvider.clearListSUbrent();
                 },
                 title: "Teruskan Bancian"),
           ),

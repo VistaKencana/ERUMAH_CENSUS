@@ -11,7 +11,6 @@ import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/bancian_main_screen.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/owner_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/bloc/penghuni_bloc.dart';
 import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
@@ -137,37 +136,37 @@ class _PenghuniFormState extends State<PenghuniForm> {
               onPressedBack: () {
                 _exitWarning();
               },
-              actions: _isNewForm()
-                  ? []
-                  : [
-                      PopupMenuButton<int>(
-                        itemBuilder: (context) => [
-                          PopupMenuItem(
-                            value: 1,
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const BancianMainScreen(
-                                            isNewForm: true,
-                                          )));
-                            },
-                            child: const Row(
-                              children: [
-                                Icon(Icons.report),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Lapor Penghuni")
-                              ],
-                            ),
-                          ),
-                        ],
-                        offset: const Offset(0, 50),
-                        color: Colors.white,
-                        elevation: 2,
-                      ),
-                    ],
+              // actions: _isNewForm()
+              //     ? []
+              //     : [
+              //         PopupMenuButton<int>(
+              //           itemBuilder: (context) => [
+              //             PopupMenuItem(
+              //               value: 1,
+              //               onTap: () {
+              //                 Navigator.push(
+              //                     context,
+              //                     MaterialPageRoute(
+              //                         builder: (_) => const BancianMainScreen(
+              //                               isNewForm: true,
+              //                             )));
+              //               },
+              //               child: const Row(
+              //                 children: [
+              //                   Icon(Icons.report),
+              //                   SizedBox(
+              //                     width: 10,
+              //                   ),
+              //                   Text("Lapor Penghuni")
+              //                 ],
+              //               ),
+              //             ),
+              //           ],
+              //           offset: const Offset(0, 50),
+              //           color: Colors.white,
+              //           elevation: 2,
+              //         ),
+              //       ],
             ),
             body: BlocListener<PenghuniBloc, PenghuniState>(
               listener: (context, state) {
@@ -292,6 +291,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                             _headerTitle('Sijil Perkahwinan'),
                             FileDisplay(
                               img: ownerData!.uploadMarriageCert,
+                              subtitle: 'Sijil Perkahwinan',
                               onPicture: (bytes) => setState(() => setState(
                                   () => ownerData = ownerData!
                                       .copyWith(uploadMarriageCert: bytes))),

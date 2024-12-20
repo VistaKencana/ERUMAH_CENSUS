@@ -40,7 +40,7 @@ class StatusInputModel {
     return {
       'censusCode': censusCode,
       'isFingerPrintVerified': isFingerPrintVerified,
-      'statusCode': statusCode ?? "",
+      // 'statusCode': statusCode ?? "",
       'remark': remark,
     };
   }

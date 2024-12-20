@@ -33,7 +33,13 @@ class _IcCameraState extends State<IcCamera> {
           padding: 30,
         ),
         onTakePicture: (img) async {
-          final croppedImg = cropImage(img, 2.3, 50);
+          final croppedImg = cropCenterRectangle(
+            img,
+            context,
+            containerWidthRatio: 0.7,
+            containerHeightRatio: 0.112,
+          );
+          // final croppedImg = cropImage(img, 2.3, 50);
           final result = await imageCropper(croppedImg);
           widget.onTakePicture(result);
         },
@@ -41,7 +47,7 @@ class _IcCameraState extends State<IcCamera> {
     );
   }
 
-  static Uint8List cropImage(
+  Uint8List cropImage(
       Uint8List bytes, double overlayAspectRatio, double overlayPadding) {
     imag.Image? image = imag.decodeImage(bytes);
 
@@ -111,5 +117,57 @@ class _IcCameraState extends State<IcCamera> {
     await tempFile.writeAsBytes(img);
 
     return tempFile.path; // Return the path of the temporary file
+  }
+
+  Uint8List cropCenterRectangle(
+    Uint8List imageData,
+    BuildContext context, {
+    required double containerWidthRatio,
+    required double containerHeightRatio,
+  }) {
+    // Decode the image
+    imag.Image? originalImage = imag.decodeImage(imageData);
+
+    if (originalImage == null) {
+      throw Exception("Unable to decode image");
+    }
+
+    // Calculate the width and height for the container based on the screen size
+    final containerWidth =
+        MediaQuery.of(context).size.width * containerWidthRatio;
+    final containerHeight =
+        MediaQuery.of(context).size.height * containerHeightRatio;
+
+    // Calculate the container aspect ratio
+    final containerAspectRatio = containerWidth / containerHeight;
+
+    // Determine the target crop dimensions based on the container's aspect ratio
+    int targetWidth, targetHeight;
+
+    if ((originalImage.width / originalImage.height) >= containerAspectRatio) {
+      // Image is wider than the container's aspect ratio, so base target height on the image height
+      targetHeight = originalImage.height;
+      targetWidth = (targetHeight * containerAspectRatio).toInt();
+    } else {
+      // Image is taller than the container's aspect ratio, so base target width on the image width
+      targetWidth = originalImage.width;
+      targetHeight = (targetWidth / containerAspectRatio).toInt();
+    }
+
+    // Calculate the top-left coordinates to center the cropping rectangle
+    int x = (originalImage.width - targetWidth) ~/ 2;
+    int y = (originalImage.height - targetHeight) ~/ 2;
+
+    // Perform the cropping
+    imag.Image croppedImage = imag.copyCrop(
+      originalImage,
+      x: x,
+      y: y,
+      width: targetWidth,
+      height: targetHeight,
+    );
+
+    // Convert the cropped image back to Uint8List
+    return Uint8List.fromList(imag.encodePng(croppedImage));
   }
 }

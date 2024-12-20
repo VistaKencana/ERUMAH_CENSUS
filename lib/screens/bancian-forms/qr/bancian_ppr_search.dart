@@ -26,7 +26,7 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
   void initState() {
     super.initState();
     _propertyBloc = BlocProvider.of<PropertyBloc>(context, listen: false);
-    _propertyBloc.add(FetchZone());
+    _propertyBloc.add(FetchAllArea());
     _qrBloc = BlocProvider.of<QrBloc>(context, listen: false);
     zoneCtrl = TextEditingController();
     areaCtrl = TextEditingController();
@@ -47,8 +47,8 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(180),
-                // preferredSize: const Size.fromHeight(235),
+                preferredSize: const Size.fromHeight(145),
+                // preferredSize: const Size.fromHeight(180),
                 child: Container(
                   decoration:
                       const BoxDecoration(color: Colors.white, boxShadow: [
@@ -72,37 +72,37 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
                           Expanded(
                             child: Column(
                               children: [
-                                textField(
-                                  controller: zoneCtrl,
-                                  hintText: "Pilih Zon",
-                                  onTap: () {
-                                    CustomDropdownSheet(
-                                        label: "Pilih Zon",
-                                        items: propertyWatch.listZone,
-                                        groupValue: propertyWatch.selectedZone,
-                                        getTitle: (data) => data.desc ?? "-",
-                                        onQuery: (data, query) {
-                                          final result = data.where((zon) {
-                                            String value =
-                                                (zon.desc ?? "").toLowerCase();
-                                            return value.contains(
-                                                query?.toLowerCase() ?? "");
-                                          }).toList();
-                                          return result;
-                                        },
-                                        onChange: (val) {
-                                          if (val == null) return;
-                                          setState(() {
-                                            zoneCtrl.text = val.desc!;
-                                            areaCtrl.clear();
-                                            blockCtrl.clear();
-                                          });
-                                          _propertyBloc
-                                              .add(FetchArea(zoneData: val));
-                                          hideLevel(true);
-                                        }).show(context);
-                                  },
-                                ),
+                                // textField(
+                                //   controller: zoneCtrl,
+                                //   hintText: "Pilih Zon",
+                                //   onTap: () {
+                                //     CustomDropdownSheet(
+                                //         label: "Pilih Zon",
+                                //         items: propertyWatch.listZone,
+                                //         groupValue: propertyWatch.selectedZone,
+                                //         getTitle: (data) => data.desc ?? "-",
+                                //         onQuery: (data, query) {
+                                //           final result = data.where((zon) {
+                                //             String value =
+                                //                 (zon.desc ?? "").toLowerCase();
+                                //             return value.contains(
+                                //                 query?.toLowerCase() ?? "");
+                                //           }).toList();
+                                //           return result;
+                                //         },
+                                //         onChange: (val) {
+                                //           if (val == null) return;
+                                //           setState(() {
+                                //             zoneCtrl.text = val.desc!;
+                                //             areaCtrl.clear();
+                                //             blockCtrl.clear();
+                                //           });
+                                //           _propertyBloc
+                                //               .add(FetchArea(zoneData: val));
+                                //           hideLevel(true);
+                                //         }).show(context);
+                                //   },
+                                // ),
                                 const SizedBox(height: 8),
                                 textField(
                                   controller: areaCtrl,
