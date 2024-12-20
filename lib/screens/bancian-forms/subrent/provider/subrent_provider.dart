@@ -1,5 +1,6 @@
 import 'package:eperumahan_bancian/data/api/repositories/application_repository.dart';
 import 'package:eperumahan_bancian/main.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/models/status_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/subrent_input_model.dart';
 import 'package:eperumahan_bancian/services/app_log.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +25,32 @@ class SubrentProvider extends ChangeNotifier {
 
   void clearListSUbrent() {
     listSubrent.clear();
+    notifyListeners();
   }
 
   void selectSubrent(SubrentInputModel val) {
     selectedSubrent = val;
     selectedSubrent = selectedSubrent.copyWith(censusCode: censusCode);
     notifyListeners();
+  }
+
+  Future<void> submitStatus({required StatusInputModel data}) async {
+    if (listSubrent.isEmpty) {
+      final context = navigatorKey.currentContext!;
+      CustomFlushbar.of(context).showInfo(msg: "Sila tambah subrent");
+      return;
+    }
+
+    EasyLoading.show();
+    appLog.logDebug(tag: "Send Item", msg: data.toJson().toString());
+    try {
+      final resp = await repo.storeStatus(data: data);
+      appLog.logDebug(tag: "submitStatus", msg: resp);
+    } catch (e) {
+      appLog.logError(tag: "submitStatus", msg: e.toString());
+    } finally {
+      EasyLoading.dismiss();
+    }
   }
 
   Future<void> submitSubrent({required SubrentInputModel data}) async {

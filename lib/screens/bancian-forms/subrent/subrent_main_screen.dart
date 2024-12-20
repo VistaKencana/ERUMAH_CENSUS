@@ -6,6 +6,7 @@ import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/models/status_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/subrent/provider/subrent_provider.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/subrent/subrent_form.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,8 @@ class SubrentMainScreen extends StatefulWidget {
 
 class _SubrentMainScreenState extends State<SubrentMainScreen> {
   late BancianBloc _bancianBloc;
+  late StatusInputModel statusData;
+  final formKey = GlobalKey<FormState>();
   final remarkCtrl = TextEditingController();
   @override
   void initState() {
@@ -33,6 +36,8 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
       context
           .read<SubrentProvider>()
           .setCensusCode(val: _bancianBloc.unitData.censusCode ?? "");
+      _bancianBloc.initNotOwner();
+      statusData = _bancianBloc.statusNotOwnerData!;
     });
   }
 
@@ -40,104 +45,114 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
   Widget build(BuildContext context) {
     final watchSubrent = context.watch<SubrentProvider>().listSubrent;
     Size size = MediaQuery.sizeOf(context);
-    return BgImage(
-      child: Scaffold(
-        appBar: const CustomAppBar(title: "Maklumat Subrent"),
-        backgroundColor: Colors.transparent,
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(vertical: 12),
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          const Icon(Icons.location_on),
-                          Text(
-                            _bancianBloc.unitData.unit?.housingProject?.desc ??
-                                "-",
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(width: size.width * .1),
-                          Text(
-                            _bancianBloc.unitData.unit?.status ?? "-",
-                            style:
-                                TextStyle(color: AppColors.dimmedPurple.color),
-                          ),
-                          SizedBox(width: size.width * .1),
-                          Text(
-                            "Unit No:${_bancianBloc.unitData.unit?.no ?? "-"}",
-                            style:
-                                TextStyle(color: AppColors.dimmedPurple.color),
-                          ),
-                        ],
-                      ),
-                    ],
+    return Form(
+      key: formKey,
+      child: BgImage(
+        child: Scaffold(
+          appBar: const CustomAppBar(title: "Maklumat Subrent"),
+          backgroundColor: Colors.transparent,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            const Icon(Icons.location_on),
+                            Text(
+                              _bancianBloc
+                                      .unitData.unit?.housingProject?.desc ??
+                                  "-",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(width: size.width * .1),
+                            Text(
+                              _bancianBloc.unitData.unit?.status ?? "-",
+                              style: TextStyle(
+                                  color: AppColors.dimmedPurple.color),
+                            ),
+                            SizedBox(width: size.width * .1),
+                            Text(
+                              "Unit No:${_bancianBloc.unitData.unit?.no ?? "-"}",
+                              style: TextStyle(
+                                  color: AppColors.dimmedPurple.color),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                //MARK: Cap Jari
-                _section("Cap Jari"),
-                SectionContainer(
-                  border: Border.all(color: Colors.grey),
-                  padding: EdgeInsets.zero,
-                  margin: EdgeInsets.zero,
-                  child: ListTile(
-                    tileColor: Colors.white,
-                    leading: const Icon(Icons.fingerprint),
-                    title: const Text("Sahkan Cap Jari"),
-                    onTap: () => _go(const BancianFingerprint()),
+                  //MARK: Cap Jari
+                  _section("Cap Jari"),
+                  SectionContainer(
+                    border: Border.all(color: Colors.grey),
+                    padding: EdgeInsets.zero,
+                    margin: EdgeInsets.zero,
+                    child: ListTile(
+                      tileColor: Colors.white,
+                      leading: const Icon(Icons.fingerprint),
+                      title: const Text("Sahkan Cap Jari"),
+                      onTap: () => _go(const BancianFingerprint()),
+                    ),
                   ),
-                ),
-                _gap(),
-                //MARK: Rmark
-                _section("Catatan"),
-                CustomFormField(
-                  maxLines: 3,
-                  controller: remarkCtrl,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return '';
-                    return null;
-                  },
-                  hintText: "Sila tulis catatan",
-                  contentPadding: const EdgeInsets.only(
-                      top: 10, left: 10, right: 10, bottom: 10),
-                ),
-                _gap(size: 26),
-                const Divider(height: 2), _gap(size: 20),
-                _section("Maklumat subrent"),
-                _gap(),
-                ...List.generate(watchSubrent.length, (index) {
-                  return _borangTile(
-                    label: "Subrent ${index + 1}",
-                    screen: const SubrentForm(isExistData: true),
-                    onTap: () {
-                      context
-                          .read<SubrentProvider>()
-                          .selectSubrent(watchSubrent[index]);
+                  _gap(),
+                  //MARK: Rmark
+                  _section("Catatan"),
+                  CustomFormField(
+                    maxLines: 3,
+                    controller: remarkCtrl,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return '';
+                      return null;
                     },
-                  );
-                }),
-                // _borangTile(label: "label", screen: Container()),
-                _addSubrentBtn(showBtn: watchSubrent.length < 5),
-              ],
+                    hintText: "Sila tulis catatan",
+                    contentPadding: const EdgeInsets.only(
+                        top: 10, left: 10, right: 10, bottom: 10),
+                  ),
+                  _gap(size: 26),
+                  const Divider(height: 2), _gap(size: 20),
+                  _section("Maklumat subrent"),
+                  _gap(),
+                  ...List.generate(watchSubrent.length, (index) {
+                    return _borangTile(
+                      label: "Subrent ${index + 1}",
+                      screen: const SubrentForm(isExistData: true),
+                      onTap: () {
+                        context
+                            .read<SubrentProvider>()
+                            .selectSubrent(watchSubrent[index]);
+                      },
+                    );
+                  }),
+                  // _borangTile(label: "label", screen: Container()),
+                  _addSubrentBtn(showBtn: watchSubrent.length < 5),
+                ],
+              ),
             ),
           ),
-        ),
-        bottomNavigationBar: BottomBarButton(
-          title: "Selesai Bancian",
-          onTap: () {},
+          bottomNavigationBar: BottomBarButton(
+            title: "Selesai Bancian",
+            onTap: () {
+              setState(() {
+                statusData = statusData.copyWith(
+                  remark: remarkCtrl.text,
+                );
+              });
+            },
+          ),
         ),
       ),
     );
