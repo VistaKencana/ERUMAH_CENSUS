@@ -12,8 +12,20 @@ class DashboardProvider extends ChangeNotifier {
   final log = const AppLog(classname: "DashboardProvider");
 
   initDashboard() async {
-    // MARK: Download Incomplete
     setListLoading(true);
+    await Future.wait([
+      fetchLatest(),
+      fetchIncomplete(),
+    ]);
+  }
+
+  void setListLoading(bool val) {
+    latestLoading = val;
+    incompleteLoading = val;
+    notifyListeners();
+  }
+
+  Future fetchLatest() async {
     // MARK: Download Latest
     try {
       latestList = await repo.getLatest();
@@ -23,7 +35,10 @@ class DashboardProvider extends ChangeNotifier {
       latestLoading = false;
       notifyListeners();
     }
+  }
 
+  Future fetchIncomplete() async {
+    // MARK: Download Incomplete
     try {
       incompleteList = await repo.getIncomplete();
     } catch (e) {
@@ -32,11 +47,5 @@ class DashboardProvider extends ChangeNotifier {
       incompleteLoading = false;
       notifyListeners();
     }
-  }
-
-  void setListLoading(bool val) {
-    latestLoading = val;
-    incompleteLoading = val;
-    notifyListeners();
   }
 }

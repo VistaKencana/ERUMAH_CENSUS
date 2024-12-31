@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/dashboard/model/dashboard_json_model.dart';
 import 'package:flutter/material.dart';
@@ -40,11 +42,12 @@ class DashboardSection extends StatelessWidget {
         String? listSubtitle = (data[index].visit?.isEmpty ?? true)
             ? "Bancian Pertama"
             : data[index].visit?.first.remark;
+        String? listUnitNo = data[index].unit?.unitNo;
+
+        log("this is unit no test ===> $listUnitNo");
 
         return _dataTile(
-          title: listTitle,
-          subtitle: listSubtitle,
-        );
+            title: listTitle, subtitle: listSubtitle, unitNo: listUnitNo);
       }));
     } else {
       //Empty
@@ -103,7 +106,11 @@ class DashboardSection extends StatelessWidget {
     );
   }
 
-  ListTile _dataTile({required String? title, required String? subtitle}) {
+  ListTile _dataTile({
+    required String? title,
+    required String? subtitle,
+    required String? unitNo,
+  }) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       tileColor: Colors.white,
@@ -117,7 +124,7 @@ class DashboardSection extends StatelessWidget {
         child: const Icon(Icons.location_on),
       ),
       title: Text(title ?? "-"),
-      subtitle: Text(subtitle ?? "-"),
+      subtitle: Text("${subtitle ?? "-"},${unitNo ?? "-"}"),
       trailing: const Icon(Icons.chevron_right),
     );
   }
