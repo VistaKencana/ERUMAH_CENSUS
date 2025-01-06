@@ -2,10 +2,13 @@ import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/config/constants/app_size.dart';
 import 'package:eperumahan_bancian/screens/dashboard/dashboard_header.dart';
+import 'package:eperumahan_bancian/screens/dashboard/dashboard_section.dart';
 import 'package:eperumahan_bancian/screens/dashboard/kawasan_modal.dart';
+import 'package:eperumahan_bancian/screens/dashboard/provider/dashboard_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../components/indicator.dart';
 import '../../config/constants/app_images.dart';
 
@@ -17,8 +20,20 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  late DashboardProvider dashboardProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    dashboardProvider = Provider.of(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((a) {
+      dashboardProvider.initDashboard();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final watchDashboard = Provider.of<DashboardProvider>(context);
     return BgImage(
       // bgPath: AppImages.homeBg.path,
       child: LayoutBuilder(builder: (context, constraint) {
@@ -76,51 +91,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ]),
                 SizedBox(height: constraint.maxHeight * .02),
-                sectionContainer(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 16, bottom: 4, top: 4),
-                        child: Text(
-                          "AKTIVITI",
-                          style: appTextStyle(
-                              fontWeight: FontWeight.bold,
-                              size: 14,
-                              color: AppColors.dimmedPurple.color),
-                        ),
-                      ),
-                      _title(
-                        title: "Aktiviti terkini",
-                        padding: const EdgeInsets.only(left: 16),
-                      ),
-                      _dataTile(title: "PPR Kelantan", subtitle: "Cuba2"),
-                      _dataTile(title: "PPR Kelantan", subtitle: "Cuba2"),
-                      _dataTile(title: "PPR Kelantan", subtitle: "Cuba2"),
-                    ]),
+                //MARK: Latest Activity
+                DashboardSection(
+                    isLoading: watchDashboard.latestLoading,
+                    data: watchDashboard.latestList,
+                    miniTitle: "AKTIVITI",
+                    title: "Aktiviti terkini"),
+
                 SizedBox(height: constraint.maxHeight * .02),
-                sectionContainer(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 16, bottom: 4, top: 4),
-                        child: Text(
-                          "SUSULAN",
-                          style: appTextStyle(
-                              fontWeight: FontWeight.bold,
-                              size: 14,
-                              color: AppColors.dimmedPurple.color),
-                        ),
-                      ),
-                      _title(
-                        title: "Untuk susulan",
-                        padding: const EdgeInsets.only(left: 16),
-                      ),
-                      _dataTile(title: "PPR Kelantan", subtitle: "Cuba2"),
-                      _dataTile(title: "PPR Kelantan", subtitle: "Cuba2"),
-                      _dataTile(title: "PPR Kelantan", subtitle: "Cuba2"),
-                    ]),
+                //MARK: Incomplete Activity
+                DashboardSection(
+                    isLoading: watchDashboard.incompleteLoading,
+                    data: watchDashboard.incompleteList,
+                    miniTitle: "SUSULAN",
+                    title: "Untuk susulan"),
+
                 const SizedBox(height: 40),
                 // cartaPerumahan(),
                 // Container(
@@ -136,25 +121,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         );
       }),
-    );
-  }
-
-  ListTile _dataTile({required String title, required String subtitle}) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      tileColor: Colors.white,
-      leading: Container(
-        decoration: BoxDecoration(
-          color: AppColors.midGrey.color,
-          shape: BoxShape.circle,
-        ),
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.only(top: 4),
-        child: const Icon(Icons.location_on),
-      ),
-      title: Text(title),
-      subtitle: Text(subtitle),
-      trailing: const Icon(Icons.chevron_right),
     );
   }
 
