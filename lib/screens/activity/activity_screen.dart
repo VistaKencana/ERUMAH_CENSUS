@@ -64,7 +64,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                               children: [
                                 const Expanded(
                                   child: Text(
-                                    "Carian Kawasan \nBancian",
+                                    "Carian Perumahan \nBancian",
                                     style: TextStyle(
                                         fontSize: 22, color: Colors.white),
                                   ),
@@ -134,11 +134,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                   suffixIcon: Icons.unfold_more_rounded,
                                   controller: areaCtrl,
                                   readOnly: true,
-                                  hintText: "Kawasan",
+                                  hintText: "Perumahan",
                                   fillColor: Colors.white,
                                   onTap: () {
                                     CustomDropdownSheet(
-                                      label: "Pilih Kawasan",
+                                      label: "Pilih Perumahan",
                                       items: propertyWatch.listArea,
                                       groupValue: propertyWatch.selectedArea,
                                       getTitle: (data) => data.desc ?? "-",
@@ -236,7 +236,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 }),
               ),
               const SizedBox(height: 14),
-              _recentTile(),
+              // _recentTile(),
             ],
           ),
         ),
@@ -248,26 +248,26 @@ class _ActivityScreenState extends State<ActivityScreen> {
     Navigator.pushNamed(context, RoutesName.activitySearch);
   }
 
-  _recentTile() {
-    return ListTile(
-        // onTap: _goToList,
-        minLeadingWidth: 0,
-        leading: Container(
-          decoration: BoxDecoration(
-            color: AppColors.midGrey.color,
-            shape: BoxShape.circle,
-          ),
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.only(top: 4),
-          child: const Icon(Icons.schedule),
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14),
-        title: Text(
-          "PPR Sri Selangor",
-          style: TextStyle(
-              fontWeight: FontWeight.bold, color: AppColors.primary.color),
-        ),
-        subtitle: const Text("Zon 1 • Blok 20"),
-        trailing: const Icon(Icons.chevron_right));
-  }
+  // _recentTile() {
+  //   return ListTile(
+  //       // onTap: _goToList,
+  //       minLeadingWidth: 0,
+  //       leading: Container(
+  //         decoration: BoxDecoration(
+  //           color: AppColors.midGrey.color,
+  //           shape: BoxShape.circle,
+  //         ),
+  //         padding: const EdgeInsets.all(10),
+  //         margin: const EdgeInsets.only(top: 4),
+  //         child: const Icon(Icons.schedule),
+  //       ),
+  //       contentPadding: const EdgeInsets.symmetric(horizontal: 14),
+  //       title: Text(
+  //         "PPR Sri Selangor",
+  //         style: TextStyle(
+  //             fontWeight: FontWeight.bold, color: AppColors.primary.color),
+  //       ),
+  //       subtitle: const Text("Zon 1 • Blok 20"),
+  //       trailing: const Icon(Icons.chevron_right));
+  // }
 }
