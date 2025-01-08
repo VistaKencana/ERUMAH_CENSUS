@@ -68,14 +68,14 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
               ),
             ),
           ),
-          Row(
-            children: [
-              _infoContainer(val: info[4].value, title: info[4].title),
-              _infoContainer(val: info[5].value, title: info[5].title),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     _infoContainer(val: info[4].value, title: info[4].title),
+          //     _infoContainer(val: info[5].value, title: info[5].title),
+          //   ],
+          // ),
           Container(
-            height: size.height * 0.55,
+            height: size.height * 0.7,
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 14),
             decoration: BoxDecoration(
@@ -148,31 +148,36 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
     ));
   }
 
-  _infoContainer({required String val, required String title}) {
-    return Container(
-      width: MediaQuery.sizeOf(context).width * .44,
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
-      child: Column(
-        children: [
-          Text(
-            val,
-            style: appTextStyle(size: 22, fontWeight: FontWeight.bold),
-          ),
-          Text(title),
-        ],
-      ),
-    );
-  }
+  // _infoContainer({required String val, required String title}) {
+  //   return Container(
+  //     width: MediaQuery.sizeOf(context).width * .44,
+  //     margin: const EdgeInsets.all(10),
+  //     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
+  //     decoration: BoxDecoration(
+  //         color: Colors.white, borderRadius: BorderRadius.circular(10)),
+  //     child: Column(
+  //       children: [
+  //         Text(
+  //           val,
+  //           style: appTextStyle(size: 22, fontWeight: FontWeight.bold),
+  //         ),
+  //         Text(title),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   _newInfoTile({required PropertyData data}) {
     return ListTile(
       onTap: () {
         _qrBloc.setPropertyData(selectedProperty: data);
-        QrNavigationPref.setFromHome(val: false).then((val) =>
-            _goTo(QrScanScreen(isFromHome: false, unitNumber: data.unitNo)));
+        QrNavigationPref.setFromHome(val: false)
+            .then((val) => _goTo(QrScanScreen(
+                  isFromHome: false,
+                  isFirstBancian: (data.totalVisit ?? 0) == 0,
+                  unitNumber: data.unitNo,
+                  unitCode: data.unitCode,
+                )));
       },
       // onTap: () => const BancianInfosModal().show(context),
       minLeadingWidth: 0,

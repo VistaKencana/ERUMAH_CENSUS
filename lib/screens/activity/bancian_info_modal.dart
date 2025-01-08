@@ -83,7 +83,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
                 Padding(
                   padding: const EdgeInsets.only(left: 12, bottom: 5),
                   child: Text(
-                    'UNIT: ${residentData.unit!.no}',
+                    'UNIT: ${residentData.unit?.no ?? ""}',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,

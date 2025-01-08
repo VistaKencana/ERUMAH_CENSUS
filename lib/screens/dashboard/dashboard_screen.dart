@@ -101,10 +101,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 SizedBox(height: constraint.maxHeight * .02),
                 //MARK: Incomplete Activity
                 DashboardSection(
-                    isLoading: watchDashboard.incompleteLoading,
-                    data: watchDashboard.incompleteList,
-                    miniTitle: "SUSULAN",
-                    title: "Untuk susulan"),
+                  isLoading: watchDashboard.incompleteLoading,
+                  data: watchDashboard.incompleteList,
+                  miniTitle: "SUSULAN",
+                  title: "Untuk susulan",
+                  showButton: true,
+                ),
 
                 const SizedBox(height: 40),
                 // cartaPerumahan(),

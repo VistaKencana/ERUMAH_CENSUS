@@ -168,6 +168,11 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
     emit(UnitLoading());
     try {
       selectedFloor = event.floorData;
+
+      applog.logDebug(
+          tag: "fetchListProperties",
+          msg:
+              "zoneCode:${selectedZone.code ?? ''}\n housingCode:${selectedArea.code ?? ""}\n blockNo:${selectedBlock.blockNo}\n floor:${selectedFloor.floorNo}");
       final resp = await repo.fetchListProperties(
           zoneCode: selectedZone.code ?? "",
           housingCode: selectedArea.code!,
