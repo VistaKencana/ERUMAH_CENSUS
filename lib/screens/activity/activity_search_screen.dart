@@ -62,7 +62,7 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
           Padding(
             padding: const EdgeInsets.only(left: 12, top: 20),
             child: Text(
-              "Info Kawasan Bancian",
+              "Info Perumahan Bancian",
               style: appTextStyle(
                 fontWeight: FontWeight.w400,
               ),
