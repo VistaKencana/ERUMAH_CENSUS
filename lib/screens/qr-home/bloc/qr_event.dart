@@ -14,6 +14,13 @@ class ScanQrcode extends QrEvent {
   const ScanQrcode({required this.qrCode, required this.isFromHome});
 }
 
+class ManualQrcode extends QrEvent {
+  final String unitCode;
+  final bool isFromHome;
+
+  const ManualQrcode({required this.unitCode, required this.isFromHome});
+}
+
 class RegisterQrcode extends QrEvent {
   const RegisterQrcode();
 }

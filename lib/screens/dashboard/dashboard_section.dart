@@ -1,24 +1,32 @@
 import 'dart:developer';
 
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/screens/dashboard/dashboard_data_view.dart';
 import 'package:eperumahan_bancian/screens/dashboard/model/dashboard_json_model.dart';
 import 'package:flutter/material.dart';
 
-class DashboardSection extends StatelessWidget {
+class DashboardSection extends StatefulWidget {
   final String miniTitle;
   final String title;
   final bool isLoading;
+  final bool showButton;
   final List<DashboardModel> data;
   const DashboardSection(
       {super.key,
       required this.isLoading,
       required this.data,
       required this.miniTitle,
+      this.showButton = false,
       required this.title});
 
   @override
+  State<DashboardSection> createState() => _DashboardSectionState();
+}
+
+class _DashboardSectionState extends State<DashboardSection> {
+  @override
   Widget build(BuildContext context) {
-    if (isLoading) {
+    if (widget.isLoading) {
       //Loading
       return cardWidget(children: [
         const Padding(
@@ -32,22 +40,25 @@ class DashboardSection extends StatelessWidget {
       ]);
     }
     //Loaded
-    if (data.isNotEmpty) {
+    if (widget.data.isNotEmpty) {
       //set limit 3
-      int listLen = data.length >= 3 ? 3 : data.length;
+      int listLen = widget.data.length >= 3 ? 3 : widget.data.length;
 
       return cardWidget(
           children: List.generate(listLen, (index) {
-        String? listTitle = data[index].housingProject?.desc;
-        String? listSubtitle = (data[index].visit?.isEmpty ?? true)
+        String? listTitle = widget.data[index].housingProject?.desc;
+        String? listSubtitle = (widget.data[index].visit?.isEmpty ?? true)
             ? "Bancian Pertama"
-            : data[index].visit?.first.remark;
-        String? listUnitNo = data[index].unit?.unitNo;
+            : widget.data[index].visit?.first.remark;
+        String? listUnitNo = widget.data[index].unit?.unitNo;
 
         log("this is unit no test ===> $listUnitNo");
 
-        return _dataTile(
-            title: listTitle, subtitle: listSubtitle, unitNo: listUnitNo);
+        return _dataTile(context,
+            data: widget.data[index],
+            title: listTitle,
+            subtitle: listSubtitle,
+            unitNo: listUnitNo);
       }));
     } else {
       //Empty
@@ -83,14 +94,14 @@ class DashboardSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    miniTitle,
+                    widget.miniTitle,
                     style: appTextStyle(
                         fontWeight: FontWeight.bold,
                         size: 14,
                         color: AppColors.dimmedPurple.color),
                   ),
                   Text(
-                    title,
+                    widget.title,
                     style: appTextStyle(
                         color: AppColors.primary.color,
                         size: 22,
@@ -106,12 +117,19 @@ class DashboardSection extends StatelessWidget {
     );
   }
 
-  ListTile _dataTile({
+  ListTile _dataTile(
+    BuildContext context, {
     required String? title,
     required String? subtitle,
     required String? unitNo,
+    required DashboardModel data,
   }) {
     return ListTile(
+      onTap: () {
+        DashboardDataView.show(context,
+            data: data, onPressed: widget.showButton ? () {} : null);
+      },
+      isThreeLine: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       tileColor: Colors.white,
       leading: Container(
@@ -123,9 +141,13 @@ class DashboardSection extends StatelessWidget {
         margin: const EdgeInsets.only(top: 4),
         child: const Icon(Icons.location_on),
       ),
-      title: Text(title ?? "-"),
-      subtitle: Text("${subtitle ?? "-"},${unitNo ?? "-"}"),
-      trailing: const Icon(Icons.chevron_right),
+      title: Text(
+        title ?? "-",
+        style: const TextStyle(overflow: TextOverflow.ellipsis),
+      ),
+      subtitle: Text("${unitNo ?? "-"}\n${subtitle ?? "-"}"),
+      trailing: const SizedBox(
+          height: double.infinity, child: Icon(Icons.chevron_right)),
     );
   }
 }

@@ -15,8 +15,15 @@ import 'qr_confirmation_dialog.dart';
 
 class QrScanScreen extends StatefulWidget {
   final bool isFromHome;
+  final bool isFirstBancian;
   final String? unitNumber;
-  const QrScanScreen({super.key, this.isFromHome = true, this.unitNumber});
+  final String? unitCode;
+  const QrScanScreen(
+      {super.key,
+      this.isFromHome = true,
+      this.unitNumber,
+      this.unitCode,
+      this.isFirstBancian = true});
 
   @override
   State<QrScanScreen> createState() => _QrScanScreenState();
@@ -140,7 +147,23 @@ class _QrScanScreenState extends State<QrScanScreen> {
                         // )
                       ],
                     )),
-              )
+              ),
+              Visibility(
+                  visible: widget.isFromHome == false &&
+                      widget.isFirstBancian == false,
+                  child: Positioned(
+                      bottom: constaint.maxHeight * 0.1,
+                      child: _roundedButton(
+                        title: "Bancian Manual",
+                        onTap: () async {
+                          controller?.pauseCamera();
+                          _qrBloc.add(ManualQrcode(
+                              unitCode: widget.unitCode ?? "",
+                              isFromHome: widget.isFromHome));
+                          // BancianInfosModal.show(context)
+                          //     .then((val) => controller?.resumeCamera());
+                        },
+                      )))
             ],
           );
         }),
@@ -148,29 +171,29 @@ class _QrScanScreenState extends State<QrScanScreen> {
     );
   }
 
-  // _roundedButton({required String title, required void Function() onTap}) {
-  //   return GestureDetector(
-  //     onTap: onTap,
-  //     child: Container(
-  //       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-  //       decoration: const ShapeDecoration(
-  //           shape: StadiumBorder(), color: Colors.black26),
-  //       child: Row(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           Text(
-  //             title,
-  //             style: const TextStyle(color: Colors.white),
-  //           ),
-  //           const Icon(
-  //             Icons.chevron_right,
-  //             color: Colors.white,
-  //           )
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  _roundedButton({required String title, required void Function() onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: const ShapeDecoration(
+            shape: StadiumBorder(), color: Colors.black26),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(color: Colors.white),
+            ),
+            const Icon(
+              Icons.chevron_right,
+              color: Colors.white,
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   Future _registerAlertDialog() async {
     controller?.pauseCamera();

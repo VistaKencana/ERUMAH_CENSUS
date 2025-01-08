@@ -20,6 +20,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     on<ScanQrcode>(_onScanQrcode);
     on<RegisterQrcode>(_onRegisterQrcode);
     on<UpdateQrcode>(_onUpdateQrcode);
+    on<ManualQrcode>(_onManualQrcode);
   }
 
   final repo = QrRepository();
@@ -83,6 +84,68 @@ class QrBloc extends Bloc<QrEvent, QrState> {
       emit(QrSuccess(data: residentData));
     } catch (e) {
       log.logError(tag: '_onScanQrcode', msg: e.toString());
+      if (e.toString().toLowerCase().contains("not found")) {
+        emit(QrNotFound(msg: e.toString()));
+      } else {
+        emit(QrError(msg: e.toString()));
+      }
+    } finally {
+      EasyLoading.dismiss();
+    }
+  }
+
+  _onManualQrcode(ManualQrcode event, Emitter<QrState> emit) async {
+    emit(QrLoading());
+    final unitCode = event.unitCode;
+    // if (qrCode.isEmpty) {
+    //   emit(const QrError(msg: "Failed to detect Qr Code"));
+    //   return;
+    // }
+    isFromHome = event.isFromHome;
+    if (isFromHome) clearPropertyData();
+
+    try {
+      // this.qrCode = qrCode;
+      //Fetch qr code data
+
+      log.logDebug(
+          tag: "_onManualQrcode",
+          msg: "Fetch cencus code for unitCode:${event.unitCode}");
+      final resp =
+          await repo.scanQrCode(code: unitCode, type: Searchtype.unitCode);
+      residentData = resp;
+
+      //If from home will compare with selected property
+      if (!isFromHome) {
+        if (residentData.unit!.no != selectedProperty.unitNo) {
+          String errMsg =
+              "QR diimbas dimiliki oleh unit ${residentData.unit!.no} yang tidak sama seperti yang dipilih";
+          emit(QrNotTally(msg: errMsg));
+          return;
+        }
+      }
+
+      //Get census code if not exist
+      if (residentData.censusCode == null || residentData.censusCode!.isEmpty) {
+        try {
+          log.logDebug(
+              tag: "_onManualQrcode",
+              msg: "Fetch cencus code for unitCode:${event.unitCode}");
+          final cencusCode =
+              await repoAppl.getCensusCode(unitCode: residentData.unit!.code!);
+          residentData = residentData.copyWith(censusCode: cencusCode);
+        } catch (e) {
+          emit(const QrError(msg: "Error on fetch census code"));
+          log.logError(
+              tag: "_onManualQrcode Fethc census code", msg: e.toString());
+          EasyLoading.dismiss();
+          return;
+        }
+      }
+
+      emit(QrSuccess(data: residentData));
+    } catch (e) {
+      log.logError(tag: '_onManualQrcode', msg: e.toString());
       if (e.toString().toLowerCase().contains("not found")) {
         emit(QrNotFound(msg: e.toString()));
       } else {
