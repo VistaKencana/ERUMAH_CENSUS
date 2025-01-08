@@ -191,20 +191,6 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                       ],
                     ),
                   ),
-
-                  _section("Cap Jari"),
-                  SectionContainer(
-                    border: Border.all(color: Colors.grey),
-                    padding: EdgeInsets.zero,
-                    margin: EdgeInsets.zero,
-                    child: ListTile(
-                      tileColor: Colors.white,
-                      leading: const Icon(Icons.fingerprint),
-                      title: const Text("Sahkan Cap Jari"),
-                      onTap: () => _go(const BancianFingerprint()),
-                    ),
-                  ),
-                  _gap(size: 14),
                   _section("Gambar"),
                   SectionContainer(
                     border: Border.all(color: Colors.grey),
@@ -248,6 +234,20 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                     ),
                   ),
                   _gap(size: 14),
+                  _section("Cap Jari"),
+                  SectionContainer(
+                    border: Border.all(color: Colors.grey),
+                    padding: EdgeInsets.zero,
+                    margin: EdgeInsets.zero,
+                    child: ListTile(
+                      tileColor: Colors.white,
+                      leading: const Icon(Icons.fingerprint),
+                      title: const Text("Sahkan Cap Jari"),
+                      onTap: () => _go(const BancianFingerprint()),
+                    ),
+                  ),
+                  _gap(size: 14),
+
                   _borangTile(
                       label: "Maklumat Penghuni",
                       screen: PenghuniForm(
