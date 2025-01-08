@@ -194,34 +194,6 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                       ],
                     ),
                   ),
-
-                  _section("Cap Jari"),
-                  SectionContainer(
-                    border: Border.all(color: Colors.grey),
-                    padding: EdgeInsets.zero,
-                    margin: EdgeInsets.zero,
-                    child: ListTile(
-                        tileColor: Colors.white,
-                        leading: const Icon(Icons.fingerprint),
-                        title: const Text("Sahkan Cap Jari"),
-                        trailing: Icon(
-                          isVerifyFP ? Icons.check_circle : Icons.warning,
-                          color: isVerifyFP ? Colors.green : Colors.amber,
-                        ),
-                        onTap: () {
-                          if (isVerifyFP) {
-                            CustomFlushbar.of(context)
-                                .showInfo(msg: "Mykad telah berjaya disahkan");
-                            return;
-                          }
-                          _go(BancianFingerprint(
-                            onVerifyFP: (val) {
-                              setState(() => isVerifyFP = val);
-                            },
-                          ));
-                        }),
-                  ),
-                  _gap(size: 14),
                   _section("Gambar"),
                   SectionContainer(
                     border: Border.all(color: Colors.grey),
@@ -263,6 +235,33 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                         }),
                       ),
                     ),
+                  ),
+                  _gap(size: 14),
+                  _section("Cap Jari"),
+                  SectionContainer(
+                    border: Border.all(color: Colors.grey),
+                    padding: EdgeInsets.zero,
+                    margin: EdgeInsets.zero,
+                    child: ListTile(
+                        tileColor: Colors.white,
+                        leading: const Icon(Icons.fingerprint),
+                        title: const Text("Sahkan Cap Jari"),
+                        trailing: Icon(
+                          isVerifyFP ? Icons.check_circle : Icons.warning,
+                          color: isVerifyFP ? Colors.green : Colors.amber,
+                        ),
+                        onTap: () {
+                          if (isVerifyFP) {
+                            CustomFlushbar.of(context)
+                                .showInfo(msg: "Mykad telah berjaya disahkan");
+                            return;
+                          }
+                          _go(BancianFingerprint(
+                            onVerifyFP: (val) {
+                              setState(() => isVerifyFP = val);
+                            },
+                          ));
+                        }),
                   ),
                   _gap(size: 14),
                   _borangTile(
