@@ -191,20 +191,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                       ],
                     ),
                   ),
-                  _borangTile(
-                      label: "Maklumat Penghuni",
-                      screen: PenghuniForm(
-                          isNewForm: widget.isNewForm,
-                          imgs: statusData.getFiles())),
-                  if (!_isNewForm())
-                    _borangTile(
-                        label: "Maklumat Pasangan",
-                        screen: const PasanganForm()),
-                  if (!_isNewForm())
-                    _borangTile(
-                        label: "Maklumat Anak & Tanggungan",
-                        screen: const TanggunganForm()),
-                  _gap(size: 20),
+
                   _section("Cap Jari"),
                   SectionContainer(
                     border: Border.all(color: Colors.grey),
@@ -217,44 +204,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                       onTap: () => _go(const BancianFingerprint()),
                     ),
                   ),
-                  // _gap(),
-                  // _section("Status Bancian"),
-                  // CustomTextField(
-                  //   hintText: "Pilih status",
-                  //   readOnly: true,
-                  //   controller: statusCtrl,
-                  //   validator: (value) {
-                  //     if (value == null || value.isEmpty) return '';
-                  //     return null;
-                  //   },
-                  //   suffixIcon: Icons.arrow_drop_down,
-                  //   onTap: () {
-                  //     final ddR = context.read<DropdownProvider>();
-                  //     ddR.fetchDropdownData(DdType.censusStatus).then((val) {
-                  //       CustomDropdownSheet(
-                  //         label: "Pilih status",
-                  //         items: ddR.censusStatusList,
-                  //         onFindGroupValue: (data) {
-                  //           return data.where((val) {
-                  //             var a = val.code?.contains(
-                  //                     statusData.statusCode ?? "*_*") ??
-                  //                 false;
-                  //             return a;
-                  //           }).firstOrNull;
-                  //         },
-                  //         getTitle: (data) => data.desc ?? "-",
-                  //         onChange: (val) {
-                  //           if (val == null) return;
-                  //           statusData =
-                  //               statusData.copyWith(statusCode: val.code);
-                  //           statusCtrl.text = val.desc ?? "";
-                  //         },
-                  //         // ignore: use_build_context_synchronously
-                  //       ).show(context);
-                  //     });
-                  //   },
-                  // ),
-                  _gap(),
+                  _gap(size: 14),
                   _section("Gambar"),
                   SectionContainer(
                     border: Border.all(color: Colors.grey),
@@ -297,7 +247,60 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                       ),
                     ),
                   ),
-                  _gap(),
+                  _gap(size: 14),
+                  _borangTile(
+                      label: "Maklumat Penghuni",
+                      screen: PenghuniForm(
+                          isNewForm: widget.isNewForm,
+                          imgs: statusData.getFiles())),
+                  if (!_isNewForm())
+                    _borangTile(
+                        label: "Maklumat Pasangan",
+                        screen: const PasanganForm()),
+                  if (!_isNewForm())
+                    _borangTile(
+                        label: "Maklumat Anak & Tanggungan",
+                        screen: const TanggunganForm()),
+                  _gap(size: 20),
+
+                  // _gap(),
+                  // _section("Status Bancian"),
+                  // CustomTextField(
+                  //   hintText: "Pilih status",
+                  //   readOnly: true,
+                  //   controller: statusCtrl,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) return '';
+                  //     return null;
+                  //   },
+                  //   suffixIcon: Icons.arrow_drop_down,
+                  //   onTap: () {
+                  //     final ddR = context.read<DropdownProvider>();
+                  //     ddR.fetchDropdownData(DdType.censusStatus).then((val) {
+                  //       CustomDropdownSheet(
+                  //         label: "Pilih status",
+                  //         items: ddR.censusStatusList,
+                  //         onFindGroupValue: (data) {
+                  //           return data.where((val) {
+                  //             var a = val.code?.contains(
+                  //                     statusData.statusCode ?? "*_*") ??
+                  //                 false;
+                  //             return a;
+                  //           }).firstOrNull;
+                  //         },
+                  //         getTitle: (data) => data.desc ?? "-",
+                  //         onChange: (val) {
+                  //           if (val == null) return;
+                  //           statusData =
+                  //               statusData.copyWith(statusCode: val.code);
+                  //           statusCtrl.text = val.desc ?? "";
+                  //         },
+                  //         // ignore: use_build_context_synchronously
+                  //       ).show(context);
+                  //     });
+                  //   },
+                  // ),
+
                   _section("Catatan"),
                   CustomFormField(
                     maxLines: 3,
