@@ -73,11 +73,23 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 12, top: 28, bottom: 10),
-                  child: Text(
-                    'Info Unit Bancian',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 12, right: 12, top: 28, bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Info Unit Bancian',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 24),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            showReportDialog();
+                          },
+                          child: const Icon(Icons.error_outline_outlined))
+                    ],
                   ),
                 ),
                 Padding(
@@ -181,5 +193,58 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
             remarks: "-"),
       )
     ]);
+  }
+
+  void showReportDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          title: const Text(
+            'Adakah Pemilik Tidak Berada di Rumah?',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: const Text(
+            'Jika ya, kami akan menghantar pautan untuk tindakan lanjut.',
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(
+                      context); // Action for "Yes, I don’t want to learn"
+                },
+                child: const Text('Ya, Hantar Pautan'),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
+                ),
+                onPressed: () {
+                  Navigator.pop(context); // Action for "Cancel"
+                },
+                child: const Text('Batal'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
