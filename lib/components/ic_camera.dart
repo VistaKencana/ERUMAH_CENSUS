@@ -33,13 +33,17 @@ class _IcCameraState extends State<IcCamera> {
           padding: 30,
         ),
         onTakePicture: (img) async {
-          final croppedImg = cropCenterRectangle(
-            img,
-            context,
-            containerWidthRatio: 0.7,
-            containerHeightRatio: 0.112,
-          );
-          // final croppedImg = cropImage(img, 2.3, 50);
+          //>>> OPPO PHONE RESOLUTION CROP<<<<
+          // final croppedImg = cropCenterRectangle(
+          //   img,
+          //   context,
+          //   containerWidthRatio: 0.7,
+          //   containerHeightRatio: 0.112,
+          // );
+
+          //>>> DEVICE V11 RESOLUTION CROP<<<<
+          final croppedImg = cropImage(img, 2.3, 50);
+          //-----------------------------------
           final result = await imageCropper(croppedImg);
           widget.onTakePicture(result);
         },
