@@ -6,6 +6,7 @@ import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
+import 'package:eperumahan_bancian/components/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -159,10 +160,16 @@ class _TanggunganModalState extends State<TanggunganModal> {
                                   children: [
                                     _dropdownHubungan(),
                                     _textField(
-                                        title: 'No. Kad Pengenalan',
-                                        controller: icNoCtrl,
-                                        keyboardType: TextInputType.number,
-                                        readOnly: _isReadOnly()),
+                                      title: 'No. Kad Pengenalan',
+                                      controller: icNoCtrl,
+                                      keyboardType: TextInputType.number,
+                                      readOnly: _isReadOnly(),
+                                      validator: (value) {
+                                        return Validator.validatePhoneNumber(
+                                            value,
+                                            length: 12);
+                                      },
+                                    ),
                                     // _textField(
                                     //   title: 'Emel',
                                     //   controller: emelCtrl,
@@ -309,7 +316,8 @@ class _TanggunganModalState extends State<TanggunganModal> {
       void Function(String)? onChanged,
       double? width,
       void Function()? onTap,
-      bool isDropdown = false}) {
+      bool isDropdown = false,
+      String? Function(String?)? validator}) {
     if (isDropdown) {
       return SizedBox(
           width: width ?? MediaQuery.sizeOf(context).width * 0.4,
@@ -349,10 +357,15 @@ class _TanggunganModalState extends State<TanggunganModal> {
         keyboardType: keyboardType,
         validator: isMandatory
             ? (value) {
+                if (validator != null) return validator(value);
                 if (value == null || value.isEmpty) return '';
+
                 return null;
               }
-            : null,
+            : (value) {
+                if (validator != null) return validator(value);
+                return null;
+              },
         readOnly: readOnly,
         hintText: hintText,
         onChanged: onChanged,

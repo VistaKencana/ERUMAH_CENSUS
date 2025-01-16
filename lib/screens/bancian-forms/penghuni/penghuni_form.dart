@@ -9,6 +9,7 @@ import 'package:eperumahan_bancian/components/file_display.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
+import 'package:eperumahan_bancian/components/validator.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/owner_input_model.dart';
@@ -128,6 +129,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
       },
       child: Form(
         key: formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: BgImage(
           child: Scaffold(
             backgroundColor: Colors.transparent,
@@ -233,25 +235,38 @@ class _PenghuniFormState extends State<PenghuniForm> {
                                     keyboardType: TextInputType.number,
                                     controller: bilIsiRumahCtrl),
                                 _textField(
-                                    title: 'No. Kad Pengenalan',
-                                    controller: icNoCtrl,
-                                    isMandatory: _isNewForm(),
-                                    keyboardType: TextInputType.number,
-                                    readOnly: _isReadOnly()),
+                                  title: 'No. Kad Pengenalan',
+                                  controller: icNoCtrl,
+                                  isMandatory: _isNewForm(),
+                                  keyboardType: TextInputType.number,
+                                  readOnly: _isReadOnly(),
+                                  validator: (value) {
+                                    return Validator.validatePhoneNumber(value,
+                                        length: 12);
+                                  },
+                                ),
                                 _textField(
                                   title: 'Emel',
                                   controller: emelCtrl,
                                   keyboardType: TextInputType.emailAddress,
+                                  validator: (value) {
+                                    return Validator.validateEmail(value);
+                                  },
                                 ),
                                 _textField(
                                     title: 'Umur(Tahun)',
                                     controller: umurCtrl,
+                                    keyboardType: TextInputType.number,
                                     readOnly: _isReadOnly()),
                                 _textField(
                                   title: 'No Telefon',
                                   controller: noTelCtrl,
                                   keyboardType: TextInputType.phone,
                                   isMandatory: _isNewForm(),
+                                  validator: (value) {
+                                    return Validator.validatePhoneNumber(value,
+                                        length: 12);
+                                  },
                                 ),
                                 _dropdownJantina(),
                                 _dropdownBangsa(),
@@ -405,7 +420,8 @@ class _PenghuniFormState extends State<PenghuniForm> {
       double? width,
       TextInputType keyboardType = TextInputType.text,
       void Function()? onTap,
-      bool isDropdown = false}) {
+      bool isDropdown = false,
+      String? Function(String?)? validator}) {
     if (isDropdown) {
       return SizedBox(
           width: width ?? MediaQuery.sizeOf(context).width * 0.4,
@@ -420,7 +436,9 @@ class _PenghuniFormState extends State<PenghuniForm> {
             isMandatory: isMandatory,
             validator: isMandatory
                 ? (value) {
+                    if (validator != null) return validator(value);
                     if (value == null || value.isEmpty) return '';
+
                     return null;
                   }
                 : null,
@@ -448,10 +466,15 @@ class _PenghuniFormState extends State<PenghuniForm> {
         onChanged: onChanged, isMandatory: isMandatory,
         validator: isMandatory
             ? (value) {
+                if (validator != null) return validator(value);
                 if (value == null || value.isEmpty) return '';
+
                 return null;
               }
-            : null,
+            : (value) {
+                if (validator != null) return validator(value);
+                return null;
+              },
         // initialValue: _isNewForm() ? "" : initialValue,
       ),
     );

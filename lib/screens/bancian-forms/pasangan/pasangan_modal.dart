@@ -6,6 +6,7 @@ import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/switch_modal.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
+import 'package:eperumahan_bancian/components/validator.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/spouse_input_model.dart';
@@ -260,15 +261,24 @@ class _PasanganModalState extends State<PasanganModal> {
                       //   keyboardType: TextInputType.emailAddress,
                       // ),
                       _textField(
-                          title: 'No. Kad Pengenalan',
-                          controller: icNoCtrl,
-                          keyboardType: TextInputType.number,
-                          isMandatory: _isNewForm(),
-                          readOnly: _isReadOnly()),
+                        title: 'No. Kad Pengenalan',
+                        controller: icNoCtrl,
+                        keyboardType: TextInputType.number,
+                        isMandatory: _isNewForm(),
+                        readOnly: _isReadOnly(),
+                        validator: (value) {
+                          return Validator.validatePhoneNumber(value,
+                              length: 12);
+                        },
+                      ),
                       _textField(
                         title: 'No Telefon',
                         keyboardType: TextInputType.phone,
                         controller: noTelCtrl,
+                        validator: (value) {
+                          return Validator.validatePhoneNumber(value,
+                              length: 12);
+                        },
                       ),
                       _textField(
                           title: 'Umur(Tahun)',
@@ -359,7 +369,8 @@ class _PasanganModalState extends State<PasanganModal> {
       double? width,
       TextInputType keyboardType = TextInputType.text,
       void Function()? onTap,
-      bool isDropdown = false}) {
+      bool isDropdown = false,
+      String? Function(String?)? validator}) {
     if (isDropdown) {
       return SizedBox(
           width: width ?? MediaQuery.sizeOf(context).width * 0.4,
@@ -403,10 +414,15 @@ class _PasanganModalState extends State<PasanganModal> {
         isMandatory: isMandatory,
         validator: isMandatory
             ? (value) {
+                if (validator != null) return validator(value);
                 if (value == null || value.isEmpty) return '';
+
                 return null;
               }
-            : null,
+            : (value) {
+                if (validator != null) return validator(value);
+                return null;
+              },
         // initialValue: _isNewForm() ? "" : initialValue,
       ),
     );
