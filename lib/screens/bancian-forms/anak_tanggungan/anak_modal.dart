@@ -5,6 +5,7 @@ import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/kad_pengenalan_tile.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
+import 'package:eperumahan_bancian/components/validator.dart';
 import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/bloc/anak_tanggungan_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/dependant_input_model.dart';
@@ -157,11 +158,17 @@ class _AnakModalState extends State<AnakModal> {
                                   children: [
                                     if (!_isEdit()) _dropdownHubungan(),
                                     _textField(
-                                        title: 'No. Kad Pengenalan',
-                                        controller: icNoCtrl,
-                                        keyboardType: TextInputType.number,
-                                        isMandatory: _isEdit(),
-                                        readOnly: _isReadOnly()),
+                                      title: 'No. Kad Pengenalan',
+                                      controller: icNoCtrl,
+                                      keyboardType: TextInputType.number,
+                                      isMandatory: _isEdit(),
+                                      readOnly: _isReadOnly(),
+                                      validator: (value) {
+                                        return Validator.validatePhoneNumber(
+                                            value,
+                                            length: 12);
+                                      },
+                                    ),
                                     // _textField(
                                     //   title: 'Emel',
                                     //   controller: emelCtrl,
@@ -308,7 +315,8 @@ class _AnakModalState extends State<AnakModal> {
       double? width,
       TextInputType keyboardType = TextInputType.text,
       void Function()? onTap,
-      bool isDropdown = false}) {
+      bool isDropdown = false,
+      String? Function(String?)? validator}) {
     if (isDropdown) {
       return SizedBox(
           width: width ?? MediaQuery.sizeOf(context).width * 0.4,
@@ -348,10 +356,15 @@ class _AnakModalState extends State<AnakModal> {
         keyboardType: keyboardType,
         validator: isMandatory
             ? (value) {
+                if (validator != null) return validator(value);
                 if (value == null || value.isEmpty) return '';
+
                 return null;
               }
-            : null,
+            : (value) {
+                if (validator != null) return validator(value);
+                return null;
+              },
         readOnly: readOnly,
         hintText: hintText,
         onChanged: onChanged,

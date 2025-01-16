@@ -114,6 +114,11 @@ class CustomFormField extends StatelessWidget {
                 borderSide: BorderSide(
                     color: readOnly ? const Color(0xFFA4A8AD) : Colors.black,
                     width: 2)),
+            errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                    color: readOnly ? const Color(0xFFA4A8AD) : Colors.red,
+                    width: 2)),
             contentPadding: contentPadding ??
                 const EdgeInsets.only(left: 12.0, right: 12.0),
             labelStyle: labelStyle ?? const TextStyle(fontSize: 16),

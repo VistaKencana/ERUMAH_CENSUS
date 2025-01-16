@@ -6,10 +6,10 @@ class Validator {
     return null;
   }
 
-  static String? validateEmail(String? value, {String? err}) {
+  static String? validateEmail(String? value, {String err = ""}) {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (value == null || value.isEmpty) {
-      return err ?? 'Email is required';
+      return err;
     }
     if (!emailRegex.hasMatch(value)) {
       return 'Enter a valid email';
@@ -18,12 +18,23 @@ class Validator {
   }
 
   static String? validatePassword(String? value,
-      {required int length, String? err}) {
+      {required int length, String err = ""}) {
     if (value == null || value.isEmpty) {
-      return err ?? 'Password is required';
+      return err;
     }
     if (value.length < length) {
       return 'Password must be at least $length characters';
+    }
+    return null;
+  }
+
+  static String? validatePhoneNumber(String? value,
+      {required int length, String err = ""}) {
+    if (value == null || value.isEmpty) {
+      return err;
+    }
+    if (value.length < length) {
+      return 'Phone Number is Invalid';
     }
     return null;
   }
