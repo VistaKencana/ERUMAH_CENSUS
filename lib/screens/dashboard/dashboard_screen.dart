@@ -83,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           icon: Icons.check_circle_rounded,
                           color: const Color(0xFF28C194)),
                       _item(
-                          title: "KIV",
+                          title: "Dalam Proses",
                           val: "28",
                           icon: Icons.error_rounded,
                           color: Colors.amber),
@@ -95,7 +95,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 DashboardSection(
                     isLoading: watchDashboard.latestLoading,
                     data: watchDashboard.latestList,
-                    miniTitle: "AKTIVITI",
+                    // miniTitle: "AKTIVITI",
                     title: "Aktiviti terkini"),
 
                 SizedBox(height: constraint.maxHeight * .02),
@@ -103,7 +103,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 DashboardSection(
                   isLoading: watchDashboard.incompleteLoading,
                   data: watchDashboard.incompleteList,
-                  miniTitle: "SUSULAN",
+                  // miniTitle: "SUSULAN",
                   title: "Untuk susulan",
                   showButton: true,
                 ),

@@ -47,7 +47,7 @@ class DashboardHeader extends StatelessWidget {
                                 onTap: () => homePageController.jumpToPage(2),
                                 decoration: const InputDecoration(
                                     fillColor: Colors.white,
-                                    hintText: "Carian kawasan",
+                                    hintText: "Carian Perumahan",
                                     hintStyle: TextStyle(color: Colors.grey),
                                     border: InputBorder.none,
                                     focusedBorder: InputBorder.none),

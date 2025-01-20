@@ -3,7 +3,9 @@ import 'dart:typed_data';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_image_preview.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_main_screen.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/unit_kosong/unit_kosong_main_screen.dart';
 import 'package:eperumahan_bancian/services/camera_service/screenshot_camera_widget.dart';
+import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
@@ -50,8 +52,16 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
         maxImage: maxImage,
         controller: _controller,
         onNext: (images) {
-          context.read<BancianBloc>().setImages(imgs: images);
-          _goReplace(const BancianMainScreen());
+          final bancianBloc = context.read<BancianBloc>();
+          bancianBloc.setImages(imgs: images);
+          final screen = getScreen(bancianBloc.houseStatus);
+          if (screen == null) {
+            CustomFlushbar.of(context).showWarning(
+                msg:
+                    "Status unit : ${bancianBloc.unitData.unit?.status ?? "Tidak wujud"} comming soon!");
+            return;
+          }
+          _goReplace(screen);
         },
         onTapImage: (image, index) {
           BancianImagePreview(
@@ -66,6 +76,24 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
         },
       ),
     );
+  }
+
+  Widget? getScreen(String stats) {
+    final map = {
+      //--- Unit Bancian
+      "UNS001": const BancianMainScreen(),
+      "UNS002": const BancianMainScreen(),
+
+      //--- Unit Kosong
+      "UNS003": const UnitKosongMainScreen(),
+      "UNS004": const UnitKosongMainScreen(),
+      "UNS005": const UnitKosongMainScreen(),
+      "UNS006": const UnitKosongMainScreen(),
+      "UNS007": const UnitKosongMainScreen(),
+      "UNS008": const UnitKosongMainScreen(),
+    };
+
+    return map[stats];
   }
 
   _goReplace(Widget screen) => Navigator.pushReplacement(context,

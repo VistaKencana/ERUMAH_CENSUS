@@ -6,7 +6,7 @@ import 'package:eperumahan_bancian/screens/dashboard/model/dashboard_json_model.
 import 'package:flutter/material.dart';
 
 class DashboardSection extends StatefulWidget {
-  final String miniTitle;
+  final String? miniTitle;
   final String title;
   final bool isLoading;
   final bool showButton;
@@ -15,7 +15,7 @@ class DashboardSection extends StatefulWidget {
       {super.key,
       required this.isLoading,
       required this.data,
-      required this.miniTitle,
+      this.miniTitle,
       this.showButton = false,
       required this.title});
 
@@ -93,13 +93,14 @@ class _DashboardSectionState extends State<DashboardSection> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.miniTitle,
-                    style: appTextStyle(
-                        fontWeight: FontWeight.bold,
-                        size: 14,
-                        color: AppColors.dimmedPurple.color),
-                  ),
+                  if (widget.miniTitle != null)
+                    Text(
+                      widget.miniTitle ?? "",
+                      style: appTextStyle(
+                          fontWeight: FontWeight.bold,
+                          size: 14,
+                          color: AppColors.dimmedPurple.color),
+                    ),
                   Text(
                     widget.title,
                     style: appTextStyle(
