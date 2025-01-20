@@ -49,6 +49,14 @@ class StatusInputModel {
     return images;
   }
 
+  void addImages(Uint8List img) {
+    images.add(img);
+  }
+
+  void removeImages(int index) {
+    images.removeAt(index);
+  }
+
   // fromJson method
   factory StatusInputModel.fromJson(Map<String, dynamic> json) {
     return StatusInputModel(

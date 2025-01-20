@@ -68,7 +68,7 @@ class _DashboardDataViewState extends State<DashboardDataView> {
                           style: const TextStyle(
                               fontSize: 22, fontWeight: FontWeight.bold),
                         ),
-                        const Text("Log Masuk"),
+                        Text(widget.data.unit?.unitNo ?? "-"),
                         SizedBox(
                             height: MediaQuery.sizeOf(context).height * 0.04),
                         Container(

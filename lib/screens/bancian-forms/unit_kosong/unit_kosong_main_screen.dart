@@ -1,41 +1,36 @@
 import 'package:eperumahan_bancian/components/bg_image.dart';
+import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
+import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/section_container.dart';
+import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/anak_tanggungan/tanggungan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_add_proof.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bancian_image_preview.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_result.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/status_input_model.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/bloc/penghuni_bloc.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/penghuni_form.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/subrent/subrent_main_screen.dart';
+import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../../components/borang_listtile.dart';
-import '../../components/bottombar_button.dart';
-import '../../components/custom_appbar.dart';
-import '../../config/constants/app_colors.dart';
-import '../../services/flushbar/custom_flushbar.dart';
-import 'bancian_image_preview.dart';
-
-class BancianMainScreen extends StatefulWidget {
+class UnitKosongMainScreen extends StatefulWidget {
   final bool? isNewForm;
-  const BancianMainScreen({super.key, this.isNewForm});
+  const UnitKosongMainScreen({super.key, this.isNewForm});
 
   @override
-  State<BancianMainScreen> createState() => _BancianMainScreenState();
+  State<UnitKosongMainScreen> createState() => _UnitKosongMainScreenState();
 }
 
-class _BancianMainScreenState extends State<BancianMainScreen> {
+class _UnitKosongMainScreenState extends State<UnitKosongMainScreen> {
   // late DropdownBloc _dropdownBloc;
   late BancianBloc _bancianBloc;
   late StatusInputModel statusData;
@@ -105,7 +100,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
           child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: CustomAppBar(
-          title: "Maklumat Penghuni",
+          title: "Maklumat Unit Kosong",
           centerTitle: false,
           onPressedBack: _onPop,
           actions: [
@@ -289,20 +284,20 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                   ),
                   _gap(size: 14),
 
-                  _borangTile(
-                      label: "Maklumat Penghuni",
-                      screen: PenghuniForm(
-                          isNewForm: widget.isNewForm,
-                          imgs: statusData.getFiles())),
-                  if (!_isNewForm())
-                    _borangTile(
-                        label: "Maklumat Pasangan",
-                        screen: const PasanganForm()),
-                  if (!_isNewForm())
-                    _borangTile(
-                        label: "Maklumat Anak & Tanggungan",
-                        screen: const TanggunganForm()),
-                  _gap(size: 20),
+                  // _borangTile(
+                  //     label: "Maklumat Penghuni",
+                  //     screen: PenghuniForm(
+                  //         isNewForm: widget.isNewForm,
+                  //         imgs: statusData.getFiles())),
+                  // if (!_isNewForm())
+                  //   _borangTile(
+                  //       label: "Maklumat Pasangan",
+                  //       screen: const PasanganForm()),
+                  // if (!_isNewForm())
+                  //   _borangTile(
+                  //       label: "Maklumat Anak & Tanggungan",
+                  //       screen: const TanggunganForm()),
+                  // _gap(size: 20),
 
                   // _gap(),
                   // _section("Status Bancian"),
@@ -425,20 +420,20 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
     return SizedBox(height: size);
   }
 
-  _borangTile({required String label, required Widget screen}) {
-    return Column(
-      children: [
-        BorangTile(
-          title: "Borang",
-          subtitle: label,
-          onTap: () {
-            _go(screen);
-          },
-        ),
-        _gap(),
-      ],
-    );
-  }
+  // _borangTile({required String label, required Widget screen}) {
+  //   return Column(
+  //     children: [
+  //       BorangTile(
+  //         title: "Borang",
+  //         subtitle: label,
+  //         onTap: () {
+  //           _go(screen);
+  //         },
+  //       ),
+  //       _gap(),
+  //     ],
+  //   );
+  // }
 
   Widget _section(String title) {
     return Text(
