@@ -52,22 +52,21 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
         },
         floor: propertyWatch.selectedFloor.floorNo ?? "-",
         title: _propertyBloc.selectedArea.desc ?? "-",
-        subtitle:
-            "${_propertyBloc.selectedZone.desc} • Blok : ${_propertyBloc.selectedBlock.blockNo}",
+        subtitle: " Blok : ${_propertyBloc.selectedBlock.blockNo}",
         centerTitle: false,
         foregroundColor: AppColors.primary.color,
       ),
       body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 12, top: 20),
-            child: Text(
-              "Info Perumahan Bancian",
-              style: appTextStyle(
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 12, top: 20),
+          //   child: Text(
+          //     "Info Perumahan Bancian",
+          //     style: appTextStyle(
+          //       fontWeight: FontWeight.w400,
+          //     ),
+          //   ),
+          // ),
           // Row(
           //   children: [
           //     _infoContainer(val: info[4].value, title: info[4].title),

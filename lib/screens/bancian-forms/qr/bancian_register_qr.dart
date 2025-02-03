@@ -106,7 +106,16 @@ class _BancianRegisterQrState extends State<BancianRegisterQr> {
                   EasyLoading.show();
                 } else if (state is QrRegSuccess) {
                   // ignore: use_build_context_synchronously
-                  EasyLoading.dismiss().then((val) => Navigator.pop(context));
+                  EasyLoading.dismiss()
+                      // ignore: use_build_context_synchronously
+                      .then((val) => Navigator.pop(context))
+                      .then((val) {
+                    // ignore: use_build_context_synchronously
+                    CustomFlushbar.of(context).showSuccess(
+                        msg:
+                            "QR berjaya didaftar, sila imbas qr semula untuk memulakan bancian",
+                        duration: const Duration(seconds: 3));
+                  });
                 } else if (state is QrRegError) {
                   EasyLoading.dismiss();
                   CustomFlushbar.of(context).showFailed(
