@@ -1,9 +1,23 @@
 import 'dart:developer';
 
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/data/api/repositories/qr_repository.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bancian_proof_camera.dart';
 import 'package:eperumahan_bancian/screens/dashboard/dashboard_data_view.dart';
 import 'package:eperumahan_bancian/screens/dashboard/model/dashboard_json_model.dart';
+import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+
+import '../../data/hive-manager/repository/qr_navigation_pref.dart';
+import '../bancian-forms/anak_tanggungan/bloc/anak_tanggungan_bloc.dart';
+import '../bancian-forms/bloc/bancian_bloc.dart';
+import '../bancian-forms/pasangan/bloc/pasangan_bloc.dart';
+import '../bancian-forms/penghuni/bloc/penghuni_bloc.dart';
+import '../bancian-forms/subrent/provider/subrent_provider.dart';
 
 class DashboardSection extends StatefulWidget {
   final String? miniTitle;
@@ -24,6 +38,25 @@ class DashboardSection extends StatefulWidget {
 }
 
 class _DashboardSectionState extends State<DashboardSection> {
+  String currValue = "Bancian Biasa";
+  late BancianBloc _bancianBloc;
+  late PenghuniBloc _penghuniBloc;
+  late PasanganBloc _pasanganBloc;
+  late AnakTanggunganBloc _anakTanggunganBloc;
+  late SubrentProvider subrentProvider;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _bancianBloc = BlocProvider.of<BancianBloc>(context, listen: false);
+    _penghuniBloc = BlocProvider.of<PenghuniBloc>(context, listen: false);
+    _pasanganBloc = BlocProvider.of<PasanganBloc>(context, listen: false);
+    _anakTanggunganBloc =
+        BlocProvider.of<AnakTanggunganBloc>(context, listen: false);
+    subrentProvider = Provider.of<SubrentProvider>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.isLoading) {
@@ -128,7 +161,46 @@ class _DashboardSectionState extends State<DashboardSection> {
     return ListTile(
       onTap: () {
         DashboardDataView.show(context,
-            data: data, onPressed: widget.showButton ? () {} : null);
+            data: data,
+            onPressed: widget.showButton
+                ? () async {
+                    QrNavigationPref.setFromHome(val: true);
+                    String? censusCode = data.censusCode;
+                    if (censusCode == null) {
+                      CustomFlushbar.of(context).showWarning(
+                          msg:
+                              "Bancian Dibenarkan Untuk Bancian ke-2 dan ke atas akibat ralat sistem.");
+                      return;
+                    }
+                    EasyLoading.show();
+                    try {
+                      final residentData = await QrRepository().scanQrCode(
+                          code: data.unit?.code ?? "",
+                          type: Searchtype.unitCode);
+
+                      _bancianBloc.add(SetBancianData(
+                          data: residentData, censusCode: censusCode));
+                      _penghuniBloc.add(SetPenghuniData(
+                          data: residentData, censusCode: censusCode));
+                      _pasanganBloc.add(SetPasanganData(
+                          data: residentData, censusCode: censusCode));
+                      _anakTanggunganBloc.add(SetAnakTanggungData(
+                          data: residentData, censusCode: censusCode));
+                      Navigator.push(
+                          // ignore: use_build_context_synchronously
+                          context,
+                          PageTransition(
+                              child: const BancianProofCamera(),
+                              type: PageTransitionType.rightToLeft));
+                      subrentProvider.clearListSUbrent();
+                    } catch (e) {
+                      // ignore: use_build_context_synchronously
+                      CustomFlushbar.of(context).showWarning(msg: e.toString());
+                    } finally {
+                      EasyLoading.dismiss();
+                    }
+                  }
+                : null);
       },
       isThreeLine: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),

@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import '../../config/constants/app_colors.dart';
 
 class BancianInfosModal extends StatefulWidget {
   const BancianInfosModal({super.key});
@@ -103,18 +102,18 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
                   ),
                 ),
                 LayoutBuilder(builder: (context, constraint) {
-                  final cWidth = constraint.maxWidth;
+                  // final cWidth = constraint.maxWidth;
                   return Stack(
                     children: [
-                      Positioned(
-                        left: cWidth * 0.04,
-                        top: 23,
-                        bottom: 23,
-                        child: VerticalDivider(
-                          width: 10,
-                          color: AppColors.darkGrey.color,
-                        ),
-                      ),
+                      // Positioned(
+                      //   left: cWidth * 0.04,
+                      //   top: 23,
+                      //   bottom: 23,
+                      //   child: VerticalDivider(
+                      //     width: 10,
+                      //     color: AppColors.darkGrey.color,
+                      //   ),
+                      // ),
                       _visitsData()
                     ],
                   );

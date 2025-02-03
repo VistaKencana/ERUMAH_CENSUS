@@ -178,6 +178,9 @@ class _DashboardDataViewState extends State<DashboardDataView> {
                                 height: 50,
                                 child: ElevatedButton(
                                     onPressed: () {
+                                      if (widget.onPressed != null) {
+                                        widget.onPressed!();
+                                      }
                                       FocusScope.of(context).unfocus();
                                     },
                                     child: const Text("Banci"))),

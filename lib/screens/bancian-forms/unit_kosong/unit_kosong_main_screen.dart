@@ -9,7 +9,6 @@ import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_add_proof.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_image_preview.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_result.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
@@ -270,19 +269,19 @@ class _UnitKosongMainScreenState extends State<UnitKosongMainScreen> {
                     ),
                   ),
                   _gap(size: 14),
-                  _section("Cap Jari"),
-                  SectionContainer(
-                    border: Border.all(color: Colors.grey),
-                    padding: EdgeInsets.zero,
-                    margin: EdgeInsets.zero,
-                    child: ListTile(
-                      tileColor: Colors.white,
-                      leading: const Icon(Icons.fingerprint),
-                      title: const Text("Sahkan Cap Jari"),
-                      onTap: () => _go(const BancianFingerprint()),
-                    ),
-                  ),
-                  _gap(size: 14),
+                  // _section("Cap Jari"),
+                  // SectionContainer(
+                  //   border: Border.all(color: Colors.grey),
+                  //   padding: EdgeInsets.zero,
+                  //   margin: EdgeInsets.zero,
+                  //   child: ListTile(
+                  //     tileColor: Colors.white,
+                  //     leading: const Icon(Icons.fingerprint),
+                  //     title: const Text("Sahkan Cap Jari"),
+                  //     onTap: () => _go(const BancianFingerprint()),
+                  //   ),
+                  // ),
+                  // _gap(size: 14),
 
                   // _borangTile(
                   //     label: "Maklumat Penghuni",
