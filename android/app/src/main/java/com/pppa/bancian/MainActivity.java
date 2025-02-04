@@ -1,4 +1,4 @@
-package com.securemetric.myidreader;
+package com.pppa.bancian;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -60,7 +60,8 @@ public class MainActivity extends FlutterActivity implements MyIDListener, MyIDP
                         case "myKadSDK":
                             Boolean args = call.argument("usingFP");
                             usingFP = (args != null) ? args : false;
-                            startMyKadSDK();
+                            String lesen = call.argument("license");
+                            startMyKadSDK(lesen);
                             result.success(null);
                             break;
                         case "turnOnFP": {
@@ -155,7 +156,7 @@ public class MainActivity extends FlutterActivity implements MyIDListener, MyIDP
         }
     }
 
-    private void startMyKadSDK() {
+    private void startMyKadSDK(String lesen) {
         if (mReaderManager != null) {
             String msg = "MyKad Already Initialize";
             Log.d(TAG, msg);
@@ -169,7 +170,10 @@ public class MainActivity extends FlutterActivity implements MyIDListener, MyIDP
         // Set implementation of device filter to filter out devices.
         mReaderManager.setDeviceFilter(mDeviceFilter);
         try {
-            String license = "eyJ2ZXJzaW9uIjoxLCJwYXlsb2FkIjoiNlVDaG5rVHZoZkt6b1FvZUVoWmIzUnEvaWVqak5ydUM5VmdmZ2VjdVFTejc5TXRtQ1VGS1pHZWJ2OXVmZnQ2MnJ3L1R4eWNVd0d1UTJVMXNwYW13WWxCSGQwVG9yS0I3dHE2UlVaQU5RMGo0d2NuMVhNSXBNaW1kNXc5WGlLWGtjU0FRT3RCdEZJMFdkek1KTm9xZlRKaVVNbjJlU3d0Yy9sUFdHYlY1cHN0UWhGM1l4bWxWZlRPWXQ1MWpZSE5NIiwic2lnbmF0dXJlIjoiTUVVQ0lRQ3R6UmRMc2tWcUdDYTBJVTdYdjBjNDIyRFV2U25rOXVwalk4QVorUi9kRWdJZ1IwSVRWOVVzV29yUTZOMGxOOHp3bTZ6anM2c2lwSXVnejBUL0kxdzdaSms9IiwiY2hhbGxhbmdlX2NvZGUiOiJuRGFsTFhsYzlLIn0=";
+//            String license = "eyJ2ZXJzaW9uIjoyLCJjb2RlIjoxMDF9.eyJpYXQiOjE3Mzg2Mjk0MTYsImNoYWxsYW5nZV9jb2RlIjoiYm43dDZrVmFCSCIsImNpcGhlciI6IlltSCtmSnhVckYvMUxHaVZ4Z2c3ZzQrUDhxVXJRUTN2Y3Z4aXQ3WXRneTFzUzY5QmF3U2RBN0lGRHNHeDVaRFcrQWFOUVBnTnU2c1Q0WVdTZTNJS3ZlRG1oQ1QvRWt0NDc5dWFGOXl0ckx6cVd2WlNJdlNWV05SclRSOFppWjlzbGpVTW05MmNFejBXNUVWYXFVa0c3ZWRoSndrN1BROENlZHJuQkNkaCsrS1RpWVM0cm5IMFRPY1B6ZkxjRDYwSUJ3cHBnc3pnbHFITWtQREdIZzJKY0FnTlRaMFYyaUw4THNQVHl4ZGdFbGk3czh6QjFnTE5JZS9ZVVlrWnYva284QkliYStueW1OTG1hU1FGdWRVaW0rVDYreVVicnNYWGlnVCtxM3FQMTR2bVpSOEZnampKc052a0hqTFVpaTU2eTV6QllybmRIRS93N0VDd0JXWTNEbTVncFdOWGVXT01KUWNBaTFObGxZdWE2N2RPZkozazRQdEc4NmVJcGVOZHptUnRtT1lURmFkRWJWQm9VOHV2SlE3anRMYnkva3VBanprUitmd1dNUkVXUDdjTEpGR0tVb1RESTZhQ0doUXI4S1FjendaNWRLdEZ4YWNOMktTMFkvb2hiajJvaGdqMHJZUFhhT1p5TlQ5OVF4M2lDbFFEQVBiNGtMN21YTnduNXJyS3ZsNkk3NFdJcFZzVkFlR2owMmhvK0wyeFhWN3BUdWQ2bitKREhkNlVGRWw4V1ZJZy8rYS9neWFMbURXUFpGS3FQa2p3dVlZWm5MN1JhSGJScVZZRGJSTzdtcXZvbDJuR0pkNG51eDdRQXRhTHhLbjZHT29YeVVlLytscnhKNzc1clJaWWhXNk5adG1WTzRCNEIxQ3pocGt3TVR5Yi9GcHhjYk45MlZVPSJ9.MEYCIQC-GaeUfBIT9LbQgeilaPZ1ge5_mV0E09s108jnUtqVhQIhAPCKaouiqTzTJbILyoAyp1beuH0vbh48q3y3NdlkGJR_";
+            // Original License
+           String lisin = "eyJ2ZXJzaW9uIjoxLCJwYXlsb2FkIjoiNlVDaG5rVHZoZkt6b1FvZUVoWmIzUnEvaWVqak5ydUM5VmdmZ2VjdVFTejc5TXRtQ1VGS1pHZWJ2OXVmZnQ2MnJ3L1R4eWNVd0d1UTJVMXNwYW13WWxCSGQwVG9yS0I3dHE2UlVaQU5RMGo0d2NuMVhNSXBNaW1kNXc5WGlLWGtjU0FRT3RCdEZJMFdkek1KTm9xZlRKaVVNbjJlU3d0Yy9sUFdHYlY1cHN0UWhGM1l4bWxWZlRPWXQ1MWpZSE5NIiwic2lnbmF0dXJlIjoiTUVVQ0lRQ3R6UmRMc2tWcUdDYTBJVTdYdjBjNDIyRFV2U25rOXVwalk4QVorUi9kRWdJZ1IwSVRWOVVzV29yUTZOMGxOOHp3bTZ6anM2c2lwSXVnejBUL0kxdzdaSms9IiwiY2hhbGxhbmdlX2NvZGUiOiJuRGFsTFhsYzlLIn0=";
+           String license =(lesen!= null)?lesen:lisin;
             mReaderManager.init(getApplicationContext(), true, license);
         } catch (MyIDException e) {
             Log.d(TAG, "Error on initiate");

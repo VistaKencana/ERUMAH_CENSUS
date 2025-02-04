@@ -3,6 +3,7 @@ import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/login/bloc/auth_bloc.dart';
 import 'package:eperumahan_bancian/screens/password/forget_password_screen.dart';
 import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
+import 'package:eperumahan_bancian/services/mykad_sdk/my_kad_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -170,6 +171,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.white),
                             )),
                       ),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const MyKadTest()));
+                          },
+                          child: const Text("Debug SDK"))
                       // TextButton(
                       //     onPressed: () {
                       //       Navigator.push(
