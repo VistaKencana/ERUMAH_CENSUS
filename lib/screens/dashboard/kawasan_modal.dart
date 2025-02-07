@@ -52,7 +52,7 @@ class _KawasanModalState extends State<KawasanModal> {
             const Padding(
               padding: EdgeInsets.only(left: 12, top: 28, bottom: 18),
               child: Text(
-                'Pilih Kawasan',
+                'Pilih Perumahan',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
               ),
             ),

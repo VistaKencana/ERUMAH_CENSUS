@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_image_preview.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_main_screen.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/unit_kedai/unit_kedai_main_screen.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/unit_kosong/unit_kosong_main_screen.dart';
 import 'package:eperumahan_bancian/services/camera_service/screenshot_camera_widget.dart';
 import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
@@ -54,8 +55,14 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
         onNext: (images) {
           final bancianBloc = context.read<BancianBloc>();
           bancianBloc.setImages(imgs: images);
-          final screen = getScreen(bancianBloc.houseStatus);
+          final screen = getScreenIfUnitKosong(bancianBloc.houseStatus);
           if (screen == null) {
+            final screen2 = getScreenByUnitType(bancianBloc.unitTypeCode);
+            if (screen2 != null) {
+              _goReplace(screen2);
+              return;
+            }
+
             CustomFlushbar.of(context).showWarning(
                 msg:
                     "Status unit : ${bancianBloc.unitData.unit?.status ?? "Tidak wujud"} comming soon!");
@@ -78,11 +85,11 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
     );
   }
 
-  Widget? getScreen(String stats) {
+  Widget? getScreenIfUnitKosong(String stats) {
     final map = {
       //--- Unit Bancian
-      "UNS001": const BancianMainScreen(),
-      "UNS002": const BancianMainScreen(),
+      // "UNS001": const BancianMainScreen(), //Unit Boleh Dibanci
+      // "UNS002": const BancianMainScreen(), //Unit Boleh Dibanci
 
       //--- Unit Kosong
       "UNS003": const UnitKosongMainScreen(),
@@ -91,6 +98,31 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
       "UNS006": const UnitKosongMainScreen(),
       "UNS007": const UnitKosongMainScreen(),
       "UNS008": const UnitKosongMainScreen(),
+    };
+
+    return map[stats];
+  }
+
+  Widget? getScreenByUnitType(String stats) {
+    final map = {
+      // Already develop
+      "UNT001": const BancianMainScreen(), //KEDIAMAN
+      // "UNT002": const UnitKosongMainScreen(), //GERAI
+      // "UNT003": const UnitKosongMainScreen(), //DEWAN
+      // "UNT004": const UnitKosongMainScreen(), //PEJABAT
+      // "UNT005": const UnitKosongMainScreen(), //SURAU
+      "UNT006": const UnitKedaiMainScreen(), //KEDAI
+      // "UNT007": const UnitKosongMainScreen(), //KEDIAMAN SEMENTARA
+      // "UNT008": const UnitKosongMainScreen(), //TADIKA
+      // "UNT009": const UnitKosongMainScreen(), //TABIKA
+      // "UNT010": const UnitKosongMainScreen(), //PEJABAT PERSATUAN
+      // "UNT011": const UnitKosongMainScreen(), //SEWA TAPAK
+      // "UNT012": const UnitKosongMainScreen(), //KEMAS
+      // "UNT013": const UnitKosongMainScreen(), //TASKA
+      // "UNT014": const UnitKosongMainScreen(), //TASKOM
+      // "UNT015": const UnitKosongMainScreen(), //GERAI BERKUNCI
+      // "UNT016": const UnitKosongMainScreen(), //PUSAT KOMUNITI
+      // "UNT017": const UnitKosongMainScreen(), //PUSTAKA
     };
 
     return map[stats];

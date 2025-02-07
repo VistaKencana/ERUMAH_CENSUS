@@ -7,7 +7,7 @@ class SearchTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return const TextField(
       decoration: InputDecoration(
-        hintText: 'Carian Kawasan',
+        hintText: 'Carian Perumahan',
         prefixIcon: Icon(Icons.search),
         filled: true,
         fillColor: Colors.white,

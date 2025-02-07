@@ -717,6 +717,7 @@ class UnitData {
   String? block;
   String? floor;
   String? type;
+  String? typeCode;
   String? status;
   String? statusCode;
   GeneralData? housingProject;
@@ -727,6 +728,7 @@ class UnitData {
     this.block,
     this.floor,
     this.type,
+    this.typeCode,
     this.status,
     this.statusCode,
     this.housingProject,
@@ -738,6 +740,7 @@ class UnitData {
     String? block,
     String? floor,
     String? type,
+    String? typeCode,
     String? status,
     String? statusCode,
     GeneralData? housingProject,
@@ -748,6 +751,7 @@ class UnitData {
         block: block ?? this.block,
         floor: floor ?? this.floor,
         type: type ?? this.type,
+        typeCode: typeCode ?? this.typeCode,
         status: status ?? this.status,
         statusCode: statusCode ?? this.statusCode,
         housingProject: housingProject ?? this.housingProject,
@@ -759,6 +763,7 @@ class UnitData {
         block: json["block"],
         floor: json["floor"],
         type: json["type"],
+        typeCode: json["typeCode"],
         status: json["status"],
         statusCode: json["statusCode"],
         housingProject: json["housingProject"] == null
@@ -772,6 +777,7 @@ class UnitData {
         "block": block,
         "floor": floor,
         "type": type,
+        "typeCode": typeCode,
         "status": status,
         "statusCode": statusCode,
         "housingProject": housingProject?.toJson(),

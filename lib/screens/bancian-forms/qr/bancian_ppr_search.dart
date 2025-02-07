@@ -106,10 +106,10 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
                                 const SizedBox(height: 8),
                                 textField(
                                   controller: areaCtrl,
-                                  hintText: "Pilih Kawasan",
+                                  hintText: "Pilih Perumahan",
                                   onTap: () {
                                     CustomDropdownSheet(
-                                      label: "Pilih Kawasan",
+                                      label: "Pilih Perumahan",
                                       items: propertyWatch.listArea,
                                       groupValue: propertyWatch.selectedArea,
                                       getTitle: (data) => data.desc ?? "-",
@@ -299,8 +299,7 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Center(
-                              child: Text("Sila Pilih Zon, Kawasan dan Blok"))
+                          Center(child: Text("Sila Pilih Perumahan dan Blok"))
                         ],
                       ));
                     } else {
