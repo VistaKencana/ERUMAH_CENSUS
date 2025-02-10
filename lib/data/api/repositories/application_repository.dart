@@ -6,6 +6,7 @@ import 'package:eperumahan_bancian/screens/bancian-forms/models/owner_input_mode
 import 'package:eperumahan_bancian/screens/bancian-forms/models/spouse_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/status_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/subrent_input_model.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/models/unit_kedai_input_model.dart';
 import 'package:http/http.dart' as http;
 
 import 'response_validator.dart';
@@ -138,6 +139,27 @@ class ApplicationRepository {
     }
     final resp = await client.postFormData(
         endpoint: "/appl/group/store", files: files, body: data.toJson());
+    final json = jsonDecode(resp.body);
+    final isValid = RespValidator.isSuccess(json);
+    if (!isValid) throw Exception(RespValidator.getMessage(json));
+    return json.toString();
+  }
+
+  Future<String> storeShop({required UnitKedaiInputModel data}) async {
+    List<http.MultipartFile> files = [];
+    int cnt = 0;
+    for (var entry in data.getFiles().entries) {
+      final field = entry.key;
+      final img = entry.value;
+      if (img != null) {
+        cnt++;
+        files.add(client.bytesToMultipartFile(
+            fieldName: field, bytes: img, filename: "image_$cnt.jpg"));
+      }
+    }
+
+    final resp = await client.postFormData(
+        endpoint: "/appl/shop/store", files: files, body: data.toJson());
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
     if (!isValid) throw Exception(RespValidator.getMessage(json));

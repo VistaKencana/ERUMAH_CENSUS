@@ -167,6 +167,18 @@ class ResidentInfoData {
     };
   }
 
+  Map<String, String> toUnitKedaiJson() {
+    return {
+      'censusCode': censusCode ?? "",
+      'name': owner?.name ?? "",
+      'icNo': owner?.icNo ?? "",
+      'email': owner?.email ?? "",
+      'phoneNo': owner?.phoneNo ?? "",
+      'businessTypeCode': unit?.businessType?.code ?? "",
+      'businessTypeDesc': unit?.businessType?.desc ?? "",
+    };
+  }
+
   List<Map<String, dynamic>> toDependantChildJson() {
     return dependants?.child == null || (dependants?.child?.isEmpty ?? true)
         ? <Map<String, dynamic>>[]
@@ -721,6 +733,7 @@ class UnitData {
   String? status;
   String? statusCode;
   GeneralData? housingProject;
+  GeneralData? businessType;
 
   UnitData({
     this.code,
@@ -732,6 +745,7 @@ class UnitData {
     this.status,
     this.statusCode,
     this.housingProject,
+    this.businessType,
   });
 
   UnitData copyWith({
@@ -744,6 +758,7 @@ class UnitData {
     String? status,
     String? statusCode,
     GeneralData? housingProject,
+    GeneralData? businessType,
   }) =>
       UnitData(
         code: code ?? this.code,
@@ -755,6 +770,7 @@ class UnitData {
         status: status ?? this.status,
         statusCode: statusCode ?? this.statusCode,
         housingProject: housingProject ?? this.housingProject,
+        businessType: businessType ?? this.businessType,
       );
 
   factory UnitData.fromJson(Map<String, dynamic> json) => UnitData(
@@ -769,6 +785,9 @@ class UnitData {
         housingProject: json["housingProject"] == null
             ? null
             : GeneralData.fromJson(json["housingProject"]),
+        businessType: json["businessType"] == null
+            ? null
+            : GeneralData.fromJson(json["businessType"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -781,6 +800,7 @@ class UnitData {
         "status": status,
         "statusCode": statusCode,
         "housingProject": housingProject?.toJson(),
+        "businessType": businessType?.toJson(),
       };
 }
 

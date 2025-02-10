@@ -6,6 +6,7 @@ import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart'
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/bloc/pasangan_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/penghuni/bloc/penghuni_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/subrent/provider/subrent_provider.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/unit_kedai/bloc/unit_kedai_bloc.dart';
 import 'package:eperumahan_bancian/screens/qr-home/bloc/qr_bloc.dart';
 import 'package:eperumahan_bancian/screens/qr-home/models/resident_info_model.dart';
 import 'package:eperumahan_bancian/services/date_format.dart';
@@ -38,6 +39,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
   late PasanganBloc _pasanganBloc;
   late AnakTanggunganBloc _anakTanggunganBloc;
   late SubrentProvider subrentProvider;
+  late UnitKedaiBloc _unitKedaiBloc;
   List<String> statusFilter = [
     "Bancian Biasa",
     "Tiada Penghuni",
@@ -54,6 +56,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
         BlocProvider.of<AnakTanggunganBloc>(context, listen: false);
     subrentProvider = Provider.of<SubrentProvider>(context, listen: false);
     residentData = _qrBloc.residentData;
+    _unitKedaiBloc = BlocProvider.of<UnitKedaiBloc>(context, listen: false);
   }
 
   @override
@@ -135,6 +138,9 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
                       data: _qrBloc.residentData,
                       censusCode: _qrBloc.residentData.censusCode ?? ""));
                   _anakTanggunganBloc.add(SetAnakTanggungData(
+                      data: _qrBloc.residentData,
+                      censusCode: _qrBloc.residentData.censusCode ?? ""));
+                  _unitKedaiBloc.add(SetPemilikData(
                       data: _qrBloc.residentData,
                       censusCode: _qrBloc.residentData.censusCode ?? ""));
                   Navigator.push(

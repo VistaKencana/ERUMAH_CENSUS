@@ -277,7 +277,7 @@ class _PasanganModalState extends State<PasanganModal> {
                         controller: noTelCtrl,
                         validator: (value) {
                           return Validator.validatePhoneNumber(value,
-                              length: 12);
+                              length: 10);
                         },
                       ),
                       _textField(

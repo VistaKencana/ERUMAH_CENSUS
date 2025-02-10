@@ -14,6 +14,7 @@ class DropdownProvider extends ChangeNotifier {
   List<DropdownData> censusStatusList = [];
   List<DropdownData> relationshipList = [];
   List<DropdownData> healthLevelList = [];
+  List<DropdownData> businessTypeList = [];
 
   final repo = DropdownRepository();
   final log = const AppLog(classname: "DropdownProvider");
@@ -33,6 +34,10 @@ class DropdownProvider extends ChangeNotifier {
     try {
       final resp = await repo.getDropdownData(type: type);
       listData = resp;
+      AppLog.instantLog(
+          classname: "DropdownProvider",
+          tag: "fetchDropdownData",
+          msg: "Total data: ${resp.length}");
       _updateDropdownList(type: type, data: listData);
     } catch (e) {
       log.logError(tag: "fetchDropdownData", msg: e.toString());
@@ -52,6 +57,7 @@ class DropdownProvider extends ChangeNotifier {
       DdType.relationship: relationshipList,
       DdType.healthLevel: healthLevelList,
       DdType.censusStatus: censusStatusList,
+      DdType.businessType: businessTypeList,
     };
     return listData[type] ?? [];
   }
@@ -80,6 +86,9 @@ class DropdownProvider extends ChangeNotifier {
         break;
       case DdType.censusStatus:
         censusStatusList = data;
+        break;
+      case DdType.businessType:
+        businessTypeList = data;
         break;
     }
     notifyListeners(); // Notify listeners after data changes

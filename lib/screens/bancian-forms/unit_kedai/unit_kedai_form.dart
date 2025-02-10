@@ -1,13 +1,21 @@
 import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_appbar.dart';
+import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/file_display.dart';
 import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/components/two_column_form.dart';
 import 'package:eperumahan_bancian/components/validator.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/data/api/repositories/dropdown_repository.dart';
+import 'package:eperumahan_bancian/data/api/repositories/provider/dropdown_provider.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/models/unit_kedai_input_model.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/unit_kedai/bloc/unit_kedai_bloc.dart';
+import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class UnitKedaiForm extends StatefulWidget {
   const UnitKedaiForm({super.key});
@@ -17,12 +25,38 @@ class UnitKedaiForm extends StatefulWidget {
 }
 
 class _UnitKedaiFormState extends State<UnitKedaiForm> {
+  UnitKedaiInputModel? ownerData;
   final nameCtrl = TextEditingController();
   final emelCtrl = TextEditingController();
   final icNoCtrl = TextEditingController();
   final noTelCtrl = TextEditingController();
   final businessCtrl = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+  late UnitKedaiBloc _unitKedaiBloc;
+  @override
+  void initState() {
+    super.initState();
+    // _dropdownBloc = BlocProvider.of<DropdownBloc>(context, listen: false);
+    _unitKedaiBloc = BlocProvider.of<UnitKedaiBloc>(context, listen: false);
+
+    initVal();
+  }
+
+  initVal() {
+    ownerData = _unitKedaiBloc.existData.copyWith(isChangeOnImage: false);
+    nameCtrl.text = setDataValue(ownerData?.name);
+    icNoCtrl.text = setDataValue(ownerData?.icNo);
+    emelCtrl.text = setDataValue(ownerData?.email);
+    noTelCtrl.text = setDataValue(ownerData?.phoneNo);
+    businessCtrl.text = setDataValue(ownerData?.businessTypeDesc);
+  }
+
+  String setDataValue(String? val, {String? defaultVal}) {
+    return val ?? (defaultVal ?? "");
+    // return _isNewForm() ? "" : val ?? (defaultVal ?? "");
+  }
+
   _exitWarning() {
     CustomAlertDialog(
       title: "Berhenti banci kedai?",
@@ -57,105 +91,124 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
                 _exitWarning();
               },
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 6.0, bottom: 18),
-                      child: Text(
-                        "Maklumat Kedai",
-                        style:
-                            appTextStyle(size: 25, fontWeight: FontWeight.bold),
+            body: BlocListener<UnitKedaiBloc, UnitKedaiState>(
+              listener: (context, state) {
+                if (state is UnitKedaiLoading) {
+                  EasyLoading.show();
+                } else if (state is UnitKedaiSuccess) {
+                  EasyLoading.dismiss();
+                  setState(() =>
+                      ownerData = ownerData!.copyWith(isChangeOnImage: false));
+                  CustomFlushbar.of(context)
+                      .showSuccess(msg: "Berjaya menmyimpan data");
+                } else if (state is UnitKedaiNoChanges) {
+                  CustomFlushbar.of(context).showInfo(msg: state.msg);
+                } else if (state is UnitKedaiError) {
+                  EasyLoading.dismiss();
+                  CustomFlushbar.of(context).showFailed(msg: state.msg);
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6.0, bottom: 18),
+                        child: Text(
+                          "Maklumat Kedai",
+                          style: appTextStyle(
+                              size: 25, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    SectionContainer(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _textField(
-                            title: 'Nama Penuh',
-                            controller: nameCtrl,
-                            // isMandatory: _isNewForm(),
-                            // initialValue:
-                            //     _isNewForm() ? "" : ownerData?.name ?? "",
-                            width: double.infinity,
-                            // readOnly: _isReadOnly()
-                          ),
-                          TwoColumnForm(
-                            children: [
-                              _textField(
-                                title: 'No. Kad Pengenalan',
-                                controller: icNoCtrl,
-                                // isMandatory: _isNewForm(),
-                                keyboardType: TextInputType.number,
-                                // readOnly: _isReadOnly(),
-                                validator: (value) {
-                                  return Validator.validatePhoneNumber(value,
-                                      length: 12);
-                                },
-                              ),
-                              _textField(
-                                title: 'Emel',
-                                controller: emelCtrl,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: (value) {
-                                  return Validator.validateEmail(value);
-                                },
-                              ),
-                              _textField(
-                                title: 'No Telefon',
-                                controller: noTelCtrl,
-                                keyboardType: TextInputType.phone,
-                                // isMandatory: _isNewForm(),
-                                validator: (value) {
-                                  return Validator.validatePhoneNumber(value,
-                                      length: 12);
-                                },
-                              ),
-                              _dropdownBusinessType(),
-                            ],
-                          ),
-                        ],
+                      SectionContainer(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _textField(
+                              title: 'Nama Penuh',
+                              controller: nameCtrl,
+                              // isMandatory: _isNewForm(),
+                              // initialValue:
+                              //     _isNewForm() ? "" : ownerData?.name ?? "",
+                              width: double.infinity,
+                              // readOnly: _isReadOnly()
+                            ),
+                            _gap(),
+                            TwoColumnForm(
+                              children: [
+                                _textField(
+                                  title: 'No. Kad Pengenalan',
+                                  controller: icNoCtrl,
+                                  // isMandatory: _isNewForm(),
+                                  keyboardType: TextInputType.number,
+                                  // readOnly: _isReadOnly(),
+                                  validator: (value) {
+                                    return Validator.validatePhoneNumber(value,
+                                        length: 12);
+                                  },
+                                ),
+                                _textField(
+                                  title: 'Emel',
+                                  controller: emelCtrl,
+                                  keyboardType: TextInputType.emailAddress,
+                                  validator: (value) {
+                                    return Validator.validateEmail(value);
+                                  },
+                                ),
+                                _textField(
+                                  title: 'No Telefon',
+                                  controller: noTelCtrl,
+                                  keyboardType: TextInputType.phone,
+                                  // isMandatory: _isNewForm(),
+                                  validator: (value) {
+                                    return Validator.validatePhoneNumber(value,
+                                        length: 10);
+                                  },
+                                ),
+                                _dropdownBusinessType(),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    SectionContainer(
-                      child: Column(
-                        children: [
-                          _headerTitle('SSM'),
-                          FileDisplay(
-                              // img: ownerData!.uploadMarriageCert,
-                              subtitle: 'SSM',
-                              onPicture: (bytes) {
-                                setState(() => setState(() {
-                                      // ownerData = ownerData!
-                                      //     .copyWith(uploadMarriageCert: bytes);
-                                    }));
-                              })
-                        ],
+                      SectionContainer(
+                        child: Column(
+                          children: [
+                            _headerTitle('SSM'),
+                            FileDisplay(
+                                img: ownerData!.uploadSSM,
+                                subtitle: 'SSM',
+                                onPicture: (bytes) {
+                                  setState(() => setState(() {
+                                        ownerData = ownerData!
+                                            .copyWith(uploadSSM: bytes);
+                                      }));
+                                })
+                          ],
+                        ),
                       ),
-                    ),
-                    SectionContainer(
-                      child: Column(
-                        children: [
-                          _headerTitle('Lesen Perniagaan'),
-                          FileDisplay(
-                              // img: ownerData!.uploadMarriageCert,
-                              subtitle: 'Lesen Perniagaan',
-                              onPicture: (bytes) {
-                                setState(() => setState(() {
-                                      // ownerData = ownerData!
-                                      //     .copyWith(uploadMarriageCert: bytes);
-                                    }));
-                              })
-                        ],
+                      SectionContainer(
+                        child: Column(
+                          children: [
+                            _headerTitle('Lesen Perniagaan'),
+                            FileDisplay(
+                                img: ownerData!.uploadBusinessLicense,
+                                subtitle: 'Lesen Perniagaan',
+                                onPicture: (bytes) {
+                                  setState(() => setState(() {
+                                        ownerData = ownerData!.copyWith(
+                                            uploadBusinessLicense: bytes);
+                                      }));
+                                })
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -251,41 +304,43 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
 
   _dropdownBusinessType() {
     return _textField(
-      title: 'Jantina',
+      title: 'Perniagaan',
       // isMandatory: _isNewForm(),
       controller: businessCtrl,
       // readOnly: _isReadOnly(),
       // enableDropdown: _isNewForm(),
       isDropdown: true,
       onTap: () {
-        // final ddR = context.read<DropdownProvider>();
-        // ddR.fetchDropdownData(DdType.gender).then((val) {
-        //   CustomDropdownSheet(
-        //     label: "Pilih Jantina",
-        //     items: ddR.genderList,
-        //     onFindGroupValue: (data) {
-        //       final searchData = (ownerData?.genderCode != null &&
-        //               (ownerData?.genderCode?.isNotEmpty ?? false))
-        //           ? (ownerData?.genderCode?.toLowerCase() ?? "*_*")
-        //           : "*_*";
-        //       final result = data.where((val) {
-        //         var a = val.code?.toLowerCase().contains(searchData) ?? false;
-        //         return a;
-        //       }).firstOrNull;
+        final ddR = context.read<DropdownProvider>();
+        ddR.fetchDropdownData(DdType.businessType).then((val) {
+          CustomDropdownSheet(
+            label: "Pilih Jenis Perniagaan",
+            items: ddR.businessTypeList,
+            onFindGroupValue: (data) {
+              final searchData = (ownerData?.businessTypeCode != null &&
+                      (ownerData?.businessTypeCode?.isNotEmpty ?? false))
+                  ? (ownerData?.businessTypeCode?.toLowerCase() ?? "*_*")
+                  : "*_*";
+              final result = data.where((val) {
+                var a = val.code?.toLowerCase().contains(searchData) ?? false;
+                return a;
+              }).firstOrNull;
 
-        //       return result;
-        //     },
-        //     getTitle: (data) => data.desc ?? "-",
-        //     onChange: (val) {
-        //       if (val == null) return;
-        //       ownerData = ownerData!
-        //           .copyWith(genderCode: val.code, genderDesc: val.desc);
-        //       jantinaCtrl.text = val.desc ?? "";
-        //     },
-        //     // ignore: use_build_context_synchronously
-        //   ).show(context);
-        // });
+              return result;
+            },
+            getTitle: (data) => data.desc ?? "-",
+            onChange: (val) {
+              if (val == null) return;
+              ownerData = ownerData!.copyWith(
+                  businessTypeCode: val.code, businessTypeDesc: val.desc);
+              businessCtrl.text = val.desc ?? "";
+            },
+            // ignore: use_build_context_synchronously
+          ).show(context);
+        });
       },
     );
   }
+
+  _gap({double height = 10}) => SizedBox(height: height);
 }

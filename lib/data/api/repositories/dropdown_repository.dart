@@ -32,7 +32,8 @@ enum DdType {
   occupationType(endpoint: "/listOccupationType"),
   relationship(endpoint: "/listRelationship"),
   healthLevel(endpoint: "/listHealthLevel"),
-  censusStatus(endpoint: "/censusUser/appl/listStatus");
+  censusStatus(endpoint: "/censusUser/appl/listStatus"),
+  businessType(endpoint: "/listBusinessType");
 
   final String endpoint;
 
