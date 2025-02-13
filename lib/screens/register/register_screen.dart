@@ -56,7 +56,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   _gap(),
                   CustomFormField(
-                    title: "Kawasan",
+                    title: "Perumahan",
                     isMandatory: true,
                     suffixIcon: Icons.arrow_drop_down,
                     readOnly: true,
