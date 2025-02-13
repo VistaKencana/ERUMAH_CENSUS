@@ -21,6 +21,7 @@ class DropdownBloc extends Bloc<DropdownEvent, DropdownState> {
   List<DropdownData> censusStatusList = [];
   List<DropdownData> relationshipList = [];
   List<DropdownData> healthLevelList = [];
+  List<DropdownData> businessTypeList = [];
 
   final repo = DropdownRepository();
   final log = const AppLog(classname: "DropdownBloc");
@@ -64,6 +65,7 @@ class DropdownBloc extends Bloc<DropdownEvent, DropdownState> {
       DdType.relationship: relationshipList,
       DdType.healthLevel: healthLevelList,
       DdType.censusStatus: censusStatusList,
+      DdType.businessType: businessTypeList,
     };
     return listData[type] ?? [];
   }
@@ -92,6 +94,9 @@ class DropdownBloc extends Bloc<DropdownEvent, DropdownState> {
         break;
       case DdType.censusStatus:
         censusStatusList = data;
+        break;
+      case DdType.businessType:
+        businessTypeList = data;
         break;
     }
   }

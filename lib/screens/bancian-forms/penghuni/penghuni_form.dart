@@ -265,7 +265,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                                   isMandatory: _isNewForm(),
                                   validator: (value) {
                                     return Validator.validatePhoneNumber(value,
-                                        length: 12);
+                                        length: 10);
                                   },
                                 ),
                                 _dropdownJantina(),

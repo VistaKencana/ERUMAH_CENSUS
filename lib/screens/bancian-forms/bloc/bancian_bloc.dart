@@ -22,9 +22,11 @@ class BancianBloc extends Bloc<BancianEvent, BancianState> {
   StatusInputModel? statusData;
   StatusInputModel? statusNotOwnerData;
   String houseStatus = ""; // UNS003:unit kosong
+  String unitTypeCode = ""; //
   _onSetBancianData(SetBancianData event, Emitter<BancianState> emit) {
     unitData = event.data;
     houseStatus = unitData.unit?.statusCode ?? "";
+    unitTypeCode = unitData.unit?.typeCode ?? "";
     statusData = StatusInputModel(
         censusCode: unitData.censusCode ?? '',
         isFingerPrintVerified: "0",

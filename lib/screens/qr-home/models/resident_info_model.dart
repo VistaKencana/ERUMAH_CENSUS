@@ -167,6 +167,18 @@ class ResidentInfoData {
     };
   }
 
+  Map<String, String> toUnitKedaiJson() {
+    return {
+      'censusCode': censusCode ?? "",
+      'name': owner?.name ?? "",
+      'icNo': owner?.icNo ?? "",
+      'email': owner?.email ?? "",
+      'phoneNo': owner?.phoneNo ?? "",
+      'businessTypeCode': unit?.businessType?.code ?? "",
+      'businessTypeDesc': unit?.businessType?.desc ?? "",
+    };
+  }
+
   List<Map<String, dynamic>> toDependantChildJson() {
     return dependants?.child == null || (dependants?.child?.isEmpty ?? true)
         ? <Map<String, dynamic>>[]
@@ -717,9 +729,11 @@ class UnitData {
   String? block;
   String? floor;
   String? type;
+  String? typeCode;
   String? status;
   String? statusCode;
   GeneralData? housingProject;
+  GeneralData? businessType;
 
   UnitData({
     this.code,
@@ -727,9 +741,11 @@ class UnitData {
     this.block,
     this.floor,
     this.type,
+    this.typeCode,
     this.status,
     this.statusCode,
     this.housingProject,
+    this.businessType,
   });
 
   UnitData copyWith({
@@ -738,9 +754,11 @@ class UnitData {
     String? block,
     String? floor,
     String? type,
+    String? typeCode,
     String? status,
     String? statusCode,
     GeneralData? housingProject,
+    GeneralData? businessType,
   }) =>
       UnitData(
         code: code ?? this.code,
@@ -748,9 +766,11 @@ class UnitData {
         block: block ?? this.block,
         floor: floor ?? this.floor,
         type: type ?? this.type,
+        typeCode: typeCode ?? this.typeCode,
         status: status ?? this.status,
         statusCode: statusCode ?? this.statusCode,
         housingProject: housingProject ?? this.housingProject,
+        businessType: businessType ?? this.businessType,
       );
 
   factory UnitData.fromJson(Map<String, dynamic> json) => UnitData(
@@ -759,11 +779,15 @@ class UnitData {
         block: json["block"],
         floor: json["floor"],
         type: json["type"],
+        typeCode: json["typeCode"],
         status: json["status"],
         statusCode: json["statusCode"],
         housingProject: json["housingProject"] == null
             ? null
             : GeneralData.fromJson(json["housingProject"]),
+        businessType: json["businessType"] == null
+            ? null
+            : GeneralData.fromJson(json["businessType"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -772,9 +796,11 @@ class UnitData {
         "block": block,
         "floor": floor,
         "type": type,
+        "typeCode": typeCode,
         "status": status,
         "statusCode": statusCode,
         "housingProject": housingProject?.toJson(),
+        "businessType": businessType?.toJson(),
       };
 }
 

@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:eperumahan_bancian/services/app_info.dart';
 import 'package:eperumahan_bancian/services/mykad_sdk/my_kad_reader.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' as dev;
+
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MyKadTest extends StatefulWidget {
   const MyKadTest({super.key});
@@ -40,10 +45,56 @@ class _MyKadTestState extends State<MyKadTest> {
                   }
                   await MyKadReader.callSDK(
                       license:
-                          "eyJ2ZXJzaW9uIjoyLCJjb2RlIjoxMDF9.eyJpYXQiOjE3Mzg2Mjk0MTYsImNoYWxsYW5nZV9jb2RlIjoiYm43dDZrVmFCSCIsImNpcGhlciI6IlltSCtmSnhVckYvMUxHaVZ4Z2c3ZzQrUDhxVXJRUTN2Y3Z4aXQ3WXRneTFzUzY5QmF3U2RBN0lGRHNHeDVaRFcrQWFOUVBnTnU2c1Q0WVdTZTNJS3ZlRG1oQ1QvRWt0NDc5dWFGOXl0ckx6cVd2WlNJdlNWV05SclRSOFppWjlzbGpVTW05MmNFejBXNUVWYXFVa0c3ZWRoSndrN1BROENlZHJuQkNkaCsrS1RpWVM0cm5IMFRPY1B6ZkxjRDYwSUJ3cHBnc3pnbHFITWtQREdIZzJKY0FnTlRaMFYyaUw4THNQVHl4ZGdFbGk3czh6QjFnTE5JZS9ZVVlrWnYva284QkliYStueW1OTG1hU1FGdWRVaW0rVDYreVVicnNYWGlnVCtxM3FQMTR2bVpSOEZnampKc052a0hqTFVpaTU2eTV6QllybmRIRS93N0VDd0JXWTNEbTVncFdOWGVXT01KUWNBaTFObGxZdWE2N2RPZkozazRQdEc4NmVJcGVOZHptUnRtT1lURmFkRWJWQm9VOHV2SlE3anRMYnkva3VBanprUitmd1dNUkVXUDdjTEpGR0tVb1RESTZhQ0doUXI4S1FjendaNWRLdEZ4YWNOMktTMFkvb2hiajJvaGdqMHJZUFhhT1p5TlQ5OVF4M2lDbFFEQVBiNGtMN21YTnduNXJyS3ZsNkk3NFdJcFZzVkFlR2owMmhvK0wyeFhWN3BUdWQ2bitKREhkNlVGRWw4V1ZJZy8rYS9neWFMbURXUFpGS3FQa2p3dVlZWm5MN1JhSGJScVZZRGJSTzdtcXZvbDJuR0pkNG51eDdRQXRhTHhLbjZHT29YeVVlLytscnhKNzc1clJaWWhXNk5adG1WTzRCNEIxQ3pocGt3TVR5Yi9GcHhjYk45MlZVPSJ9.MEYCIQC-GaeUfBIT9LbQgeilaPZ1ge5_mV0E09s108jnUtqVhQIhAPCKaouiqTzTJbILyoAyp1beuH0vbh48q3y3NdlkGJR_");
-                  // license:
-                  //     "eyJ2ZXJzaW9uIjoyLCJjb2RlIjoxMDF9.eyJpYXQiOjE3Mzg2Mjk1MzksImNoYWxsYW5nZV9jb2RlIjoid0lCWkVtUldvRSIsImNpcGhlciI6Ik5sLythN1FsRERIeHZrbU5zaTF3TkgzS3FVZmN6R1FJRFBBbUo1eThWaG1RWW9sUTUyWUNZK3RqQ1dTb3cvSW5rMUpZMHZGUFhHRHdybVl3blN0dE9tbWFFSjVFT0haRU9HTWx0d25heUJwN2V6bGFTUVFpL0tsU0JhclNmc1k1b05wUGsyVys5elFqbzRVd29XakU3TE5PbzRseUNhc2J4QXRqM0JzU3lEY2VwTUVUVHhURkZvVEdYZUxQNHl5cDNna1YySDEreWlyVkR3Z2hBWGkrREptY2hUVkJaR3RRZHp3YmNWMkNCQlVIclA3M0xUanFrbENtU3R4T1NLSTZzbS9EVHNmaFhNVTF1RGRKYTZzb1RwZyszNUFKOWwrSzBnbTBKSjE2aUJPa1pET1ZUVkJKSFR1RTFJdkFXUWliOEg5dE4vWUdnNGpYVWFINzlBcXVmVnRlaHM1Q2t6NVFKUkRSY2xTMXhNdVVndzlHOUZmVUM3QkNaWWM3MkdUZmJpdGRndDFnZDRRazM2MnJhTFY5Y29zbjNmVjdlY0NjK2g3RkR4NEdPZHp5dzlHem1Ja0VodU9NcjhiTEVKSnJGV0lRUEdZQllaeGtXVjRoZjRueGxVUUNuUlNKRitZby9XbU13TWo4eU9vUnI3M3hWakUwKzN3OXcxVGRUNlZLb2JNUFhSR1VUVEdDRzBQaVdsS2E4SmlWMThVS0w4ZXFWbFNDc3lDTDNDWnl1UTMxNW5qaHNTd2FDV3ZXSjluS3NtOTlpRkpwaDRkYmlIR0M5T0d2QkVuQ2V0UnNiRUV4ZE04VmFNVk40bzcrY1JncTNVbkU0ZXpNWE9GdTNKY2VEVEVoSzJ2Q0xJOWFwRVgwaDVQVzFHeFhRd2tLZGwwZlRmTDU3Q3N3N1FRPSJ9.MEUCIQD783vTo8jltbTE_Glsn-ETaidHbovjZAy7n2QHMqg6bAIgUbt4PRULVhwi8MPDoxIvy10euIRs5jiIou9yrakvdcE");
+                          "eyJjaGFsbGFuZ2VfY29kZSI6ImZ4UURyR2RHaDQiLCJwYXlsb2FkIjoiT1Q2TU82Njk0aE9ZelJBWjliM3FVRDlzR1dZVkJUemdLbUdPS0I3SHBsM3dCZ21JM29CZWtDWUt1cklrQURMemFKR1dzR05YT3RDcjVpYURkakRRekViWE9nK3pOU3hrSVhERkdwKy9Jb2NNdG1rK0FKSnZZbStiSlRGZ09NZEhUSkZsL3hRakcvYXNwYlhDUk1LZTJOeTRrcEd3T2kxQlNPTks0MkFFaG53PSIsInNpZ25hdHVyZSI6Ik1FUUNJR3JYcSsxN3k1ZzQwdGJqUkYrM0xGMGRBWnk5dFZZYkI0SmZOOUNHdVpHd0FpQlJPdno5L0s1TkxFMDdPakQ1eXZrRjNyOUVYVFFvM3g0Q0JXRyt2Wm5lbGc9PSIsInZlcnNpb24iOjF9");
                   setState(() => isInitialize = true);
+                  /* --- Start M11 settings ---*/
+                  if (!context.mounted) return;
+                  await initFP(context);
+                  /* --- End M11 settings   ---*/
+
+                  if (!context.mounted) return;
+                  MyKadReader.sdkListener(
+                    context: context,
+                    onIdle: () {
+                      //Please insert card
+                      setMessage(msg: "Please insert card");
+                    },
+                    onReadCard: () {
+                      //Loading ...
+                      setMyKadData(null);
+                      setMessage(msg: "Loading read card...");
+                    },
+                    onSuccessCard: (data) async {
+                      setMyKadData(data);
+                      //Success read card
+                      setMessage(msg: "Read card successful");
+                      // if (verifyFP) {
+                      //   await MyKadReader.turnOnFP();
+                      //   await addDelay(milisec: 2500);
+                      //   setMessage(msg: "Initialize Fingerprint Hardware...");
+                      //   await MyKadReader.getFPDeviceList();
+                      //   await addDelay(milisec: 2000);
+                      //   await connectAndScanFP();
+                      // }
+                    },
+                    onErrorCard: () {
+                      //Remove card and try again
+                      setMessage(msg: "Remove card and try again");
+                    },
+                    onVerifyFP: () {
+                      //Verifying Fingerprint
+                      setMessage(
+                          msg: "Please place your fingerprint at the scanner");
+                    },
+                    onSuccessFP: () {
+                      //Success verify fingerprint
+                      setMessage(msg: "User verification successful");
+                    },
+                    onErrorFP: () async {
+                      //Please try again
+                      setMessage(msg: "Error: Please try again");
+                    },
+                  );
                 },
                 title: "Initiate SDK"),
             _button(
@@ -60,10 +111,11 @@ class _MyKadTestState extends State<MyKadTest> {
                   setState(() => isInitialize = false);
                 },
                 title: "Dispose SDK"),
-            // _button(onPressed: () async {}, title: "title"),
-            // _button(onPressed: () async {}, title: "title"),
-            // _button(onPressed: () async {}, title: "title"),
-            // _button(onPressed: () async {}, title: "title"),
+            _button(
+                onPressed: () {
+                  close();
+                },
+                title: "Restart SDK")
           ],
         ),
       ),
@@ -75,5 +127,78 @@ class _MyKadTestState extends State<MyKadTest> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: ElevatedButton(onPressed: onPressed, child: Text(title)),
     );
+  }
+
+  Future initFP(BuildContext context) async {
+    showLoading(context);
+    setMessage(msg: "Initialize Fingerprint Hardware...");
+    await MyKadReader.turnOnFP();
+    await addDelay(milisec: 2500);
+    await MyKadReader.disconnectFPScanner();
+    await addDelay();
+    await MyKadReader.connectFPScanner();
+    if (!context.mounted) return;
+    closeLoading(context);
+  }
+
+  setMessage({required String msg}) {
+    dev.log(msg);
+    Fluttertoast.showToast(msg: msg);
+  }
+
+  void setMyKadData(SdkResponseModel? data) {
+    if (data == null) {
+      return;
+    }
+    final json = jsonDecode(data.data!);
+    String icNO = "";
+    if (data.isDataMykad()) {
+      icNO = MyKadModel.fromJson(json).icNo ?? "";
+    } else {
+      icNO = MyKidModel.fromJson(json).icNo ?? "";
+    }
+    setMessage(msg: icNO);
+  }
+
+  void closeLoading(BuildContext context) => Navigator.pop(context);
+
+  Future<dynamic> showLoading(BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.3),
+      builder: (context) => PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {},
+        child: GestureDetector(
+          onTap: () {},
+          child: Material(
+              color: Colors.black.withOpacity(0.6),
+              child: Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    padding: const EdgeInsets.all(15),
+                    color: Colors.white,
+                    child: const CircularProgressIndicator(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              )),
+        ),
+      ),
+    );
+  }
+
+  // Close the StreamController
+  Future<void> close() async {
+    setMyKadData(null);
+    await MyKadReader.disconnectFPScanner();
+    await addDelay();
+    await MyKadReader.turnOffFP();
+    await addDelay();
+    await MyKadReader.disposeListener();
   }
 }
