@@ -31,6 +31,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
+  String nullOrEmptyReplace(String? val, {String? replaceWIth}) {
+    String result = replaceWIth ?? "-";
+    if (val == null) {
+      return result;
+    }
+    return (val.isEmpty) ? result : val;
+  }
+
   @override
   Widget build(BuildContext context) {
     final watchDashboard = Provider.of<DashboardProvider>(context);
@@ -46,6 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 const DashboardHeader(),
                 SizedBox(height: constraint.maxHeight * .02),
+                //MARK: User Activity
                 sectionContainer(children: [
                   Text(
                     "Aktiviti anda",
@@ -61,34 +70,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         size: 14,
                       )),
                   SizedBox(height: constraint.maxHeight * .03),
-                  GridView(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3, // 3 items per row
-                      crossAxisSpacing: 6.0,
-                      mainAxisSpacing: 10.0,
-                    ),
-                    children: [
-                      _item(
-                          title: "Unit rumah",
-                          val: "118",
-                          icon: Icons.apartment_outlined,
-                          color: const Color(0xFF8F69EE)),
-                      _item(
-                          title: "Berjaya",
-                          val: "90",
-                          icon: Icons.check_circle_rounded,
-                          color: const Color(0xFF28C194)),
-                      _item(
-                          title: "Dalam Proses",
-                          val: "28",
-                          icon: Icons.error_rounded,
-                          color: Colors.amber),
-                    ],
-                  ),
+                  watchDashboard.activityLoading
+                      ? const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                          ],
+                        )
+                      : GridView(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3, // 3 items per row
+                            crossAxisSpacing: 6.0,
+                            mainAxisSpacing: 10.0,
+                          ),
+                          children: [
+                            _item(
+                                title: "Unit rumah",
+                                val: nullOrEmptyReplace(
+                                    watchDashboard.acitivtyData.totalUnit),
+                                icon: Icons.apartment_outlined,
+                                color: const Color(0xFF8F69EE)),
+                            _item(
+                                title: "Berjaya",
+                                val: nullOrEmptyReplace(
+                                    watchDashboard.acitivtyData.totalComplete),
+                                icon: Icons.check_circle_rounded,
+                                color: const Color(0xFF28C194)),
+                            _item(
+                                title: "Dalam Proses",
+                                val: nullOrEmptyReplace(watchDashboard
+                                    .acitivtyData.totalInProgress),
+                                icon: Icons.error_rounded,
+                                color: Colors.amber),
+                          ],
+                        ),
                 ]),
                 SizedBox(height: constraint.maxHeight * .02),
                 //MARK: Latest Activity
