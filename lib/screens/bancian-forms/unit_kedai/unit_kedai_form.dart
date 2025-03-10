@@ -1,4 +1,5 @@
 import 'package:eperumahan_bancian/components/bg_image.dart';
+import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
@@ -184,8 +185,9 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
                                 subtitle: 'SSM',
                                 onPicture: (bytes) {
                                   setState(() => setState(() {
-                                        ownerData = ownerData!
-                                            .copyWith(uploadSSM: bytes);
+                                        ownerData = ownerData!.copyWith(
+                                            uploadSSM: bytes,
+                                            isChangeOnImage: true);
                                       }));
                                 })
                           ],
@@ -201,7 +203,8 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
                                 onPicture: (bytes) {
                                   setState(() => setState(() {
                                         ownerData = ownerData!.copyWith(
-                                            uploadBusinessLicense: bytes);
+                                            uploadBusinessLicense: bytes,
+                                            isChangeOnImage: true);
                                       }));
                                 })
                           ],
@@ -212,6 +215,19 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
                 ),
               ),
             ),
+            bottomNavigationBar: BottomBarButton(
+                onTap: () {
+                  setState(() {
+                    ownerData = ownerData!.copyWith(
+                      name: nameCtrl.text,
+                      icNo: icNoCtrl.text,
+                      email: emelCtrl.text,
+                      phoneNo: noTelCtrl.text,
+                    );
+                  });
+                  _unitKedaiBloc.add(SavePemilikData(data: ownerData!));
+                },
+                title: "Simpan"),
           )),
         ));
   }

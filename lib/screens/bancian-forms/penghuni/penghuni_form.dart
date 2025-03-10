@@ -308,8 +308,9 @@ class _PenghuniFormState extends State<PenghuniForm> {
                               img: ownerData!.uploadMarriageCert,
                               subtitle: 'Sijil Perkahwinan',
                               onPicture: (bytes) => setState(() => setState(
-                                  () => ownerData = ownerData!
-                                      .copyWith(uploadMarriageCert: bytes))),
+                                  () => ownerData = ownerData!.copyWith(
+                                      uploadMarriageCert: bytes,
+                                      isChangeOnImage: true))),
                             )
                           ],
                         ),
