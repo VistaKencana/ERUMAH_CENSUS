@@ -70,14 +70,17 @@ class _TanggunganModalState extends State<TanggunganModal> {
     //   _tanggunganBloc.addNewDependant();
     // }
     dependantData = _tanggunganBloc.selectedData!.copyWith();
-    nameCtrl.text = setDataValue(dependantData?.name);
-    icNoCtrl.text = setDataValue(dependantData?.icNo);
+    // nameCtrl.text = setDataValue(dependantData?.name);
+    nameCtrl.text = dependantData?.name ?? "";
+    // icNoCtrl.text = setDataValue(dependantData?.icNo);
+    icNoCtrl.text = dependantData?.icNo ?? "";
     emelCtrl.text = setDataValue(dependantData?.email);
     noTelCtrl.text = setDataValue(dependantData?.phoneNo);
     hubunganCtrl.text = setDataValue(dependantData?.relationshipDesc);
     umurCtrl.text = setDataValue(dependantData?.age);
     kesihatanCtrl.text = setDataValue(dependantData?.healthLevelDesc);
-    jantinaCtrl.text = setDataValue(dependantData?.genderDesc);
+    // jantinaCtrl.text = setDataValue(dependantData?.genderDesc);
+    jantinaCtrl.text = dependantData?.genderDesc ?? "";
     bangsaCtrl.text = setDataValue(dependantData?.raceDesc);
   }
 

@@ -101,71 +101,63 @@ class _DashboardSectionState extends State<DashboardSection> {
                     backgroundColor: Colors.white,
                     builder: (_) {
                       return DraggableScrollableSheet(
-                          expand: false,
-                          maxChildSize: .9,
-                          initialChildSize: .5,
-                          minChildSize: .3,
-                          builder: (_, sc) {
-                            return ClipRRect(
-                              clipBehavior: Clip.antiAlias,
-                              borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(16)),
-                              child: Scaffold(
-                                appBar: AppBar(
-                                  centerTitle: true,
-                                  title: Text(widget.title),
-                                  backgroundColor: Colors.white,
-                                  bottom: const PreferredSize(
-                                    preferredSize: Size.fromHeight(
-                                        1.0), // Height of the underline
-                                    child: Divider(
-                                      height: 1,
-                                      thickness: 1,
-                                      color:
-                                          Colors.grey, // Color of the underline
-                                    ),
+                        expand: false,
+                        maxChildSize: .9,
+                        initialChildSize: .5,
+                        minChildSize: .3,
+                        builder: (_, sc) {
+                          return ClipRRect(
+                            clipBehavior: Clip.antiAlias,
+                            borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(16)),
+                            child: Scaffold(
+                              appBar: AppBar(
+                                centerTitle: true,
+                                title: Text(widget.title),
+                                backgroundColor: Colors.white,
+                                bottom: const PreferredSize(
+                                  preferredSize: Size.fromHeight(1.0),
+                                  child: Divider(
+                                    height: 1,
+                                    thickness: 1,
+                                    color: Colors.grey,
                                   ),
                                 ),
-                                backgroundColor: Colors.transparent,
-                                body: Scrollbar(
-                                  thickness: 10,
+                              ),
+                              backgroundColor: Colors.transparent,
+                              body: Scrollbar(
+                                thickness: 10,
+                                controller: sc,
+                                child: ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
                                   controller: sc,
-                                  child: SingleChildScrollView(
-                                    physics: const BouncingScrollPhysics(),
-                                    controller: sc,
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: widget.data.length,
-                                      itemBuilder: (context, index) {
-                                        String? listTitle = widget
-                                            .data[index].housingProject?.desc;
-                                        String? listSubtitle = (widget
-                                                    .data[index]
-                                                    .visit
-                                                    ?.isEmpty ??
+                                  itemCount: widget.data.length,
+                                  itemBuilder: (context, index) {
+                                    String? listTitle =
+                                        widget.data[index].housingProject?.desc;
+                                    String? listSubtitle =
+                                        (widget.data[index].visit?.isEmpty ??
                                                 true)
                                             ? "Bancian Pertama"
                                             : widget.data[index].visit?.first
                                                 .remark;
-                                        String? listUnitNo =
-                                            widget.data[index].unit?.unitNo;
+                                    String? listUnitNo =
+                                        widget.data[index].unit?.unitNo;
 
-                                        return _dataTile(
-                                          context,
-                                          data: widget.data[index],
-                                          title: listTitle,
-                                          subtitle: listSubtitle,
-                                          unitNo: listUnitNo,
-                                        );
-                                      },
-                                    ),
-                                  ),
+                                    return _dataTile(
+                                      context,
+                                      data: widget.data[index],
+                                      title: listTitle,
+                                      subtitle: listSubtitle,
+                                      unitNo: listUnitNo,
+                                    );
+                                  },
                                 ),
                               ),
-                            );
-                          });
+                            ),
+                          );
+                        },
+                      );
                     });
               },
               child: Container(

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:eperumahan_bancian/components/timeout_screen.dart';
@@ -12,7 +13,8 @@ import '../hive-manager/repository/login_pref.dart';
 class ApiClient {
   static final ApiClient _instance = ApiClient._internal();
   String? _baseUrl;
-
+  static bool _isHandlingTokenExpiration = false;
+  static Completer<void>? _tokenRefreshCompleter;
   factory ApiClient() {
     return _instance;
   }
@@ -44,7 +46,7 @@ class ApiClient {
       String? authToken,
       bool includeToken = true,
       Map<String, String>? headers}) async {
-    final getToken = getAuthToken(includeToken);
+    final getToken = await getAuthToken(includeToken);
     final token = includeToken ? (authToken ?? getToken) : null;
     final header = await _mergeHeaders(headers, token);
     final response = await http
@@ -59,7 +61,7 @@ class ApiClient {
       String? authToken,
       bool includeToken = true,
       Map<String, String>? headers}) async {
-    final getToken = getAuthToken(includeToken);
+    final getToken = await getAuthToken(includeToken);
     final token = includeToken ? (authToken ?? getToken) : null;
     final header = await _mergeHeaders(headers, token);
     final response = await http.post(
@@ -76,7 +78,7 @@ class ApiClient {
       bool includeToken = true,
       String? authToken,
       Map<String, String>? headers}) async {
-    final getToken = getAuthToken(includeToken);
+    final getToken = await getAuthToken(includeToken);
     final token = includeToken ? (authToken ?? getToken) : null;
     final header = await _mergeHeaders(headers, token);
     final response = await http.put(
@@ -92,7 +94,7 @@ class ApiClient {
       String? authToken,
       bool includeToken = true,
       Map<String, String>? headers}) async {
-    final getToken = getAuthToken(includeToken);
+    final getToken = await getAuthToken(includeToken);
     final token = includeToken ? (authToken ?? getToken) : null;
     final header = await _mergeHeaders(headers, token);
     final response = await http.delete(
@@ -109,7 +111,7 @@ class ApiClient {
       String? authToken,
       bool includeToken = true,
       Map<String, String>? headers}) async {
-    final getToken = getAuthToken(includeToken);
+    final getToken = await getAuthToken(includeToken);
     final token = includeToken ? (authToken ?? getToken) : null;
     final header = await _mergeHeaders(headers, token);
 
@@ -173,21 +175,68 @@ class ApiClient {
     return mergedHeaders;
   }
 
-  //GET TOKEN FROM PREFERENCE
-  String? getAuthToken(bool includToken) {
-    if (!includToken) return null;
+  // //GET TOKEN FROM PREFERENCE
+  // String? getAuthToken(bool includToken) {
+  //   if (!includToken) return null;
+  //   final isExist = LoginPreference().isTokenExist();
+  //   if (!isExist) return null;
+  //   final token = LoginPreference().isTokenExpired();
+  //   if (token == null) {
+  //     Navigator.push(
+  //         navigatorKey.currentContext!,
+  //         PageTransition(
+  //             child: const TimeoutScreen(),
+  //             type: PageTransitionType.rightToLeft));
+  //     throw TokenExpiredException();
+  //   }
+  //   return token;
+  // }
+
+  Future<String?> getAuthToken(bool includeToken) async {
+    if (!includeToken) return null;
+
     final isExist = LoginPreference().isTokenExist();
     if (!isExist) return null;
+
     final token = LoginPreference().isTokenExpired();
+
     if (token == null) {
-      Navigator.push(
-          navigatorKey.currentContext!,
-          PageTransition(
-              child: const TimeoutScreen(),
-              type: PageTransitionType.rightToLeft));
-      throw TokenExpiredException();
+      return await _handleTokenExpiration();
     }
     return token;
+  }
+
+  Future<String?> _handleTokenExpiration() async {
+    if (_isHandlingTokenExpiration) {
+      // If another request is already handling token expiration, wait for it to complete
+      dev.log("Waiting for token refresh...", name: "API Service");
+      await _tokenRefreshCompleter?.future;
+    } else {
+      // First request triggers the token expiration handling
+      _isHandlingTokenExpiration = true;
+      _tokenRefreshCompleter = Completer<void>();
+
+      try {
+        dev.log("Handling token expiration...", name: "API Service");
+
+        // Redirect user to login or refresh token logic
+        Navigator.push(
+          navigatorKey.currentContext!,
+          PageTransition(
+            child: const TimeoutScreen(),
+            type: PageTransitionType.rightToLeft,
+          ),
+        );
+
+        throw TokenExpiredException();
+      } finally {
+        // Mark completion so waiting requests continue
+        _isHandlingTokenExpiration = false;
+        _tokenRefreshCompleter?.complete();
+        _tokenRefreshCompleter = null;
+      }
+    }
+    return null;
   }
 }
 
