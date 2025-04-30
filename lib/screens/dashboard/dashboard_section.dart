@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/data/api/repositories/qr_repository.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_proof_camera.dart';
@@ -77,22 +75,124 @@ class _DashboardSectionState extends State<DashboardSection> {
       //set limit 3
       int listLen = widget.data.length >= 3 ? 3 : widget.data.length;
 
-      return cardWidget(
-          children: List.generate(listLen, (index) {
-        String? listTitle = widget.data[index].housingProject?.desc;
-        String? listSubtitle = (widget.data[index].visit?.isEmpty ?? true)
-            ? "Bancian Pertama"
-            : widget.data[index].visit?.first.remark;
-        String? listUnitNo = widget.data[index].unit?.unitNo;
+      return cardWidget(children: [
+        ...List.generate(listLen, (index) {
+          String? listTitle = widget.data[index].housingProject?.desc;
+          String? listSubtitle = (widget.data[index].visit?.isEmpty ?? true)
+              ? "Bancian Pertama"
+              : widget.data[index].visit?.first.remark;
+          String? listUnitNo = widget.data[index].unit?.unitNo;
 
-        log("this is unit no test ===> $listUnitNo");
+          // log("this is unit no test ===> $listUnitNo");
 
-        return _dataTile(context,
-            data: widget.data[index],
-            title: listTitle,
-            subtitle: listSubtitle,
-            unitNo: listUnitNo);
-      }));
+          return _dataTile(context,
+              data: widget.data[index],
+              title: listTitle,
+              subtitle: listSubtitle,
+              unitNo: listUnitNo);
+        }),
+        Visibility(
+            visible: widget.data.length > 3,
+            child: GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.white,
+                    builder: (_) {
+                      return DraggableScrollableSheet(
+                        expand: false,
+                        maxChildSize: .9,
+                        initialChildSize: .5,
+                        minChildSize: .3,
+                        builder: (_, sc) {
+                          return ClipRRect(
+                            clipBehavior: Clip.antiAlias,
+                            borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(16)),
+                            child: Scaffold(
+                              appBar: AppBar(
+                                centerTitle: true,
+                                title: Text(widget.title),
+                                backgroundColor: Colors.white,
+                                bottom: const PreferredSize(
+                                  preferredSize: Size.fromHeight(1.0),
+                                  child: Divider(
+                                    height: 1,
+                                    thickness: 1,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              backgroundColor: Colors.transparent,
+                              body: Scrollbar(
+                                thickness: 10,
+                                controller: sc,
+                                child: ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
+                                  controller: sc,
+                                  itemCount: widget.data.length,
+                                  itemBuilder: (context, index) {
+                                    String? listTitle =
+                                        widget.data[index].housingProject?.desc;
+                                    String? listSubtitle =
+                                        (widget.data[index].visit?.isEmpty ??
+                                                true)
+                                            ? "Bancian Pertama"
+                                            : widget.data[index].visit?.first
+                                                .remark;
+                                    String? listUnitNo =
+                                        widget.data[index].unit?.unitNo;
+
+                                    return _dataTile(
+                                      context,
+                                      data: widget.data[index],
+                                      title: listTitle,
+                                      subtitle: listSubtitle,
+                                      unitNo: listUnitNo,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    });
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Lihat Semua",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 22, 99, 138)),
+                    ),
+                    Container(
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: Colors.blueGrey.shade100,
+                      ),
+                      margin: const EdgeInsets.only(left: 12),
+                      padding: const EdgeInsets.only(
+                          left: 6, right: 6, top: 2, bottom: 2),
+                      child: Text(
+                        widget.data.length.toString(),
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ))
+      ]);
     } else {
       //Empty
       return cardWidget(children: [

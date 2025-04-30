@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:eperumahan_bancian/data/api/repositories/application_repository.dart';
@@ -23,6 +24,7 @@ class BancianBloc extends Bloc<BancianEvent, BancianState> {
   StatusInputModel? statusNotOwnerData;
   String houseStatus = ""; // UNS003:unit kosong
   String unitTypeCode = ""; //
+  bool isLampiranSuccess = false;
   _onSetBancianData(SetBancianData event, Emitter<BancianState> emit) {
     unitData = event.data;
     houseStatus = unitData.unit?.statusCode ?? "";
@@ -38,6 +40,11 @@ class BancianBloc extends Bloc<BancianEvent, BancianState> {
     applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
     try {
       final resp = await repo.storeStatus(data: event.data);
+      final json = jsonDecode(resp);
+      final data = json['data'];
+      isLampiranSuccess = (data['censusStatus'] as String)
+          .toLowerCase()
+          .contains("tidak lengkap");
       applog.logDebug(tag: "_onSavePenghuniData", msg: resp);
       emit(BancianSuccess());
     } catch (e) {

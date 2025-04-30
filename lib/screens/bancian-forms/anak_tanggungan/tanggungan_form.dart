@@ -63,12 +63,17 @@ class _TanggunganFormState extends State<TanggunganForm> {
                     context,
                     PageTransition(
                         child: CaptureCardScreen(onNext: (frontImg, backImg) {
-                          context.read<AnakTanggunganBloc>().addNewChild(
-                              frontImg: frontImg, backImg: backImg);
-                          Navigator.pop(context);
-                          const AnakModal(
-                            isEdit: true,
-                          ).show(context);
+                          context
+                              .read<AnakTanggunganBloc>()
+                              .addNewChild(frontImg: frontImg, backImg: backImg)
+                              .then((val) {
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                            const AnakModal(
+                              isEdit: true,
+                              // ignore: use_build_context_synchronously
+                            ).show(context);
+                          });
                         }),
                         type: PageTransitionType.bottomToTop));
               },
@@ -124,12 +129,18 @@ class _TanggunganFormState extends State<TanggunganForm> {
                     context,
                     PageTransition(
                         child: CaptureCardScreen(onNext: (frontImg, backImg) {
-                          context.read<AnakTanggunganBloc>().addNewDependant(
-                              frontImg: frontImg, backImg: backImg);
-                          Navigator.pop(context);
-                          const TanggunganModal(
-                            isEdit: true,
-                          ).show(context);
+                          context
+                              .read<AnakTanggunganBloc>()
+                              .addNewDependant(
+                                  frontImg: frontImg, backImg: backImg)
+                              .then((val) {
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                            const TanggunganModal(
+                              isEdit: true,
+                              // ignore: use_build_context_synchronously
+                            ).show(context);
+                          });
                         }),
                         type: PageTransitionType.bottomToTop));
               },

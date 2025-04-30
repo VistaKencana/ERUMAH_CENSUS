@@ -4,7 +4,9 @@ import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BancianResult extends StatefulWidget {
   final bool isVerify;
@@ -60,7 +62,9 @@ class _BancianResultState extends State<BancianResult> {
                           _listileWidget(
                               icon: Icons.description,
                               title: "Lampiran",
-                              isChecked: true),
+                              isChecked: context
+                                  .read<BancianBloc>()
+                                  .isLampiranSuccess),
                           _listileWidget(
                               icon: Icons.fingerprint,
                               title: "Cap jari",

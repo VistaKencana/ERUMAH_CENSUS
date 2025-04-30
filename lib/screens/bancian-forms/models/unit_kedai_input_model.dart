@@ -80,9 +80,9 @@ class UnitKedaiInputModel {
     String? icNo,
     String? email,
     String? phoneNo,
-    String? businessTypeCode,
     Uint8List? uploadSSM,
     Uint8List? uploadBusinessLicense,
+    String? businessTypeCode,
     String? businessTypeDesc,
     bool? isChangeOnImage,
   }) {

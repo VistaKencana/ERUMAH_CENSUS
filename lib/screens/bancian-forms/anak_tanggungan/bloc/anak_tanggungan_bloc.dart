@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:eperumahan_bancian/data/api/repositories/ocr_repository.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/dependant_input_model.dart';
 import 'package:eperumahan_bancian/screens/qr-home/models/resident_info_model.dart';
 import 'package:eperumahan_bancian/services/app_log.dart';
@@ -29,6 +30,7 @@ class AnakTanggunganBloc
   DependantInputModel? selectedData;
   int selectedIndex = 0;
   final repo = ApplicationRepository();
+  final ocrRepo = OcrRepository();
   final applog = const AppLog(classname: "AnakTanggunganBloc");
   _onSetAnakTanggungData(
       SetAnakTanggungData event, Emitter<AnakTanggunganState> emit) {
@@ -155,10 +157,10 @@ class AnakTanggunganBloc
         tag: "Select Dependant", msg: selectedData!.toJson().toString());
   }
 
-  addNewChild({
+  Future<bool> addNewChild({
     required Uint8List frontImg,
     required Uint8List backImg,
-  }) {
+  }) async {
     //Setting new object for new child
     selectedData = DependantInputModel(
         censusCode: censusCode,
@@ -166,17 +168,46 @@ class AnakTanggunganBloc
         relationshipDesc: "Anak",
         uploadIcFront: frontImg,
         uploadIcBack: backImg);
+    try {
+      EasyLoading.show();
+      final ocrData = await ocrRepo.scanMyKad(frontIc: frontImg);
+      selectedData = selectedData!.copyWith(
+          name: ocrData.name,
+          icNo: ocrData.icNo,
+          genderCode: ocrData.genderCode,
+          genderDesc: ocrData.genderDesc);
+    } catch (e) {
+      applog.logError(tag: "Add Child", msg: e.toString());
+    } finally {
+      EasyLoading.dismiss();
+    }
+
     applog.logDebug(tag: "Add Child", msg: selectedData!.toJson().toString());
+    return true;
   }
 
-  addNewDependant({
+  Future<bool> addNewDependant({
     required Uint8List frontImg,
     required Uint8List backImg,
-  }) {
+  }) async {
     //Setting new object for new dependant
     selectedData = DependantInputModel(
         censusCode: censusCode, uploadIcFront: frontImg, uploadIcBack: backImg);
+    try {
+      EasyLoading.show();
+      final ocrData = await ocrRepo.scanMyKad(frontIc: frontImg);
+      selectedData = selectedData!.copyWith(
+          name: ocrData.name,
+          icNo: ocrData.icNo,
+          genderCode: ocrData.genderCode,
+          genderDesc: ocrData.genderDesc);
+    } catch (e) {
+      applog.logError(tag: "Add Child", msg: e.toString());
+    } finally {
+      EasyLoading.dismiss();
+    }
     applog.logDebug(
         tag: "Add Dependant", msg: selectedData!.toJson().toString());
+    return true;
   }
 }
