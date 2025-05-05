@@ -102,7 +102,8 @@ class _IcCameraState extends State<IcCamera> {
           toolbarTitle: 'Cropper',
           toolbarColor: AppColors.primary.color,
           toolbarWidgetColor: Colors.white,
-          aspectRatioPresets: CropAspectRatioPreset.values,
+          // aspectRatioPresets: CropAspectRatioPreset.values,
+          initAspectRatio: CropAspectRatioPreset.original,
         )
       ],
     );
