@@ -105,14 +105,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _showLogoutAlert() async {
     return await CustomAlertDialog(
-      position: AlertBtnPosition.leftRignt,
-      title: "Logout",
-      subtitle: "You will be logout from this app",
-      colorBtnLabel: "Logout",
-      dimmedBtnLabel: "Cancel",
-      onDimmedBtn: () => Navigator.pop(context),
-      onColorBtn: () =>
-          Navigator.popUntil(context, ModalRoute.withName(RoutesName.login)),
-    ).show(context);
+        position: AlertBtnPosition.leftRignt,
+        title: "Logout",
+        subtitle: "You will be logout from this app",
+        colorBtnLabel: "Logout",
+        dimmedBtnLabel: "Cancel",
+        onDimmedBtn: () => Navigator.pop(context),
+        onColorBtn: () => Navigator.pushNamedAndRemoveUntil(
+              context,
+              RoutesName.login,
+              (route) => false,
+            )
+        // Navigator.popUntil(context, ModalRoute.withName(RoutesName.login)),
+        ).show(context);
   }
 }

@@ -37,7 +37,7 @@ class NavItem extends StatelessWidget {
   const NavItem({
     super.key,
     required this.icon,
-    this.selectedBgColor = const Color(0xFF403C97),
+    this.selectedBgColor = const Color(0xFF096B6C),
     this.selectedColor = Colors.white,
     required this.isSelected,
     this.unselectedBgColor = Colors.transparent,
@@ -67,11 +67,13 @@ class NavItem extends StatelessWidget {
           children: [
             (icon is Icon)
                 ? Icon((icon as Icon).icon,
-                    color: isSelected ? selectedBgColor : Colors.black,
+                    color: isSelected
+                        ? selectedBgColor
+                        : Colors.black.withOpacity(.8),
                     size: (icon as Icon).size)
                 : icon,
             Visibility(
-              visible: isSelected,
+              visible: isSelected && label.isNotEmpty,
               child: Text(label,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,

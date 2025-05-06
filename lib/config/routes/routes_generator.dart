@@ -3,6 +3,7 @@ import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/screens/activity/activity_search_screen.dart';
 import 'package:eperumahan_bancian/screens/home_screen.dart';
 import 'package:eperumahan_bancian/screens/login/login_screen.dart';
+import 'package:eperumahan_bancian/screens/profile/profile_screen.dart';
 import 'package:eperumahan_bancian/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -18,7 +19,7 @@ class RoutesGenerator {
         return PageTransition(
             settings: const RouteSettings(name: RoutesName.login),
             type: PageTransitionType.fade,
-            duration: const Duration(milliseconds: 2500),
+            duration: const Duration(milliseconds: 1500),
             child: const LoginScreen());
       case RoutesName.home:
         return PageTransition(
@@ -30,6 +31,11 @@ class RoutesGenerator {
             type: PageTransitionType.rightToLeft,
             settings: const RouteSettings(name: RoutesName.activitySearch),
             child: const ActivitySearchScreen());
+      case RoutesName.profile:
+        return PageTransition(
+            type: PageTransitionType.rightToLeft,
+            settings: const RouteSettings(name: RoutesName.profile),
+            child: const ProfileScreen());
       default:
         return RoutesError.errorRoute();
     }

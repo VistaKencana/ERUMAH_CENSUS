@@ -7,6 +7,7 @@ import 'package:eperumahan_bancian/screens/dashboard/kawasan_modal.dart';
 import 'package:eperumahan_bancian/screens/dashboard/provider/dashboard_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../components/indicator.dart';
@@ -32,11 +33,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   String nullOrEmptyReplace(String? val, {String? replaceWIth}) {
-    String result = replaceWIth ?? "-";
+    String result = replaceWIth ?? "0";
     if (val == null) {
       return result;
     }
-    return (val.isEmpty) ? result : val;
+    return "${((val.isEmpty) ? result : val)} Unit";
   }
 
   @override
@@ -47,29 +48,73 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: LayoutBuilder(builder: (context, constraint) {
         return Scaffold(
           // backgroundColor: Colors.transparent,
-          backgroundColor: AppColors.lightBlue.color,
+          // backgroundColor: AppColors.lightBlue.color,
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const DashboardHeader(),
-                SizedBox(height: constraint.maxHeight * .02),
-                //MARK: User Activity
-                sectionContainer(children: [
-                  Text(
-                    "Aktiviti anda",
-                    style: appTextStyle(
-                        color: AppColors.primary.color,
-                        size: 22,
-                        fontWeight: FontWeight.bold),
+                SizedBox(height: constraint.maxHeight * .03),
+                //MARK: Latest Activity
+                GridView(
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // 3 items per row
+                    crossAxisSpacing: 6.0,
+                    mainAxisSpacing: 10.0,
+                    childAspectRatio: 1.6,
                   ),
-                  Text(
-                      "${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())}",
-                      style: appTextStyle(
-                        color: AppColors.primary.color,
-                        size: 14,
-                      )),
-                  SizedBox(height: constraint.maxHeight * .03),
+                  children: [
+                    //MARK: Latest Activity
+                    DashboardSection(
+                        isLoading: watchDashboard.latestLoading,
+                        title: "Aktiviti terkini",
+                        data: watchDashboard.latestList),
+                    DashboardSection(
+                        isLoading: watchDashboard.incompleteLoading,
+                        title: "Untuk susulan",
+                        data: watchDashboard.incompleteList),
+                  ],
+                ),
+                SizedBox(height: constraint.maxHeight * .03),
+                const Divider(height: 18),
+                SizedBox(height: constraint.maxHeight * .02),
+                //MARK: Incomplete Activity
+
+                //MARK: User Activity
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            color: AppColors.darkGrey.color,
+                            borderRadius: BorderRadius.circular(6)),
+                        child: Text(
+                          "AKTIVITI ANDA",
+                          style: appTextStyle(
+                              color: Colors.white,
+                              size: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Text(
+                          "${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())}"
+                              .toUpperCase(),
+                          style: appTextStyle(
+                              fontWeight: FontWeight.bold,
+                              size: 26,
+                              color: Colors.black87)),
+                    ],
+                  ),
+                ),
+                SizedBox(height: constraint.maxHeight * .02),
+                sectionContainer(children: [
                   watchDashboard.activityLoading
                       ? const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -79,14 +124,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ],
                         )
                       : GridView(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3, // 3 items per row
+                            crossAxisCount: 2, // 3 items per row
                             crossAxisSpacing: 6.0,
                             mainAxisSpacing: 10.0,
+                            childAspectRatio: 1.2,
                           ),
                           children: [
                             _item(
@@ -99,45 +145,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 title: "Berjaya",
                                 val: nullOrEmptyReplace(
                                     watchDashboard.acitivtyData.totalComplete),
-                                icon: Icons.check_circle_rounded,
+                                icon: Icons.check_circle_outline,
                                 color: const Color(0xFF28C194)),
                             _item(
                                 title: "Dalam Proses",
                                 val: nullOrEmptyReplace(watchDashboard
                                     .acitivtyData.totalInProgress),
-                                icon: Icons.error_rounded,
+                                icon: Icons.error_outline_outlined,
                                 color: Colors.amber),
                           ],
                         ),
                 ]),
-                SizedBox(height: constraint.maxHeight * .02),
-                //MARK: Latest Activity
-                DashboardSection(
-                    isLoading: watchDashboard.latestLoading,
-                    data: watchDashboard.latestList,
-                    // miniTitle: "AKTIVITI",
-                    title: "Aktiviti terkini"),
-
-                SizedBox(height: constraint.maxHeight * .02),
-                //MARK: Incomplete Activity
-                DashboardSection(
-                  isLoading: watchDashboard.incompleteLoading,
-                  data: watchDashboard.incompleteList,
-                  // miniTitle: "SUSULAN",
-                  title: "Untuk susulan",
-                  showButton: true,
-                ),
 
                 const SizedBox(height: 40),
-                // cartaPerumahan(),
-                // Container(
-                //   margin: const EdgeInsets.symmetric(vertical: 22),
-                //   color: Colors.grey.shade300,
-                //   height: 8,
-                //   width: double.infinity,
-                // ),
-                // const SizedBox(height: 4),
-                // maklumatTelefon(),
               ],
             ),
           ),
@@ -183,20 +203,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required IconData icon,
     Color? color,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Icon(icon, size: 40, color: color),
-        const SizedBox(height: 6),
-        Text(
-          val,
-          style: appTextStyle(size: 20, fontWeight: FontWeight.bold),
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: color?.withOpacity(.2)),
+              child: Icon(icon, size: 24, color: color),
+            ),
+            const Spacer(),
+            Text(
+              title,
+              style: appTextStyle(size: 16.sp, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              val,
+              style: appTextStyle(
+                  size: 16.sp, color: AppColors.dimmedPurple.color),
+            ),
+          ],
         ),
-        Text(
-          title,
-          style: appTextStyle(size: 14, color: AppColors.dimmedPurple.color),
-        ),
-      ],
+      ),
     );
   }
 
@@ -240,9 +271,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
   }) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12),
+      elevation: 0,
+      // margin: const EdgeInsets.symmetric(horizontal: 12),
       child: Container(
-        padding: const EdgeInsets.only(top: 18, bottom: 18),
+        // padding: const EdgeInsets.only(top: 18, bottom: 18),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),

@@ -18,6 +18,10 @@ enum AppImages {
   custService(path: "assets/images/customer_service.png"),
   captureCard(path: "assets/images/capture_card.png"),
   noConnection(path: "assets/images/no_internet.png"),
+  //
+  splash(path: "assets/images/splash_screen.png"),
+  qrIcons(path: "assets/images/qr_icon.png"),
+  greenBg(path: "assets/images/green_bg.png"),
   ;
 
   final String path;

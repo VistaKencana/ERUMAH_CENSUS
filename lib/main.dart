@@ -12,7 +12,6 @@ import 'package:eperumahan_bancian/config/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'config/constants/app_size.dart';
 import 'config/providers/app_provider.dart';
 import 'data/hive-manager/hive_manager.dart';
@@ -23,7 +22,7 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ApiClient.init(ApiEnv.dev.baseUrl);
-  await _requestPermission();
+  // await _requestPermission();
   await Future.wait([
     AppInfo.init(),
     DrawWatermark.initializeFont(),
@@ -40,13 +39,13 @@ Future<void> main() async {
   ));
 }
 
-_requestPermission() async {
-  var status = await Permission.camera.status;
-  if (!status.isGranted) {
-    await Permission.camera.request();
-  }
-  await Permission.storage.request();
-}
+// _requestPermission() async {
+//   var status = await Permission.camera.status;
+//   if (!status.isGranted) {
+//     await Permission.camera.request();
+//   }
+//   await Permission.storage.request();
+// }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -72,8 +71,8 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: navigatorKey,
         //THEME
         themeMode: ThemeMode.light,
-        theme: AppThemes.lightTheme,
-        darkTheme: AppThemes.darkTheme,
+        theme: AppThemes.of(context).lightTheme,
+        darkTheme: AppThemes.of(context).darkTheme,
         //ROUTES
         initialRoute: RoutesName.splash,
         onGenerateRoute: RoutesGenerator.generateRoutes,
