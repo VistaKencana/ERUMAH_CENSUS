@@ -55,7 +55,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _navigateBasedOnLogin() {
     final isLoggedIn = LoginPreference().isTokenExpired() != null;
-
+    if (isLoggedIn) {
+      Navigator.pushReplacementNamed(context, RoutesName.login);
+      Navigator.pushNamed(context, RoutesName.home);
+      return;
+    }
     Navigator.pushNamedAndRemoveUntil(
       context,
       isLoggedIn ? RoutesName.home : RoutesName.login,

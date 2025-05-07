@@ -69,6 +69,7 @@ dependencies:
   google_mlkit_document_scanner: ^0.3.0
   device_info_plus: ^11.3.0
   google_fonts: ^6.2.1
+  synchronized: ^3.3.0+3
 
 dev_dependencies:
   flutter_test:

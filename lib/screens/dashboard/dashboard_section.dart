@@ -69,7 +69,7 @@ class _DashboardSectionState extends State<DashboardSection> {
                     return DraggableScrollableSheet(
                       expand: false,
                       maxChildSize: .9,
-                      initialChildSize: .5,
+                      initialChildSize: .8,
                       minChildSize: .3,
                       builder: (_, sc) {
                         return ClipRRect(
@@ -79,16 +79,32 @@ class _DashboardSectionState extends State<DashboardSection> {
                           child: Scaffold(
                             appBar: AppBar(
                               centerTitle: true,
-                              title: Text(widget.title),
-                              backgroundColor: Colors.white,
-                              bottom: const PreferredSize(
-                                preferredSize: Size.fromHeight(1.0),
-                                child: Divider(
-                                  height: 1,
-                                  thickness: 1,
-                                  color: Colors.grey,
-                                ),
+                              elevation: 0,
+                              shadowColor: Colors.transparent,
+                              title: Text(
+                                widget.title,
+                                style: appTextStyle(
+                                    size: 20,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
                               ),
+                              foregroundColor: Colors.white,
+                              leading: IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios,
+                                    size: 16,
+                                  )),
+                              // bottom: const PreferredSize(
+                              //   preferredSize: Size.fromHeight(1.0),
+                              //   child: Divider(
+                              //     height: 1,
+                              //     thickness: 1,
+                              //     color: Colors.grey,
+                              //   ),
+                              // ),
                             ),
                             backgroundColor: Colors.transparent,
                             body: Scrollbar(

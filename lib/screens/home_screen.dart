@@ -67,10 +67,12 @@ class _HomeScreenState extends State<HomeScreen> {
             EasyLoading.show();
           } else if (state is AuthLogoutSuccess) {
             EasyLoading.dismiss().then(
-              (val) => Navigator.popUntil(
-                  // ignore: use_build_context_synchronously
-                  context,
-                  ModalRoute.withName(RoutesName.login)),
+              (val) => Navigator.pushNamedAndRemoveUntil(
+                // ignore: use_build_context_synchronously
+                context,
+                RoutesName.login,
+                (route) => false,
+              ),
             );
           } else if (state is AuthLogoutError) {
             EasyLoading.dismiss();
@@ -105,18 +107,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _showLogoutAlert() async {
     return await CustomAlertDialog(
-        position: AlertBtnPosition.leftRignt,
-        title: "Logout",
-        subtitle: "You will be logout from this app",
-        colorBtnLabel: "Logout",
-        dimmedBtnLabel: "Cancel",
-        onDimmedBtn: () => Navigator.pop(context),
-        onColorBtn: () => Navigator.pushNamedAndRemoveUntil(
-              context,
-              RoutesName.login,
-              (route) => false,
-            )
-        // Navigator.popUntil(context, ModalRoute.withName(RoutesName.login)),
-        ).show(context);
+      position: AlertBtnPosition.leftRignt,
+      title: "Logout",
+      subtitle: "You will be logout from this app",
+      colorBtnLabel: "Logout",
+      dimmedBtnLabel: "Cancel",
+      onDimmedBtn: () => Navigator.pop(context),
+      onColorBtn: () => context.read<AuthBloc>().add(UserLogout()),
+      // Navigator.popUntil(context, ModalRoute.withName(RoutesName.login)),
+    ).show(context);
   }
 }
