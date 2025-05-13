@@ -1,3 +1,4 @@
+import 'package:eperumahan_bancian/config/constants/app_images.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/login_pref.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +22,41 @@ class SplashScreen extends StatelessWidget {
       }
     });
 
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return LayoutBuilder(builder: (contex, constraint) {
+      return Scaffold(
+          body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            stops: [0.0, 0.23, 0.61, 1.0],
+            colors: [
+              Color(0xFFBA2C45), // 0%
+              Color(0xFF641725), // 23%
+              Color(0xFF50121D), // 61%
+              Color(0xFF040001), // 100%
+            ],
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AspectRatio(
+                aspectRatio: 30 / 9,
+                child: Image.asset(
+                  AppImages.dbklLogo.path,
+                  fit: BoxFit.contain,
+                  height: constraint.maxHeight * .2,
+                  width: constraint.maxWidth * .4,
+                ),
+              ),
+              const SizedBox(height: 30),
+              const CircularProgressIndicator(color: Colors.white)
+            ],
+          ),
+        ),
+      ));
+    });
   }
 }
