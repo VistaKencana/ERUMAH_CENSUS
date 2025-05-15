@@ -4,7 +4,7 @@ enum AppColors {
   darkGrey(color: Color(0xFF383838)),
   midGrey(color: Color(0xFFEEEDED)),
   lightGrey(color: Color(0xFFF5F5F5)),
-  primary(color: Color(0xFF312D81)),
+  primary(color: Color(0xFF8D182D)),
   dimmedPurple(color: Color(0xFF83849F)),
   brightBlue(color: Color(0xFF0446F3)),
   lightBlue(color: Color(0xFFF0F4F7)),

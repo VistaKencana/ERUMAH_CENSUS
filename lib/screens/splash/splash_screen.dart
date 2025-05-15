@@ -2,26 +2,71 @@ import 'package:eperumahan_bancian/config/constants/app_images.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/login_pref.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _handleStartup();
+  }
+
+  Future<void> _handleStartup() async {
+    bool allGranted = await _checkAndRequestPermissions();
+
+    if (allGranted) {
+      await Future.delayed(const Duration(milliseconds: 3500));
+    } else {
+      // Wait a little longer after permissions are granted
+      await Future.delayed(const Duration(milliseconds: 2000));
+    }
+
+    _navigateBasedOnLogin();
+  }
+
+  Future<bool> _checkAndRequestPermissions() async {
+    final cameraStatus = await Permission.camera.status;
+    final storageStatus = await Permission.storage.status;
+
+    bool cameraGranted = cameraStatus.isGranted;
+    bool storageGranted = storageStatus.isGranted;
+
+    if (!cameraGranted) {
+      final newStatus = await Permission.camera.request();
+      cameraGranted = newStatus.isGranted;
+    }
+
+    if (!storageGranted) {
+      final newStatus = await Permission.storage.request();
+      storageGranted = newStatus.isGranted;
+    }
+
+    return cameraGranted && storageGranted;
+  }
+
+  void _navigateBasedOnLogin() {
+    final isLoggedIn = LoginPreference().isTokenExpired() != null;
+    if (isLoggedIn) {
+      Navigator.pushReplacementNamed(context, RoutesName.login);
+      Navigator.pushNamed(context, RoutesName.home);
+      return;
+    }
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      isLoggedIn ? RoutesName.home : RoutesName.login,
+      (route) => false,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      final isLoggedIn = LoginPreference().isTokenExpired() != null;
-
-      Navigator.pushNamedAndRemoveUntil(
-          // ignore: use_build_context_synchronously
-          context,
-          RoutesName.login,
-          (route) => false);
-      if (isLoggedIn) {
-        // ignore: use_build_context_synchronously
-        Navigator.pushNamed(context, RoutesName.home);
-      }
-    });
-
     return LayoutBuilder(builder: (contex, constraint) {
       return Scaffold(
           body: Container(

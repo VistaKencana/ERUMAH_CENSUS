@@ -67,10 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
             EasyLoading.show();
           } else if (state is AuthLogoutSuccess) {
             EasyLoading.dismiss().then(
-              (val) => Navigator.popUntil(
+              (val) => Navigator.popAndPushNamed(
                   // ignore: use_build_context_synchronously
                   context,
-                  ModalRoute.withName(RoutesName.login)),
+                  RoutesName.login),
             );
           } else if (state is AuthLogoutError) {
             EasyLoading.dismiss();
@@ -111,8 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
       colorBtnLabel: "Logout",
       dimmedBtnLabel: "Cancel",
       onDimmedBtn: () => Navigator.pop(context),
-      onColorBtn: () =>
-          Navigator.popUntil(context, ModalRoute.withName(RoutesName.login)),
+      onColorBtn: () => context.read<AuthBloc>().add(UserLogout()),
     ).show(context);
   }
 }

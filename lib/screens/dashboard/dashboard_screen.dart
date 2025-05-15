@@ -32,7 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   String nullOrEmptyReplace(String? val, {String? replaceWIth}) {
-    String result = replaceWIth ?? "-";
+    String result = replaceWIth ?? "0";
     if (val == null) {
       return result;
     }
@@ -47,70 +47,85 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: LayoutBuilder(builder: (context, constraint) {
         return Scaffold(
           // backgroundColor: Colors.transparent,
-          backgroundColor: AppColors.lightBlue.color,
+          // backgroundColor: AppColors.lightBlue.color,
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const DashboardHeader(),
-                SizedBox(height: constraint.maxHeight * .02),
+                SizedBox(height: constraint.maxHeight * .03),
                 //MARK: User Activity
-                sectionContainer(children: [
-                  Text(
-                    "Aktiviti anda",
-                    style: appTextStyle(
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 16, right: 16, bottom: 10),
+                  child: Row(
+                    children: [
+                      Text(
+                        "AKTIVITI ANDA",
+                        style:
+                            appTextStyle(size: 20, fontWeight: FontWeight.bold),
+                      ),
+                      const Spacer(),
+                      Icon(
+                        Icons.calendar_month,
                         color: AppColors.primary.color,
-                        size: 22,
-                        fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                          "${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())}"
+                              .toUpperCase(),
+                          style: appTextStyle(
+                            color: AppColors.darkGrey.color,
+                            size: 14,
+                          )),
+                      SizedBox(height: constraint.maxHeight * .03),
+                    ],
                   ),
-                  Text(
-                      "${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())}",
-                      style: appTextStyle(
-                        color: AppColors.primary.color,
-                        size: 14,
-                      )),
-                  SizedBox(height: constraint.maxHeight * .03),
-                  watchDashboard.activityLoading
-                      ? const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(),
-                          ],
-                        )
-                      : GridView(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3, // 3 items per row
-                            crossAxisSpacing: 6.0,
-                            mainAxisSpacing: 10.0,
-                          ),
-                          children: [
-                            _item(
-                                title: "Unit rumah",
-                                val: nullOrEmptyReplace(
-                                    watchDashboard.acitivtyData.totalUnit),
-                                icon: Icons.apartment_outlined,
-                                color: const Color(0xFF8F69EE)),
-                            _item(
-                                title: "Berjaya",
-                                val: nullOrEmptyReplace(
-                                    watchDashboard.acitivtyData.totalComplete),
-                                icon: Icons.check_circle_rounded,
-                                color: const Color(0xFF28C194)),
-                            _item(
-                                title: "Dalam Proses",
-                                val: nullOrEmptyReplace(watchDashboard
-                                    .acitivtyData.totalInProgress),
-                                icon: Icons.error_rounded,
-                                color: Colors.amber),
-                          ],
-                        ),
-                ]),
-                SizedBox(height: constraint.maxHeight * .02),
+                ),
+                watchDashboard.activityLoading
+                    ? const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                        ],
+                      )
+                    : GridView(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3, // 3 items per row
+                                crossAxisSpacing: 6.0,
+                                mainAxisSpacing: 10.0,
+                                childAspectRatio: 1.2),
+                        children: [
+                          _item(
+                              title: "Unit rumah",
+                              val: nullOrEmptyReplace(
+                                  watchDashboard.acitivtyData.totalUnit),
+                              icon: Icons.apartment_outlined,
+                              color: const Color(0xFF8F69EE)),
+                          _item(
+                              title: "Berjaya",
+                              val: nullOrEmptyReplace(
+                                  watchDashboard.acitivtyData.totalComplete),
+                              icon: Icons.check_circle_rounded,
+                              color: const Color(0xFF28C194)),
+                          _item(
+                              title: "Dalam Proses",
+                              val: nullOrEmptyReplace(
+                                  watchDashboard.acitivtyData.totalInProgress),
+                              icon: Icons.error_rounded,
+                              color: Colors.amber),
+                        ],
+                      ),
+                // sectionContainer(children: [
+
+                // ]),
+                Container(
+                    color: AppColors.lightBlue.color,
+                    height: constraint.maxHeight * .02),
                 //MARK: Latest Activity
                 DashboardSection(
                     isLoading: watchDashboard.latestLoading,
@@ -118,7 +133,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     // miniTitle: "AKTIVITI",
                     title: "Aktiviti terkini"),
 
-                SizedBox(height: constraint.maxHeight * .02),
+                Container(
+                    color: AppColors.lightBlue.color,
+                    height: constraint.maxHeight * .02),
                 //MARK: Incomplete Activity
                 DashboardSection(
                   isLoading: watchDashboard.incompleteLoading,
@@ -184,10 +201,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Color? color,
   }) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(icon, size: 40, color: color),
-        const SizedBox(height: 6),
+        // Icon(icon, size: 40, color: color),
+        // const SizedBox(height: 6),
         Text(
           val,
           style: appTextStyle(size: 20, fontWeight: FontWeight.bold),

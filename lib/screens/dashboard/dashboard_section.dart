@@ -162,11 +162,12 @@ class _DashboardSectionState extends State<DashboardSection> {
               },
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Text(
+                    Text(
                       "Lihat Semua",
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -174,20 +175,7 @@ class _DashboardSectionState extends State<DashboardSection> {
                           fontSize: 16,
                           color: Color.fromARGB(255, 22, 99, 138)),
                     ),
-                    Container(
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: Colors.blueGrey.shade100,
-                      ),
-                      margin: const EdgeInsets.only(left: 12),
-                      padding: const EdgeInsets.only(
-                          left: 6, right: 6, top: 2, bottom: 2),
-                      child: Text(
-                        widget.data.length.toString(),
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                    )
+                    Icon(Icons.arrow_forward_ios, size: 16)
                   ],
                 ),
               ),
@@ -207,6 +195,7 @@ class _DashboardSectionState extends State<DashboardSection> {
 
   cardWidget({required List<Widget> children}) {
     return Card(
+      elevation: 0,
       margin: const EdgeInsets.symmetric(horizontal: 12),
       child: Container(
         width: double.infinity,
@@ -222,7 +211,8 @@ class _DashboardSectionState extends State<DashboardSection> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 16, bottom: 4, top: 4),
+              padding:
+                  const EdgeInsets.only(left: 8, right: 8, bottom: 14, top: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -234,12 +224,31 @@ class _DashboardSectionState extends State<DashboardSection> {
                           size: 14,
                           color: AppColors.dimmedPurple.color),
                     ),
-                  Text(
-                    widget.title,
-                    style: appTextStyle(
-                        color: AppColors.primary.color,
-                        size: 22,
-                        fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      Text(
+                        widget.title.toUpperCase(),
+                        style: appTextStyle(
+                            // color: AppColors.primary.color,
+                            size: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const Spacer(),
+                      Container(
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: Colors.blueGrey.shade100,
+                        ),
+                        margin: const EdgeInsets.only(left: 12),
+                        padding: const EdgeInsets.only(
+                            left: 6, right: 6, top: 2, bottom: 2),
+                        child: Text(
+                          widget.data.length.toString(),
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      )
+                    ],
                   ),
                 ],
               ),
@@ -303,7 +312,7 @@ class _DashboardSectionState extends State<DashboardSection> {
                 : null);
       },
       isThreeLine: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       tileColor: Colors.white,
       leading: Container(
         decoration: BoxDecoration(

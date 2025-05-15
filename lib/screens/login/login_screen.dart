@@ -8,8 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
-
-import '../../components/bg_image.dart';
 import '../../components/custom_textfield.dart';
 import '../../config/constants/app_images.dart';
 import '../../config/routes/routes_name.dart';
@@ -45,164 +43,135 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: Form(
         key: _formKey,
-        child: BgImage(
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: SafeArea(
-              child: LayoutBuilder(builder: (context, constraint) {
-                return SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: constraint.maxWidth * .1,
-                      vertical: constraint.maxHeight * .04),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Selamat Datang",
-                        style:
-                            appTextStyle(size: 20, fontWeight: FontWeight.w600),
+        child: Scaffold(
+          body: SafeArea(
+            child: LayoutBuilder(builder: (context, constraint) {
+              return SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                    horizontal: constraint.maxWidth * .1,
+                    vertical: constraint.maxHeight * .04),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 15),
+                    AspectRatio(
+                      aspectRatio: 30 / 9,
+                      child: Image.asset(
+                        AppImages.dbklLogo.path,
+                        fit: BoxFit.contain,
+                        height: constraint.maxHeight * .2,
+                        width: constraint.maxWidth * .4,
                       ),
-                      const SizedBox(height: 15),
-                      AspectRatio(
-                        aspectRatio: 30 / 9,
-                        child: Image.asset(
-                          AppImages.dbklLogo.path,
-                          fit: BoxFit.contain,
-                          height: constraint.maxHeight * .2,
-                          width: constraint.maxWidth * .4,
-                        ),
-                      ),
-                      SizedBox(height: constraint.maxHeight * .04),
-                      Text(
-                        "PENGURUSAN PERUMAHAN",
-                        style: appTextStyle(
-                            size: 20.sp, fontWeight: FontWeight.w700),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        "DEWAN BANDARAYA KUALA LUMPUR",
-                        style: appTextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(height: constraint.maxHeight * .03),
-                      AspectRatio(
-                        aspectRatio: 16 / 1.5,
-                        child: Image.asset(
-                          AppImages.icLogMasuk.path,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      CustomTextField(
-                        title: "ID Pengguna:",
-                        controller: userIdCtrl,
-                        titleStyle: appTextStyle(fontWeight: FontWeight.w600),
-                        hintText: "Tulis id pengguna disini",
-                        validator: (value) => Validator.validateText(value,
-                            err: "Sila isi ID Pengguna"),
-                        prefixWidget: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Image.asset(
-                            AppImages.icId.path,
-                            width: 20,
-                            height: 20,
+                    ),
+                    SizedBox(height: constraint.maxHeight * .04),
+                    Text(
+                      "PENGURUSAN PERUMAHAN",
+                      style: appTextStyle(
+                          size: 20.sp, fontWeight: FontWeight.w700),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      "DEWAN BANDARAYA KUALA LUMPUR",
+                      style: appTextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(height: constraint.maxHeight * .03),
+
+                    const SizedBox(height: 10),
+                    CustomTextField(
+                      title: "ID Pengguna:",
+                      controller: userIdCtrl,
+                      titleStyle: appTextStyle(fontWeight: FontWeight.w600),
+                      hintText: "Tulis id pengguna disini",
+                      validator: (value) => Validator.validateText(value,
+                          err: "Sila isi ID Pengguna"),
+                    ),
+                    const SizedBox(height: 10),
+                    CustomTextField(
+                      title: "Kata Laluan:",
+                      controller: pwdCtrl,
+                      hintText: "Tulis kata laluan disini",
+                      obscureText: true,
+                      validator: (value) => Validator.validatePassword(value,
+                          length: 6, err: "Sila isi kata laluan"),
+                      titleStyle: appTextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: const ForgetPasswordScreen(),
+                                    type: PageTransitionType.rightToLeft));
+                          },
+                          style: TextButton.styleFrom(
+                            alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.zero,
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      CustomTextField(
-                        title: "Kata Laluan:",
-                        controller: pwdCtrl,
-                        hintText: "Tulis kata laluan disini",
-                        obscureText: true,
-                        validator: (value) => Validator.validatePassword(value,
-                            length: 6, err: "Sila isi kata laluan"),
-                        titleStyle: appTextStyle(fontWeight: FontWeight.w600),
-                        prefixWidget: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Image.asset(
-                            AppImages.icLock.path,
-                            width: 20,
-                            height: 20,
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      child: const ForgetPasswordScreen(),
-                                      type: PageTransitionType.rightToLeft));
-                            },
-                            style: TextButton.styleFrom(
-                              alignment: Alignment.centerLeft,
-                              padding: EdgeInsets.zero,
-                            ),
-                            child: Text(
-                              'Lupa Kata Laluan?',
-                              textAlign: TextAlign.left,
-                              style: appTextStyle(
-                                  size: 15,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0XFF1488CC)),
-                            )),
-                      ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 52,
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              FocusScope.of(context).unfocus();
-                              if (!_formKey.currentState!.validate()) return;
-                              context.read<AuthBloc>().add(
-                                    UserLogin(
-                                        userCode: userIdCtrl.text,
-                                        pwd: pwdCtrl.text),
-                                  );
-                            },
-                            child: Text(
-                              "Log Masuk",
-                              style: appTextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white),
-                            )),
-                      ),
-                      // ElevatedButton(
-                      //     onPressed: () {
-                      //       Navigator.push(
-                      //           context,
-                      //           MaterialPageRoute(
-                      //               builder: (_) => const MyKadTest()));
-                      //     },
-                      //     child: const Text("Debug SDK"))
-                      // TextButton(
-                      //     onPressed: () {
-                      //       Navigator.push(
-                      //           context,
-                      //           PageTransition(
-                      //               child: const RegisterScreen(),
-                      //               type: PageTransitionType.rightToLeft));
-                      //     },
-                      //     style: TextButton.styleFrom(
-                      //       alignment: Alignment.centerLeft,
-                      //       padding: EdgeInsets.zero,
-                      //     ),
-                      //     child: Text(
-                      //       'Daftar Akaun',
-                      //       textAlign: TextAlign.left,
-                      //       style: appTextStyle(
-                      //           size: 15,
-                      //           fontWeight: FontWeight.w500,
-                      //           color: const Color(0XFF1488CC)),
-                      //     )),
-                    ],
-                  ),
-                );
-              }),
-            ),
+                          child: Text(
+                            'Lupa Kata Laluan?',
+                            textAlign: TextAlign.left,
+                            style: appTextStyle(
+                                size: 15,
+                                fontWeight: FontWeight.w500,
+                                color: const Color(0XFF1488CC)),
+                          )),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            FocusScope.of(context).unfocus();
+                            if (!_formKey.currentState!.validate()) return;
+                            context.read<AuthBloc>().add(
+                                  UserLogin(
+                                      userCode: userIdCtrl.text,
+                                      pwd: pwdCtrl.text),
+                                );
+                          },
+                          child: Text(
+                            "Log Masuk",
+                            style: appTextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
+                          )),
+                    ),
+                    // ElevatedButton(
+                    //     onPressed: () {
+                    //       Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //               builder: (_) => const MyKadTest()));
+                    //     },
+                    //     child: const Text("Debug SDK"))
+                    // TextButton(
+                    //     onPressed: () {
+                    //       Navigator.push(
+                    //           context,
+                    //           PageTransition(
+                    //               child: const RegisterScreen(),
+                    //               type: PageTransitionType.rightToLeft));
+                    //     },
+                    //     style: TextButton.styleFrom(
+                    //       alignment: Alignment.centerLeft,
+                    //       padding: EdgeInsets.zero,
+                    //     ),
+                    //     child: Text(
+                    //       'Daftar Akaun',
+                    //       textAlign: TextAlign.left,
+                    //       style: appTextStyle(
+                    //           size: 15,
+                    //           fontWeight: FontWeight.w500,
+                    //           color: const Color(0XFF1488CC)),
+                    //     )),
+                  ],
+                ),
+              );
+            }),
           ),
         ),
       ),
