@@ -12,8 +12,8 @@ class LoginPreference {
     await loginPref.saveData(value: jsonEncode(model.toJson()));
   }
 
-  String? isTokenExpired() {
-    if (!isTokenExist()) return null;
+  Future<String?> isTokenExpired() async {
+    if (!(await isTokenExist())) return null;
     final data = loginPref.getData();
     final resp = LoginModel.fromJson(jsonDecode(data!)).data!;
     DateTime now = DateTime.now();
@@ -36,7 +36,7 @@ class LoginPreference {
     return loginData.data?.userName;
   }
 
-  bool isTokenExist() => loginPref.getData() != null;
+  Future<bool> isTokenExist() async => loginPref.getData() != null;
 
   static Future<void> clearData() async => await loginPref.deleteData();
 }

@@ -64,7 +64,8 @@ class ApiClient {
       String? authToken,
       bool includeToken = true,
       Map<String, String>? headers}) async {
-    final getToken = await getAuthToken(includeToken);
+    final getToken =
+        await syncApi.queue(() async => await getAuthToken(includeToken));
     final token = includeToken ? (authToken ?? getToken) : null;
     final header = await _mergeHeaders(headers, token);
     final response = await http.post(
@@ -201,10 +202,10 @@ class ApiClient {
   Future<String?> getAuthToken(bool includeToken) async {
     if (!includeToken) return null;
 
-    final isExist = LoginPreference().isTokenExist();
+    final isExist = await LoginPreference().isTokenExist();
     if (!isExist) return null;
 
-    final token = LoginPreference().isTokenExpired();
+    final token = await LoginPreference().isTokenExpired();
 
     if (token == null) {
       return await _handleTokenExpiration();
