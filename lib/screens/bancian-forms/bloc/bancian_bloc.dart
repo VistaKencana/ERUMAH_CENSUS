@@ -25,7 +25,7 @@ class BancianBloc extends Bloc<BancianEvent, BancianState> {
   String houseStatus = ""; // UNS003:unit kosong
   String unitTypeCode = ""; //
   bool isLampiranSuccess = false;
-  _onSetBancianData(SetBancianData event, Emitter<BancianState> emit) {
+  void _onSetBancianData(SetBancianData event, Emitter<BancianState> emit) {
     unitData = event.data;
     houseStatus = unitData.unit?.statusCode ?? "";
     unitTypeCode = unitData.unit?.typeCode ?? "";
@@ -35,7 +35,7 @@ class BancianBloc extends Bloc<BancianEvent, BancianState> {
         remark: "");
   }
 
-  _onSaveBancianData(SaveBancianData event, Emitter<BancianState> emit) async {
+  Future<void> _onSaveBancianData(SaveBancianData event, Emitter<BancianState> emit) async {
     emit(BancianLoading());
     applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
     try {
@@ -55,11 +55,11 @@ class BancianBloc extends Bloc<BancianEvent, BancianState> {
     }
   }
 
-  setImages({required List<Uint8List> imgs}) {
+  void setImages({required List<Uint8List> imgs}) {
     statusData = statusData!.copyWith(images: imgs);
   }
 
-  initNotOwner() {
+  void initNotOwner() {
     statusNotOwnerData = StatusInputModel(
         censusCode: unitData.censusCode ?? '',
         isFingerPrintVerified: "0",

@@ -183,7 +183,7 @@ class _DashboardSectionState extends State<DashboardSection> {
     );
   }
 
-  cardWidget({required List<Widget> children}) {
+  Card cardWidget({required List<Widget> children}) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12),
       child: Container(

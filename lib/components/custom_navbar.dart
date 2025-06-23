@@ -69,7 +69,7 @@ class NavItem extends StatelessWidget {
                 ? Icon((icon as Icon).icon,
                     color: isSelected
                         ? selectedBgColor
-                        : Colors.black.withOpacity(.8),
+                        : Colors.black.withValues(alpha: .8),
                     size: (icon as Icon).size)
                 : icon,
             Visibility(

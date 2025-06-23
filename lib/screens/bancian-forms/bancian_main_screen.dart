@@ -42,7 +42,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
   final statusCtrl = TextEditingController();
   final remarkCtrl = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
+  bool _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
 
   @override
   void initState() {
@@ -57,7 +57,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
     }
   }
 
-  _onPop() async {
+  Future<void> _onPop() async {
     if (_isNewForm()) {
       CustomAlertDialog(
         title: "Berhenti banci?",
@@ -439,11 +439,11 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
     );
   }
 
-  _gap({double size = 10}) {
+  SizedBox _gap({double size = 10}) {
     return SizedBox(height: size);
   }
 
-  _borangTile({required String label, required Widget screen}) {
+  Column _borangTile({required String label, required Widget screen}) {
     return Column(
       children: [
         BorangTile(
@@ -465,6 +465,6 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
     );
   }
 
-  _go(Widget screen) => Navigator.push(context,
+  Future _go(Widget screen) => Navigator.push(context,
       PageTransition(child: screen, type: PageTransitionType.rightToLeft));
 }

@@ -37,8 +37,8 @@ class TanggunganModal extends StatefulWidget {
 }
 
 class _TanggunganModalState extends State<TanggunganModal> {
-  _isEdit() => (widget.isEdit != null && widget.isEdit == true);
-  _isReadOnly() => _isEdit() ? false : true;
+  bool _isEdit() => (widget.isEdit != null && widget.isEdit == true);
+  bool _isReadOnly() => _isEdit() ? false : true;
   Uint8List? frontCard;
   Uint8List? backCard;
   Uint8List? okuCard;
@@ -65,7 +65,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
     initVal();
   }
 
-  initVal() {
+  void initVal() {
     // if (_isEdit()) {
     //   _tanggunganBloc.addNewDependant();
     // }
@@ -88,7 +88,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
     return _isEdit() ? "" : val ?? (defaultVal ?? "");
   }
 
-  _exitWarning() {
+  void _exitWarning() {
     CustomAlertDialog(
       title: "Berhenti banci tanggungan?",
       subtitle: "Adakah anda akan berhenti membuat bancian untuk tanggungan?",
@@ -282,7 +282,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
     );
   }
 
-  _header() {
+  Padding _header() {
     return Padding(
       padding: const EdgeInsets.only(left: 12, top: 28),
       child: Row(
@@ -306,9 +306,9 @@ class _TanggunganModalState extends State<TanggunganModal> {
     return prefix + title;
   }
 
-  _gap({double height = 10}) => SizedBox(height: height);
+  SizedBox _gap({double height = 10}) => SizedBox(height: height);
 
-  _textField(
+  SizedBox _textField(
       {required String title,
       bool isMandatory = false,
       bool readOnly = false,
@@ -376,7 +376,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
     );
   }
 
-  _dropdownHubungan() {
+  dynamic _dropdownHubungan() {
     return _textField(
       title: 'Hubungan Dengan Penyewa',
       isDropdown: true,
@@ -454,7 +454,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
     // );
   }
 
-  _dropdownKesihatan() {
+  dynamic _dropdownKesihatan() {
     return _textField(
         title: 'Tahap Kesihatan',
         isMandatory: _isEdit(),
@@ -525,7 +525,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
     // );
   }
 
-  _dropdownJantina() {
+  dynamic _dropdownJantina() {
     return _textField(
         title: 'Jantina',
         controller: jantinaCtrl,
@@ -602,7 +602,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
     // );
   }
 
-  _dropdownBangsa() {
+  dynamic _dropdownBangsa() {
     return _textField(
       title: 'Bangsa',
       controller: bangsaCtrl,

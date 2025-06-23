@@ -94,7 +94,7 @@ class _CustomAlertDialogState extends State<QrConfirmationDialog> {
     );
   }
 
-  gapHeight({double height = 10}) {
+  SizedBox gapHeight({double height = 10}) {
     return SizedBox(height: height);
   }
 
@@ -109,7 +109,7 @@ class _CustomAlertDialogState extends State<QrConfirmationDialog> {
     ];
   }
 
-  _button(
+  Padding _button(
       {required String title,
       required void Function()? onPressed,
       Color? color}) {

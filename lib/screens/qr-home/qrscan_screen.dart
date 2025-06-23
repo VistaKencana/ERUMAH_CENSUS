@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/qr_not_tally_dialog.dart';
@@ -171,7 +173,8 @@ class _QrScanScreenState extends State<QrScanScreen> {
     );
   }
 
-  _roundedButton({required String title, required void Function() onTap}) {
+  GestureDetector _roundedButton(
+      {required String title, required void Function() onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -216,7 +219,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
     ).show(context).then((val) => controller?.resumeCamera());
   }
 
-  _notTallyAlertDialog(String msg) {
+  void _notTallyAlertDialog(String msg) {
     controller?.pauseCamera();
     QrNotTallyDialog(
       title: "QR ralat!",

@@ -37,8 +37,8 @@ class _SubrentFormState extends State<SubrentForm> {
   final formKey = GlobalKey<FormState>();
   SubrentInputModel? subrentData;
   late SubrentProvider subrentProvider;
-  _isNewForm() => !widget.isExistData;
-  _isReadOnly() => widget.isExistData;
+  bool _isNewForm() => !widget.isExistData;
+  bool _isReadOnly() => widget.isExistData;
   @override
   void initState() {
     super.initState();
@@ -46,7 +46,7 @@ class _SubrentFormState extends State<SubrentForm> {
     initVal();
   }
 
-  initVal() {
+  void initVal() {
     if (!_isNewForm()) {
       subrentData = subrentProvider.selectedSubrent;
       // _penghuniBloc.notsubrentData.copyWith(isChangeOnImage: false);
@@ -209,7 +209,7 @@ class _SubrentFormState extends State<SubrentForm> {
     );
   }
 
-  _textField(
+  SizedBox _textField(
       {required String title,
       bool isMandatory = false,
       bool readOnly = false,
@@ -272,7 +272,7 @@ class _SubrentFormState extends State<SubrentForm> {
     );
   }
 
-  _dropdownBangsa() {
+  dynamic _dropdownBangsa() {
     return _textField(
       title: 'Bangsa',
       controller: bangsaCtrl,
@@ -314,7 +314,7 @@ class _SubrentFormState extends State<SubrentForm> {
     );
   }
 
-  _dropdownJantina() {
+  dynamic _dropdownJantina() {
     return _textField(
       title: 'Jantina',
       isMandatory: _isNewForm(),
@@ -354,7 +354,7 @@ class _SubrentFormState extends State<SubrentForm> {
     );
   }
 
-  _dropdownKesihatan() {
+  dynamic _dropdownKesihatan() {
     return _textField(
         title: 'Tahap Kesihatan',
         isMandatory: _isNewForm(),
@@ -390,8 +390,8 @@ class _SubrentFormState extends State<SubrentForm> {
         controller: kesihatanCtrl);
   }
 
-  _gap({double height = 10}) => SizedBox(height: height);
-  _exitWarning() {
+  SizedBox _gap({double height = 10}) => SizedBox(height: height);
+  void _exitWarning() {
     CustomAlertDialog(
       title: "Berhenti banci penghuni?",
       subtitle: "Adakah anda akan berhenti membuat bancian untuk penghuni?",

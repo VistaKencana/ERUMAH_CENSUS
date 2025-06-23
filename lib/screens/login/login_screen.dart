@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  showLogin() {
+  void showLogin() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,

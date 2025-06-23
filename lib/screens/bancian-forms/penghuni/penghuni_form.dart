@@ -73,7 +73,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     initVal();
   }
 
-  initVal() {
+  void initVal() {
     if (_isNewForm()) {
       ownerData = _penghuniBloc.notOwnerData.copyWith(isChangeOnImage: false);
     } else {
@@ -104,7 +104,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     // return _isNewForm() ? "" : val ?? (defaultVal ?? "");
   }
 
-  _exitWarning() {
+  void _exitWarning() {
     CustomAlertDialog(
       title: "Berhenti banci penghuni?",
       subtitle: "Adakah anda akan berhenti membuat bancian untuk penghuni?",
@@ -358,7 +358,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     );
   }
 
-  maklumatPendapatan() {
+  Column maklumatPendapatan() {
     return Column(
       children: [
         const SizedBox(height: 10),
@@ -410,7 +410,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     );
   }
 
-  _textField(
+  SizedBox _textField(
       {required String title,
       bool isMandatory = false,
       bool readOnly = false,
@@ -481,7 +481,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     );
   }
 
-  _dropdownJantina() {
+  dynamic _dropdownJantina() {
     return _textField(
       title: 'Jantina',
       isMandatory: _isNewForm(),
@@ -521,7 +521,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     );
   }
 
-  _dropdownBangsa() {
+  dynamic _dropdownBangsa() {
     return _textField(
       title: 'Bangsa',
       controller: bangsaCtrl,
@@ -563,7 +563,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     );
   }
 
-  _dropdownJenisPekerjaan() {
+  dynamic _dropdownJenisPekerjaan() {
     return _textField(
       title: 'Jenis Pekerjaan',
       controller: jenisKerjaCtrl,
@@ -600,7 +600,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     );
   }
 
-  _dropdownStatusPerkahwinan() {
+  dynamic _dropdownStatusPerkahwinan() {
     return _textField(
       title: 'Status Perkahwinan',
       controller: statusKahwinCtrl,
@@ -637,7 +637,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     );
   }
 
-  _dropdownKesihatan() {
+  dynamic _dropdownKesihatan() {
     return _textField(
         title: 'Tahap Kesihatan',
         isMandatory: _isNewForm(),
@@ -673,7 +673,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
         controller: kesihatanCtrl);
   }
 
-  _headerTitle(String title) {
+  Padding _headerTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(top: 12, bottom: 6),
       child: Row(
@@ -688,7 +688,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
     );
   }
 
-  _gap({double height = 10}) => SizedBox(height: height);
+  SizedBox _gap({double height = 10}) => SizedBox(height: height);
 
   @override
   void dispose() {
