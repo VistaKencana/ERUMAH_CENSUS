@@ -38,7 +38,7 @@ class _UnitKosongMainScreenState extends State<UnitKosongMainScreen> {
   final formKey = GlobalKey<FormState>();
 
   bool isVerifyFP = false;
-  _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
+  bool _isNewForm() => (widget.isNewForm != null && widget.isNewForm == true);
   @override
   void initState() {
     super.initState();
@@ -52,7 +52,7 @@ class _UnitKosongMainScreenState extends State<UnitKosongMainScreen> {
     }
   }
 
-  _onPop() async {
+  Future<void> _onPop() async {
     if (_isNewForm()) {
       CustomAlertDialog(
         title: "Berhenti banci?",
@@ -423,7 +423,7 @@ class _UnitKosongMainScreenState extends State<UnitKosongMainScreen> {
     );
   }
 
-  _gap({double size = 10}) {
+  SizedBox _gap({double size = 10}) {
     return SizedBox(height: size);
   }
 
@@ -449,6 +449,6 @@ class _UnitKosongMainScreenState extends State<UnitKosongMainScreen> {
     );
   }
 
-  _go(Widget screen) => Navigator.push(context,
+  Future _go(Widget screen) => Navigator.push(context,
       PageTransition(child: screen, type: PageTransitionType.rightToLeft));
 }

@@ -85,7 +85,7 @@ class _PasanganFormState extends State<PasanganForm> {
     );
   }
 
-  _pasanganTile({required SpouseInputModel data, required int index}) {
+  Column _pasanganTile({required SpouseInputModel data, required int index}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [

@@ -40,7 +40,7 @@ Future<void> main() async {
   ));
 }
 
-_requestPermission() async {
+Future<void> _requestPermission() async {
   var status = await Permission.camera.status;
   if (!status.isGranted) {
     await Permission.camera.request();

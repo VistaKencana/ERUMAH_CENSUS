@@ -146,7 +146,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  _title(
+  GestureDetector _title(
       {required String title,
       String? subtitle,
       EdgeInsetsGeometry? padding,
@@ -177,7 +177,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  _item({
+  Column _item({
     required String title,
     required String val,
     required IconData icon,
@@ -200,7 +200,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  listTile(
+  Column listTile(
       {required String title,
       required String phoneNo,
       bool addDivider = true}) {
@@ -225,7 +225,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  _divider() {
+  Divider _divider() {
     return const Divider(
       height: 0,
       indent: 16,
@@ -257,7 +257,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  cartaPerumahan() {
+  Column cartaPerumahan() {
     return Column(
       children: [
         const SizedBox(height: 28),
@@ -331,7 +331,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  maklumatTelefon() {
+  Column maklumatTelefon() {
     return Column(
       children: [
         _title(title: 'Makmulat Telefon'),
@@ -357,7 +357,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  headerNew() {
+  void headerNew() {
     // SizedBox(height: constraint.maxHeight * .12),
     // AspectRatio(
     //   aspectRatio: 40 / 9,

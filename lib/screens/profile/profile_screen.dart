@@ -94,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  _profileTile(
+  ListTile _profileTile(
       {required String title,
       required IconData icon,
       required void Function() onTap}) {
@@ -109,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  _showLogoutAlert() async {
+  Future _showLogoutAlert() async {
     return await CustomAlertDialog(
       position: AlertBtnPosition.leftRignt,
       title: "Logout",

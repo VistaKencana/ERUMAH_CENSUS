@@ -37,7 +37,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
   FloorData selectedFloor = FloorData();
   PropertyData selectedProperty = PropertyData();
 
-  _onScanQrcode(ScanQrcode event, Emitter<QrState> emit) async {
+  Future<void> _onScanQrcode(ScanQrcode event, Emitter<QrState> emit) async {
     emit(QrLoading());
     final qrCode = event.qrCode;
     if (qrCode.isEmpty) {
@@ -94,7 +94,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     }
   }
 
-  _onManualQrcode(ManualQrcode event, Emitter<QrState> emit) async {
+  Future<void> _onManualQrcode(ManualQrcode event, Emitter<QrState> emit) async {
     emit(QrLoading());
     final unitCode = event.unitCode;
     // if (qrCode.isEmpty) {
@@ -156,7 +156,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     }
   }
 
-  _onRegisterQrcode(RegisterQrcode event, Emitter<QrState> emit) async {
+  Future<void> _onRegisterQrcode(RegisterQrcode event, Emitter<QrState> emit) async {
     if (selectedProperty.unitCode == null ||
         (selectedProperty.unitCode?.isEmpty ?? true)) {
       emit(const QrRegError(msg: "Sila pilih unit rumah"));
@@ -188,7 +188,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     }
   }
 
-  _onUpdateQrcode(UpdateQrcode event, Emitter<QrState> emit) async {
+  Future<void> _onUpdateQrcode(UpdateQrcode event, Emitter<QrState> emit) async {
     emit(QrRegLoading());
     try {
       final resp = await repo.updateQrCode(
@@ -204,7 +204,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     }
   }
 
-  setPropertyData(
+  void setPropertyData(
       {ZoneData? selectedZone,
       AreaData? selectedArea,
       BlockData? selectedBlock,
@@ -217,7 +217,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     this.selectedProperty = selectedProperty ?? this.selectedProperty;
   }
 
-  clearPropertyData() {
+  void clearPropertyData() {
     selectedProperty = PropertyData();
     selectedZone = ZoneData();
     selectedArea = AreaData();

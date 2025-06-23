@@ -14,7 +14,7 @@ class DashboardProvider extends ChangeNotifier {
   final repo = DashboardRepository();
   final log = const AppLog(classname: "DashboardProvider");
 
-  initDashboard() async {
+  Future<void> initDashboard() async {
     setListLoading(true);
     await Future.wait([
       fetchUserActivity(),

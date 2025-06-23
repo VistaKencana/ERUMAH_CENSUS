@@ -42,14 +42,14 @@ class _ScreenshotCameraWidgetState extends State<ScreenshotCameraWidget> {
     super.dispose();
   }
 
-  _getCameraDesc() async {
+  Future<void> _getCameraDesc() async {
     final cameraDesc = await availableCameras();
     controller = CameraController(cameraDesc[0], ResolutionPreset.veryHigh);
 
     _cameraPermissionCheck(controller: controller!);
   }
 
-  _cameraPermissionCheck({required CameraController controller}) {
+  void _cameraPermissionCheck({required CameraController controller}) {
     _checkCameraPermission().then((isGranted) {
       if (!isGranted) {
         Future.delayed(const Duration(seconds: 0)).then((_) {
@@ -134,7 +134,7 @@ class _ScreenshotCameraWidgetState extends State<ScreenshotCameraWidget> {
         });
   }
 
-  cameraWidget(context) {
+  Widget cameraWidget(BuildContext context) {
     if (!(controller?.value.isInitialized ?? false)) {
       return Container();
     }

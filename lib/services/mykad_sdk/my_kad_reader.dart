@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-library mykad_sdk;
+library;
 
 export 'model/my_kad_model.dart';
 export 'model/my_kid_model.dart';

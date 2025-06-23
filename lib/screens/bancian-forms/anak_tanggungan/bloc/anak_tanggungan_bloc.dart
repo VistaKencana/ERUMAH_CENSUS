@@ -32,7 +32,7 @@ class AnakTanggunganBloc
   final repo = ApplicationRepository();
   final ocrRepo = OcrRepository();
   final applog = const AppLog(classname: "AnakTanggunganBloc");
-  _onSetAnakTanggungData(
+  void _onSetAnakTanggungData(
       SetAnakTanggungData event, Emitter<AnakTanggunganState> emit) {
     try {
       unitData = event.data;
@@ -61,7 +61,7 @@ class AnakTanggunganBloc
     }
   }
 
-  _onSaveChildData(
+  Future<void> _onSaveChildData(
       SaveChildData event, Emitter<AnakTanggunganState> emit) async {
     var origin =
         selectedData!.copyWith(isChangeOnImage: false).toValidate().toString();
@@ -88,7 +88,7 @@ class AnakTanggunganBloc
     }
   }
 
-  _onAddChildData(AddChildData event, Emitter<AnakTanggunganState> emit) async {
+  Future<void> _onAddChildData(AddChildData event, Emitter<AnakTanggunganState> emit) async {
     emit(DependantLoading());
     applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
     try {
@@ -106,7 +106,7 @@ class AnakTanggunganBloc
     }
   }
 
-  _onSaveOtherData(
+  Future<void> _onSaveOtherData(
       SaveOtherData event, Emitter<AnakTanggunganState> emit) async {
     var origin = selectedData!.toJson().toString();
     var newData = event.data.toJson().toString();
@@ -132,7 +132,7 @@ class AnakTanggunganBloc
     }
   }
 
-  _onAddOtherData(AddOtherData event, Emitter<AnakTanggunganState> emit) async {
+  Future<void> _onAddOtherData(AddOtherData event, Emitter<AnakTanggunganState> emit) async {
     emit(DependantLoading());
     applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
     try {
@@ -150,7 +150,7 @@ class AnakTanggunganBloc
     }
   }
 
-  selectDependant(DependantInputModel data, int index) {
+  void selectDependant(DependantInputModel data, int index) {
     selectedData = data;
     selectedIndex = index;
     applog.logDebug(

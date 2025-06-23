@@ -32,6 +32,6 @@ class _BancianQrscanState extends State<BancianQrscan> {
     );
   }
 
-  _goReplace(Widget screen) => Navigator.pushReplacement(context,
+  Future _goReplace(Widget screen) => Navigator.pushReplacement(context,
       PageTransition(child: screen, type: PageTransitionType.rightToLeft));
 }

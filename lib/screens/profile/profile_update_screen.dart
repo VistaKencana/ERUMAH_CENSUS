@@ -101,7 +101,7 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
     ));
   }
 
-  _gap({double height = 10}) => SizedBox(height: height);
+  SizedBox _gap({double height = 10}) => SizedBox(height: height);
   String _nullConverter({required String? data, String? placeholder}) =>
       data ?? (placeholder ?? "-");
 }

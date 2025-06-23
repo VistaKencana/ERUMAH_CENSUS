@@ -113,7 +113,7 @@ class _BancianImagePreviewState extends State<BancianImagePreview> {
     );
   }
 
-  _iconButton(
+  Column _iconButton(
       {required String title,
       bool isFilled = false,
       required IconData iconData,

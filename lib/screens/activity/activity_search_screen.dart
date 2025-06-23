@@ -166,7 +166,7 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
   //   );
   // }
 
-  _newInfoTile({required PropertyData data}) {
+  ListTile _newInfoTile({required PropertyData data}) {
     return ListTile(
       onTap: () {
         _qrBloc.setPropertyData(selectedProperty: data);
@@ -215,6 +215,6 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
     );
   }
 
-  _goTo(Widget screen) => Navigator.push(context,
+  Future _goTo(Widget screen) => Navigator.push(context,
       PageTransition(child: screen, type: PageTransitionType.rightToLeft));
 }

@@ -128,6 +128,6 @@ class _BancianProofCameraState extends State<BancianProofCamera> {
     return map[stats];
   }
 
-  _goReplace(Widget screen) => Navigator.pushReplacement(context,
+  Future _goReplace(Widget screen) => Navigator.pushReplacement(context,
       PageTransition(child: screen, type: PageTransitionType.rightToLeft));
 }

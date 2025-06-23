@@ -17,7 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   final repo = AuthRepository();
-  _onUserLogin(UserLogin event, Emitter<AuthState> emit) async {
+  Future<void> _onUserLogin(UserLogin event, Emitter<AuthState> emit) async {
     emit(AuthLoginLoading());
     try {
       final resp =
@@ -31,7 +31,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  _onUserLoginTimeout(UserLoginTimeout event, Emitter<AuthState> emit) async {
+  Future<void> _onUserLoginTimeout(UserLoginTimeout event, Emitter<AuthState> emit) async {
     emit(AuthLoginLoading());
     try {
       final resp =
@@ -45,7 +45,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  _onUserLogout(UserLogout event, Emitter<AuthState> emit) async {
+  Future<void> _onUserLogout(UserLogout event, Emitter<AuthState> emit) async {
     emit(AuthLogoutLoading());
     try {
       final isSuccess = await repo.userLogout();

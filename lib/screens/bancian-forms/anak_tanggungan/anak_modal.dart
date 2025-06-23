@@ -35,8 +35,8 @@ class AnakModal extends StatefulWidget {
 }
 
 class _AnakModalState extends State<AnakModal> {
-  _isEdit() => (widget.isEdit != null && widget.isEdit == true);
-  _isReadOnly() => _isEdit() ? false : true;
+  bool _isEdit() => (widget.isEdit != null && widget.isEdit == true);
+  bool _isReadOnly() => _isEdit() ? false : true;
 
   late AnakTanggunganBloc _tanggunganBloc;
 
@@ -61,7 +61,7 @@ class _AnakModalState extends State<AnakModal> {
     initVal();
   }
 
-  initVal() {
+  void initVal() {
     // if (_isEdit()) {
     //   _tanggunganBloc.addNewChild();
     // }
@@ -85,7 +85,7 @@ class _AnakModalState extends State<AnakModal> {
     return _isEdit() ? "" : val ?? (defaultVal ?? "");
   }
 
-  _exitWarning() {
+  void _exitWarning() {
     CustomAlertDialog(
       title: "Berhenti banci anak?",
       subtitle: "Adakah anda akan berhenti membuat bancian untuk anak?",
@@ -282,7 +282,7 @@ class _AnakModalState extends State<AnakModal> {
     );
   }
 
-  _header() {
+  Padding _header() {
     return Padding(
       padding: const EdgeInsets.only(left: 12, top: 28),
       child: Row(
@@ -306,8 +306,8 @@ class _AnakModalState extends State<AnakModal> {
     return prefix + title;
   }
 
-  _gap({double height = 10}) => SizedBox(height: height);
-  _textField(
+  SizedBox _gap({double height = 10}) => SizedBox(height: height);
+  SizedBox _textField(
       {required String title,
       bool isMandatory = false,
       bool readOnly = false,
@@ -375,7 +375,7 @@ class _AnakModalState extends State<AnakModal> {
     );
   }
 
-  _dropdownHubungan() {
+  dynamic _dropdownHubungan() {
     return _textField(
       title: 'Hubungan Dengan Penyewa',
       isDropdown: true,
@@ -453,7 +453,7 @@ class _AnakModalState extends State<AnakModal> {
     // );
   }
 
-  _dropdownKesihatan() {
+  dynamic _dropdownKesihatan() {
     return _textField(
         title: 'Tahap Kesihatan',
         isMandatory: _isEdit(),
@@ -524,7 +524,7 @@ class _AnakModalState extends State<AnakModal> {
     // );
   }
 
-  _dropdownJantina() {
+  dynamic _dropdownJantina() {
     return _textField(
         title: 'Jantina',
         controller: jantinaCtrl,
@@ -601,7 +601,7 @@ class _AnakModalState extends State<AnakModal> {
     // );
   }
 
-  _dropdownBangsa() {
+  dynamic _dropdownBangsa() {
     return _textField(
       title: 'Bangsa',
       controller: bangsaCtrl,

@@ -72,7 +72,7 @@ class _PasanganModalState extends State<PasanganModal> {
     initVal();
   }
 
-  initVal() {
+  void initVal() {
     // if (_isNewForm()) {
     //   _pasanganBloc.addNewPasangan();
     // }
@@ -103,7 +103,7 @@ class _PasanganModalState extends State<PasanganModal> {
     return _isNewForm() ? "" : val ?? (defaultVal ?? "");
   }
 
-  _exitWarning() {
+  void _exitWarning() {
     CustomAlertDialog(
       title: "Berhenti banci pasangan?",
       subtitle: "Adakah anda akan berhenti membuat bancian untuk pasangan?",
@@ -204,7 +204,7 @@ class _PasanganModalState extends State<PasanganModal> {
     );
   }
 
-  _header() {
+  Padding _header() {
     return Padding(
       padding: const EdgeInsets.only(left: 12, top: 28, bottom: 18),
       child: Row(
@@ -222,7 +222,7 @@ class _PasanganModalState extends State<PasanganModal> {
     );
   }
 
-  _form() {
+  Expanded _form() {
     return Expanded(
       child: SingleChildScrollView(
         child: Column(
@@ -357,7 +357,7 @@ class _PasanganModalState extends State<PasanganModal> {
     );
   }
 
-  _textField(
+  SizedBox _textField(
       {required String title,
       String? initialValue,
       bool readOnly = false,
@@ -428,7 +428,7 @@ class _PasanganModalState extends State<PasanganModal> {
     );
   }
 
-  _dropdownBangsa() {
+  dynamic _dropdownBangsa() {
     return _textField(
       title: 'Bangsa',
       readOnly: _isReadOnly(),
@@ -502,7 +502,7 @@ class _PasanganModalState extends State<PasanganModal> {
     // );
   }
 
-  _dropdownJantina() {
+  dynamic _dropdownJantina() {
     return _textField(
         title: 'Jantina',
         readOnly: _isReadOnly(),
@@ -576,7 +576,7 @@ class _PasanganModalState extends State<PasanganModal> {
     // );
   }
 
-  _dropdownKesihatan() {
+  dynamic _dropdownKesihatan() {
     return _textField(
         title: 'Tahap Kesihatan',
         isDropdown: true,
@@ -647,7 +647,7 @@ class _PasanganModalState extends State<PasanganModal> {
     // );
   }
 
-  _dropdownJenisPekerjaan() {
+  dynamic _dropdownJenisPekerjaan() {
     return _textField(
         title: 'Jenis Pekerjaan',
         isDropdown: true,
@@ -719,7 +719,7 @@ class _PasanganModalState extends State<PasanganModal> {
     // );
   }
 
-  _formPenadapatan() {
+  Padding _formPenadapatan() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       child: Column(
@@ -774,5 +774,5 @@ class _PasanganModalState extends State<PasanganModal> {
     );
   }
 
-  _gap({double height = 10}) => SizedBox(height: height);
+  SizedBox _gap({double height = 10}) => SizedBox(height: height);
 }

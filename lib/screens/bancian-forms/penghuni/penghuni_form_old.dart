@@ -21,8 +21,8 @@ class PenghuniFormOld extends StatefulWidget {
 }
 
 class _PenghuniFormOldState extends State<PenghuniFormOld> {
-  _isEdit() => (widget.isEdit != null && widget.isEdit == true);
-  _isReadOnly() => _isEdit() ? false : true;
+  bool _isEdit() => (widget.isEdit != null && widget.isEdit == true);
+  bool _isReadOnly() => _isEdit() ? false : true;
   Uint8List? frontCard;
   Uint8List? backCard;
   Uint8List? okuCard;
@@ -134,7 +134,7 @@ class _PenghuniFormOldState extends State<PenghuniFormOld> {
     );
   }
 
-  _textField(
+  SizedBox _textField(
       {required String title, String? initialValue, bool readOnly = false}) {
     return SizedBox(
       width: MediaQuery.sizeOf(context).width * 0.4,

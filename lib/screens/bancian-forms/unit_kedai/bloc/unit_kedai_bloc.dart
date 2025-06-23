@@ -24,7 +24,7 @@ class UnitKedaiBloc extends Bloc<UnitKedaiEvent, UnitKedaiState> {
     return _existData ?? UnitKedaiInputModel();
   }
 
-  _onSetPemilikData(SetPemilikData event, Emitter<UnitKedaiState> emit) {
+  void _onSetPemilikData(SetPemilikData event, Emitter<UnitKedaiState> emit) {
     try {
       unitData = event.data;
       //[Owner] Setting current model
@@ -42,7 +42,7 @@ class UnitKedaiBloc extends Bloc<UnitKedaiEvent, UnitKedaiState> {
     }
   }
 
-  _onSavePenghuniData(
+  Future<void> _onSavePenghuniData(
       SavePemilikData event, Emitter<UnitKedaiState> emit) async {
     //Validate if there is changes
     var origin =

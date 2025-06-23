@@ -31,7 +31,7 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
     return _notOwnerData ?? OwnerInputModel();
   }
 
-  _onSetPenghuniData(SetPenghuniData event, Emitter<PenghuniState> emit) {
+  void _onSetPenghuniData(SetPenghuniData event, Emitter<PenghuniState> emit) {
     try {
       unitData = event.data;
       //[Owner] Setting current model
@@ -49,7 +49,7 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
     }
   }
 
-  _onSavePenghuniData(
+  Future<void> _onSavePenghuniData(
       SavePenghuniData event, Emitter<PenghuniState> emit) async {
     //Validate if there is changes
     var origin =
@@ -80,7 +80,7 @@ class PenghuniBloc extends Bloc<PenghuniEvent, PenghuniState> {
     return _notOwnerData?.name?.isNotEmpty ?? false;
   }
 
-  _onSaveBukanPenghuniData(
+  Future<void> _onSaveBukanPenghuniData(
       SaveBukanPenghuniData event, Emitter<PenghuniState> emit) async {
     //Validate if there is changes
     var origin =
