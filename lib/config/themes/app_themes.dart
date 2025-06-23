@@ -33,7 +33,7 @@ class AppThemes {
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Colors.red, width: 2)),
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
         labelColor: AppColors.primary.color,
         labelStyle: TextStyle(color: AppColors.primary.color),
         indicator: UnderlineTabIndicator(
