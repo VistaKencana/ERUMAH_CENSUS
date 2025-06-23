@@ -16,9 +16,6 @@ class _BancianAddProofState extends State<BancianAddProof> {
   double maxSize = 0.26;
   double minSize = 0.1;
   int maxImage = 3;
-  // final DraggableScrollableController _controller =
-  //     DraggableScrollableController();
-  // List<Uint8List> imgs = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,34 +30,8 @@ class _BancianAddProofState extends State<BancianAddProof> {
         onTakePicture: (Uint8List uintImg) {
           widget.onTakePicture(uintImg);
           Navigator.pop(context);
-          // _controller.jumpTo(maxSize);
-          // if (imgs.length >= maxImage) return;
-          // setState(() => imgs.add(uintImg));
         },
       ),
-      // bottomSheet: ImageBottomSheet(
-      //   images: imgs,
-      //   initSize: initSize,
-      //   maxSize: maxSize,
-      //   minSize: minSize,
-      //   maxImage: maxImage,
-      //   controller: _controller,
-      //   onNext: (images) {
-      //     context.read<BancianBloc>().setImages(imgs: images);
-      //     _goReplace(const BancianMainScreen());
-      //   },
-      //   onTapImage: (image, index) {
-      //     BancianImagePreview(
-      //       canDelete: true,
-      //       title: "Gambar ${index + 1}",
-      //       image: imgs[index],
-      //       onDelete: () {
-      //         setState(() => imgs.removeAt(index));
-      //         Navigator.pop(context);
-      //       },
-      //     ).show(context);
-      //   },
-      // ),
     );
   }
 }
