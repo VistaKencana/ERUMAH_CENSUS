@@ -155,14 +155,14 @@ class MyKadController {
   Future<dynamic> showLoading(BuildContext context) {
     return showDialog(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.3),
+      barrierColor: Colors.black.withValues(alpha: 0.3),
       builder: (context) => PopScope(
         canPop: false,
         onPopInvokedWithResult: (didPop, result) async {},
         child: GestureDetector(
           onTap: () {},
           child: Material(
-              color: Colors.black.withOpacity(0.6),
+              color: Colors.black.withValues(alpha: 0.6),
               child: Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),

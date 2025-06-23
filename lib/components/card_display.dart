@@ -28,7 +28,7 @@ class CardDisplay extends StatefulWidget {
 }
 
 class _CardDisplayState extends State<CardDisplay> {
-  _openCamera() {
+  void _openCamera() {
     Navigator.push(
         context,
         PageTransition(
@@ -65,11 +65,11 @@ class _CardDisplayState extends State<CardDisplay> {
             }
           },
           child: DottedBorder(
-            color: Colors.grey,
-            padding: const EdgeInsets.all(4),
-            dashPattern: const [8, 4],
-            radius: const Radius.circular(14),
-            borderType: BorderType.RRect,
+            options: RectDottedBorderOptions(
+              color: Colors.grey,
+              padding: const EdgeInsets.all(4),
+              dashPattern: const [8, 4],
+            ),
             child: Container(
               clipBehavior: Clip.antiAlias,
               width: widget.width ?? MediaQuery.sizeOf(context).width * .43,

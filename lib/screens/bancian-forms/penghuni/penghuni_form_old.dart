@@ -30,7 +30,7 @@ class _PenghuniFormOldState extends State<PenghuniFormOld> {
   Widget build(BuildContext context) {
     // Size size = MediaQuery.sizeOf(context);
     return Scaffold(
-      //  backgroundColor: Colors.white.withOpacity(0.5),
+      //  backgroundColor: Colors.white.withValues(alpha:0.5),
       appBar: CustomAppBar(
         title: "Maklumat Penghuni",
         actions: _isEdit()

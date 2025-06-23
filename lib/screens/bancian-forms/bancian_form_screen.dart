@@ -36,7 +36,7 @@
 //                     width: double.infinity,
 //                     margin: const EdgeInsets.symmetric(vertical: 12),
 //                     padding: const EdgeInsets.all(14),
-//                     color: Colors.white.withOpacity(0.7),
+//                     color: Colors.white.withValues(alpha:0.7),
 //                     child: Wrap(
 //                       crossAxisAlignment: WrapCrossAlignment.center,
 //                       children: [

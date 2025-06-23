@@ -94,7 +94,7 @@ class _CustomAlertDialogState extends State<QrNotTallyDialog> {
     return Text(widget.subtitle);
   }
 
-  gapHeight({double height = 10}) {
+  Widget gapHeight({double height = 10}) {
     return SizedBox(height: height);
   }
 
@@ -103,7 +103,7 @@ class _CustomAlertDialogState extends State<QrNotTallyDialog> {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: Colors.blueGrey.withOpacity(0.2))),
+          border: Border.all(color: Colors.blueGrey.withValues(alpha: 0.2))),
       child: const Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -132,7 +132,7 @@ class _CustomAlertDialogState extends State<QrNotTallyDialog> {
     ];
   }
 
-  _button(
+  Widget _button(
       {required String title,
       required void Function()? onPressed,
       Color? color}) {

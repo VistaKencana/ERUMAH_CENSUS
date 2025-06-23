@@ -76,7 +76,7 @@ class _ScreenshotCameraWidgetState extends State<ScreenshotCameraWidget> {
                               height: 100,
                               width: 100,
                               decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.3),
+                                  color: Colors.grey.withValues(alpha: 0.3),
                                   shape: BoxShape.circle),
                               child: const Icon(Icons.camera_alt)),
                           const SizedBox(height: 15),
@@ -208,14 +208,14 @@ class _ScreenshotCameraWidgetState extends State<ScreenshotCameraWidget> {
   Future<dynamic> showLoading(BuildContext context) {
     return showDialog(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.3),
+      barrierColor: Colors.black.withValues(alpha: 0.3),
       builder: (context) => PopScope(
         canPop: false,
         onPopInvokedWithResult: (didPop, result) async {},
         child: GestureDetector(
           onTap: () {},
           child: Material(
-              color: Colors.black.withOpacity(0.6),
+              color: Colors.black.withValues(alpha: 0.6),
               child: Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),

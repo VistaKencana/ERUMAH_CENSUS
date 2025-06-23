@@ -19,7 +19,7 @@ class BorangTile extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 6,
             spreadRadius: 2,
             offset: const Offset(2, 4),
@@ -30,7 +30,7 @@ class BorangTile extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(30),
               decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.2),
+                  color: Colors.blue.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(10)),
               child: const Icon(
                 Icons.description,

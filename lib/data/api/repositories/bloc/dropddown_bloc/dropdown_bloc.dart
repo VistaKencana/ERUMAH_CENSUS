@@ -26,7 +26,8 @@ class DropdownBloc extends Bloc<DropdownEvent, DropdownState> {
   final repo = DropdownRepository();
   final log = const AppLog(classname: "DropdownBloc");
 
-  _onFetchDdData(FetchDdFormData event, Emitter<DropdownState> emit) async {
+  void _onFetchDdData(
+      FetchDdFormData event, Emitter<DropdownState> emit) async {
     emit(DropdownLoading());
     final dropdownType = event.type;
     var listData = _getDropdownList(type: dropdownType);
