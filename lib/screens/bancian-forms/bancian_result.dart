@@ -94,7 +94,7 @@ class _BancianResultState extends State<BancianResult> {
     );
   }
 
-  _goToSearch() async {
+  Future<void> _goToSearch() async {
     final isFromHome = await QrNavigationPref.isFromHome();
     if (!mounted) return;
     if (isFromHome) {
@@ -104,7 +104,7 @@ class _BancianResultState extends State<BancianResult> {
     Navigator.popUntil(context, ModalRoute.withName(RoutesName.activitySearch));
   }
 
-  _listileWidget(
+  ListTile _listileWidget(
       {IconData? icon, required String title, required bool isChecked}) {
     return ListTile(
       leading: icon != null ? Icon(icon) : null,

@@ -78,5 +78,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ));
   }
 
-  _gap({double height = 10}) => SizedBox(height: height);
+  SizedBox _gap({double height = 10}) => SizedBox(height: height);
 }

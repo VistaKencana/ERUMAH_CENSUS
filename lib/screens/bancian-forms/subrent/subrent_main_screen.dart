@@ -160,7 +160,7 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
     );
   }
 
-  _borangTile(
+  Column _borangTile(
       {required String label,
       required Widget screen,
       required void Function() onTap}) {
@@ -179,7 +179,7 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
     );
   }
 
-  _addSubrentBtn({required bool showBtn}) {
+  Visibility _addSubrentBtn({required bool showBtn}) {
     return Visibility(
       visible: showBtn,
       child: GestureDetector(
@@ -212,17 +212,17 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
     );
   }
 
-  _gap({double size = 10}) {
+  SizedBox _gap({double size = 10}) {
     return SizedBox(height: size);
   }
 
-  _section(String title) {
+  Text _section(String title) {
     return Text(
       title,
       style: appTextStyle(fontWeight: FontWeight.bold, size: 20),
     );
   }
 
-  _go(Widget screen) => Navigator.push(context,
+  Future _go(Widget screen) => Navigator.push(context,
       PageTransition(child: screen, type: PageTransitionType.rightToLeft));
 }

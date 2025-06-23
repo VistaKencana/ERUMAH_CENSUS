@@ -44,13 +44,13 @@ class _MyKadWidgetState extends State<MyKadWidget> {
     );
   }
 
-  setListener(String msg) {
+  void setListener(String msg) {
     if (widget.onListen != null) {
       widget.onListen!(msg);
     }
   }
 
-  setFunction(String msg) {
+  void setFunction(String msg) {
     final lowerMsg = msg.toLowerCase();
     if (lowerMsg.contains("remove card") || lowerMsg.contains("insert card")) {
       widget.onCardSuccess(false);

@@ -16,7 +16,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   final repo = ProfileRepository();
   ProfileData profileData = ProfileData();
-  _onFetchProfile(FetchProfile event, Emitter<ProfileState> emit) async {
+  Future<void> _onFetchProfile(FetchProfile event, Emitter<ProfileState> emit) async {
     profileData = ProfileData();
     emit(ProfileLoading());
     try {

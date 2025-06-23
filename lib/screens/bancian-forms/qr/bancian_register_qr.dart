@@ -141,5 +141,5 @@ class _BancianRegisterQrState extends State<BancianRegisterQr> {
     });
   }
 
-  _gap({double height = 10}) => SizedBox(height: height);
+  SizedBox _gap({double height = 10}) => SizedBox(height: height);
 }

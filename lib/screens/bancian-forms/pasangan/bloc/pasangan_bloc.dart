@@ -26,7 +26,7 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
   List<SpouseInputModel> existData = [];
   SpouseInputModel? selectedSpouse;
   int selectedIndex = 0;
-  _onSetPasanganData(SetPasanganData event, Emitter<PasanganState> emit) {
+  void _onSetPasanganData(SetPasanganData event, Emitter<PasanganState> emit) {
     try {
       unitData = event.data;
       existData.clear();
@@ -45,14 +45,14 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
     }
   }
 
-  selectPasangan(SpouseInputModel data, int index) {
+  void selectPasangan(SpouseInputModel data, int index) {
     selectedSpouse = data;
     selectedIndex = index;
     applog.logDebug(
         tag: "Select Spouse", msg: selectedSpouse!.toJson().toString());
   }
 
-  addNewPasangan({
+  void addNewPasangan({
     required Uint8List frontImg,
     required Uint8List backImg,
   }) {
@@ -62,7 +62,7 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
         tag: "Add Spouse", msg: selectedSpouse!.toJson().toString());
   }
 
-  _onSavePasanganData(
+  Future<void> _onSavePasanganData(
       SavePasanganData event, Emitter<PasanganState> emit) async {
     var origin = selectedSpouse!
         .copyWith(isChangeOnImage: false)
@@ -90,7 +90,7 @@ class PasanganBloc extends Bloc<PasanganEvent, PasanganState> {
     }
   }
 
-  _onAddNewPasanganData(
+  Future<void> _onAddNewPasanganData(
       AddNewPasanganData event, Emitter<PasanganState> emit) async {
     emit(PasanganLoading());
     applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());

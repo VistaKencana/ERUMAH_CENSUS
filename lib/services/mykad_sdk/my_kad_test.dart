@@ -122,7 +122,7 @@ class _MyKadTestState extends State<MyKadTest> {
     );
   }
 
-  _button({required void Function()? onPressed, required String title}) {
+  Padding _button({required void Function()? onPressed, required String title}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: ElevatedButton(onPressed: onPressed, child: Text(title)),
@@ -141,7 +141,7 @@ class _MyKadTestState extends State<MyKadTest> {
     closeLoading(context);
   }
 
-  setMessage({required String msg}) {
+  void setMessage({required String msg}) {
     dev.log(msg);
     Fluttertoast.showToast(msg: msg);
   }

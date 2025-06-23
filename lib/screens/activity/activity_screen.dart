@@ -244,7 +244,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
-  _goToList() {
+  void _goToList() {
     Navigator.pushNamed(context, RoutesName.activitySearch);
   }
 

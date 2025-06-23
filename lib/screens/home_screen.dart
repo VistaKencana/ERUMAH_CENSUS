@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 PageController homePageController = PageController();
 
-moveScreenTo(int index) {
+void moveScreenTo(int index) {
   homePageController.animateToPage(index,
       duration: const Duration(milliseconds: 300), curve: Curves.linear);
 }
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  _showLogoutAlert() async {
+  Future _showLogoutAlert() async {
     return await CustomAlertDialog(
       position: AlertBtnPosition.leftRignt,
       title: "Logout",

@@ -25,7 +25,7 @@ class PendapatanModal extends StatefulWidget {
 }
 
 class _PendapatanModalState extends State<PendapatanModal> {
-  _isEdit() => (widget.isEdit != null && widget.isEdit == true);
+  bool _isEdit() => (widget.isEdit != null && widget.isEdit == true);
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -55,7 +55,7 @@ class _PendapatanModalState extends State<PendapatanModal> {
     );
   }
 
-  _header() {
+  Padding _header() {
     return Padding(
       padding: const EdgeInsets.only(left: 12, top: 28, bottom: 18),
       child: Row(
@@ -74,7 +74,7 @@ class _PendapatanModalState extends State<PendapatanModal> {
     );
   }
 
-  formV1() {
+  Expanded formV1() {
     return Expanded(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -116,7 +116,7 @@ class _PendapatanModalState extends State<PendapatanModal> {
     );
   }
 
-  formV2() {
+  Expanded formV2() {
     return Expanded(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -162,7 +162,7 @@ class _PendapatanModalState extends State<PendapatanModal> {
     );
   }
 
-  _textField(
+  SizedBox _textField(
       {required String title, String? initialValue, bool readOnly = false}) {
     return SizedBox(
       width: MediaQuery.sizeOf(context).width * 0.4,
@@ -175,7 +175,7 @@ class _PendapatanModalState extends State<PendapatanModal> {
     );
   }
 
-  _textFieldV2(
+  SizedBox _textFieldV2(
       {required String title,
       String? initialValue,
       bool readOnly = false,

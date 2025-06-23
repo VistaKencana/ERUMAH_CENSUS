@@ -320,7 +320,7 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
     );
   }
 
-  textField(
+  SizedBox textField(
       {required String hintText,
       TextEditingController? controller,
       void Function()? onTap}) {
@@ -336,7 +336,7 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
         ));
   }
 
-  _newInfoTile({required PropertyData data}) {
+  Padding _newInfoTile({required PropertyData data}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(

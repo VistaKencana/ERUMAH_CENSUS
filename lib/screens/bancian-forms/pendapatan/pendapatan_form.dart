@@ -49,7 +49,7 @@ class _PendapatanFormState extends State<PendapatanForm> {
     );
   }
 
-  _pendapatanTile(
+  GestureDetector _pendapatanTile(
       {required String title,
       required String address,
       required String salary}) {
@@ -111,7 +111,7 @@ class _PendapatanFormState extends State<PendapatanForm> {
     );
   }
 
-  _section({required String title, bool showBtn = false}) {
+  Padding _section({required String title, bool showBtn = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(

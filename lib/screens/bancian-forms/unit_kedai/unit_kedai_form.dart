@@ -44,7 +44,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
     initVal();
   }
 
-  initVal() {
+  void initVal() {
     ownerData = _unitKedaiBloc.existData.copyWith(isChangeOnImage: false);
     nameCtrl.text = setDataValue(ownerData?.name);
     icNoCtrl.text = setDataValue(ownerData?.icNo);
@@ -58,7 +58,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
     // return _isNewForm() ? "" : val ?? (defaultVal ?? "");
   }
 
-  _exitWarning() {
+  void _exitWarning() {
     CustomAlertDialog(
       title: "Berhenti banci kedai?",
       subtitle: "Adakah anda akan berhenti membuat bancian untuk kedai?",
@@ -232,7 +232,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
         ));
   }
 
-  _headerTitle(String title) {
+  Padding _headerTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(top: 12, bottom: 6),
       child: Row(
@@ -247,7 +247,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
     );
   }
 
-  _textField(
+  SizedBox _textField(
       {required String title,
       bool isMandatory = false,
       bool readOnly = false,
@@ -318,7 +318,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
     );
   }
 
-  _dropdownBusinessType() {
+  dynamic _dropdownBusinessType() {
     return _textField(
       title: 'Perniagaan',
       // isMandatory: _isNewForm(),
@@ -358,5 +358,5 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
     );
   }
 
-  _gap({double height = 10}) => SizedBox(height: height);
+  SizedBox _gap({double height = 10}) => SizedBox(height: height);
 }
