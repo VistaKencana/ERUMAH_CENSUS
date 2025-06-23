@@ -13,7 +13,7 @@ class CheckIcon extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-          shape: BoxShape.circle, color: blueColor.withOpacity(0.25)),
+          shape: BoxShape.circle, color: blueColor.withValues(alpha: 0.25)),
       child: Stack(
         alignment: Alignment.center,
         children: [

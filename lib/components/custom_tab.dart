@@ -14,7 +14,7 @@ class CustomTab extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSelected
             ? AppColors.brightBlue.color
-            : Colors.white.withOpacity(0.7),
+            : Colors.white.withValues(alpha: 0.7),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
       ),
       child: Padding(

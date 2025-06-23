@@ -76,7 +76,7 @@ class _CustomAlertDialogState extends State<QrConfirmationDialog> {
           margin: const EdgeInsets.only(bottom: 14),
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
           decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.withOpacity(0.4))),
+              border: Border.all(color: Colors.grey.withValues(alpha: 0.4))),
           child: Text(
             widget.unitNumber,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
