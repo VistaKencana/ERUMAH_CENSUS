@@ -27,7 +27,7 @@ class CustomDialogLoading extends StatefulWidget {
       required void Function(DialogState state) onFinish}) async {
     showDialog(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.3),
+      barrierColor: Colors.black.withValues(alpha: 0.3),
       builder: (_) => CustomDialogLoading(
         controller: controller,
         isDissmissable: isDissmissable,
@@ -90,7 +90,7 @@ class _CustomDialogLoadingState extends State<CustomDialogLoading> {
           }
         },
         child: Material(
-          color: Colors.black.withOpacity(0.6),
+          color: Colors.black.withValues(alpha: 0.6),
           child: Center(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30),

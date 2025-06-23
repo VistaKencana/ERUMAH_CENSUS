@@ -68,7 +68,7 @@ class FileDisplay extends StatelessWidget {
                       : Container(
                           height: 80.h,
                           width: 80.h,
-                          color: Colors.grey.withOpacity(.3),
+                          color: Colors.grey.withValues(alpha: .3),
                           child: Icon(
                             icon ?? Icons.camera_alt_rounded,
                             size: 20,
@@ -90,10 +90,11 @@ class FileDisplay extends StatelessWidget {
 
   DottedBorder dottedBorder(BuildContext context) {
     return DottedBorder(
-        radius: const Radius.circular(12),
-        padding: const EdgeInsets.all(4),
-        dashPattern: const [8, 4],
-        borderType: BorderType.RRect,
+        options: RectDottedBorderOptions(
+          color: Colors.grey,
+          padding: const EdgeInsets.all(4),
+          dashPattern: const [8, 4],
+        ),
         child: Container(
           width: double.infinity,
           height: MediaQuery.sizeOf(context).height * .18,
@@ -135,7 +136,7 @@ class FileDisplay extends StatelessWidget {
         ));
   }
 
-  openEditScreen(BuildContext context, Uint8List imageData) {
+  void openEditScreen(BuildContext context, Uint8List imageData) {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,

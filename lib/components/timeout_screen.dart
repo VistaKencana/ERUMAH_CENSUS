@@ -22,7 +22,7 @@ class _TimeoutScreenState extends State<TimeoutScreen> {
   final pwdCtrl = TextEditingController(text: "123456");
   final _formKey = GlobalKey<FormState>();
 
-  _alertDialog() {
+  void _alertDialog() {
     CustomAlertDialog(
       title: 'Berhenti Banci?',
       subtitle: "Jika anda tekan 'Okay' anda akan kembali ke Log Masuk",

@@ -193,7 +193,7 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 6,
                   spreadRadius: 2,
                   offset: const Offset(2, 4),
