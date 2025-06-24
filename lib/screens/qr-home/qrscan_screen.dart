@@ -245,9 +245,10 @@ class _QrScanScreenState extends State<QrScanScreen> {
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
           borderColor: Colors.white,
-          borderRadius: 10,
+          borderRadius: 30,
           borderLength: 30,
           borderWidth: 10,
+          overlayColor: Colors.black87,
           cutOutSize: scanArea),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );
