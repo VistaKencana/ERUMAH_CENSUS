@@ -37,7 +37,7 @@ class NavItem extends StatelessWidget {
   const NavItem({
     super.key,
     required this.icon,
-    this.selectedBgColor = const Color(0xFF403C97),
+    this.selectedBgColor = const Color(0xFF8D182D),
     this.selectedColor = Colors.white,
     required this.isSelected,
     this.unselectedBgColor = Colors.transparent,

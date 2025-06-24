@@ -58,6 +58,8 @@ class DashboardProvider extends ChangeNotifier {
     // MARK: User Activity
     try {
       acitivtyData = await repo.getUserActivity();
+      log.logDebug(
+          tag: "fetchUserActivity", msg: acitivtyData.toJson().toString());
     } catch (e) {
       log.logError(tag: "initDashboard-user activity", msg: e.toString());
     } finally {
