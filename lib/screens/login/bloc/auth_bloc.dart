@@ -31,7 +31,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onUserLoginTimeout(UserLoginTimeout event, Emitter<AuthState> emit) async {
+  Future<void> _onUserLoginTimeout(
+      UserLoginTimeout event, Emitter<AuthState> emit) async {
     emit(AuthLoginLoading());
     try {
       final resp =
@@ -50,7 +51,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final isSuccess = await repo.userLogout();
       if (!isSuccess) {
-        emit(const AuthLogoutError(msg: "Something went wrong"));
+        await LoginPreference.clearData();
+        emit(AuthLogoutSuccess());
+        // emit(const AuthLogoutError(msg: "Something went wrong"));
         return;
       }
       await LoginPreference.clearData();
