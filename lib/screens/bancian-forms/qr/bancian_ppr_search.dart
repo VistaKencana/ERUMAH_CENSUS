@@ -72,37 +72,6 @@ class _BancianPprSearchState extends State<BancianPprSearch> {
                           Expanded(
                             child: Column(
                               children: [
-                                // textField(
-                                //   controller: zoneCtrl,
-                                //   hintText: "Pilih Zon",
-                                //   onTap: () {
-                                //     CustomDropdownSheet(
-                                //         label: "Pilih Zon",
-                                //         items: propertyWatch.listZone,
-                                //         groupValue: propertyWatch.selectedZone,
-                                //         getTitle: (data) => data.desc ?? "-",
-                                //         onQuery: (data, query) {
-                                //           final result = data.where((zon) {
-                                //             String value =
-                                //                 (zon.desc ?? "").toLowerCase();
-                                //             return value.contains(
-                                //                 query?.toLowerCase() ?? "");
-                                //           }).toList();
-                                //           return result;
-                                //         },
-                                //         onChange: (val) {
-                                //           if (val == null) return;
-                                //           setState(() {
-                                //             zoneCtrl.text = val.desc!;
-                                //             areaCtrl.clear();
-                                //             blockCtrl.clear();
-                                //           });
-                                //           _propertyBloc
-                                //               .add(FetchArea(zoneData: val));
-                                //           hideLevel(true);
-                                //         }).show(context);
-                                //   },
-                                // ),
                                 const SizedBox(height: 8),
                                 textField(
                                   controller: areaCtrl,

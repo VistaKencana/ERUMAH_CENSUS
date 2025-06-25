@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/config/constants/app_images.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
@@ -53,9 +55,8 @@ class _SplashScreenState extends State<SplashScreen> {
     return cameraGranted && storageGranted;
   }
 
-  void _navigateBasedOnLogin() {
-    // ignore: unnecessary_null_comparison
-    final isLoggedIn = LoginPreference().isTokenExpired() != null;
+  void _navigateBasedOnLogin() async {
+    final isLoggedIn = (await LoginPreference().isTokenExpired()) != null;
     if (isLoggedIn) {
       Navigator.pushReplacementNamed(context, RoutesName.login);
       Navigator.pushNamed(context, RoutesName.home);
@@ -63,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     Navigator.pushNamedAndRemoveUntil(
       context,
-      isLoggedIn ? RoutesName.home : RoutesName.login,
+      RoutesName.login,
       (route) => false,
     );
   }

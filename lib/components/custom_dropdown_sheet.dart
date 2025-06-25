@@ -30,7 +30,9 @@ class CustomDropdownSheet<T> extends StatefulWidget {
   Future show(BuildContext context) {
     return showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(18))),
       isScrollControlled: true,
       builder: (_) => this,
     );
@@ -111,25 +113,22 @@ class _CustomDropdownSheetState<T> extends State<CustomDropdownSheet<T>> {
                 widget.items.isNotEmpty
                     ? Expanded(
                         child: Scrollbar(
-                        thickness: 10,
-                        radius: const Radius.circular(20),
-                        child: ListView(
-                          controller: sc,
-                          children: List.generate(
-                            shownItems.length,
-                            (index) => RadioListTile<T>(
-                                controlAffinity:
-                                    ListTileControlAffinity.trailing,
-                                groupValue: currValue,
-                                value: shownItems[index],
-                                title: Text(widget.getTitle(shownItems[index])),
-                                onChanged: (val) {
-                                  widget.onChange(val);
-                                  Navigator.pop(context);
-                                }),
-                          ),
-                        ),
-                      ))
+                            thickness: 10,
+                            radius: const Radius.circular(20),
+                            child: ListView(
+                                controller: sc,
+                                children: shownItems
+                                    .map((item) => RadioListTile<T>(
+                                        controlAffinity:
+                                            ListTileControlAffinity.trailing,
+                                        groupValue: currValue,
+                                        value: item,
+                                        title: Text(widget.getTitle(item)),
+                                        onChanged: (val) {
+                                          widget.onChange(val);
+                                          Navigator.pop(context);
+                                        }))
+                                    .toList())))
                     : Expanded(
                         child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,

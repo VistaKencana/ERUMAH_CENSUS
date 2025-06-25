@@ -70,11 +70,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     //MARK: Latest Activity
                     DashboardSection(
                         isLoading: watchDashboard.latestLoading,
-                        title: "Aktiviti terkini",
+                        title: "Ringkasan aktiviti",
                         data: watchDashboard.latestList),
                     DashboardSection(
                       isLoading: watchDashboard.incompleteLoading,
-                      title: "Untuk susulan",
+                      title: "Perlu tindakan",
                       data: watchDashboard.incompleteList,
                       showButton: true,
                     ),
@@ -98,7 +98,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             color: AppColors.darkGrey.color,
                             borderRadius: BorderRadius.circular(6)),
                         child: Text(
-                          "AKTIVITI ANDA",
+                          "Rekod Aktiviti".toUpperCase(),
                           style: appTextStyle(
                               color: Colors.white,
                               size: 12,

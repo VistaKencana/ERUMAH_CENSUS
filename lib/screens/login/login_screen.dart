@@ -157,12 +157,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 16),
                 CustomTextField(
-                  title: "ID Pengguna:",
+                  title: "ID Staff:",
                   controller: userIdCtrl,
                   titleStyle: appTextStyle(fontWeight: FontWeight.w600),
                   hintText: "Tulis id pengguna disini",
-                  validator: (value) => Validator.validateText(value,
-                      err: "Sila isi ID Pengguna"),
+                  validator: (value) =>
+                      Validator.validateText(value, err: "Sila isi ID Staff"),
                   prefixWidget: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Image.asset(
