@@ -1,7 +1,8 @@
+import 'package:eperumahan_bancian/data/api/repositories/bloc/home_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../config/constants/app_colors.dart';
 import '../../config/constants/app_size.dart';
-import '../home_screen.dart';
 
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({
@@ -33,7 +34,7 @@ class DashboardHeader extends StatelessWidget {
                           children: [
                             IconButton(
                                 onPressed: () {
-                                  moveScreenTo(1);
+                                  context.read<HomeProvider>().moveScreenTo(1);
                                 },
                                 icon: const Icon(Icons.qr_code_scanner)),
                             VerticalDivider(
@@ -44,7 +45,10 @@ class DashboardHeader extends StatelessWidget {
                             Expanded(
                               child: TextFormField(
                                 readOnly: true,
-                                onTap: () => homePageController.jumpToPage(2),
+                                onTap: () => context
+                                    .read<HomeProvider>()
+                                    .pageController
+                                    .jumpToPage(2),
                                 decoration: const InputDecoration(
                                     fillColor: Colors.white,
                                     hintText: "Carian Perumahan",

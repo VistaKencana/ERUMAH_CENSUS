@@ -7,14 +7,6 @@ sealed class PropertyEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchZone extends PropertyEvent {}
-
-class FetchArea extends PropertyEvent {
-  final ZoneData zoneData;
-
-  const FetchArea({required this.zoneData});
-}
-
 class FetchAllArea extends PropertyEvent {}
 
 class FetchBlock extends PropertyEvent {

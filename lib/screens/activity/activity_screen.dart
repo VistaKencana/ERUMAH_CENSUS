@@ -21,14 +21,13 @@ class ActivityScreen extends StatefulWidget {
 class _ActivityScreenState extends State<ActivityScreen> {
   late PropertyBloc _propertyBloc;
   late QrBloc _qrBloc;
-  late TextEditingController zoneCtrl, areaCtrl, blockCtrl;
+  late TextEditingController areaCtrl, blockCtrl;
   @override
   void initState() {
     super.initState();
     _propertyBloc = BlocProvider.of<PropertyBloc>(context, listen: false);
     _qrBloc = BlocProvider.of<QrBloc>(context, listen: false);
     _propertyBloc.add(FetchAllArea());
-    zoneCtrl = TextEditingController();
     areaCtrl = TextEditingController();
     blockCtrl = TextEditingController();
   }
