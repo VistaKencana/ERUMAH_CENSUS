@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
+import android.os.Bundle;
 
 import com.example.mykad_sdk.AsyncTaskExecutorService;
 import com.example.mykad_sdk.FingerPrintManager;
@@ -49,6 +50,16 @@ public class MainActivity extends FlutterActivity implements MyIDListener, MyIDP
     public boolean usingFP = false;
     FingerPrintManager fpManager = FingerPrintManager.getInstance();
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Catch unhandled exceptions
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            Log.e("APP_CRASH", "Uncaught exception in thread " + thread.getName(), throwable);
+        });
+    }
+    
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine);
