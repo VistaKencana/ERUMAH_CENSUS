@@ -32,7 +32,9 @@ class MyKadController {
   void init({required bool verifyFP, required BuildContext context}) async {
     if (controller == null) {
       controller = StreamController<ReaderResponse>.broadcast();
-      await MyKadReader.callSDK();
+      await MyKadReader.callSDK(
+          license:
+              "eyJjaGFsbGFuZ2VfY29kZSI6ImZ4UURyR2RHaDQiLCJwYXlsb2FkIjoiT1Q2TU82Njk0aE9ZelJBWjliM3FVRDlzR1dZVkJUemdLbUdPS0I3SHBsM3dCZ21JM29CZWtDWUt1cklrQURMemFKR1dzR05YT3RDcjVpYURkakRRekViWE9nK3pOU3hrSVhERkdwKy9Jb2NNdG1rK0FKSnZZbStiSlRGZ09NZEhUSkZsL3hRakcvYXNwYlhDUk1LZTJOeTRrcEd3T2kxQlNPTks0MkFFaG53PSIsInNpZ25hdHVyZSI6Ik1FUUNJR3JYcSsxN3k1ZzQwdGJqUkYrM0xGMGRBWnk5dFZZYkI0SmZOOUNHdVpHd0FpQlJPdno5L0s1TkxFMDdPakQ1eXZrRjNyOUVYVFFvM3g0Q0JXRyt2Wm5lbGc9PSIsInZlcnNpb24iOjF9");
 
       /* --- Start M11 settings ---*/
       if (!context.mounted) return;

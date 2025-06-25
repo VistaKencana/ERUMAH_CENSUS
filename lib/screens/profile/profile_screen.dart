@@ -28,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               padding: const EdgeInsets.all(18),
               color: AppColors.primary.color,
-              height: constraint.maxHeight * .2,
+              height: constraint.maxHeight * .24,
               width: double.infinity,
               child: SafeArea(
                 child: Column(
