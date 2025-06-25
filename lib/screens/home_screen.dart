@@ -1,5 +1,5 @@
 import 'package:eperumahan_bancian/components/custom_navbar.dart';
-import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
+import 'package:eperumahan_bancian/data/api/repositories/bloc/home_provider.dart';
 import 'package:eperumahan_bancian/screens/login/bloc/auth_bloc.dart';
 import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
@@ -17,44 +17,24 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-PageController homePageController = PageController();
-
-void moveScreenTo(int index) {
-  homePageController.animateToPage(index,
-      duration: const Duration(milliseconds: 300), curve: Curves.linear);
-}
-
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-
+  late HomeProvider _homeProvider;
   @override
   void initState() {
     super.initState();
+    _homeProvider = context.read<HomeProvider>();
+    _homeProvider.initHome();
   }
 
-  void _onPageChanged(int page) {
-    setState(() {
-      setQRScannerFromHome(page);
-      _selectedIndex = page;
-    });
-  }
-
-  void setQRScannerFromHome(int page) {
-    if (page != 1) return;
-    QrNavigationPref.setFromHome(val: true);
-  }
-
-  void _onItemTapped(int index) {
-    homePageController.jumpToPage(index);
-    // homePageController.animateToPage(
-    //   index,
-    //   duration: const Duration(milliseconds: 300),
-    //   curve: Curves.easeInOut,
-    // );
+  @override
+  void dispose() {
+    _homeProvider.disposeController();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final homeProviderWatch = context.watch<HomeProvider>();
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
@@ -82,8 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: Scaffold(
           body: PageView(
-            controller: homePageController,
-            onPageChanged: _onPageChanged,
+            controller: _homeProvider.pageController,
+            onPageChanged: _homeProvider.onPageChanged,
             children: List.generate(BottomNavItem.values.length,
                 (index) => BottomNavItem.values[index].screen),
           ),
@@ -92,11 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
             final data = BottomNavItem.values[index];
             return NavItem(
               itemCount: BottomNavItem.values.length,
-              onTap: () => _onItemTapped(index),
-              icon: _selectedIndex == index
+              onTap: () => _homeProvider.onItemTapped(index),
+              icon: homeProviderWatch.currentIndex == index
                   ? data.item.activeIcon
                   : data.item.icon,
-              isSelected: _selectedIndex == index,
+              isSelected: homeProviderWatch.currentIndex == index,
               label: data.item.label!,
             );
           }),
