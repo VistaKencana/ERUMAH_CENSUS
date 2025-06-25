@@ -15,8 +15,7 @@ part 'property_state.dart';
 
 class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
   PropertyBloc() : super(PropertyInitial()) {
-    on<FetchZone>(_onFetchZone);
-    on<FetchArea>(_onFetchArea);
+    // on<FetchArea>(_onFetchArea);
     on<FetchAllArea>(_onFetchAllArea);
     on<FetchBlock>(_onFetchBlock);
     on<FetchUnitFloor>(_onFetchUnitFloor);
@@ -44,39 +43,23 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
   final repo = PropertyRepository();
   final applog = const AppLog(classname: "PropertyBloc");
 
-  Future<void> _onFetchZone(FetchZone event, Emitter<PropertyState> emit) async {
-    emit(PropertyInitial());
-    _clearAllData();
-    if (listZone.isNotEmpty) {
-      return;
-    }
-    EasyLoading.show();
+  // Future<void> _onFetchArea(
+  //     FetchArea event, Emitter<PropertyState> emit) async {
+  //   EasyLoading.show();
+  //   _clearArea();
+  //   selectedZone = event.zoneData;
+  //   try {
+  //     final resp = await repo.fetchArea(zoneCode: selectedZone.code!);
+  //     listArea = resp;
+  //   } catch (e) {
+  //     applog.logError(tag: "fetchArea", msg: e.toString());
+  //   } finally {
+  //     EasyLoading.dismiss();
+  //   }
+  // }
 
-    try {
-      final resp = await repo.fetchZone();
-      listZone = resp;
-    } catch (e) {
-      applog.logError(tag: "fetchZone", msg: e.toString());
-    } finally {
-      EasyLoading.dismiss();
-    }
-  }
-
-  Future<void> _onFetchArea(FetchArea event, Emitter<PropertyState> emit) async {
-    EasyLoading.show();
-    _clearArea();
-    selectedZone = event.zoneData;
-    try {
-      final resp = await repo.fetchArea(zoneCode: selectedZone.code!);
-      listArea = resp;
-    } catch (e) {
-      applog.logError(tag: "fetchArea", msg: e.toString());
-    } finally {
-      EasyLoading.dismiss();
-    }
-  }
-
-  Future<void> _onFetchAllArea(FetchAllArea event, Emitter<PropertyState> emit) async {
+  Future<void> _onFetchAllArea(
+      FetchAllArea event, Emitter<PropertyState> emit) async {
     emit(PropertyInitial());
     _clearArea();
     EasyLoading.show();
@@ -104,7 +87,8 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
     }
   }
 
-  Future<void> _onFetchBlock(FetchBlock event, Emitter<PropertyState> emit) async {
+  Future<void> _onFetchBlock(
+      FetchBlock event, Emitter<PropertyState> emit) async {
     EasyLoading.show();
     _clearBlock();
     selectedArea = event.areaData;
@@ -120,7 +104,8 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
     }
   }
 
-  Future<void> _onFetchUnitFloor(FetchUnitFloor event, Emitter<PropertyState> emit) async {
+  Future<void> _onFetchUnitFloor(
+      FetchUnitFloor event, Emitter<PropertyState> emit) async {
     EasyLoading.show();
     selectedBlock = event.blockData;
     try {
@@ -224,18 +209,6 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
       applog.logError(tag: "onFetchFloorAndUnit 2", msg: e.toString());
       emit(PropertyError(msg: e.toString()));
     }
-  }
-
-  void _clearAllData() {
-    listArea.clear();
-    listBlock.clear();
-    listFloor.clear();
-    listProperty.clear();
-    selectedZone = ZoneData();
-    selectedArea = AreaData();
-    selectedBlock = BlockData();
-    selectedFloor = FloorData();
-    selectedProperty = PropertyData();
   }
 
   void _clearArea() {
