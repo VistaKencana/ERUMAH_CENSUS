@@ -74,6 +74,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
     }
 
     if (listArea.isNotEmpty) {
+      EasyLoading.dismiss();
       return;
     }
 
@@ -123,6 +124,9 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
   Future<void> _onFetchListProperties(
       FetchListProperties event, Emitter<PropertyState> emit) async {
     emit(PropertyLoading());
+    selectedZone = event.zoneData ?? selectedZone;
+    selectedArea = event.areaData ?? selectedArea;
+    selectedBlock = event.blockData ?? selectedBlock;
     try {
       if (selectedZone.code == null ||
           selectedArea.code == null ||
@@ -133,6 +137,16 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
 
       if (listFloor.isNotEmpty) {
         selectedFloor = listFloor.first;
+      }
+
+      if (event.isShortcut) {
+        final tempList = await repo.fetchUnitFloor(
+            housingCode: selectedArea.code!,
+            blockNo: selectedBlock.blockNo.toString());
+        listFloor = tempList;
+        if (listFloor.isNotEmpty) {
+          selectedFloor = listFloor.first;
+        }
       }
 
       final resp = await repo.fetchListProperties(
@@ -212,7 +226,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
   }
 
   void _clearArea() {
-    listArea.clear();
+    // listArea.clear();
     listBlock.clear();
     listFloor.clear();
 

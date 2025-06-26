@@ -5,7 +5,11 @@ import 'package:eperumahan_bancian/components/modal/modal_handler.dart';
 import 'package:eperumahan_bancian/components/search_appbar.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
+import 'package:eperumahan_bancian/data/api/repositories/bloc/home_provider.dart';
 import 'package:eperumahan_bancian/data/api/repositories/bloc/property_bloc/property_bloc.dart';
+import 'package:eperumahan_bancian/data/api/repositories/model/area_model.dart';
+import 'package:eperumahan_bancian/data/api/repositories/model/block_model.dart';
+import 'package:eperumahan_bancian/data/api/repositories/model/zone_model.dart';
 import 'package:eperumahan_bancian/screens/qr-home/bloc/qr_bloc.dart';
 import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
@@ -37,34 +41,94 @@ class _ActivityScreenState extends State<ActivityScreen> {
   @override
   Widget build(BuildContext context) {
     final propertyWatch = context.watch<PropertyBloc>();
+    final recentWatch = context.watch<HomeProvider>();
     Size size = MediaQuery.sizeOf(context);
-    return Scaffold(
-      appBar: SearchAppbar(
-        searchController: searchCtrl,
-        onTap: () {
-          CustomDraggableSheet.show(
-              context: context,
-              builder: (_, __) => searchSection(size, propertyWatch));
-        },
-      ),
-      backgroundColor: Colors.transparent,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 10),
-            Text(
-              "Carian terbaru",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            _recentTile(),
-            //  searchSection(size, propertyWatch),
-            const SizedBox(height: 14),
-            // _recentTile(),
-          ],
+    return BlocListener<PropertyBloc, PropertyState>(
+      listener: (context, state) {
+        if (state is PropertyLoading) {
+          EasyLoading.show();
+        } else if (state is PropertySuccess) {
+          //Save to local
+          context.read<HomeProvider>().saveRecent(
+              zoneCode: _propertyBloc.selectedZone,
+              housingCode: _propertyBloc.selectedArea,
+              blockNo: _propertyBloc.selectedBlock);
+          //Navigate next screen
+          EasyLoading.dismiss().then((val) => _goToList());
+        } else if (state is PropertyError) {
+          CustomFlushbar.of(context).showWarning(msg: state.msg);
+          EasyLoading.dismiss();
+        }
+      },
+      child: Scaffold(
+        appBar: SearchAppbar(
+          searchController: searchCtrl,
+          onTap: () {
+            CustomDraggableSheet.show(
+                context: context,
+                builder: (_, __) => searchSection(size, propertyWatch));
+          },
+        ),
+        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 10),
+              Text(
+                "Carian terbaru",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              (recentWatch.isRecentEmpty)
+                  ? InkWell(
+                      onTap: () => CustomDraggableSheet.show(
+                          context: context,
+                          builder: (_, __) =>
+                              searchSection(size, propertyWatch)),
+                      child: Ink(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color:
+                                AppColors.primary.color.withValues(alpha: .1)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.search),
+                            Text(
+                              "Buat carian perumhan",
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  : Column(
+                      children: recentWatch.recentList.map((e) {
+                        final zone = e.zoneCode;
+                        final area = e.housingCode;
+                        final blok = e.blockNo;
+                        return _recentTile(
+                            onTap: () {
+                              searchPerumahan(
+                                  isShortcut: true,
+                                  selectedZone: zone,
+                                  selectedArea: area,
+                                  selectedBlock: blok);
+                            },
+                            title: area.desc ?? "-",
+                            subtitle:
+                                "Zone: ${zone.desc} | Blok: ${blok.blockNo}");
+                      }).toList(),
+                    ),
+              const SizedBox(height: 14),
+              // _recentTile(),
+            ],
+          ),
         ),
       ),
     );
@@ -157,33 +221,38 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       color: Colors.blueGrey.shade400,
                       fontWeight: FontWeight.bold),
                 )),
-            BlocListener<PropertyBloc, PropertyState>(
-                listener: (context, state) {
-                  if (state is PropertyLoading) {
-                    EasyLoading.show();
-                  } else if (state is PropertySuccess) {
-                    EasyLoading.dismiss().then((val) => _goToList());
-                  } else if (state is PropertyError) {
-                    CustomFlushbar.of(context).showWarning(msg: state.msg);
-                    EasyLoading.dismiss();
-                  }
+            ElevatedButton(
+                onPressed: () {
+                  searchPerumahan(
+                      isShortcut: false,
+                      selectedZone: _propertyBloc.selectedZone,
+                      selectedArea: _propertyBloc.selectedArea,
+                      selectedBlock: _propertyBloc.selectedBlock);
                 },
-                child: ElevatedButton(
-                    onPressed: () {
-                      _propertyBloc.add(const FetchListProperties());
-                      _qrBloc.setPropertyData(
-                          selectedZone: _propertyBloc.selectedZone,
-                          selectedArea: _propertyBloc.selectedArea,
-                          selectedBlock: _propertyBloc.selectedBlock);
-                    },
-                    child: const Text(
-                      "Carian",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ))),
+                child: const Text(
+                  "Carian",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )),
           ],
         ),
       ),
     );
+  }
+
+  void searchPerumahan(
+      {required bool isShortcut,
+      ZoneData? selectedZone,
+      AreaData? selectedArea,
+      BlockData? selectedBlock}) {
+    _propertyBloc.add(FetchListProperties(
+        isShortcut: isShortcut,
+        zoneData: selectedZone,
+        areaData: selectedArea,
+        blockData: selectedBlock));
+    _qrBloc.setPropertyData(
+        selectedZone: selectedZone,
+        selectedArea: selectedArea,
+        selectedBlock: selectedBlock);
   }
 
   Widget section(
@@ -217,12 +286,15 @@ class _ActivityScreenState extends State<ActivityScreen> {
     Navigator.pushNamed(context, RoutesName.activitySearch);
   }
 
-  Widget _recentTile() {
+  Widget _recentTile(
+      {void Function()? onTap,
+      required String title,
+      required String subtitle}) {
     return ListTile(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.circular(12),
       ),
-      onTap: () {},
+      onTap: onTap,
       contentPadding: EdgeInsets.zero,
       leading: Container(
         padding: EdgeInsets.all(6),
@@ -234,8 +306,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
           color: AppColors.primary.color,
         ),
       ),
-      title: Text("Perumahan"),
-      subtitle: Text("Kawasan"),
+      title: Text(title),
+      subtitle: Text(subtitle),
       trailing: Icon(
         Icons.chevron_right,
         color: Colors.black26,

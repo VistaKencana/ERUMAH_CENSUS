@@ -1,12 +1,12 @@
 import 'package:eperumahan_bancian/components/activity_appbar.dart';
-import 'package:eperumahan_bancian/components/bg_image.dart';
-import 'package:eperumahan_bancian/components/custom_dropdown_sheet.dart';
+import 'package:eperumahan_bancian/components/tingkat_chip.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/data/api/repositories/bloc/property_bloc/property_bloc.dart';
 import 'package:eperumahan_bancian/data/api/repositories/model/property_model.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
 import 'package:eperumahan_bancian/screens/qr-home/bloc/qr_bloc.dart';
 import 'package:eperumahan_bancian/screens/qr-home/qrscan_screen.dart';
+import 'package:eperumahan_bancian/services/extensions/skeletonizer_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
@@ -23,6 +23,11 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
   final info = BancianInfo.getExampleData();
   late PropertyBloc _propertyBloc;
   late QrBloc _qrBloc;
+  bool _hideLevel = true;
+  void hideLevel(bool val) {
+    _hideLevel = val;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -34,22 +39,10 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
   Widget build(BuildContext context) {
     final propertyWatch = BlocProvider.of<PropertyBloc>(context);
     Size size = MediaQuery.sizeOf(context);
-    return BgImage(
-        child: Scaffold(
-      backgroundColor: Colors.transparent,
+    return Scaffold(
       appBar: ActivityAppbar(
-        onOpenFloor: () {
-          CustomDropdownSheet(
-              label: "Pilih Tingkat",
-              items: _propertyBloc.listFloor,
-              getTitle: (data) => data.floorNo ?? "",
-              groupValue: propertyWatch.selectedFloor,
-              onChange: (val) {
-                if (val == null) return;
-                _propertyBloc.add(ChangePropertyFloor(floorData: val));
-                setState(() {});
-              }).show(context);
-        },
+        automaticallyImplyLeading: false,
+        onOpenFloor: () {},
         floor: propertyWatch.selectedFloor.floorNo ?? "-",
         title: _propertyBloc.selectedArea.desc ?? "-",
         subtitle: " Blok : ${_propertyBloc.selectedBlock.blockNo}",
@@ -58,68 +51,122 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
       ),
       body: ListView(
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.only(left: 12, top: 20),
-          //   child: Text(
-          //     "Info Perumahan Bancian",
-          //     style: appTextStyle(
-          //       fontWeight: FontWeight.w400,
-          //     ),
-          //   ),
-          // ),
-          // Row(
-          //   children: [
-          //     _infoContainer(val: info[4].value, title: info[4].title),
-          //     _infoContainer(val: info[5].value, title: info[5].title),
-          //   ],
-          // ),
+          BlocBuilder<PropertyBloc, PropertyState>(
+            builder: (context, state) {
+              if (state is PropertySuccess || state is UnitSuccess) {
+                return Container(
+                  color: Colors.white,
+                  height: 65,
+                  width: double.infinity,
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: List.generate(
+                        _propertyBloc.listFloor.length,
+                        (index) => Padding(
+                          padding: EdgeInsets.only(
+                              left: (index == 0) ? 14 : 0, right: 8),
+                          child: TingkatChip(
+                            isSelected: propertyWatch.selectedFloor ==
+                                _propertyBloc.listFloor[index],
+                            title: "${_propertyBloc.listFloor[index].floorNo}",
+                            onPressed: () {
+                              _propertyBloc.add(ChangePropertyFloor(
+                                  floorData: _propertyBloc.listFloor[index]));
+                              hideLevel(false);
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              } else if (!_hideLevel) {
+                return Container(
+                  color: Colors.white,
+                  height: 65,
+                  width: double.infinity,
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: List.generate(
+                        _propertyBloc.listFloor.length,
+                        (index) => Padding(
+                          padding: EdgeInsets.only(
+                              left: (index == 0) ? 14 : 0, right: 8),
+                          child: TingkatChip(
+                            isSelected: propertyWatch.selectedFloor ==
+                                _propertyBloc.listFloor[index],
+                            title: "${_propertyBloc.listFloor[index].floorNo}",
+                            onPressed: () {
+                              _propertyBloc.add(ChangePropertyFloor(
+                                  floorData: _propertyBloc.listFloor[index]));
+                              hideLevel(false);
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
           Container(
             height: size.height * 0.7,
             margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "Senarai unit bancian",
-                        style:
-                            appTextStyle(fontWeight: FontWeight.bold, size: 25),
-                      ),
-                    ),
-                    // GestureDetector(
-                    //   onTap: () {},
-                    //   child: Container(
-                    //     decoration: BoxDecoration(
-                    //         color: AppColors.lightGrey.color,
-                    //         borderRadius: BorderRadius.circular(10)),
-                    //     padding: const EdgeInsets.all(10),
-                    //     child: const Icon(Icons.search),
-                    //   ),
-                    // )
-                  ],
-                ),
-                const SizedBox(height: 12),
                 BlocConsumer<PropertyBloc, PropertyState>(
                   listener: (state, context) {},
                   builder: (context, state) {
                     if (state is UnitLoading || state is PropertyLoading) {
-                      return const Expanded(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        ],
-                      ));
+                      return Expanded(
+                          child: ListView.builder(
+                              itemCount: 4,
+                              itemBuilder: (_, index) {
+                                return Container(
+                                  margin: EdgeInsets.symmetric(vertical: 4),
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey.shade100,
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundColor: Colors.grey.shade200,
+                                    ),
+                                    title: Text("Loading .."),
+                                    subtitle: Text('Loading ..............'),
+                                  ),
+                                ).withSkeleton(isLoading: true);
+                              }));
                     } else if (state is PropertySuccess ||
                         state is UnitSuccess) {
+                      if (propertyWatch.listProperty.isEmpty) {
+                        return Expanded(
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(height: size.height * .2),
+                                Text(
+                                  "Tiada Rumah dijumpai",
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }
                       return Expanded(
                         child: Scrollbar(
                             child: ListView.builder(
@@ -144,27 +191,8 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
           )
         ],
       ),
-    ));
+    );
   }
-
-  // _infoContainer({required String val, required String title}) {
-  //   return Container(
-  //     width: MediaQuery.sizeOf(context).width * .44,
-  //     margin: const EdgeInsets.all(10),
-  //     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
-  //     decoration: BoxDecoration(
-  //         color: Colors.white, borderRadius: BorderRadius.circular(10)),
-  //     child: Column(
-  //       children: [
-  //         Text(
-  //           val,
-  //           style: appTextStyle(size: 22, fontWeight: FontWeight.bold),
-  //         ),
-  //         Text(title),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   ListTile _newInfoTile({required PropertyData data}) {
     return ListTile(

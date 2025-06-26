@@ -24,6 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _homeProvider = context.read<HomeProvider>();
     _homeProvider.initHome();
+    WidgetsBinding.instance
+        .addPostFrameCallback((val) => _homeProvider.fetchRecent());
   }
 
   @override

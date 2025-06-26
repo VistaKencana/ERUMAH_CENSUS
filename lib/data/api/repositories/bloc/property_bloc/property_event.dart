@@ -22,7 +22,12 @@ class FetchUnitFloor extends PropertyEvent {
 }
 
 class FetchListProperties extends PropertyEvent {
-  const FetchListProperties();
+  final ZoneData? zoneData;
+  final AreaData? areaData;
+  final BlockData? blockData;
+  final bool isShortcut;
+  const FetchListProperties(
+      {this.zoneData, this.areaData, this.blockData, required this.isShortcut});
 }
 
 class ChangePropertyFloor extends PropertyEvent {
