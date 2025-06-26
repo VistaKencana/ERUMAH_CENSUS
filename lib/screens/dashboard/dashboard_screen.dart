@@ -61,7 +61,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Row(
                     children: [
                       Text(
-                        "AKTIVITI ANDA",
+                        "AKTIVITI LOG",
                         style:
                             appTextStyle(size: 20, fontWeight: FontWeight.bold),
                       ),
@@ -131,7 +131,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     isLoading: watchDashboard.latestLoading,
                     data: watchDashboard.latestList,
                     // miniTitle: "AKTIVITI",
-                    title: "Aktiviti terkini"),
+                    title: "Tugasan terkini"),
 
                 Container(
                     color: AppColors.lightBlue.color,
@@ -141,7 +141,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   isLoading: watchDashboard.incompleteLoading,
                   data: watchDashboard.incompleteList,
                   // miniTitle: "SUSULAN",
-                  title: "Untuk susulan",
+                  title: "Tindakan lanjut",
                   showButton: true,
                 ),
 

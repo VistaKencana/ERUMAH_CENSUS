@@ -6,6 +6,7 @@ import 'package:eperumahan_bancian/screens/profile/profile_update_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../components/custom_alertdialog.dart';
@@ -32,29 +33,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               width: double.infinity,
               child: SafeArea(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Align(
-                    //   alignment: Alignment.centerRight,
-                    //   child: GestureDetector(
-                    //     onTap: () {
-                    //       Navigator.pop(context);
-                    //     },
-                    //     child: Container(
-                    //       decoration: BoxDecoration(
-                    //         color: AppColors.midGrey.color,
-                    //         shape: BoxShape.circle,
-                    //       ),
-                    //       padding: const EdgeInsets.all(10),
-                    //       child: const Icon(
-                    //         Icons.close,
-                    //         size: 20,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     Text(
-                      "Selamat datang",
+                      "Profil pengguna",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18.sp,
@@ -74,7 +57,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               padding: const EdgeInsets.all(18),
               width: double.infinity,
-              color: Colors.grey.shade200,
               child: Text(
                 "Tetapan",
                 style: TextStyle(
@@ -84,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             _profileTile(
-              icon: Icons.person_outline,
+              icon: FontAwesomeIcons.idBadge,
               title: "Maklumat Akaun",
               onTap: () {
                 Navigator.push(
@@ -95,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
             _profileTile(
-              icon: Icons.lock_outline_rounded,
+              icon: FontAwesomeIcons.lock,
               title: "Ubah Kata Laluan",
               onTap: () {
                 Navigator.push(
@@ -106,16 +88,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
             SizedBox(height: constraint.maxHeight * .3),
-            TextButton(
-                onPressed: () {
-                  _showLogoutAlert();
-                },
-                child: Text('Log keluar',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22.sp,
-                    )))
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: OutlinedButton(
+                    onPressed: () {
+                      _showLogoutAlert();
+                    },
+                    child: Text('Log keluar',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22.sp,
+                        ))),
+              ),
+            )
           ],
         ),
       ));
@@ -129,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ListTile(
       onTap: onTap,
       title: Text(title),
-      leading: Icon(icon),
+      leading: FaIcon(icon),
       // tileColor: Colors.grey.shade200,
       trailing: const Icon(Icons.chevron_right),
       contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
