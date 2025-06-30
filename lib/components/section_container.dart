@@ -15,7 +15,7 @@ class SectionContainer extends StatelessWidget {
       padding:
           padding ?? const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
       decoration: BoxDecoration(
-          border: border,
+          border: Border.all(),
           color: Colors.white,
           borderRadius: BorderRadius.circular(10)),
       clipBehavior: Clip.antiAlias,

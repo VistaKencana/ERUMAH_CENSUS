@@ -1,4 +1,3 @@
-import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/components/card_display.dart';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
@@ -77,9 +76,7 @@ class _SubrentFormState extends State<SubrentForm> {
       },
       child: Form(
         key: formKey,
-        child: BgImage(
-            child: Scaffold(
-          backgroundColor: Colors.transparent,
+        child: Scaffold(
           appBar: CustomAppBar(
             title: "",
             onPressedBack: () {
@@ -101,6 +98,7 @@ class _SubrentFormState extends State<SubrentForm> {
                     ),
                   ),
                   KadPengenalanTile(
+                    hasBorder: true,
                     frontCard: subrentData?.uploadIcFront,
                     onFrontCard: (bytes) {
                       setState(() => subrentData = subrentData!.copyWith(
@@ -204,7 +202,7 @@ class _SubrentFormState extends State<SubrentForm> {
               }
             },
           ),
-        )),
+        ),
       ),
     );
   }

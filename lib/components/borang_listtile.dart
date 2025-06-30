@@ -16,15 +16,18 @@ class BorangTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 6,
-            spreadRadius: 2,
-            offset: const Offset(2, 4),
-          ),
-        ], color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        // padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            //   boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.black.withValues(alpha: 0.1),
+            //     blurRadius: 6,
+            //     spreadRadius: 2,
+            //     offset: const Offset(2, 4),
+            //   ),
+            // ],
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10)),
         child: Row(
           children: [
             Container(
@@ -46,7 +49,7 @@ class BorangTile extends StatelessWidget {
                   Text(
                     subtitle,
                     style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

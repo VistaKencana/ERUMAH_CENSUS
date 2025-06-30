@@ -88,6 +88,16 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
       {required String title,
       required void Function()? onPressed,
       Color? color}) {
+    if (widget.position == AlertBtnPosition.topDown) {
+      return SizedBox(
+        height: 45,
+        width: double.infinity,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: color),
+            onPressed: onPressed,
+            child: Text(title)),
+      );
+    }
     return Expanded(
         child: Padding(
       padding: const EdgeInsets.all(2.0),

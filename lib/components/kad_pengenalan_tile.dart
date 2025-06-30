@@ -9,12 +9,14 @@ class KadPengenalanTile extends StatefulWidget {
   final Uint8List? backCard;
   final void Function(Uint8List bytes) onFrontCard;
   final void Function(Uint8List bytes) onBackCard;
+  final bool hasBorder;
   const KadPengenalanTile(
       {super.key,
       required this.onFrontCard,
       required this.onBackCard,
       this.frontCard,
-      this.backCard});
+      this.backCard,
+      this.hasBorder = false});
 
   @override
   State<KadPengenalanTile> createState() => _KadPengenalanTileState();
@@ -23,63 +25,62 @@ class KadPengenalanTile extends StatefulWidget {
 class _KadPengenalanTileState extends State<KadPengenalanTile> {
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      child: Card(
-        color: Colors.white,
-        elevation: 0,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8, bottom: 8),
-          child: ExpansionTile(
-            initiallyExpanded: true,
-            backgroundColor: Colors.white,
-            shape: const Border(),
-            title: Row(
-              children: [
-                Text(
-                  "Kad Pengenalan",
-                  style: appTextStyle(size: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 4),
-                const Text(
-                  "*",
-                  style: TextStyle(color: Colors.red),
-                )
-              ],
-            ),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+          border: widget.hasBorder ? Border.all() : null,
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8, bottom: 8),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          backgroundColor: Colors.white,
+          shape: const Border(),
+          title: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 12, right: 12, bottom: 20),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      CardDisplay(
-                        title: "Kad Pengenalan Depan",
-                        img: widget.frontCard,
-                        onPicture: (bytes) {
-                          if (bytes == null) return;
-                          // setState(() => frontCard = bytes);
-                          widget.onFrontCard(bytes);
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                      CardDisplay(
-                        title: "Kad Pengenalan Belakang",
-                        img: widget.backCard,
-                        onPicture: (bytes) {
-                          if (bytes == null) return;
-                          // setState(() => backCard = bytes);
-                          widget.onBackCard(bytes);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+              Text(
+                "Kad Pengenalan",
+                style: appTextStyle(size: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 4),
+              const Text(
+                "*",
+                style: TextStyle(color: Colors.red),
               )
             ],
           ),
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 12, right: 12, bottom: 20),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    CardDisplay(
+                      title: "Kad Pengenalan Depan",
+                      img: widget.frontCard,
+                      onPicture: (bytes) {
+                        if (bytes == null) return;
+                        // setState(() => frontCard = bytes);
+                        widget.onFrontCard(bytes);
+                      },
+                    ),
+                    const SizedBox(width: 10),
+                    CardDisplay(
+                      title: "Kad Pengenalan Belakang",
+                      img: widget.backCard,
+                      onPicture: (bytes) {
+                        if (bytes == null) return;
+                        // setState(() => backCard = bytes);
+                        widget.onBackCard(bytes);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

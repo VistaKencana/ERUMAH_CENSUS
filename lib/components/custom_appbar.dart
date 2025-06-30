@@ -28,7 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Container(
       height: 200,
       decoration: BoxDecoration(
-          color: gradientBg ? null : Colors.transparent,
+          color: gradientBg ? Colors.white : Colors.white,
           gradient: gradientBg
               ? const LinearGradient(
                   begin: Alignment.topRight,
@@ -43,6 +43,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           AppBar(
+            scrolledUnderElevation: 0,
             automaticallyImplyLeading: false,
             leading: automaticallyImplyLeading
                 ? IconButton(
@@ -55,7 +56,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     },
                     icon: const Icon(Icons.chevron_left))
                 : null,
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.white,
             foregroundColor:
                 (foregroundColor ?? (gradientBg ? Colors.white : Colors.black)),
             title: Text(
