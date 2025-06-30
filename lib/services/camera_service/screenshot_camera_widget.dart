@@ -50,6 +50,7 @@ class _ScreenshotCameraWidgetState extends State<ScreenshotCameraWidget> {
 
   @override
   void dispose() {
+    lifecycleListener.dispose();
     controller!.dispose();
     super.dispose();
   }
@@ -62,9 +63,12 @@ class _ScreenshotCameraWidgetState extends State<ScreenshotCameraWidget> {
     controller = await cameraHelper.initialize(
       controller: controller,
       cameras: _cameras,
-      onRefreshed: () => setState(() {}),
+      onRefreshed: () {
+        if (!mounted) return;
+        setState(() {});
+      },
     );
-
+    if (!mounted) return;
     setState(() {});
   }
 
