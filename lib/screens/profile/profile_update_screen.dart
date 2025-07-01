@@ -38,6 +38,7 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
             backgroundColor: Colors.transparent,
             appBar: const CustomAppBar(
               title: "Maklumat Akaun",
+              backgroundColor: Colors.transparent,
               foregroundColor: Colors.white,
               centerTitle: true,
             ),

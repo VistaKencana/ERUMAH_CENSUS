@@ -4,6 +4,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool centerTitle;
   final Color? foregroundColor;
+  final Color? backgroundColor;
   final bool gradientBg;
   final bool automaticallyImplyLeading;
   final List<Widget>? actions;
@@ -16,6 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.automaticallyImplyLeading = true,
     required this.title,
     this.foregroundColor,
+    this.backgroundColor = Colors.white,
     this.gradientBg = false,
     this.actions,
     this.height = 60,
@@ -28,7 +30,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Container(
       height: 200,
       decoration: BoxDecoration(
-          color: gradientBg ? Colors.white : Colors.white,
+          color: gradientBg ? Colors.white : backgroundColor,
           gradient: gradientBg
               ? const LinearGradient(
                   begin: Alignment.topRight,
@@ -56,7 +58,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     },
                     icon: const Icon(Icons.chevron_left))
                 : null,
-            backgroundColor: Colors.white,
+            backgroundColor: backgroundColor,
             foregroundColor:
                 (foregroundColor ?? (gradientBg ? Colors.white : Colors.black)),
             title: Text(

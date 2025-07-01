@@ -45,9 +45,11 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text("Lapor Penghuni"),
-          backgroundColor: Colors.redAccent,
+          backgroundColor: Color(0xff950606),
           foregroundColor: Colors.white,
           centerTitle: true,
+          leading: IconButton(
+              onPressed: () => Navigator.pop(context), icon: Icon(Icons.close)),
         ),
         body: SingleChildScrollView(
           child: Padding(

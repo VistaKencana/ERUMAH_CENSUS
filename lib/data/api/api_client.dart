@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:eperumahan_bancian/components/timeout_screen.dart';
 import 'package:eperumahan_bancian/main.dart';
@@ -54,6 +55,9 @@ class ApiClient {
     final header = await _mergeHeaders(headers, token);
     final response = await http
         .get(Uri.parse((baseUrl ?? this.baseUrl) + endpoint), headers: header);
+    if (response.statusCode != 200) {
+      throw Exception(response.body);
+    }
     return response;
   }
 
@@ -72,6 +76,9 @@ class ApiClient {
         Uri.parse((baseUrl ?? this.baseUrl) + endpoint),
         headers: header,
         body: jsonEncode(body));
+    if (response.statusCode != 200) {
+      throw Exception(response.body);
+    }
     return response;
   }
 
@@ -90,6 +97,9 @@ class ApiClient {
         Uri.parse((baseUrl ?? this.baseUrl) + endpoint),
         headers: header,
         body: jsonEncode(body));
+    if (response.statusCode != 200) {
+      throw Exception(response.body);
+    }
     return response;
   }
 
@@ -106,6 +116,9 @@ class ApiClient {
     final response = await http.delete(
         Uri.parse((baseUrl ?? this.baseUrl) + endpoint),
         headers: header);
+    if (response.statusCode != 200) {
+      throw Exception(response.body);
+    }
     return response;
   }
 
@@ -143,6 +156,55 @@ class ApiClient {
     return response;
   }
 
+  /// Not supported Xfile
+  Future<http.Response> postFormDataV2({
+    required String endpoint,
+    required Map<String, dynamic>? body,
+    String? baseUrl,
+    String? authToken,
+    bool includeToken = true,
+    Map<String, String>? headers,
+  }) async {
+    final getToken =
+        await syncApi.queue(() async => await getAuthToken(includeToken));
+    final token = includeToken ? (authToken ?? getToken) : null;
+    final header = await _mergeHeaders(headers, token);
+
+    final url = Uri.parse("${baseUrl ?? this.baseUrl}$endpoint");
+    final request = http.MultipartRequest('POST', url);
+    request.headers.addAll(header);
+
+    if (body != null) {
+      for (final entry in body.entries) {
+        final key = entry.key;
+        final value = entry.value;
+
+        if (value == null) {
+          request.files.add(emptyMultipartFile(fieldName: key));
+        } else if (value is Uint8List) {
+          request.files.add(bytesToMultipartFile(fieldName: key, bytes: value));
+        } else if (value is File) {
+          final bytes = await value.readAsBytes();
+          final filename = value.path.split('/').last;
+          request.files.add(bytesToMultipartFile(
+              fieldName: key, bytes: bytes, filename: filename));
+        } else if (value is String || value is num || value is bool) {
+          request.fields[key] = value.toString();
+        } else {
+          dev.log("Unsupported type for key: $key", name: "ApiClient");
+        }
+      }
+    }
+
+    final response = await http.Response.fromStream(await request.send());
+
+    if (response.statusCode != 200) {
+      throw Exception(response.body);
+    }
+
+    return response;
+  }
+
   http.MultipartFile emptyMultipartFile({required String fieldName}) {
     return http.MultipartFile.fromBytes(
       fieldName,
@@ -161,7 +223,7 @@ class ApiClient {
     Stream<List<int>> byteStream = Stream.fromIterable([bytes]);
     http.ByteStream stream = http.ByteStream(byteStream);
     filename = filename ?? 'image.jpg';
-    debugPrint("${(length / 1024) / 1024} mb");
+    dev.log("${(length / 1024) / 1024} mb");
     return http.MultipartFile(
       fieldName,
       stream,
@@ -212,6 +274,23 @@ class ApiClient {
     }
     return token;
   }
+
+  // //GET TOKEN FROM PREFERENCE
+  // Future<String?> getAuthToken(bool includeToken) async {
+  //   if (!includeToken) return null;
+
+  //   // Check local token
+  //   final exists = await LoginPreference().isTokenExist();
+  //   if (!exists) return null;
+  //   final token = await syncApi.queue(() async {
+  //     final token = await LoginPreference().isTokenExpired();
+  //     if (token == null) throw TokenExpiredException();
+  //     return token;
+  //   });
+
+  //   if (token == null) return await _handleTokenExpiration();
+  //   return token;
+  // }
 
   Future<String?> _handleTokenExpiration() async {
     if (_isHandlingTokenExpiration) {
