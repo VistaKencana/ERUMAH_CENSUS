@@ -122,7 +122,8 @@ class ApplicationRepository {
     final json = jsonDecode(resp.body);
     final isValid = RespValidator.isSuccess(json);
     if (!isValid) throw Exception(RespValidator.getMessage(json));
-    return json.toString();
+
+    return jsonEncode(json);
   }
 
   Future<String> storeSubrent({required SubrentInputModel data}) async {
