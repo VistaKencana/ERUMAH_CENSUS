@@ -35,7 +35,8 @@ class BancianBloc extends Bloc<BancianEvent, BancianState> {
         remark: "");
   }
 
-  Future<void> _onSaveBancianData(SaveBancianData event, Emitter<BancianState> emit) async {
+  Future<void> _onSaveBancianData(
+      SaveBancianData event, Emitter<BancianState> emit) async {
     emit(BancianLoading());
     applog.logDebug(tag: "Send Item", msg: event.data.toJson().toString());
     try {

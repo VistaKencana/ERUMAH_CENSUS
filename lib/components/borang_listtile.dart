@@ -33,7 +33,8 @@ class BorangTile extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(30),
               decoration: BoxDecoration(
-                  color: Colors.blue.withValues(alpha: 0.2),
+                  border: Border.all(color: Colors.black12),
+                  // color: Colors.blue.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(10)),
               child: const Icon(
                 Icons.description,
@@ -45,7 +46,7 @@ class BorangTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title),
+                  // Text(title),
                   Text(
                     subtitle,
                     style: const TextStyle(

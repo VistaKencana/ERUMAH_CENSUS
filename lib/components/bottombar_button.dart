@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 class BottomBarButton extends StatelessWidget {
   final String title;
   final void Function() onTap;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
   const BottomBarButton({
     super.key,
     required this.onTap,
     required this.title,
+    this.backgroundColor,
+    this.foregroundColor,
   });
 
   @override
@@ -16,7 +20,12 @@ class BottomBarButton extends StatelessWidget {
       color: Colors.white,
       child: SizedBox(
           height: 50,
-          child: ElevatedButton(onPressed: onTap, child: Text(title))),
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: backgroundColor,
+                  foregroundColor: foregroundColor),
+              onPressed: onTap,
+              child: Text(title))),
     );
   }
 }

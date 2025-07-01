@@ -135,7 +135,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                                               color: Colors.red, size: 60),
                                           SizedBox(height: 10),
                                           Text(
-                                            "Lapor Penguni",
+                                            "Lapor Penghuni",
                                             style: appTextStyle(
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -148,6 +148,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                                             width: double.infinity,
                                             child: ElevatedButton(
                                                 onPressed: () {
+                                                  Navigator.pop(context);
                                                   _go(const SubrentMainScreen());
                                                 },
                                                 style: ElevatedButton.styleFrom(
@@ -356,17 +357,17 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                           _section("Borang"),
                           divider(),
                           _borangTile(
-                              label: "Maklumat Penghuni",
+                              label: "Penghuni",
                               screen: PenghuniForm(
                                   isNewForm: widget.isNewForm,
                                   imgs: statusData.getFiles())),
                           if (!_isNewForm())
                             _borangTile(
-                                label: "Maklumat Pasangan",
+                                label: "Pasangan",
                                 screen: const PasanganForm()),
                           if (!_isNewForm())
                             _borangTile(
-                                label: "Maklumat Anak & Tanggungan",
+                                label: "Anak dan Tanggungan",
                                 screen: const TanggunganForm()),
                           _gap(size: 20),
                         ],

@@ -1,11 +1,7 @@
-import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/borang_listtile.dart';
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
-import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
-import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/status_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/subrent/provider/subrent_provider.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/subrent/subrent_form.dart';
@@ -44,117 +40,119 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
   @override
   Widget build(BuildContext context) {
     final watchSubrent = context.watch<SubrentProvider>().listSubrent;
-    Size size = MediaQuery.sizeOf(context);
     return Form(
       key: formKey,
-      child: BgImage(
-        child: Scaffold(
-          appBar: const CustomAppBar(title: "Maklumat Subrent"),
-          backgroundColor: Colors.transparent,
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    margin: const EdgeInsets.symmetric(vertical: 12),
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            const Icon(Icons.location_on),
-                            Text(
-                              _bancianBloc
-                                      .unitData.unit?.housingProject?.desc ??
-                                  "-",
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(width: size.width * .1),
-                            Text(
-                              _bancianBloc.unitData.unit?.status ?? "-",
-                              style: TextStyle(
-                                  color: AppColors.dimmedPurple.color),
-                            ),
-                            SizedBox(width: size.width * .1),
-                            Text(
-                              "Unit No:${_bancianBloc.unitData.unit?.no ?? "-"}",
-                              style: TextStyle(
-                                  color: AppColors.dimmedPurple.color),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  //MARK: Cap Jari
-                  _section("Cap Jari"),
-                  SectionContainer(
-                    border: Border.all(color: Colors.grey),
-                    padding: EdgeInsets.zero,
-                    margin: EdgeInsets.zero,
-                    child: ListTile(
-                      tileColor: Colors.white,
-                      leading: const Icon(Icons.fingerprint),
-                      title: const Text("Sahkan Cap Jari"),
-                      onTap: () => _go(BancianFingerprint(
-                        onVerifyFP: (val) {},
-                      )),
-                    ),
-                  ),
-                  _gap(),
-                  //MARK: Rmark
-                  _section("Catatan"),
-                  CustomFormField(
-                    maxLines: 3,
-                    controller: remarkCtrl,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) return '';
-                      return null;
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Lapor Penghuni"),
+          backgroundColor: Colors.redAccent,
+          foregroundColor: Colors.white,
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Container(
+                //   padding: EdgeInsets.all(16),
+                //   decoration: BoxDecoration(
+                //       border:
+                //           Border(bottom: BorderSide(color: Colors.black12))),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Container(
+                //         padding: EdgeInsets.all(4),
+                //         decoration: BoxDecoration(
+                //             color: Colors.blueAccent,
+                //             borderRadius: BorderRadius.circular(8)),
+                //         child: Text(
+                //           _bancianBloc.unitData.unit?.status ?? "-",
+                //           style: TextStyle(color: Colors.white, fontSize: 14),
+                //         ),
+                //       ),
+                //       _gap(size: 6),
+                //       Text(
+                //         _bancianBloc.unitData.unit?.housingProject?.desc ?? "-",
+                //         style: const TextStyle(
+                //             fontSize: 22, fontWeight: FontWeight.bold),
+                //       ),
+                //       _gap(size: 4),
+                //       Row(
+                //         children: [
+                //           Text(
+                //             "Unit No:${_bancianBloc.unitData.unit?.no ?? "-"}",
+                //             style:
+                //                 TextStyle(color: AppColors.dimmedPurple.color),
+                //           ),
+                //         ],
+                //       ),
+                //       _gap(size: 6),
+                //     ],
+                //   ),
+                // ),
+                //MARK: Cap Jari
+                // _section("Cap Jari"),
+                // SectionContainer(
+                //   border: Border.all(color: Colors.grey),
+                //   padding: EdgeInsets.zero,
+                //   margin: EdgeInsets.zero,
+                //   child: ListTile(
+                //     tileColor: Colors.white,
+                //     leading: const Icon(Icons.fingerprint),
+                //     title: const Text("Sahkan Cap Jari"),
+                //     onTap: () => _go(BancianFingerprint(
+                //       onVerifyFP: (val) {},
+                //     )),
+                //   ),
+                // ),
+                _gap(size: 40),
+                //MARK: Rmark
+                _section("Catatan"), divider(),
+                CustomFormField(
+                  maxLines: 3,
+                  controller: remarkCtrl,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return '';
+                    return null;
+                  },
+                  hintText: "Sila tulis catatan",
+                  contentPadding: const EdgeInsets.only(
+                      top: 10, left: 10, right: 10, bottom: 10),
+                ),
+
+                _gap(size: 40),
+                _section("Subrent"), divider(),
+                _gap(),
+                ...List.generate(watchSubrent.length, (index) {
+                  return _borangTile(
+                    label: "Subrent ${index + 1}",
+                    screen: const SubrentForm(isExistData: true),
+                    onTap: () {
+                      context
+                          .read<SubrentProvider>()
+                          .selectSubrent(watchSubrent[index]);
                     },
-                    hintText: "Sila tulis catatan",
-                    contentPadding: const EdgeInsets.only(
-                        top: 10, left: 10, right: 10, bottom: 10),
-                  ),
-                  _gap(size: 26),
-                  const Divider(height: 2), _gap(size: 20),
-                  _section("Maklumat subrent"),
-                  _gap(),
-                  ...List.generate(watchSubrent.length, (index) {
-                    return _borangTile(
-                      label: "Subrent ${index + 1}",
-                      screen: const SubrentForm(isExistData: true),
-                      onTap: () {
-                        context
-                            .read<SubrentProvider>()
-                            .selectSubrent(watchSubrent[index]);
-                      },
-                    );
-                  }),
-                  // _borangTile(label: "label", screen: Container()),
-                  _addSubrentBtn(showBtn: watchSubrent.length < 5),
-                ],
-              ),
+                  );
+                }),
+                // _borangTile(label: "label", screen: Container()),
+                _addSubrentBtn(showBtn: watchSubrent.length < 5),
+              ],
             ),
           ),
-          bottomNavigationBar: BottomBarButton(
-            title: "Selesai Bancian",
-            onTap: () {
-              setState(() {
-                statusData = statusData.copyWith(
-                  remark: remarkCtrl.text,
-                );
-              });
-            },
-          ),
+        ),
+        bottomNavigationBar: BottomBarButton(
+          title: "Selesai Bancian",
+          backgroundColor: Colors.black87,
+          onTap: () {
+            setState(() {
+              statusData = statusData.copyWith(
+                remark: remarkCtrl.text,
+              );
+            });
+          },
         ),
       ),
     );
@@ -216,13 +214,23 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
     return SizedBox(height: size);
   }
 
-  Text _section(String title) {
+  Widget _section(String title) {
     return Text(
-      title,
-      style: appTextStyle(fontWeight: FontWeight.bold, size: 20),
+      title.toUpperCase(),
+      style: appTextStyle(
+          fontWeight: FontWeight.bold, size: 16, color: Colors.black54),
     );
   }
 
   Future _go(Widget screen) => Navigator.push(context,
       PageTransition(child: screen, type: PageTransitionType.rightToLeft));
+  Widget divider() {
+    return Column(
+      children: [
+        SizedBox(height: 8),
+        Divider(height: 0),
+        SizedBox(height: 10),
+      ],
+    );
+  }
 }
