@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:eperumahan_bancian/data/api/repositories/application_repository.dart';
 import 'package:eperumahan_bancian/main.dart';
+import 'package:eperumahan_bancian/screens/bancian-forms/bancian_result.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/status_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/models/subrent_input_model.dart';
 import 'package:eperumahan_bancian/services/app_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../../../services/flushbar/custom_flushbar.dart';
 
@@ -53,7 +57,7 @@ class SubrentProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> submitSubrent({required SubrentInputModel data}) async {
+  Future<void> saveLocalSubrent({required SubrentInputModel data}) async {
     data = data.copyWith(censusCode: censusCode);
 
     var origin = selectedSubrent
@@ -93,7 +97,7 @@ class SubrentProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> updateSubrent({required SubrentInputModel data}) async {
+  Future<void> updateLocalSubrent({required SubrentInputModel data}) async {
     int index = listSubrent.indexWhere(
       (subrent) => subrent.icNo == data.icNo,
     );
@@ -131,6 +135,54 @@ class SubrentProvider extends ChangeNotifier {
         notifyListeners();
         CustomFlushbar.of(context).showSuccess(msg: "Berjaya menyimpan data");
       }
+    } catch (e) {
+      appLog.logError(tag: "storeSubrent", msg: e.toString());
+      final context = navigatorKey.currentContext!;
+      if (context.mounted) {
+        CustomFlushbar.of(context).showFailed(msg: e.toString());
+      }
+    } finally {
+      EasyLoading.dismiss();
+      notifyListeners();
+    }
+  }
+
+  Future<void> submitSubrent({required StatusInputModel data}) async {
+    if (listSubrent.isEmpty) {
+      final context = navigatorKey.currentContext!;
+      CustomFlushbar.of(context).showWarning(msg: "Tiada subrent dihantar");
+      return;
+    }
+    appLog.logDebug(tag: "Submit Data", msg: data.toJson().toString());
+    try {
+      EasyLoading.show();
+      // Save subrent on server
+      await Future.wait(listSubrent
+          .map((subrent) => repo.storeSubrent(data: subrent))
+          .toList());
+      // for (var subrent in listSubrent) {
+      //   final resp = await repo.storeSubrent(data: subrent);
+      //   appLog.logDebug(tag: "Response", msg: resp);
+      // }
+      final resp = await repo.storeStatus(data: data);
+      final json = jsonDecode(resp);
+      final data1 = json['data'];
+      bool isLampiranSuccess = (data1['censusStatus'] as String)
+          .toLowerCase()
+          .contains("tidak lengkap");
+      appLog.logDebug(
+          tag: "submitSubrent success:$isLampiranSuccess", msg: resp);
+
+      final context = navigatorKey.currentContext!;
+      if (context.mounted) {
+        notifyListeners();
+        Navigator.push(
+            context,
+            PageTransition(
+                child: BancianResult(isVerify: false),
+                type: PageTransitionType.rightToLeft));
+      }
+      EasyLoading.dismiss();
     } catch (e) {
       appLog.logError(tag: "storeSubrent", msg: e.toString());
       final context = navigatorKey.currentContext!;

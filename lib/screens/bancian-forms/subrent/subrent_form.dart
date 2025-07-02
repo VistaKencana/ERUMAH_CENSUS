@@ -194,9 +194,11 @@ class _SubrentFormState extends State<SubrentForm> {
                 return;
               }
               if (_isNewForm()) {
-                subrentProvider.submitSubrent(data: subrentData!);
+                subrentProvider.saveLocalSubrent(data: subrentData!);
               } else {
-                subrentProvider.updateSubrent(data: subrentData!).then((val) {
+                subrentProvider
+                    .updateLocalSubrent(data: subrentData!)
+                    .then((val) {
                   subrentData = subrentProvider.selectedSubrent;
                 });
               }
