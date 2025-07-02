@@ -1,6 +1,7 @@
 import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/borang_listtile.dart';
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
+import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
 import 'package:eperumahan_bancian/components/section_container.dart';
@@ -9,6 +10,7 @@ import 'package:eperumahan_bancian/screens/bancian-forms/bancian_fingerprint.dar
 import 'package:eperumahan_bancian/screens/bancian-forms/models/status_input_model.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/subrent/provider/subrent_provider.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/subrent/subrent_form.dart';
+import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
@@ -153,6 +155,28 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
                   remark: remarkCtrl.text,
                 );
               });
+
+              //if add new data
+              if (formKey.currentState!.validate() == false) {
+                //Trigger if form is not validate
+                CustomFlushbar.of(context)
+                    .showWarning(msg: "Sila isi maklumat diperlukan");
+                return;
+              }
+
+              CustomAlertDialog(
+                title: "Peringatan !",
+                subtitle: "Sila pastikan semua maklumat adalah betul",
+                colorBtnLabel: "Teruskan",
+                onColorBtn: () {
+                  //Call API
+                  context
+                      .read<SubrentProvider>()
+                      .submitSubrent(data: statusData);
+                },
+                dimmedBtnLabel: "Kembali",
+                onDimmedBtn: () => Navigator.pop(context),
+              ).show(context);
             },
           ),
         ),
