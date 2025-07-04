@@ -1,5 +1,6 @@
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'model/dashboard_json_model.dart';
 
@@ -41,8 +42,7 @@ class _DashboardDataViewState extends State<DashboardDataView> {
           minChildSize: .6,
           builder: (context, sc) {
             return ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius: BorderRadius.circular(12),
               child: Form(
                 child: Scaffold(
                   body: SingleChildScrollView(
@@ -60,7 +60,8 @@ class _DashboardDataViewState extends State<DashboardDataView> {
                           ),
                           padding: const EdgeInsets.all(18),
                           margin: const EdgeInsets.only(top: 4),
-                          child: const Icon(Icons.location_on),
+                          child: const FaIcon(FontAwesomeIcons.mapPin,
+                              color: Color(0xFF8D182D)),
                         ),
                         const SizedBox(height: 6),
                         Text(

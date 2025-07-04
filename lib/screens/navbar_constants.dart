@@ -3,7 +3,6 @@ import 'package:eperumahan_bancian/screens/qr-home/qrscan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dashboard/dashboard_screen.dart';
-import 'profile/profile_screen.dart';
 
 enum BottomNavItem {
   home(
@@ -35,15 +34,16 @@ enum BottomNavItem {
       label: 'Activity',
     ),
   ),
-  profile(
-    screen: ProfileScreen(),
-    item: BottomNavigationBarItem(
-      icon: FaIcon(FontAwesomeIcons.circleUser, color: Colors.black54),
-      activeIcon: FaIcon(FontAwesomeIcons.circleUser, color: Color(0xFF8D182D)),
-      // activeIcon: CustomShader.btmNavBar(icon: Icon(Icons.apartment)),
-      label: 'Profile',
-    ),
-  );
+  ;
+  // profile(
+  //   screen: ProfileScreen(),
+  //   item: BottomNavigationBarItem(
+  //     icon: FaIcon(FontAwesomeIcons.circleUser, color: Colors.black54),
+  //     activeIcon: FaIcon(FontAwesomeIcons.circleUser, color: Color(0xFF8D182D)),
+  //     // activeIcon: CustomShader.btmNavBar(icon: Icon(Icons.apartment)),
+  //     label: 'Profile',
+  //   ),
+  // );
 
   final BottomNavigationBarItem item;
   final Widget screen;

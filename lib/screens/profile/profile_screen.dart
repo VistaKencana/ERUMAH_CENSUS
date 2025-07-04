@@ -23,91 +23,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraint) {
       return Scaffold(
+          appBar: AppBar(foregroundColor: Colors.white),
           body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(18),
-              color: AppColors.primary.color,
-              height: constraint.maxHeight * .24,
-              width: double.infinity,
-              child: SafeArea(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Profil pengguna",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.sp,
-                          color: Colors.white),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(18),
+                  color: AppColors.primary.color,
+                  height: constraint.maxHeight * .18,
+                  width: double.infinity,
+                  child: SafeArea(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Profil pengguna",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.sp,
+                              color: Colors.white),
+                        ),
+                        Text(
+                          LoginPreference().getUsername() ?? "-",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 28.sp,
+                              color: Colors.white),
+                        ),
+                      ],
                     ),
-                    Text(
-                      LoginPreference().getUsername() ?? "-",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 28.sp,
-                          color: Colors.white),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(18),
+                  width: double.infinity,
+                  child: Text(
+                    "Tetapan",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22.sp,
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(18),
-              width: double.infinity,
-              child: Text(
-                "Tetapan",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22.sp,
+                _profileTile(
+                  icon: FontAwesomeIcons.idBadge,
+                  title: "Maklumat Akaun",
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: const ProfileUpdateScreen(),
+                            type: PageTransitionType.bottomToTop));
+                  },
                 ),
-              ),
+                _profileTile(
+                  icon: FontAwesomeIcons.lock,
+                  title: "Ubah Kata Laluan",
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: const ProfileChangePwdScreen(),
+                            type: PageTransitionType.rightToLeft));
+                  },
+                ),
+                SizedBox(height: constraint.maxHeight * .3),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: OutlinedButton(
+                        onPressed: () {
+                          _showLogoutAlert();
+                        },
+                        child: Text('Log keluar',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22.sp,
+                            ))),
+                  ),
+                )
+              ],
             ),
-            _profileTile(
-              icon: FontAwesomeIcons.idBadge,
-              title: "Maklumat Akaun",
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: const ProfileUpdateScreen(),
-                        type: PageTransitionType.bottomToTop));
-              },
-            ),
-            _profileTile(
-              icon: FontAwesomeIcons.lock,
-              title: "Ubah Kata Laluan",
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: const ProfileChangePwdScreen(),
-                        type: PageTransitionType.rightToLeft));
-              },
-            ),
-            SizedBox(height: constraint.maxHeight * .3),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: OutlinedButton(
-                    onPressed: () {
-                      _showLogoutAlert();
-                    },
-                    child: Text('Log keluar',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22.sp,
-                        ))),
-              ),
-            )
-          ],
-        ),
-      ));
+          ));
     });
   }
 

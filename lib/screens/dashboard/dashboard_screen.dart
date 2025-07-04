@@ -1,4 +1,3 @@
-import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/config/constants/app_size.dart';
 import 'package:eperumahan_bancian/screens/dashboard/dashboard_header.dart';
@@ -42,125 +41,119 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final watchDashboard = Provider.of<DashboardProvider>(context);
-    return BgImage(
-      // bgPath: AppImages.homeBg.path,
-      child: LayoutBuilder(builder: (context, constraint) {
-        return Scaffold(
-          // backgroundColor: Colors.transparent,
-          // backgroundColor: AppColors.lightBlue.color,
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const DashboardHeader(),
-                SizedBox(height: constraint.maxHeight * .03),
-                //MARK: User Activity
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 16, right: 16, bottom: 10),
-                  child: Row(
-                    children: [
-                      Text(
-                        "AKTIVITI LOG",
-                        style:
-                            appTextStyle(size: 20, fontWeight: FontWeight.bold),
-                      ),
-                      const Spacer(),
-                      Icon(
-                        Icons.calendar_month,
-                        color: AppColors.primary.color,
-                      ),
-                      Text(
-                          "${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())}"
-                              .toUpperCase(),
-                          style: appTextStyle(
-                            color: AppColors.darkGrey.color,
-                            size: 14,
-                          )),
-                      SizedBox(height: constraint.maxHeight * .03),
-                    ],
-                  ),
+    return LayoutBuilder(builder: (context, constraint) {
+      return Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const DashboardHeader(),
+              SizedBox(height: constraint.maxHeight * .03),
+              //MARK: User Activity
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
+                child: Row(
+                  children: [
+                    Text(
+                      "AKTIVITI LOG",
+                      style:
+                          appTextStyle(size: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    Icon(
+                      Icons.calendar_month,
+                      color: AppColors.primary.color,
+                    ),
+                    Text(
+                        "${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())}"
+                            .toUpperCase(),
+                        style: appTextStyle(
+                          color: AppColors.darkGrey.color,
+                          size: 14,
+                        )),
+                    SizedBox(height: constraint.maxHeight * .03),
+                  ],
                 ),
-                watchDashboard.activityLoading
-                    ? const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(),
-                        ],
-                      )
-                    : GridView(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3, // 3 items per row
-                                crossAxisSpacing: 6.0,
-                                mainAxisSpacing: 10.0,
-                                childAspectRatio: 1.2),
-                        children: [
-                          _item(
-                              title: "Unit rumah",
-                              val: nullOrEmptyReplace(
-                                  watchDashboard.acitivtyData.totalUnit),
-                              icon: Icons.apartment_outlined,
-                              color: const Color(0xFF8F69EE)),
-                          _item(
-                              title: "Berjaya",
-                              val: nullOrEmptyReplace(
-                                  watchDashboard.acitivtyData.totalComplete),
-                              icon: Icons.check_circle_rounded,
-                              color: const Color(0xFF28C194)),
-                          _item(
-                              title: "Dalam Proses",
-                              val: nullOrEmptyReplace(
-                                  watchDashboard.acitivtyData.totalInProgress),
-                              icon: Icons.error_rounded,
-                              color: Colors.amber),
-                        ],
-                      ),
-                // sectionContainer(children: [
+              ),
+              watchDashboard.activityLoading
+                  ? const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                      ],
+                    )
+                  : GridView(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3, // 3 items per row
+                              crossAxisSpacing: 6.0,
+                              mainAxisSpacing: 10.0,
+                              childAspectRatio: 1.2),
+                      children: [
+                        _item(
+                            title: "Unit rumah",
+                            val: nullOrEmptyReplace(
+                                watchDashboard.acitivtyData.totalUnit),
+                            icon: Icons.apartment_outlined,
+                            color: const Color(0xFF8F69EE)),
+                        _item(
+                            title: "Berjaya",
+                            val: nullOrEmptyReplace(
+                                watchDashboard.acitivtyData.totalComplete),
+                            icon: Icons.check_circle_rounded,
+                            color: const Color(0xFF28C194)),
+                        _item(
+                            title: "Dalam Proses",
+                            val: nullOrEmptyReplace(
+                                watchDashboard.acitivtyData.totalInProgress),
+                            icon: Icons.error_rounded,
+                            color: Colors.amber),
+                      ],
+                    ),
+              // sectionContainer(children: [
 
-                // ]),
-                Container(
-                    color: AppColors.lightBlue.color,
-                    height: constraint.maxHeight * .02),
-                //MARK: Latest Activity
-                DashboardSection(
-                    isLoading: watchDashboard.latestLoading,
-                    data: watchDashboard.latestList,
-                    // miniTitle: "AKTIVITI",
-                    title: "Tugasan terkini"),
+              // ]),
+              Container(
+                  color: AppColors.lightBlue.color,
+                  height: constraint.maxHeight * .02),
+              //MARK: Latest Activity
+              DashboardSection(
+                  isLoading: watchDashboard.latestLoading,
+                  data: watchDashboard.latestList,
+                  // miniTitle: "AKTIVITI",
+                  title: "Tugasan terkini"),
 
-                Container(
-                    color: AppColors.lightBlue.color,
-                    height: constraint.maxHeight * .02),
-                //MARK: Incomplete Activity
-                DashboardSection(
-                  isLoading: watchDashboard.incompleteLoading,
-                  data: watchDashboard.incompleteList,
-                  // miniTitle: "SUSULAN",
-                  title: "Tindakan lanjut",
-                  showButton: true,
-                ),
+              Container(
+                  color: AppColors.lightBlue.color,
+                  height: constraint.maxHeight * .02),
+              //MARK: Incomplete Activity
+              DashboardSection(
+                isLoading: watchDashboard.incompleteLoading,
+                data: watchDashboard.incompleteList,
+                // miniTitle: "SUSULAN",
+                title: "Tindakan lanjut",
+                showButton: true,
+              ),
 
-                const SizedBox(height: 40),
-                // cartaPerumahan(),
-                // Container(
-                //   margin: const EdgeInsets.symmetric(vertical: 22),
-                //   color: Colors.grey.shade300,
-                //   height: 8,
-                //   width: double.infinity,
-                // ),
-                // const SizedBox(height: 4),
-                // maklumatTelefon(),
-              ],
-            ),
+              const SizedBox(height: 40),
+              // cartaPerumahan(),
+              // Container(
+              //   margin: const EdgeInsets.symmetric(vertical: 22),
+              //   color: Colors.grey.shade300,
+              //   height: 8,
+              //   width: double.infinity,
+              // ),
+              // const SizedBox(height: 4),
+              // maklumatTelefon(),
+            ],
           ),
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 
   GestureDetector _title(
@@ -208,7 +201,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         // const SizedBox(height: 6),
         Text(
           val,
-          style: appTextStyle(size: 20, fontWeight: FontWeight.bold),
+          style: appTextStyle(
+              size: 20,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColor),
         ),
         Text(
           title,

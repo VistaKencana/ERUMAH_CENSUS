@@ -1,3 +1,4 @@
+import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import '../../config/constants/app_colors.dart';
 import '../../config/constants/app_size.dart';
@@ -25,12 +26,31 @@ class DashboardHeader extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 14),
-                      child: Text(
-                        "Dashboard",
-                        style: appTextStyle(
-                            color: Colors.white,
-                            size: 24,
-                            fontWeight: FontWeight.bold),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Dashboard",
+                            style: appTextStyle(
+                                color: Colors.white,
+                                size: 24,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, RoutesName.profile);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.midGrey.color,
+                                shape: BoxShape.circle,
+                              ),
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.only(top: 4),
+                              child: const Icon(Icons.person),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -43,8 +63,10 @@ class DashboardHeader extends StatelessWidget {
                     begin: Alignment.bottomLeft,
                     end: Alignment.topRight,
                     colors: [
-                      Color(0xFFBA2C45), // 0%
-                      Color(0xFF040001), // 100%
+                      // Color(0xFFBA2C45), // 0%
+                      Color(0xFFBA2C45),
+                      Color.fromARGB(255, 252, 248, 249), // 0%
+                      // Color(0xFF040001), // 100%
                     ],
                   ),
                 ),

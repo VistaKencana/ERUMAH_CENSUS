@@ -30,6 +30,7 @@ class CustomDropdownSheet<T> extends StatefulWidget {
   Future show(BuildContext context) {
     return showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       isScrollControlled: true,
       builder: (_) => this,

@@ -1,3 +1,4 @@
+import 'package:eperumahan_bancian/components/modal/custom_dialog.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/data/api/repositories/qr_repository.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/bancian_proof_camera.dart';
@@ -7,6 +8,7 @@ import 'package:eperumahan_bancian/services/flushbar/custom_flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -102,9 +104,9 @@ class _DashboardSectionState extends State<DashboardSection> {
                     builder: (_) {
                       return DraggableScrollableSheet(
                         expand: false,
-                        maxChildSize: .9,
-                        initialChildSize: .5,
-                        minChildSize: .3,
+                        maxChildSize: .96,
+                        initialChildSize: .96,
+                        minChildSize: .8,
                         builder: (_, sc) {
                           return ClipRRect(
                             clipBehavior: Clip.antiAlias,
@@ -113,7 +115,11 @@ class _DashboardSectionState extends State<DashboardSection> {
                             child: Scaffold(
                               appBar: AppBar(
                                 centerTitle: true,
-                                title: Text(widget.title),
+                                scrolledUnderElevation: 0,
+                                title: Text(
+                                  widget.title,
+                                  style: TextStyle(fontSize: 16),
+                                ),
                                 backgroundColor: Colors.white,
                                 bottom: const PreferredSize(
                                   preferredSize: Size.fromHeight(1.0),
@@ -123,12 +129,16 @@ class _DashboardSectionState extends State<DashboardSection> {
                                     color: Colors.grey,
                                   ),
                                 ),
+                                leading: IconButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    icon: Icon(Icons.close)),
                               ),
                               backgroundColor: Colors.transparent,
                               body: Scrollbar(
                                 thickness: 10,
                                 controller: sc,
                                 child: ListView.builder(
+                                  padding: EdgeInsets.all(12),
                                   physics: const BouncingScrollPhysics(),
                                   controller: sc,
                                   itemCount: widget.data.length,
@@ -269,47 +279,58 @@ class _DashboardSectionState extends State<DashboardSection> {
   }) {
     return ListTile(
       onTap: () {
-        DashboardDataView.show(context,
-            data: data,
-            onPressed: widget.showButton
-                ? () async {
-                    QrNavigationPref.setFromHome(val: true);
-                    String? censusCode = data.censusCode;
-                    if (censusCode == null) {
-                      CustomFlushbar.of(context).showWarning(
-                          msg:
-                              "Bancian Dibenarkan Untuk Bancian ke-2 dan ke atas akibat ralat sistem.");
-                      return;
-                    }
-                    EasyLoading.show();
-                    try {
-                      final residentData = await QrRepository().scanQrCode(
-                          code: data.unit?.code ?? "",
-                          type: Searchtype.unitCode);
+        CustomDialog.show(
+            context: context,
+            builder: (_) => Dialog(
+                  insetPadding: EdgeInsets.all(16),
+                  child: DashboardDataView(
+                      data: data,
+                      onPressed: widget.showButton
+                          ? () async {
+                              QrNavigationPref.setFromHome(val: true);
+                              String? censusCode = data.censusCode;
+                              if (censusCode == null) {
+                                CustomFlushbar.of(context).showWarning(
+                                    msg:
+                                        "Bancian Dibenarkan Untuk Bancian ke-2 dan ke atas akibat ralat sistem.");
+                                return;
+                              }
+                              EasyLoading.show();
+                              try {
+                                final residentData = await QrRepository()
+                                    .scanQrCode(
+                                        code: data.unit?.code ?? "",
+                                        type: Searchtype.unitCode);
 
-                      _bancianBloc.add(SetBancianData(
-                          data: residentData, censusCode: censusCode));
-                      _penghuniBloc.add(SetPenghuniData(
-                          data: residentData, censusCode: censusCode));
-                      _pasanganBloc.add(SetPasanganData(
-                          data: residentData, censusCode: censusCode));
-                      _anakTanggunganBloc.add(SetAnakTanggungData(
-                          data: residentData, censusCode: censusCode));
-                      Navigator.push(
-                          // ignore: use_build_context_synchronously
-                          context,
-                          PageTransition(
-                              child: const BancianProofCamera(),
-                              type: PageTransitionType.rightToLeft));
-                      subrentProvider.clearListSUbrent();
-                    } catch (e) {
-                      // ignore: use_build_context_synchronously
-                      CustomFlushbar.of(context).showWarning(msg: e.toString());
-                    } finally {
-                      EasyLoading.dismiss();
-                    }
-                  }
-                : null);
+                                _bancianBloc.add(SetBancianData(
+                                    data: residentData,
+                                    censusCode: censusCode));
+                                _penghuniBloc.add(SetPenghuniData(
+                                    data: residentData,
+                                    censusCode: censusCode));
+                                _pasanganBloc.add(SetPasanganData(
+                                    data: residentData,
+                                    censusCode: censusCode));
+                                _anakTanggunganBloc.add(SetAnakTanggungData(
+                                    data: residentData,
+                                    censusCode: censusCode));
+                                Navigator.push(
+                                    // ignore: use_build_context_synchronously
+                                    context,
+                                    PageTransition(
+                                        child: const BancianProofCamera(),
+                                        type: PageTransitionType.rightToLeft));
+                                subrentProvider.clearListSUbrent();
+                              } catch (e) {
+                                // ignore: use_build_context_synchronously
+                                CustomFlushbar.of(context)
+                                    .showWarning(msg: e.toString());
+                              } finally {
+                                EasyLoading.dismiss();
+                              }
+                            }
+                          : null),
+                ));
       },
       isThreeLine: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -321,7 +342,7 @@ class _DashboardSectionState extends State<DashboardSection> {
         ),
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.only(top: 4),
-        child: const Icon(Icons.location_on),
+        child: FaIcon(FontAwesomeIcons.mapPin, color: Color(0xFF8D182D)),
       ),
       title: Text(
         title ?? "-",

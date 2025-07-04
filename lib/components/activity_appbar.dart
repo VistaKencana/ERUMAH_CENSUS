@@ -23,7 +23,7 @@ class ActivityAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.foregroundColor,
     this.gradientBg = false,
     this.actions,
-    this.height = 105,
+    this.height = 140,
     this.onPressedBack,
     this.bottom,
     required this.subtitle,
@@ -36,14 +36,14 @@ class ActivityAppbar extends StatelessWidget implements PreferredSizeWidget {
     return Container(
       height: 200,
       decoration: BoxDecoration(
-          color: gradientBg ? null : Colors.white,
+          color: AppColors.primary.color,
           gradient: gradientBg
-              ? const LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
+              ? LinearGradient(
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
                   colors: [
-                    Color(0xFF04053D),
-                    Color(0xFF0B0DA3),
+                    Color(0xFFBA2C45), // 0%
+                    Color(0xFF040001), // 100%
                   ],
                 )
               : null),
@@ -51,12 +51,14 @@ class ActivityAppbar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 10),
           AppBar(
             surfaceTintColor: Colors.white,
             automaticallyImplyLeading: false,
+            scrolledUnderElevation: 0,
             backgroundColor: Colors.transparent,
             foregroundColor:
-                (foregroundColor ?? (gradientBg ? Colors.white : Colors.black)),
+                (foregroundColor ?? (gradientBg ? Colors.white : Colors.white)),
             leading: automaticallyImplyLeading
                 ? IconButton(
                     onPressed: () {
@@ -66,19 +68,28 @@ class ActivityAppbar extends StatelessWidget implements PreferredSizeWidget {
                       }
                       Navigator.pop(context);
                     },
-                    icon: const Icon(Icons.chevron_left))
+                    icon: const Icon(
+                      Icons.chevron_left,
+                      color: Colors.white,
+                    ))
                 : null,
             title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   title,
                   overflow: TextOverflow.ellipsis,
-                  style: appTextStyle(fontWeight: FontWeight.bold, size: 20),
+                  style: appTextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      size: 20),
                 ),
                 Text(
                   subtitle,
-                  style: appTextStyle(fontWeight: FontWeight.normal, size: 14),
+                  style: appTextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.normal,
+                      size: 14),
                 ),
               ],
             ),
@@ -91,9 +102,9 @@ class ActivityAppbar extends StatelessWidget implements PreferredSizeWidget {
             onTap: onOpenFloor,
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(10),
                   color: AppColors.midGrey.color),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

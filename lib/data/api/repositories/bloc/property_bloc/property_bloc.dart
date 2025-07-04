@@ -74,6 +74,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
     }
 
     if (listArea.isNotEmpty) {
+      EasyLoading.dismiss();
       return;
     }
 
@@ -212,7 +213,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
   }
 
   void _clearArea() {
-    listArea.clear();
+    // listArea.clear();
     listBlock.clear();
     listFloor.clear();
 
