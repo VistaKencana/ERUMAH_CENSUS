@@ -56,7 +56,7 @@ class CustomFormField extends StatelessWidget {
     this.readOnly = false,
     this.maxLines = 1,
     this.enabled = true,
-    this.addBorder = true,
+    this.addBorder = false,
     this.isMandatory = false,
   });
 
@@ -108,19 +108,36 @@ class CustomFormField extends StatelessWidget {
                     borderSide: const BorderSide(color: Color(0xFFA4A8AD)),
                     borderRadius: BorderRadius.circular(10),
                   )
-                : null,
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                    color: readOnly ? const Color(0xFFA4A8AD) : Colors.black,
-                    width: 2)),
-            errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                    color: readOnly ? const Color(0xFFA4A8AD) : Colors.red,
-                    width: 2)),
+                : UnderlineInputBorder(
+                    borderSide: const BorderSide(color: Color(0xFFA4A8AD)),
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+            focusedBorder: addBorder
+                ? OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                        color:
+                            readOnly ? const Color(0xFFA4A8AD) : Colors.black,
+                        width: 2))
+                : UnderlineInputBorder(
+                    borderRadius: BorderRadius.circular(0),
+                    borderSide: BorderSide(
+                        color:
+                            readOnly ? const Color(0xFFA4A8AD) : Colors.black,
+                        width: 2)),
+            errorBorder: addBorder
+                ? OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                        color: readOnly ? const Color(0xFFA4A8AD) : Colors.red,
+                        width: 2))
+                : UnderlineInputBorder(
+                    borderRadius: BorderRadius.circular(0),
+                    borderSide: BorderSide(
+                        color: readOnly ? const Color(0xFFA4A8AD) : Colors.red,
+                        width: 2)),
             contentPadding: contentPadding ??
-                const EdgeInsets.only(left: 12.0, right: 12.0),
+                const EdgeInsets.only(left: 12.0, right: 12.0, top: 10),
             labelStyle: labelStyle ?? const TextStyle(fontSize: 16),
             hintStyle: hintStyle ?? const TextStyle(color: Colors.grey),
             prefixIcon: prefixWidget ??

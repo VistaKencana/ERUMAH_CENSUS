@@ -7,6 +7,7 @@ import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/services/doc_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FileDisplay extends StatelessWidget {
   final bool isMandatory;
@@ -54,10 +55,16 @@ class FileDisplay extends StatelessWidget {
             child: Container(
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.dimmedPurple.color),
+                  border: Border.all(color: AppColors.midGrey.color),
                   borderRadius: BorderRadius.circular(10)),
               child: Row(
                 children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(subtitle ?? "Ambil gambar"),
+                    ),
+                  ),
                   (img != null)
                       ? Image.memory(
                           img!,
@@ -69,16 +76,20 @@ class FileDisplay extends StatelessWidget {
                           height: 80.h,
                           width: 80.h,
                           color: Colors.grey.withValues(alpha: .3),
-                          child: Icon(
-                            icon ?? Icons.camera_alt_rounded,
-                            size: 20,
-                            color: Colors.black45,
+                          child: Center(
+                            child: FaIcon(
+                              icon ?? FontAwesomeIcons.image,
+                              size: 20,
+                              color: Colors.black45,
+                            ),
+                          )
+
+                          // Icon(
+                          //   icon ?? Icons.camera_alt_rounded,
+                          //   size: 20,
+                          //   color: Colors.black45,
+                          // ),
                           ),
-                        ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Text(subtitle ?? "Ambil gambar"),
-                  )
                 ],
               ),
             )

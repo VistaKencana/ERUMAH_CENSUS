@@ -17,21 +17,21 @@ class AppThemes {
       filled: true,
       hintStyle:
           const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
-      disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.lightGrey.color)),
-      enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.lightGrey.color)),
-      focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.black, width: 2)),
-      errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.red, width: 2)),
-      focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.red, width: 2)),
+      // disabledBorder: OutlineInputBorder(
+      //     borderRadius: BorderRadius.circular(8),
+      //     borderSide: BorderSide(color: AppColors.lightGrey.color)),
+      // enabledBorder: OutlineInputBorder(
+      //     borderRadius: BorderRadius.circular(8),
+      //     borderSide: BorderSide(color: AppColors.lightGrey.color)),
+      // focusedBorder: OutlineInputBorder(
+      //     borderRadius: BorderRadius.circular(8),
+      //     borderSide: const BorderSide(color: Colors.black, width: 2)),
+      // errorBorder: OutlineInputBorder(
+      //     borderRadius: BorderRadius.circular(8),
+      //     borderSide: const BorderSide(color: Colors.red, width: 2)),
+      // focusedErrorBorder: OutlineInputBorder(
+      //     borderRadius: BorderRadius.circular(8),
+      //     borderSide: const BorderSide(color: Colors.red, width: 2)),
     ),
     tabBarTheme: TabBarThemeData(
         labelColor: AppColors.primary.color,

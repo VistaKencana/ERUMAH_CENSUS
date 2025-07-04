@@ -5,8 +5,14 @@ class SectionContainer extends StatelessWidget {
   final BoxBorder? border;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
+  final BorderRadiusGeometry? borderRadius;
   const SectionContainer(
-      {super.key, this.child, this.margin, this.padding, this.border});
+      {super.key,
+      this.child,
+      this.margin,
+      this.padding,
+      this.border,
+      this.borderRadius});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +23,7 @@ class SectionContainer extends StatelessWidget {
       decoration: BoxDecoration(
           border: border,
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10)),
+          borderRadius: borderRadius ?? BorderRadius.circular(10)),
       clipBehavior: Clip.antiAlias,
       child: child,
     );

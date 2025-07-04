@@ -13,10 +13,15 @@ class BottomBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
-      color: Colors.white,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(top: BorderSide(color: Colors.black12))),
       child: SizedBox(
           height: 50,
-          child: ElevatedButton(onPressed: onTap, child: Text(title))),
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: StadiumBorder()),
+              onPressed: onTap,
+              child: Text(title))),
     );
   }
 }

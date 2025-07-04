@@ -10,25 +10,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
   final void Function()? onPressedBack;
   final PreferredSizeWidget? bottom;
-  const CustomAppBar({
-    super.key,
-    this.centerTitle = true,
-    this.automaticallyImplyLeading = true,
-    required this.title,
-    this.foregroundColor,
-    this.gradientBg = false,
-    this.actions,
-    this.height = 60,
-    this.onPressedBack,
-    this.bottom,
-  });
+  final Color? backgroundColor;
+  const CustomAppBar(
+      {super.key,
+      this.centerTitle = true,
+      this.automaticallyImplyLeading = true,
+      required this.title,
+      this.foregroundColor,
+      this.gradientBg = false,
+      this.actions,
+      this.height = 60,
+      this.onPressedBack,
+      this.bottom,
+      this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 200,
       decoration: BoxDecoration(
-          color: gradientBg ? null : Colors.transparent,
+          color: gradientBg ? null : (backgroundColor ?? Colors.transparent),
           gradient: gradientBg
               ? const LinearGradient(
                   begin: Alignment.topRight,
@@ -43,6 +44,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           AppBar(
+            scrolledUnderElevation: 0,
             automaticallyImplyLeading: false,
             leading: automaticallyImplyLeading
                 ? IconButton(
@@ -55,7 +57,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     },
                     icon: const Icon(Icons.chevron_left))
                 : null,
-            backgroundColor: Colors.transparent,
+            backgroundColor: backgroundColor ?? Colors.transparent,
             foregroundColor:
                 (foregroundColor ?? (gradientBg ? Colors.white : Colors.black)),
             title: Text(

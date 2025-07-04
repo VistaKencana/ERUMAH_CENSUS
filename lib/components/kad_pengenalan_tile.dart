@@ -23,7 +23,11 @@ class KadPengenalanTile extends StatefulWidget {
 class _KadPengenalanTileState extends State<KadPengenalanTile> {
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.black12),
+          borderRadius: BorderRadius.circular(10)),
       child: Card(
         color: Colors.white,
         elevation: 0,
