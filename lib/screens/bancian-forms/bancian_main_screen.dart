@@ -1,5 +1,6 @@
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_form_field.dart';
+import 'package:eperumahan_bancian/components/modal/custom_modal_sheet.dart';
 import 'package:eperumahan_bancian/components/section_container.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 
@@ -102,7 +103,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
       },
       child: LayoutBuilder(builder: (context, constraint) {
         return Scaffold(
-          backgroundColor: AppColors.primary.color,
+          backgroundColor: Colors.white,
           appBar: PreferredSize(
               preferredSize: Size.fromHeight(constraint.maxHeight * .108),
               child: Container(
@@ -132,14 +133,14 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                                       "Unit No:${_bancianBloc.unitData.unit?.no ?? "-"}",
                                       style: TextStyle(color: Colors.white70),
                                     ),
-                                    Text(
-                                      " • ",
-                                      style: TextStyle(color: Colors.white70),
-                                    ),
-                                    Text(
-                                      _bancianBloc.unitData.unit?.status ?? "-",
-                                      style: TextStyle(color: Colors.white70),
-                                    ),
+                                    // Text(
+                                    //   " • ",
+                                    //   style: TextStyle(color: Colors.white70),
+                                    // ),
+                                    // Text(
+                                    //   _bancianBloc.unitData.unit?.status ?? "-",
+                                    //   style: TextStyle(color: Colors.white70),
+                                    // ),
                                   ],
                                 ),
                               ],
@@ -186,279 +187,341 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
           //     ),
           //   ],
           // ),
-          body: SectionContainer(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-            padding: EdgeInsets.zero,
-            margin: EdgeInsets.zero,
-            child: Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Visibility(
-                        visible: _isNewForm(),
-                        child: Chip(
-                          label: Text(
-                            "Borang Baharu",
-                            style: appTextStyle(size: 14, color: Colors.white),
+          body: Container(
+            color: AppColors.primary.color,
+            child: SectionContainer(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+              padding: EdgeInsets.zero,
+              margin: EdgeInsets.zero,
+              child: Form(
+                key: formKey,
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Visibility(
+                          visible: _isNewForm(),
+                          child: Chip(
+                            label: Text(
+                              "Borang Baharu",
+                              style:
+                                  appTextStyle(size: 14, color: Colors.white),
+                            ),
+                            side: BorderSide.none,
+                            shape: const StadiumBorder(),
+                            color: const WidgetStatePropertyAll(Colors.blue),
                           ),
-                          side: BorderSide.none,
-                          shape: const StadiumBorder(),
-                          color: const WidgetStatePropertyAll(Colors.blue),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          _go(const SubrentMainScreen());
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(top: 16, bottom: 20),
+                        _gap(size: 22),
+                        Container(
+                          padding: EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              border: Border.all(color: Colors.black54),
-                              borderRadius: BorderRadius.circular(14)),
-                          child: ListTile(
-                            leading: Icon(Icons.campaign_outlined),
-                            title: Text("Lapor penghuni"),
-                            subtitle: Text(
-                              "Isi borang jika bukan penghuni",
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            trailing: Icon(Icons.chevron_right),
+                              color: Colors.black87,
+                              borderRadius: BorderRadius.circular(6)),
+                          child: Text(
+                            _bancianBloc.unitData.unit?.status ?? "-",
+                            style: TextStyle(color: Colors.white, fontSize: 12),
                           ),
                         ),
-                      ),
-                      // Container(
-                      //   width: double.infinity,
-                      //   margin: const EdgeInsets.symmetric(vertical: 12),
-                      //   padding: const EdgeInsets.all(14),
-                      //   decoration: BoxDecoration(
-                      //       color: Colors.white,
-                      //       borderRadius: BorderRadius.circular(10)),
-                      //   child: Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     children: [
-                      //       Wrap(
-                      //         crossAxisAlignment: WrapCrossAlignment.center,
-                      //         children: [
-                      //           const Icon(Icons.location_on),
-                      //           Text(
-                      //             _bancianBloc.unitData.unit?.housingProject
-                      //                     ?.desc ??
-                      //                 "-",
-                      //             style: const TextStyle(
-                      //                 fontSize: 18,
-                      //                 fontWeight: FontWeight.bold),
-                      //           ),
-                      //           SizedBox(width: size.width * .1),
-                      //           Text(
-                      //             _bancianBloc.unitData.unit?.status ?? "-",
-                      //             style: TextStyle(
-                      //                 color: AppColors.dimmedPurple.color),
-                      //           ),
-                      //           SizedBox(width: size.width * .1),
-                      //           Text(
-                      //             "Unit No:${_bancianBloc.unitData.unit?.no ?? "-"}",
-                      //             style: TextStyle(
-                      //                 color: AppColors.dimmedPurple.color),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _section("Gambar"),
-                          // GestureDetector(
-                          //     onTap: () {
-                          //       _go(BancianAddProof(onTakePicture: (val) {
-                          //         setState(() {
-                          //           statusData.addImages(val);
-                          //         });
-                          //       }));
-                          //     },
-                          //     child: const Icon(Icons.camera_alt_rounded))
-                        ],
-                      ),
-                      SizedBox(
-                        height: 100,
-                        child: Row(
+                        _gap(size: 6),
+                        _section("Info Penghuni", size: 26, btmPadding: 0),
+                        GestureDetector(
+                          onTap: () {
+                            CustomModalSheet.show(
+                                context: context,
+                                builder: (_) => Scaffold(
+                                      body: Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.warning_amber_rounded,
+                                              color: Colors.red,
+                                              size: 60,
+                                            ),
+                                            SizedBox(height: 12),
+                                            Text(
+                                              "Lapor Penghuni",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            SizedBox(height: 6),
+                                            Text(
+                                                "Adakah anda mahu melapor penghuni ini?",
+                                                style: TextStyle(fontSize: 18),
+                                                textAlign: TextAlign.center),
+                                          ],
+                                        ),
+                                      ),
+                                      bottomNavigationBar: Container(
+                                        height: 50,
+                                        margin: EdgeInsets.all(10),
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          SubrentMainScreen()));
+                                            },
+                                            child: Text("Lapor Penghuni")),
+                                      ),
+                                    ));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(top: 16, bottom: 20),
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border: Border.all(color: Colors.black54),
+                                borderRadius: BorderRadius.circular(14)),
+                            child: ListTile(
+                              leading: Icon(Icons.campaign_outlined),
+                              title: Text("Lapor penghuni"),
+                              subtitle: Text(
+                                "Isi borang jika bukan penghuni",
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              trailing: Icon(Icons.chevron_right),
+                            ),
+                          ),
+                        ),
+                        // Container(
+                        //   width: double.infinity,
+                        //   margin: const EdgeInsets.symmetric(vertical: 12),
+                        //   padding: const EdgeInsets.all(14),
+                        //   decoration: BoxDecoration(
+                        //       color: Colors.white,
+                        //       borderRadius: BorderRadius.circular(10)),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: [
+                        //       Wrap(
+                        //         crossAxisAlignment: WrapCrossAlignment.center,
+                        //         children: [
+                        //           const Icon(Icons.location_on),
+                        //           Text(
+                        //             _bancianBloc.unitData.unit?.housingProject
+                        //                     ?.desc ??
+                        //                 "-",
+                        //             style: const TextStyle(
+                        //                 fontSize: 18,
+                        //                 fontWeight: FontWeight.bold),
+                        //           ),
+                        //           SizedBox(width: size.width * .1),
+                        //           Text(
+                        //             _bancianBloc.unitData.unit?.status ?? "-",
+                        //             style: TextStyle(
+                        //                 color: AppColors.dimmedPurple.color),
+                        //           ),
+                        //           SizedBox(width: size.width * .1),
+                        //           Text(
+                        //             "Unit No:${_bancianBloc.unitData.unit?.no ?? "-"}",
+                        //             style: TextStyle(
+                        //                 color: AppColors.dimmedPurple.color),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                _go(BancianAddProof(onTakePicture: (val) {
-                                  setState(() {
-                                    statusData.addImages(val);
-                                  });
-                                }));
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: AppColors.midGrey.color,
-                                    borderRadius: BorderRadius.circular(12)),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 20),
-                                margin: EdgeInsets.only(right: 10),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.add_a_photo_outlined,
-                                      color: Colors.grey,
-                                    ),
-                                    Text(
-                                      "Add\nImage",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 10),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: List.generate(
-                                    statusData.getFiles().length, (index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      BancianImagePreview(
-                                        title: "Gambar ${index + 1}",
-                                        image: statusData.getFiles()[index],
-                                        canDelete:
-                                            statusData.getFiles().length > 2,
-                                        onDelete: () {
-                                          setState(() =>
-                                              statusData.removeImages(index));
-                                          Navigator.pop(context);
-                                        },
-                                      ).show(context);
-                                    },
-                                    child: Container(
-                                        width: 110,
-                                        height: 100,
-                                        margin:
-                                            const EdgeInsets.only(right: 12),
-                                        clipBehavior: Clip.hardEdge,
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey,
-                                            borderRadius:
-                                                BorderRadius.circular(6)),
-                                        child: Image.memory(
-                                          statusData.getFiles()[index],
-                                          fit: BoxFit.fill,
-                                        )),
-                                  );
-                                }),
-                              ),
-                            ),
+                            _section("Gambar Kerja"),
+                            // GestureDetector(
+                            //     onTap: () {
+                            //       _go(BancianAddProof(onTakePicture: (val) {
+                            //         setState(() {
+                            //           statusData.addImages(val);
+                            //         });
+                            //       }));
+                            //     },
+                            //     child: const Icon(Icons.camera_alt_rounded))
                           ],
                         ),
-                      ),
-                      // _gap(size: 14),
-                      // _section("Cap Jari"),
-                      // SectionContainer(
-                      //   border: Border.all(color: Colors.grey),
-                      //   padding: EdgeInsets.zero,
-                      //   margin: EdgeInsets.zero,
-                      //   child: ListTile(
-                      //       tileColor: Colors.white,
-                      //       leading: const Icon(Icons.fingerprint),
-                      //       title: const Text("Sahkan Cap Jari"),
-                      //       trailing: Icon(
-                      //         isVerifyFP ? Icons.check_circle : Icons.warning,
-                      //         color: isVerifyFP ? Colors.green : Colors.amber,
-                      //       ),
-                      //       onTap: () {
-                      //         if (isVerifyFP) {
-                      //           CustomFlushbar.of(context)
-                      //               .showInfo(msg: "Mykad telah berjaya disahkan");
-                      //           return;
-                      //         }
-                      //         _go(BancianFingerprint(
-                      //           onVerifyFP: (val) {
-                      //             setState(() => isVerifyFP = val);
-                      //           },
-                      //         ));
-                      //       }),
-                      // ),
-                      _gap(size: 22),
-                      Divider(), _gap(size: 18),
-                      _section("Dokumen"),
-                      _borangTile(
-                          label: "Maklumat Penghuni",
-                          screen: PenghuniForm(
-                              isNewForm: widget.isNewForm,
-                              imgs: statusData.getFiles())),
-                      if (!_isNewForm())
+                        SizedBox(
+                          height: 100,
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  _go(BancianAddProof(onTakePicture: (val) {
+                                    setState(() {
+                                      statusData.addImages(val);
+                                    });
+                                  }));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: AppColors.midGrey.color,
+                                      borderRadius: BorderRadius.circular(12)),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 20),
+                                  margin: EdgeInsets.only(right: 10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add_a_photo_outlined,
+                                        color: Colors.grey,
+                                      ),
+                                      Text(
+                                        "Add\nImage",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 10),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: List.generate(
+                                      statusData.getFiles().length, (index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        BancianImagePreview(
+                                          title: "Gambar ${index + 1}",
+                                          image: statusData.getFiles()[index],
+                                          canDelete:
+                                              statusData.getFiles().length > 2,
+                                          onDelete: () {
+                                            setState(() =>
+                                                statusData.removeImages(index));
+                                            Navigator.pop(context);
+                                          },
+                                        ).show(context);
+                                      },
+                                      child: Container(
+                                          width: 110,
+                                          height: 100,
+                                          margin:
+                                              const EdgeInsets.only(right: 12),
+                                          clipBehavior: Clip.hardEdge,
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey,
+                                              borderRadius:
+                                                  BorderRadius.circular(6)),
+                                          child: Image.memory(
+                                            statusData.getFiles()[index],
+                                            fit: BoxFit.fill,
+                                          )),
+                                    );
+                                  }),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // _gap(size: 14),
+                        // _section("Cap Jari"),
+                        // SectionContainer(
+                        //   border: Border.all(color: Colors.grey),
+                        //   padding: EdgeInsets.zero,
+                        //   margin: EdgeInsets.zero,
+                        //   child: ListTile(
+                        //       tileColor: Colors.white,
+                        //       leading: const Icon(Icons.fingerprint),
+                        //       title: const Text("Sahkan Cap Jari"),
+                        //       trailing: Icon(
+                        //         isVerifyFP ? Icons.check_circle : Icons.warning,
+                        //         color: isVerifyFP ? Colors.green : Colors.amber,
+                        //       ),
+                        //       onTap: () {
+                        //         if (isVerifyFP) {
+                        //           CustomFlushbar.of(context)
+                        //               .showInfo(msg: "Mykad telah berjaya disahkan");
+                        //           return;
+                        //         }
+                        //         _go(BancianFingerprint(
+                        //           onVerifyFP: (val) {
+                        //             setState(() => isVerifyFP = val);
+                        //           },
+                        //         ));
+                        //       }),
+                        // ),
+                        _gap(size: 22),
+                        Divider(), _gap(size: 18),
+                        _section("Dokumen"),
                         _borangTile(
-                            label: "Maklumat Pasangan",
-                            screen: const PasanganForm()),
-                      if (!_isNewForm())
-                        _borangTile(
-                            label: "Maklumat Anak & Tanggungan",
-                            screen: const TanggunganForm()),
-                      _gap(size: 20),
+                            label: "Penghuni",
+                            screen: PenghuniForm(
+                                isNewForm: widget.isNewForm,
+                                imgs: statusData.getFiles())),
+                        if (!_isNewForm())
+                          _borangTile(
+                              label: "Pasangan", screen: const PasanganForm()),
+                        if (!_isNewForm())
+                          _borangTile(
+                              label: "Anak / Tanggungan",
+                              screen: const TanggunganForm()),
+                        _gap(size: 22),
+                        Divider(), _gap(size: 18),
 
-                      // _gap(),
-                      // _section("Status Bancian"),
-                      // CustomTextField(
-                      //   hintText: "Pilih status",
-                      //   readOnly: true,
-                      //   controller: statusCtrl,
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) return '';
-                      //     return null;
-                      //   },
-                      //   suffixIcon: Icons.arrow_drop_down,
-                      //   onTap: () {
-                      //     final ddR = context.read<DropdownProvider>();
-                      //     ddR.fetchDropdownData(DdType.censusStatus).then((val) {
-                      //       CustomDropdownSheet(
-                      //         label: "Pilih status",
-                      //         items: ddR.censusStatusList,
-                      //         onFindGroupValue: (data) {
-                      //           return data.where((val) {
-                      //             var a = val.code?.contains(
-                      //                     statusData.statusCode ?? "*_*") ??
-                      //                 false;
-                      //             return a;
-                      //           }).firstOrNull;
-                      //         },
-                      //         getTitle: (data) => data.desc ?? "-",
-                      //         onChange: (val) {
-                      //           if (val == null) return;
-                      //           statusData =
-                      //               statusData.copyWith(statusCode: val.code);
-                      //           statusCtrl.text = val.desc ?? "";
-                      //         },
-                      //         // ignore: use_build_context_synchronously
-                      //       ).show(context);
-                      //     });
-                      //   },
-                      // ),
+                        // _gap(),
+                        // _section("Status Bancian"),
+                        // CustomTextField(
+                        //   hintText: "Pilih status",
+                        //   readOnly: true,
+                        //   controller: statusCtrl,
+                        //   validator: (value) {
+                        //     if (value == null || value.isEmpty) return '';
+                        //     return null;
+                        //   },
+                        //   suffixIcon: Icons.arrow_drop_down,
+                        //   onTap: () {
+                        //     final ddR = context.read<DropdownProvider>();
+                        //     ddR.fetchDropdownData(DdType.censusStatus).then((val) {
+                        //       CustomDropdownSheet(
+                        //         label: "Pilih status",
+                        //         items: ddR.censusStatusList,
+                        //         onFindGroupValue: (data) {
+                        //           return data.where((val) {
+                        //             var a = val.code?.contains(
+                        //                     statusData.statusCode ?? "*_*") ??
+                        //                 false;
+                        //             return a;
+                        //           }).firstOrNull;
+                        //         },
+                        //         getTitle: (data) => data.desc ?? "-",
+                        //         onChange: (val) {
+                        //           if (val == null) return;
+                        //           statusData =
+                        //               statusData.copyWith(statusCode: val.code);
+                        //           statusCtrl.text = val.desc ?? "";
+                        //         },
+                        //         // ignore: use_build_context_synchronously
+                        //       ).show(context);
+                        //     });
+                        //   },
+                        // ),
 
-                      _section("Catatan"),
-                      CustomFormField(
-                        maxLines: 3,
-                        addBorder: true,
-                        controller: remarkCtrl,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) return '';
-                          return null;
-                        },
-                        hintText: "Sila tulis catatan",
-                        contentPadding: const EdgeInsets.only(
-                            top: 10, left: 10, right: 10, bottom: 10),
-                      ),
-                      _gap(size: 20),
-                    ],
+                        _section("Catatan"),
+                        CustomFormField(
+                          maxLines: 3,
+                          addBorder: true,
+                          controller: remarkCtrl,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) return '';
+                            return null;
+                          },
+                          hintText: "Sila tulis catatan",
+                          contentPadding: const EdgeInsets.only(
+                              top: 10, left: 10, right: 10, bottom: 10),
+                        ),
+                        _gap(size: 20),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -547,7 +610,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
     );
   }
 
-  Widget _section(String title) {
+  Widget _section(String title, {double size = 20, double btmPadding = 10}) {
     return Column(
       children: [
         Text(
@@ -555,9 +618,9 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
           style: appTextStyle(
               color: AppColors.darkGrey.color,
               fontWeight: FontWeight.bold,
-              size: 20),
+              size: size),
         ),
-        SizedBox(height: 10)
+        SizedBox(height: btmPadding)
       ],
     );
   }

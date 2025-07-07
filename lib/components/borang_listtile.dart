@@ -16,28 +16,32 @@ class BorangTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 6,
-            spreadRadius: 2,
-            offset: const Offset(2, 4),
-          ),
-        ], color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.fromLTRB(6, 10, 10, 10),
+        decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.black12)),
+            //   boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.black.withValues(alpha: 0.1),
+            //     blurRadius: 6,
+            //     spreadRadius: 2,
+            //     offset: const Offset(2, 4),
+            //   ),
+            // ],
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(0)),
         child: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(30),
-              decoration: BoxDecoration(
-                  color: Colors.blue.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(10)),
-              child: const Icon(
-                Icons.description,
-                color: Colors.blue,
-              ),
-            ),
-            const SizedBox(width: 10),
+            // Container(
+            //   padding: const EdgeInsets.all(30),
+            //   decoration: BoxDecoration(
+            //       color: Colors.blue.withValues(alpha: 0.2),
+            //       borderRadius: BorderRadius.circular(10)),
+            //   child: const Icon(
+            //     Icons.description,
+            //     color: Colors.blue,
+            //   ),
+            // ),
+            // const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

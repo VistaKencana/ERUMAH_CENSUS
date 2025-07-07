@@ -87,7 +87,7 @@ class _CardDisplayState extends State<CardDisplay> {
                         children: [
                           const SizedBox(height: 10),
                           Icon(
-                            widget.icon ?? Icons.camera_alt_rounded,
+                            widget.icon ?? Icons.image,
                             size: 35,
                             color: Colors.black45,
                           ),

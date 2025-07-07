@@ -1,4 +1,3 @@
-import 'package:eperumahan_bancian/components/bg_image.dart';
 import 'package:eperumahan_bancian/components/bottombar_button.dart';
 import 'package:eperumahan_bancian/components/custom_alertdialog.dart';
 import 'package:eperumahan_bancian/components/custom_appbar.dart';
@@ -83,9 +82,8 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
         child: Form(
           key: formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: BgImage(
-              child: Scaffold(
-            backgroundColor: Colors.transparent,
+          child: Scaffold(
+            backgroundColor: Colors.white,
             appBar: CustomAppBar(
               title: "",
               onPressedBack: () {
@@ -126,6 +124,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
                         ),
                       ),
                       SectionContainer(
+                        border: Border.all(color: Colors.black12),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -177,6 +176,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
                         ),
                       ),
                       SectionContainer(
+                        border: Border.all(color: Colors.black12),
                         child: Column(
                           children: [
                             _headerTitle('SSM'),
@@ -194,6 +194,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
                         ),
                       ),
                       SectionContainer(
+                        border: Border.all(color: Colors.black12),
                         child: Column(
                           children: [
                             _headerTitle('Lesen Perniagaan'),
@@ -228,7 +229,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
                   _unitKedaiBloc.add(SavePemilikData(data: ownerData!));
                 },
                 title: "Simpan"),
-          )),
+          ),
         ));
   }
 
