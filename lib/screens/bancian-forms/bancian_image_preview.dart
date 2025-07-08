@@ -34,80 +34,79 @@ class _BancianImagePreviewState extends State<BancianImagePreview> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Material(
-        color: Colors.black.withValues(alpha: 0.3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
+        color: Colors.black,
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          appBar: AppBar(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.black,
+            centerTitle: true,
+            title: Text(
               widget.title,
-              style: const TextStyle(fontSize: 22, color: Colors.white),
+              style: const TextStyle(fontSize: 18),
             ),
-            ScaleTransition(
-              scale: CurvedAnimation(
-                parent: ModalRoute.of(context)!.animation!,
-                curve: Curves.easeOut,
-                reverseCurve: Curves.easeIn,
-              ),
-              child: Dialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                child: Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      InteractiveViewer(
-                        minScale: 1.0,
-                        maxScale: 10.0,
-                        child: AspectRatio(
-                          aspectRatio: 10 / 10,
-                          child: Image.memory(widget.image),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+            leading: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _iconButton(
+                iconData: Icons.close_rounded,
+                onTap: () => Navigator.pop(context),
+                title: "Kembali",
               ),
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _iconButton(
-                  iconData: Icons.close_rounded,
-                  onTap: () => Navigator.pop(context),
-                  title: "Kembali",
+            actions: [
+              Visibility(
+                visible: widget.canDelete,
+                child: _iconButton(
+                  isFilled: true,
+                  iconData: Icons.delete,
+                  onTap: () {
+                    if (widget.onDelete == null) return;
+                    widget.onDelete!();
+                  },
+                  title: "Buang",
                 ),
-                SizedBox(width: widget.canDelete ? 30 : 0),
-                Visibility(
-                  visible: widget.canDelete,
-                  child: _iconButton(
-                    isFilled: true,
-                    iconData: Icons.delete,
-                    onTap: () {
-                      if (widget.onDelete == null) return;
-                      widget.onDelete!();
-                    },
-                    title: "Buang",
+              ),
+              SizedBox(width: widget.canEdit ? 30 : 0),
+              Visibility(
+                visible: widget.canEdit,
+                child: _iconButton(
+                  isFilled: true,
+                  iconData: Icons.edit,
+                  onTap: () {
+                    if (widget.onEdit == null) return;
+                    widget.onEdit!();
+                  },
+                  title: "Ubah",
+                ),
+              ),
+              SizedBox(width: 10),
+            ],
+          ),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: ScaleTransition(
+                  scale: CurvedAnimation(
+                    parent: ModalRoute.of(context)!.animation!,
+                    curve: Curves.easeOut,
+                    reverseCurve: Curves.easeIn,
+                  ),
+                  child: InteractiveViewer(
+                    minScale: 1.0,
+                    maxScale: 10.0,
+                    child: Image.memory(
+                      widget.image,
+                      fit: BoxFit.contain,
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
                   ),
                 ),
-                SizedBox(width: widget.canEdit ? 30 : 0),
-                Visibility(
-                  visible: widget.canEdit,
-                  child: _iconButton(
-                    isFilled: true,
-                    iconData: Icons.edit,
-                    onTap: () {
-                      if (widget.onEdit == null) return;
-                      widget.onEdit!();
-                    },
-                    title: "Ubah",
-                  ),
-                ),
-              ],
-            )
-          ],
+              ),
+            ],
+          ),
+          bottomNavigationBar: SizedBox(height: 60),
         ),
       ),
     );
@@ -132,14 +131,15 @@ class _BancianImagePreviewState extends State<BancianImagePreview> {
             child: Icon(
               iconData,
               color: isFilled ? Colors.black : Colors.white,
+              size: 18,
             ),
           ),
         ),
-        const SizedBox(height: 3),
-        Text(
-          title,
-          style: const TextStyle(color: Colors.white),
-        )
+        // const SizedBox(height: 3),
+        // Text(
+        //   title,
+        //   style: const TextStyle(color: Colors.white),
+        // )
       ],
     );
   }

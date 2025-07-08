@@ -261,7 +261,7 @@ class _PasanganModalState extends State<PasanganModal> {
                       //   keyboardType: TextInputType.emailAddress,
                       // ),
                       _textField(
-                        title: 'No. Kad Pengenalan',
+                        title: 'No. IC',
                         controller: icNoCtrl,
                         keyboardType: TextInputType.number,
                         isMandatory: _isNewForm(),
@@ -272,7 +272,7 @@ class _PasanganModalState extends State<PasanganModal> {
                         },
                       ),
                       _textField(
-                        title: 'No Telefon',
+                        title: 'No Telefon Bimbit',
                         keyboardType: TextInputType.phone,
                         controller: noTelCtrl,
                         validator: (value) {
@@ -281,7 +281,7 @@ class _PasanganModalState extends State<PasanganModal> {
                         },
                       ),
                       _textField(
-                          title: 'Umur(Tahun)',
+                          title: 'Umur',
                           controller: umurCtrl,
                           keyboardType: TextInputType.number,
                           readOnly: _isReadOnly()),

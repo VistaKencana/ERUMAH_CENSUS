@@ -60,7 +60,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: !widget.isFromHome,
-        title: const Text("QR Bancian"),
+        title: const Text("QR Scanner"),
         foregroundColor: Colors.white,
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -245,9 +245,10 @@ class _QrScanScreenState extends State<QrScanScreen> {
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
           borderColor: Colors.white,
-          borderRadius: 10,
-          borderLength: 30,
+          borderRadius: 24,
+          borderLength: 40,
           borderWidth: 10,
+          overlayColor: Colors.black87,
           cutOutSize: scanArea),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );

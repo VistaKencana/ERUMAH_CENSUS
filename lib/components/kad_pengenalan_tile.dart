@@ -40,7 +40,7 @@ class _KadPengenalanTileState extends State<KadPengenalanTile> {
           title: Row(
             children: [
               Text(
-                "Kad Pengenalan",
+                "IC",
                 style: appTextStyle(size: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(width: 4),
@@ -58,7 +58,7 @@ class _KadPengenalanTileState extends State<KadPengenalanTile> {
                 child: Row(
                   children: [
                     CardDisplay(
-                      title: "Kad Pengenalan Depan",
+                      title: "IC Depan",
                       img: widget.frontCard,
                       onPicture: (bytes) {
                         if (bytes == null) return;
@@ -68,7 +68,7 @@ class _KadPengenalanTileState extends State<KadPengenalanTile> {
                     ),
                     const SizedBox(width: 10),
                     CardDisplay(
-                      title: "Kad Pengenalan Belakang",
+                      title: "IC Belakang",
                       img: widget.backCard,
                       onPicture: (bytes) {
                         if (bytes == null) return;

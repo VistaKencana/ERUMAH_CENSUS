@@ -55,12 +55,16 @@ class _DashboardDataViewState extends State<DashboardDataView> {
                         const SizedBox(height: 6),
                         Container(
                           decoration: BoxDecoration(
-                            color: AppColors.midGrey.color,
+                            color:
+                                AppColors.primary.color.withValues(alpha: .1),
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(18),
                           margin: const EdgeInsets.only(top: 4),
-                          child: const Icon(Icons.location_on),
+                          child: Icon(
+                            Icons.house,
+                            color: AppColors.primary.color,
+                          ),
                         ),
                         const SizedBox(height: 6),
                         Text(
@@ -71,27 +75,7 @@ class _DashboardDataViewState extends State<DashboardDataView> {
                         Text(widget.data.unit?.unitNo ?? "-"),
                         SizedBox(
                             height: MediaQuery.sizeOf(context).height * 0.04),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.grey.shade200,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Catatan",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text(stringPlaceholder(
-                                  (widget.data.visit?.isEmpty ?? true)
-                                      ? ""
-                                      : widget.data.visit?.first.remark)),
-                            ],
-                          ),
-                        ),
+                        Divider(),
                         SizedBox(
                             height: MediaQuery.sizeOf(context).height * 0.04),
                         Row(
@@ -159,6 +143,30 @@ class _DashboardDataViewState extends State<DashboardDataView> {
                               ),
                             ),
                           ],
+                        ),
+                        const SizedBox(height: 10),
+                        Divider(),
+                        const SizedBox(height: 10),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.grey.shade200,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Catatan",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(stringPlaceholder(
+                                  (widget.data.visit?.isEmpty ?? true)
+                                      ? ""
+                                      : widget.data.visit?.first.remark)),
+                            ],
+                          ),
                         ),
                       ],
                     ),

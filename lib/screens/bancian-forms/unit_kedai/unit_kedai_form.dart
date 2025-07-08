@@ -139,7 +139,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
                             TwoColumnForm(
                               children: [
                                 _textField(
-                                  title: 'No. Kad Pengenalan',
+                                  title: 'No. IC',
                                   controller: icNoCtrl,
                                   // isMandatory: _isNewForm(),
                                   keyboardType: TextInputType.number,
@@ -158,7 +158,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
                                   },
                                 ),
                                 _textField(
-                                  title: 'No Telefon',
+                                  title: 'No Telefon Bimbit',
                                   controller: noTelCtrl,
                                   keyboardType: TextInputType.phone,
                                   // isMandatory: _isNewForm(),

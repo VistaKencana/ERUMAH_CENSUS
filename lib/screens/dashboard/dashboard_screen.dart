@@ -368,7 +368,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget maklumatTelefon() {
     return Column(
       children: [
-        _title(title: 'Makmulat Telefon'),
+        _title(title: 'Makmulat Telefon Bimbit'),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 14),
           padding: const EdgeInsets.symmetric(horizontal: 4),

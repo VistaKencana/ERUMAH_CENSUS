@@ -131,7 +131,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
       if (selectedZone.code == null ||
           selectedArea.code == null ||
           selectedBlock.blockNo == null) {
-        emit(const PropertyError(msg: "Please select all data"));
+        emit(const PropertyError(msg: "Sila pilih semua maklumat"));
         return;
       }
 
@@ -204,7 +204,7 @@ class PropertyBloc extends Bloc<PropertyEvent, PropertyState> {
       if (selectedZone.code == null ||
           selectedArea.code == null ||
           selectedBlock.blockNo == null) {
-        emit(const PropertyError(msg: "Please select all data"));
+        emit(const PropertyError(msg: "Sila pilih semua maklumat"));
         return;
       }
 

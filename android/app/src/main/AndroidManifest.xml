@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.USB_PERMISSION" />
 
     <application
-        android:label="ePerumahan Bancian(SDK)"
+        android:label="ePerumahan Bancian(B)"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <!-- ✅ USB Broadcast Receiver with exported -->

@@ -38,14 +38,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   _gap(),
                   const CustomFormField(
-                    title: "No Kad Pengenalan",
+                    title: "No IC",
                     isMandatory: true,
                   ),
                   _gap(),
                   const TwoColumnForm(
                     children: [
                       CustomFormField(
-                        title: "No Telefon",
+                        title: "No Telefon Bimbit",
                         isMandatory: true,
                       ),
                       CustomFormField(

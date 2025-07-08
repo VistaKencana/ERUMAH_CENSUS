@@ -163,7 +163,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
                                   children: [
                                     _dropdownHubungan(),
                                     _textField(
-                                      title: 'No. Kad Pengenalan',
+                                      title: 'No. IC',
                                       controller: icNoCtrl,
                                       keyboardType: TextInputType.number,
                                       readOnly: _isReadOnly(),
@@ -179,13 +179,13 @@ class _TanggunganModalState extends State<TanggunganModal> {
                                     //   keyboardType: TextInputType.emailAddress,
                                     // ),
                                     _textField(
-                                        title: 'Umur(Tahun)',
+                                        title: 'Umur',
                                         controller: umurCtrl,
                                         keyboardType: TextInputType.number,
                                         readOnly: _isReadOnly()),
                                     _dropdownKesihatan(),
                                     // _textField(
-                                    //     title: 'No. Telefon',
+                                    //     title: 'No. Telefon Bimbit',
                                     //     controller: noTelCtrl,
                                     //     keyboardType: TextInputType.phone,
                                     //     readOnly: _isReadOnly()),

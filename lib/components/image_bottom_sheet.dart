@@ -75,17 +75,24 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(10),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadiusGeometry.circular(60))),
                       onPressed: imgs.length < (widget.maxImage - 1)
                           ? null
                           : () {
                               widget.onNext(imgs);
                             },
-                      child: const Text("Seterusnya")),
+                      child: const Text(
+                        "Seterusnya",
+                        style: TextStyle(fontSize: 13),
+                      )),
                 ],
               ),
             ),
             SizedBox(
-              height: 100,
+              height: 90,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.only(right: 12),
@@ -98,12 +105,24 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
                         height: size.height * .12,
                         margin: const EdgeInsets.only(left: 12),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black87, width: 3),
-                            color: Colors.grey.withValues(alpha: .5),
+                            border: Border.all(color: Colors.black12, width: 2),
+                            color: Colors.grey.withValues(alpha: .2),
                             borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                          child: Icon(Icons.camera_alt),
-                        ),
+                        child: Center(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add_a_photo,
+                              color: Colors.black54,
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              "${imgs.length}/${widget.maxImage}",
+                              style: TextStyle(color: Colors.black54),
+                            )
+                          ],
+                        )),
                       ),
                     );
                   }

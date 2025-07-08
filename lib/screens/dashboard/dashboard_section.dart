@@ -285,12 +285,15 @@ class _DashboardSectionState extends State<DashboardSection> {
       tileColor: Colors.white,
       leading: Container(
         decoration: BoxDecoration(
-          color: AppColors.midGrey.color,
+          color: AppColors.primary.color.withValues(alpha: .1),
           shape: BoxShape.circle,
         ),
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.only(top: 4),
-        child: const Icon(Icons.location_on),
+        child: Icon(
+          Icons.house,
+          color: AppColors.primary.color,
+        ),
       ),
       title: Text(
         title ?? "-",

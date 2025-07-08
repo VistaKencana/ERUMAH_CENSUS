@@ -144,7 +144,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
             const SizedBox(height: 16),
             const Center(
               child: Text(
-                "All Filter",
+                "Carian Rumah",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,

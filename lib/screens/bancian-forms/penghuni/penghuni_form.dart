@@ -232,7 +232,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                                   keyboardType: TextInputType.number,
                                   controller: bilIsiRumahCtrl),
                               _textField(
-                                title: 'No. Kad Pengenalan',
+                                title: 'No. IC',
                                 controller: icNoCtrl,
                                 isMandatory: _isNewForm(),
                                 keyboardType: TextInputType.number,
@@ -251,12 +251,12 @@ class _PenghuniFormState extends State<PenghuniForm> {
                                 },
                               ),
                               _textField(
-                                  title: 'Umur(Tahun)',
+                                  title: 'Umur',
                                   controller: umurCtrl,
                                   keyboardType: TextInputType.number,
                                   readOnly: _isReadOnly()),
                               _textField(
-                                title: 'No Telefon',
+                                title: 'No Telefon Bimbit',
                                 controller: noTelCtrl,
                                 keyboardType: TextInputType.phone,
                                 isMandatory: _isNewForm(),

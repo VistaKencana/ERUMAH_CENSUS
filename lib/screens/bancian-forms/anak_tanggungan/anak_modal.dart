@@ -161,7 +161,7 @@ class _AnakModalState extends State<AnakModal> {
                                   children: [
                                     if (!_isEdit()) _dropdownHubungan(),
                                     _textField(
-                                      title: 'No. Kad Pengenalan',
+                                      title: 'No. IC',
                                       controller: icNoCtrl,
                                       keyboardType: TextInputType.number,
                                       isMandatory: _isEdit(),
@@ -178,13 +178,13 @@ class _AnakModalState extends State<AnakModal> {
                                     //   keyboardType: TextInputType.emailAddress,
                                     // ),
                                     _textField(
-                                        title: 'Umur(Tahun)',
+                                        title: 'Umur',
                                         controller: umurCtrl,
                                         keyboardType: TextInputType.number,
                                         readOnly: _isReadOnly()),
                                     _dropdownKesihatan(),
                                     // _textField(
-                                    //     title: 'No. Telefon',
+                                    //     title: 'No. Telefon Bimbit',
                                     //     controller: noTelCtrl,
                                     //     keyboardType: TextInputType.phone,
                                     //     readOnly: _isReadOnly()),

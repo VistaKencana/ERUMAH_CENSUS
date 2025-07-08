@@ -16,7 +16,7 @@ class _BancianQrscanState extends State<BancianQrscan> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text("QR Bancian"),
+        title: const Text("QR Scanner"),
         foregroundColor: Colors.white,
         centerTitle: true,
         backgroundColor: Colors.transparent,
