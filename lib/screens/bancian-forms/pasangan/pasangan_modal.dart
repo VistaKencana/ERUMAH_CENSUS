@@ -261,7 +261,7 @@ class _PasanganModalState extends State<PasanganModal> {
                       //   keyboardType: TextInputType.emailAddress,
                       // ),
                       _textField(
-                        title: 'No. Kad Pengenalan',
+                        title: 'No. K.P',
                         controller: icNoCtrl,
                         keyboardType: TextInputType.number,
                         isMandatory: _isNewForm(),

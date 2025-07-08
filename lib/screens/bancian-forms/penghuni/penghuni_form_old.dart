@@ -92,7 +92,7 @@ class _PenghuniFormOldState extends State<PenghuniFormOld> {
                         readOnly: _isReadOnly()),
                     _textField(title: 'Bilangan Isi Rumah', initialValue: "2"),
                     _textField(
-                        title: 'No. Kad Pengenalan',
+                        title: 'No. K.P',
                         initialValue: "7056448140568",
                         readOnly: _isReadOnly()),
                     _textField(

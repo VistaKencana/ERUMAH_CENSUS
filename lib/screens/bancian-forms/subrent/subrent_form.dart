@@ -125,7 +125,7 @@ class _SubrentFormState extends State<SubrentForm> {
                         TwoColumnForm(
                           children: [
                             _textField(
-                                title: 'No. Kad Pengenalan',
+                                title: 'No. K.P',
                                 controller: icNoCtrl,
                                 isMandatory: _isNewForm(),
                                 keyboardType: TextInputType.number,

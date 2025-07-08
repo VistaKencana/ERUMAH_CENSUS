@@ -232,7 +232,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                                   keyboardType: TextInputType.number,
                                   controller: bilIsiRumahCtrl),
                               _textField(
-                                title: 'No. Kad Pengenalan',
+                                title: 'No. K.P',
                                 controller: icNoCtrl,
                                 isMandatory: _isNewForm(),
                                 keyboardType: TextInputType.number,

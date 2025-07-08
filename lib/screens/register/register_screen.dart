@@ -38,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   _gap(),
                   const CustomFormField(
-                    title: "No Kad Pengenalan",
+                    title: "No K.P",
                     isMandatory: true,
                   ),
                   _gap(),

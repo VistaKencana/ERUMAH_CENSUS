@@ -161,7 +161,7 @@ class _AnakModalState extends State<AnakModal> {
                                   children: [
                                     if (!_isEdit()) _dropdownHubungan(),
                                     _textField(
-                                      title: 'No. Kad Pengenalan',
+                                      title: 'No. K.P',
                                       controller: icNoCtrl,
                                       keyboardType: TextInputType.number,
                                       isMandatory: _isEdit(),

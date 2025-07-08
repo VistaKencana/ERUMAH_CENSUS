@@ -58,7 +58,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 child: Column(
                   children: [
                     AspectRatio(
-                      aspectRatio: 30 / 9,
+                      aspectRatio: 40 / 9,
                       child: Image.asset(
                         AppImages.dbklLogo.path,
                         fit: BoxFit.contain,
@@ -66,7 +66,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         // width: constraint.maxWidth * .4,
                       ),
                     ),
-                    SizedBox(height: size.height * .05),
+                    SizedBox(height: 10),
                     Text(
                       "Carian Perumahan",
                       textAlign: TextAlign.center,

@@ -50,7 +50,7 @@ class _CaptureCardScreenState extends State<CaptureCardScreen> {
               children: [
                 SizedBox(height: MediaQuery.sizeOf(context).height * .08),
                 CardDisplay(
-                  title: "Kad Pengenalan Depan",
+                  title: "K.P Depan",
                   width: MediaQuery.sizeOf(context).width * .8,
                   height: MediaQuery.sizeOf(context).height * .2,
                   img: frontCard,
@@ -62,7 +62,7 @@ class _CaptureCardScreenState extends State<CaptureCardScreen> {
                 ),
                 const SizedBox(height: 25),
                 CardDisplay(
-                  title: "Kad Pengenalan Belakang",
+                  title: "K.P Belakang",
                   width: MediaQuery.sizeOf(context).width * .8,
                   height: MediaQuery.sizeOf(context).height * .2,
                   img: backCard,

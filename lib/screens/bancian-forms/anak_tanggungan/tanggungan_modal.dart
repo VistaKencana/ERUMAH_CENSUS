@@ -163,7 +163,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
                                   children: [
                                     _dropdownHubungan(),
                                     _textField(
-                                      title: 'No. Kad Pengenalan',
+                                      title: 'No. K.P',
                                       controller: icNoCtrl,
                                       keyboardType: TextInputType.number,
                                       readOnly: _isReadOnly(),
