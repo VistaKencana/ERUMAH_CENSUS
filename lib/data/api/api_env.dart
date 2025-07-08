@@ -1,7 +1,7 @@
 enum ApiEnv {
-  dev(baseUrl: "https://pppa.orasyn.com/api/censusUser"),
-  stag(baseUrl: "https://pppa.orasyn.com/api/censusUser"),
-  prod(baseUrl: "https://eperumahan.fastsystem.com.my/api/censusUser"),
+  dev(baseUrl: "https://epengurusanperumahan.com.my/api/censusUser"),
+  stag(baseUrl: "https://epengurusanperumahan.com.my/api/censusUser"),
+  prod(baseUrl: "https://epengurusanperumahan.com.my/api/censusUser"),
   ;
 
   final String baseUrl;

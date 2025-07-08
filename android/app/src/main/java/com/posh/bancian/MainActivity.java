@@ -1,4 +1,4 @@
-package com.pppa.bancian;
+package com.posh.bancian;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
