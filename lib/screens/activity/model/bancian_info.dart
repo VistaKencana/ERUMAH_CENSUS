@@ -10,7 +10,7 @@ class BancianInfo {
       BancianInfo(title: "Kawasan:", value: "PPR Sri Selangor"),
       BancianInfo(title: "Blok:", value: "20"),
       BancianInfo(title: "Tingkat:", value: "20"),
-      BancianInfo(title: "Belum Dibanci:", value: "20"),
+      BancianInfo(title: "Belum Banci:", value: "20"),
       BancianInfo(title: "Selesai Dibanci:", value: "0"),
     ];
   }
