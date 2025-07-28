@@ -64,6 +64,22 @@ class _QrScanScreenState extends State<QrScanScreen> {
         foregroundColor: Colors.white,
         centerTitle: true,
         backgroundColor: Colors.transparent,
+        leading: Visibility(
+          visible: !widget.isFromHome,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: CircleAvatar(
+                backgroundColor: Colors.white10,
+                child: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
       body: BlocListener<QrBloc, QrState>(
         listener: (context, state) {
@@ -73,11 +89,12 @@ class _QrScanScreenState extends State<QrScanScreen> {
             EasyLoading.dismiss();
             controller?.pauseCamera();
             QrConfirmationDialog(
-              title: "Imbasan QR Berjaya",
-              subtitle: "Adakah nombor unit sama dengan yang anda imbas?",
+              title: state.data?.unit?.housingProject?.desc ?? "",
+              subtitle:
+                  "Pastikan nombor unit ini sama seperti yang telah anda imbas.",
               unitNumber: state.data?.unit?.no ?? "",
               lokasiPpr: state.data?.unit?.housingProject?.desc ?? "",
-              colorBtnLabel: "Ya, Teruskan Bancian",
+              colorBtnLabel: "Sahkan dan Teruskan",
               onColorBtn: () {
                 Navigator.pop(context);
                 Future.delayed(const Duration(milliseconds: 500), () {
@@ -87,7 +104,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
                       .then((val) => controller?.resumeCamera());
                 });
               },
-              dimmedBtnLabel: "Tidak",
+              dimmedBtnLabel: "Kembali",
               onDimmedBtn: () {
                 Navigator.pop(context);
                 // Future.delayed(const Duration(milliseconds: 500), () {
@@ -125,13 +142,16 @@ class _QrScanScreenState extends State<QrScanScreen> {
               Visibility(
                 visible: widget.unitNumber != null,
                 child: Positioned(
-                    top: constaint.maxHeight * 0.1,
+                    top: constaint.maxHeight * 0.34,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           "Unit: ${widget.unitNumber}",
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
                         ),
                         // _roundedButton(
                         //   title: "Daftar QR",
@@ -201,9 +221,10 @@ class _QrScanScreenState extends State<QrScanScreen> {
   Future _registerAlertDialog() async {
     controller?.pauseCamera();
     CustomAlertDialog(
-      title: "QR tidak berdaftar!",
-      subtitle: "QR perlu di daftar sebelum digunakan.",
-      colorBtnLabel: "Daftar QR",
+      title: "Akses QR ditolak",
+      subtitle:
+          "Kod QR ini belum didaftarkan. Daftarkan dahulu untuk meneruskan.",
+      colorBtnLabel: "Daftar",
       onColorBtn: () async {
         Navigator.pop(context);
         Future.delayed(const Duration(milliseconds: 150), () {

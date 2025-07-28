@@ -81,8 +81,8 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Info Unit Bancian',
+                      Text(
+                        'UNIT: ${residentData.unit?.no ?? ""}',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24),
                       ),
@@ -90,20 +90,21 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
                           onTap: () {
                             showReportDialog();
                           },
-                          child: const Icon(Icons.error_outline_outlined))
+                          child: const Icon(Icons.warning_amber_rounded,
+                              color: Colors.red, size: 30)),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12, bottom: 5),
-                  child: Text(
-                    'UNIT: ${residentData.unit?.no ?? ""}',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.grey[600]),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 12, bottom: 5),
+                //   child: Text(
+                //     'UNIT: ${residentData.unit?.no ?? ""}',
+                //     style: TextStyle(
+                //         fontWeight: FontWeight.bold,
+                //         fontSize: 16,
+                //         color: Colors.grey[600]),
+                //   ),
+                // ),
                 LayoutBuilder(builder: (context, constraint) {
                   // final cWidth = constraint.maxWidth;
                   return Stack(

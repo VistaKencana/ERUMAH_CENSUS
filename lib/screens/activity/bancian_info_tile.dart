@@ -17,42 +17,72 @@ class BancianInfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(
-      shape: const Border(),
-      expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      expandedAlignment: Alignment.centerLeft,
-      childrenPadding: const EdgeInsets.only(left: 80, bottom: 10, top: 10),
-      leading: Container(
-        decoration: BoxDecoration(
-          color: isComplete ? AppColors.primary.color : AppColors.midGrey.color,
-          shape: BoxShape.circle,
-        ),
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.only(top: 4),
-        child: Text(
-          lawatan,
-          textAlign: TextAlign.center,
-          style: appTextStyle(color: isComplete ? Colors.white : Colors.black),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          tilePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          backgroundColor: Colors.grey.shade200,
+          collapsedBackgroundColor: Colors.grey.shade200,
+          shape: Border(),
+          expandedCrossAxisAlignment: CrossAxisAlignment.start,
+          expandedAlignment: Alignment.centerLeft,
+          childrenPadding: const EdgeInsets.only(left: 10, bottom: 10, top: 10),
+          title: Row(
+            children: [
+              Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(4)),
+                  child: Text(
+                    "LAWATAN $lawatan",
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  )),
+            ],
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(!isComplete ? "Status: -" : "$status • $date"),
+          ),
+          trailing: isComplete
+              ? null
+              : Chip(
+                  color: WidgetStatePropertyAll(getStatusColor(status: status)),
+                  label: Text(
+                    status.toUpperCase(),
+                    style: appTextStyle(
+                        size: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  shape: const StadiumBorder(),
+                  side: BorderSide.none,
+                ),
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.attachment_outlined),
+                SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Catatan:",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(remarks),
+                  ],
+                )
+              ],
+            )
+          ],
         ),
       ),
-      title: Text("LAWATAN $lawatan"),
-      subtitle: Text(!isComplete ? "Status: -" : "$status • $date"),
-      trailing: isComplete
-          ? null
-          : Chip(
-              color: WidgetStatePropertyAll(getStatusColor(status: status)),
-              label: Text(
-                status.toUpperCase(),
-                style: appTextStyle(
-                    size: 10, fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-              shape: const StadiumBorder(),
-              side: BorderSide.none,
-            ),
-      children: [
-        const Text("Catatan:"),
-        Text(remarks),
-      ],
     );
   }
 

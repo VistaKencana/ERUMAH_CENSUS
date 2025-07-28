@@ -233,7 +233,7 @@ class _ActivitySearchScreenState extends State<ActivitySearchScreen> {
             ? Colors.amber
             : Colors.green),
         label: Text(
-          data.status ?? "-",
+          data.getStatusName(),
           style: appTextStyle(
               size: 10, fontWeight: FontWeight.bold, color: Colors.white),
         ),

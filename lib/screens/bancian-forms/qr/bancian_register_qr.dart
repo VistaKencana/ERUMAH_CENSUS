@@ -51,32 +51,61 @@ class _BancianRegisterQrState extends State<BancianRegisterQr> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                SizedBox(width: 40),
+                Spacer(),
                 const Text(
-                  "Daftar QR",
+                  "Pendaftaran QR",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
+                Spacer(),
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: CircleAvatar(
-                    backgroundColor: AppColors.midGrey.color,
-                    child: const Icon(Icons.close),
+                    // backgroundColor: AppColors.midGrey.color,
+                    backgroundColor: Colors.transparent,
+                    child: const Icon(
+                      Icons.keyboard_arrow_down,
+                    ),
                   ),
                 )
               ],
             ),
-            _gap(),
-            const Icon(
-              Icons.qr_code_2,
-              size: 100,
-            ),
-            Text(_qrBloc.qrCode),
             _gap(height: 16),
+            // const Icon(
+            //   Icons.qr_code_2,
+            //   size: 100,
+            // ),
+            Container(
+              width: double.maxFinite,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  color: AppColors.lightGrey.color,
+                  borderRadius: BorderRadius.circular(10)),
+              child: Column(
+                children: [
+                  _gap(height: 6),
+                  Text(
+                    "No. QR",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  Text(_qrBloc.qrCode,
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.bold)),
+                  _gap(height: 6),
+                ],
+              ),
+            ),
+            _gap(height: 30),
             CustomTextField(
               title: "Unit Rumah",
               hintText: "Sila Pilih Unit Rumah",
               controller: unitCtrl,
-              suffixIcon: Icons.arrow_drop_down,
-              fillColor: Colors.white,
+              suffixIcon: Icons.arrow_right,
+              fillColor:
+                  (!_qrBloc.isFromHome) ? Colors.grey.shade300 : Colors.white,
               onTap: () {
                 if (!_qrBloc.isFromHome) {
                   CustomFlushbar.of(context)

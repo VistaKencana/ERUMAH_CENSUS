@@ -43,6 +43,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
         reverseCurve: Curves.easeIn,
       ),
       child: AlertDialog(
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         title: Text(widget.title),
         content: widget.position == AlertBtnPosition.topDown

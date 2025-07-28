@@ -139,6 +139,11 @@ class PropertyData {
             ? []
             : List<dynamic>.from(visit!.map((x) => x.toJson())),
       };
+
+  String getStatusName() {
+    final isBelum = (status?.toLowerCase().contains("belum") ?? false);
+    return isBelum ? "BELUM BANCI" : "-";
+  }
 }
 
 class Visit {
