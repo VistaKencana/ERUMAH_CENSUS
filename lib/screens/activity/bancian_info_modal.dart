@@ -165,7 +165,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
       return Column(
         children: [
           BancianInfoTile(
-              status: "BELUM DIBANCI",
+              status: "BELUM MULA",
               lawatan: "1",
               isComplete: false,
               date: FormatDate.formatTo(
@@ -190,7 +190,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
       Visibility(
         visible: (residentData.visits?.length ?? 0) < 1,
         child: BancianInfoTile(
-            status: "BELUM DIBANCI",
+            status: "BELUM MULA",
             lawatan: (visitsLen + 1).toString(),
             isComplete: false,
             date: FormatDate.formatTo(
