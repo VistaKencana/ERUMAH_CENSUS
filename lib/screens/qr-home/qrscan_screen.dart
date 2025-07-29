@@ -60,7 +60,18 @@ class _QrScanScreenState extends State<QrScanScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: !widget.isFromHome,
-        title: const Text("QR Bancian"),
+        title: Visibility(
+          visible: widget.unitNumber != null,
+          child: Column(
+            children: [
+              Text("QR Bancian"),
+              Text(
+                "Unit: ${widget.unitNumber}",
+                style: const TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        ),
         foregroundColor: Colors.white,
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -122,34 +133,34 @@ class _QrScanScreenState extends State<QrScanScreen> {
                   ),
                 ],
               ),
-              Visibility(
-                visible: widget.unitNumber != null,
-                child: Positioned(
-                    top: constaint.maxHeight * 0.1,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "Unit: ${widget.unitNumber}",
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        // _roundedButton(
-                        //   title: "Daftar QR",
-                        //   onTap: () async {
-                        //     _registerAlertDialog();
-                        //   },
-                        // ),
-                        // _roundedButton(
-                        //   title: "Teruskan",
-                        //   onTap: () async {
-                        //     controller?.pauseCamera();
-                        //     BancianInfosModal.show(context)
-                        //         .then((val) => controller?.resumeCamera());
-                        //   },
-                        // )
-                      ],
-                    )),
-              ),
+              // Visibility(
+              //   visible: widget.unitNumber != null,
+              //   child: Positioned(
+              //       top: constaint.maxHeight * 0.1,
+              //       child: Column(
+              //         mainAxisSize: MainAxisSize.min,
+              //         children: [
+              //           Text(
+              //             "Unit: ${widget.unitNumber}",
+              //             style: const TextStyle(color: Colors.white),
+              //           ),
+              //           // _roundedButton(
+              //           //   title: "Daftar QR",
+              //           //   onTap: () async {
+              //           //     _registerAlertDialog();
+              //           //   },
+              //           // ),
+              //           // _roundedButton(
+              //           //   title: "Teruskan",
+              //           //   onTap: () async {
+              //           //     controller?.pauseCamera();
+              //           //     BancianInfosModal.show(context)
+              //           //         .then((val) => controller?.resumeCamera());
+              //           //   },
+              //           // )
+              //         ],
+              //       )),
+              // ),
               Visibility(
                   visible: widget.isFromHome == false &&
                       widget.isFirstBancian == false,
