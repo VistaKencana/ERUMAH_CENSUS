@@ -51,6 +51,7 @@ void main() async {
   await run("git", ["push", "origin", branch]);
 
   printGreen("✅ Pushed to '$branch' successfully.");
+  exit(0);
 }
 
 Future<void> run(String command, [List<String> args = const []]) async {
