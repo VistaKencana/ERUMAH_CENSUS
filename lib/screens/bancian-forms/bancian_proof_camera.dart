@@ -21,8 +21,8 @@ class BancianProofCamera extends StatefulWidget {
 }
 
 class _BancianProofCameraState extends State<BancianProofCamera> {
-  double initSize = 0.26;
-  double maxSize = 0.26;
+  double initSize = 1;
+  double maxSize = 1;
   double minSize = 0.1;
   int maxImage = 3;
   final DraggableScrollableController _controller =
