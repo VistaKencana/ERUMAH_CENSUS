@@ -23,7 +23,7 @@ class QrConfirmationDialog extends StatefulWidget {
       this.onDimmedBtn,
       required this.colorBtnLabel,
       this.dimmedBtnLabel,
-      this.position = QrConfirmationPosition.topDown,
+      this.position = QrConfirmationPosition.leftRignt,
       this.barrierDismissible = true});
   Future<T?> show<T>(BuildContext context) {
     return showDialog(
@@ -56,7 +56,7 @@ class _CustomAlertDialogState extends State<QrConfirmationDialog> {
               )
             : Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _subtitle(),
                   gapHeight(height: 20),
@@ -71,25 +71,26 @@ class _CustomAlertDialogState extends State<QrConfirmationDialog> {
 
   Widget _subtitle() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          margin: const EdgeInsets.only(bottom: 14),
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.withValues(alpha: 0.4))),
-          child: Text(
-            widget.unitNumber,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        ),
         Text(
           widget.lokasiPpr,
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Text(widget.subtitle),
-        )
+        Container(
+          margin: const EdgeInsets.only(bottom: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+          decoration: BoxDecoration(),
+          child: Text(
+            widget.unitNumber,
+            style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+          ),
+        ),
+
+        // Padding(
+        //   padding: const EdgeInsets.only(bottom: 10),
+        //   child: Text(widget.subtitle),
+        // )
       ],
     );
   }
@@ -109,11 +110,12 @@ class _CustomAlertDialogState extends State<QrConfirmationDialog> {
     ];
   }
 
-  Padding _button(
+  Widget _button(
       {required String title,
       required void Function()? onPressed,
       Color? color}) {
-    return Padding(
+    return Expanded(
+        child: Padding(
       padding: const EdgeInsets.all(2.0),
       child: SizedBox(
         height: 45,
@@ -123,6 +125,6 @@ class _CustomAlertDialogState extends State<QrConfirmationDialog> {
             onPressed: onPressed,
             child: Text(title)),
       ),
-    );
+    ));
   }
 }

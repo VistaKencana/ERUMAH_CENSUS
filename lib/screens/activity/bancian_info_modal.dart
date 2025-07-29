@@ -82,7 +82,7 @@ class _BancianInfosModalState extends State<BancianInfosModal> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        'Info Unit Bancian',
+                        'Maklumat Bancian',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24),
                       ),

@@ -1,5 +1,6 @@
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BancianInfoTile extends StatelessWidget {
   final String lawatan;
@@ -17,26 +18,26 @@ class BancianInfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(
-      shape: const Border(),
-      expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      expandedAlignment: Alignment.centerLeft,
-      childrenPadding: const EdgeInsets.only(left: 80, bottom: 10, top: 10),
-      leading: Container(
-        decoration: BoxDecoration(
-          color: isComplete ? AppColors.primary.color : AppColors.midGrey.color,
-          shape: BoxShape.circle,
-        ),
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.only(top: 4),
-        child: Text(
-          lawatan,
-          textAlign: TextAlign.center,
-          style: appTextStyle(color: isComplete ? Colors.white : Colors.black),
-        ),
+    return ListTile(
+      isThreeLine: true,
+      dense: true,
+      contentPadding: EdgeInsets.all(12),
+      leading: FaIcon(FontAwesomeIcons.cloudArrowUp),
+      title: Text(
+        "LAWATAN $lawatan",
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
-      title: Text("LAWATAN $lawatan"),
-      subtitle: Text(!isComplete ? "Status: -" : "$status • $date"),
+      subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(!isComplete ? "Status: -" : "$status • $date"),
+        SizedBox(height: 12),
+        Row(
+          children: [
+            FaIcon(FontAwesomeIcons.solidSquareCaretRight, size: 14),
+            SizedBox(width: 6),
+            Text(remarks),
+          ],
+        ),
+      ]),
       trailing: isComplete
           ? null
           : Chip(
@@ -49,10 +50,6 @@ class BancianInfoTile extends StatelessWidget {
               shape: const StadiumBorder(),
               side: BorderSide.none,
             ),
-      children: [
-        const Text("Catatan:"),
-        Text(remarks),
-      ],
     );
   }
 

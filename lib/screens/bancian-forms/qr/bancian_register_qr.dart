@@ -52,7 +52,7 @@ class _BancianRegisterQrState extends State<BancianRegisterQr> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  "Daftar QR",
+                  "QR Kod",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 GestureDetector(
@@ -65,14 +65,32 @@ class _BancianRegisterQrState extends State<BancianRegisterQr> {
               ],
             ),
             _gap(),
-            const Icon(
-              Icons.qr_code_2,
-              size: 100,
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  color: Colors.black, borderRadius: BorderRadius.circular(10)),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Icon(
+                      Icons.qr_code_2,
+                      size: 100,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    _qrBloc.qrCode,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
             ),
-            Text(_qrBloc.qrCode),
             _gap(height: 16),
             CustomTextField(
-              title: "Unit Rumah",
+              title: "Nombor Rumah",
               hintText: "Sila Pilih Unit Rumah",
               controller: unitCtrl,
               suffixIcon: Icons.arrow_drop_down,

@@ -46,90 +46,95 @@ class _ImageBottomSheetState extends State<ImageBottomSheet> {
       maxChildSize: widget.maxSize,
       minChildSize: widget.minSize,
       builder: (context, sc) {
-        return ListView(
-          controller: sc,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 6),
-                  height: 6,
-                  width: 80,
-                  decoration: BoxDecoration(
-                      color: Colors.grey.shade400,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10))),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 15, left: 12, right: 12, bottom: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return Container(
+          color: Colors.white,
+          child: ListView(
+            controller: sc,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Gambar",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  Container(
+                    margin: const EdgeInsets.only(top: 6),
+                    height: 6,
+                    width: 80,
+                    decoration: BoxDecoration(
+                        color: Colors.grey.shade400,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10))),
                   ),
-                  ElevatedButton(
-                      onPressed: imgs.length < (widget.maxImage - 1)
-                          ? null
-                          : () {
-                              widget.onNext(imgs);
-                            },
-                      child: const Text("Seterusnya")),
                 ],
               ),
-            ),
-            SizedBox(
-              height: 100,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.only(right: 12),
-                children: List.generate(imageLength(), (index) {
-                  if (canAddImage(index)) {
-                    return GestureDetector(
-                      onTap: () => widget.controller.jumpTo(widget.minSize),
-                      child: Container(
-                        width: size.width * .26,
-                        height: size.height * .12,
-                        margin: const EdgeInsets.only(left: 12),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black87, width: 3),
-                            color: Colors.grey.withValues(alpha: .5),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                          child: Icon(Icons.camera_alt),
-                        ),
-                      ),
-                    );
-                  }
-                  return GestureDetector(
-                    onTap: () {
-                      if (widget.onTapImage != null) {
-                        widget.onTapImage!(imgs[index], index);
-                      }
-                    },
-                    child: Container(
-                        width: size.width * .26,
-                        height: size.height * .12,
-                        margin: const EdgeInsets.only(left: 12),
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Image.memory(
-                          imgs[index],
-                          fit: BoxFit.fill,
-                        )),
-                  );
-                }),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 15, left: 12, right: 12, bottom: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Gambar",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    ElevatedButton(
+                        onPressed: imgs.length < (widget.maxImage - 1)
+                            ? null
+                            : () {
+                                widget.onNext(imgs);
+                              },
+                        child: const Text("Seterusnya")),
+                  ],
+                ),
               ),
-            )
-          ],
+              SizedBox(
+                height: 100,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.only(right: 12),
+                  children: List.generate(imageLength(), (index) {
+                    if (canAddImage(index)) {
+                      return GestureDetector(
+                        onTap: () => widget.controller.jumpTo(widget.minSize),
+                        child: Container(
+                          width: size.width * .26,
+                          height: size.height * .12,
+                          margin: const EdgeInsets.only(left: 12),
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: Colors.black87, width: 3),
+                              color: Colors.grey.withValues(alpha: .5),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: const Center(
+                            child: Icon(Icons.camera_alt),
+                          ),
+                        ),
+                      );
+                    }
+                    return GestureDetector(
+                      onTap: () {
+                        if (widget.onTapImage != null) {
+                          widget.onTapImage!(imgs[index], index);
+                        }
+                      },
+                      child: Container(
+                          width: size.width * .26,
+                          height: size.height * .12,
+                          margin: const EdgeInsets.only(left: 12),
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Image.memory(
+                            imgs[index],
+                            fit: BoxFit.fill,
+                          )),
+                    );
+                  }),
+                ),
+              )
+            ],
+          ),
         );
       },
     );

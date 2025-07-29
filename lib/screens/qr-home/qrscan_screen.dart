@@ -59,21 +59,32 @@ class _QrScanScreenState extends State<QrScanScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        automaticallyImplyLeading: !widget.isFromHome,
-        title: Visibility(
-          visible: widget.unitNumber != null,
-          child: Column(
-            children: [
-              Text("QR Bancian"),
-              Text(
+        // automaticallyImplyLeading: !widget.isFromHome,
+        centerTitle: widget.isFromHome,
+        leading: Visibility(
+          visible: !widget.isFromHome,
+          child: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.chevron_left)),
+        ),
+        title: Column(
+          crossAxisAlignment: widget.isFromHome
+              ? CrossAxisAlignment.center
+              : CrossAxisAlignment.start,
+          children: [
+            Text("QR Bancian"),
+            Visibility(
+              visible: widget.unitNumber != null,
+              child: Text(
                 "Unit: ${widget.unitNumber}",
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white, fontSize: 12),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         foregroundColor: Colors.white,
-        centerTitle: true,
         backgroundColor: Colors.transparent,
       ),
       body: BlocListener<QrBloc, QrState>(
@@ -84,11 +95,11 @@ class _QrScanScreenState extends State<QrScanScreen> {
             EasyLoading.dismiss();
             controller?.pauseCamera();
             QrConfirmationDialog(
-              title: "Imbasan QR Berjaya",
+              title: "QR Berjaya",
               subtitle: "Adakah nombor unit sama dengan yang anda imbas?",
               unitNumber: state.data?.unit?.no ?? "",
               lokasiPpr: state.data?.unit?.housingProject?.desc ?? "",
-              colorBtnLabel: "Ya, Teruskan Bancian",
+              colorBtnLabel: "Bancian",
               onColorBtn: () {
                 Navigator.pop(context);
                 Future.delayed(const Duration(milliseconds: 500), () {
@@ -98,7 +109,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
                       .then((val) => controller?.resumeCamera());
                 });
               },
-              dimmedBtnLabel: "Tidak",
+              dimmedBtnLabel: "Banci",
               onDimmedBtn: () {
                 Navigator.pop(context);
                 // Future.delayed(const Duration(milliseconds: 500), () {
@@ -212,9 +223,9 @@ class _QrScanScreenState extends State<QrScanScreen> {
   Future _registerAlertDialog() async {
     controller?.pauseCamera();
     CustomAlertDialog(
-      title: "QR tidak berdaftar!",
-      subtitle: "QR perlu di daftar sebelum digunakan.",
-      colorBtnLabel: "Daftar QR",
+      title: "Kod QR tidak dikenali",
+      subtitle: "Sila daftar QR ini terlebih dahulu sebelum digunakan.",
+      colorBtnLabel: "Daftar",
       onColorBtn: () async {
         Navigator.pop(context);
         Future.delayed(const Duration(milliseconds: 150), () {
