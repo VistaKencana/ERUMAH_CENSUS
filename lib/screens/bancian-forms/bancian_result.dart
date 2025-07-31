@@ -1,12 +1,9 @@
-import 'package:eperumahan_bancian/components/bg_image.dart';
-import 'package:eperumahan_bancian/components/check_icon.dart';
 import 'package:eperumahan_bancian/components/custom_appbar.dart';
 import 'package:eperumahan_bancian/config/constants/app_colors.dart';
+import 'package:eperumahan_bancian/config/constants/app_images.dart';
 import 'package:eperumahan_bancian/config/routes/routes_name.dart';
 import 'package:eperumahan_bancian/data/hive-manager/repository/qr_navigation_pref.dart';
-import 'package:eperumahan_bancian/screens/bancian-forms/bloc/bancian_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BancianResult extends StatefulWidget {
   final bool isVerify;
@@ -20,77 +17,80 @@ class _BancianResultState extends State<BancianResult> {
   final blueColor = const Color(0xFF0446F3);
   @override
   Widget build(BuildContext context) {
-    return BgImage(
-      child: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, result) async {
-          if (didPop) return;
-          _goToSearch();
-        },
-        child: SafeArea(
-          child: LayoutBuilder(builder: (context, constraint) {
-            return Scaffold(
-              appBar: CustomAppBar(
-                title: "Rekod",
-                onPressedBack: () => _goToSearch(),
-              ),
-              backgroundColor: Colors.transparent,
-              body: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                    vertical: constraint.maxHeight * .15,
-                    horizontal: constraint.maxWidth * .06),
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Column(
-                        children: [
-                          SizedBox(height: constraint.maxHeight * .11),
-                          Text("Berjaya!",
-                              style: appTextStyle(color: blueColor, size: 25)),
-                          Text(
-                            "Bancian Telah Berjaya Dilakukan",
-                            textAlign: TextAlign.center,
-                            style: appTextStyle(size: 18),
-                          ),
-                          SizedBox(height: constraint.maxHeight * .02),
-                          _listileWidget(
-                              icon: Icons.description,
-                              title: "Lampiran",
-                              isChecked: context
-                                  .read<BancianBloc>()
-                                  .isLampiranSuccess),
-                          _listileWidget(
-                              icon: Icons.fingerprint,
-                              title: "Cap jari",
-                              isChecked: widget.isVerify),
-                          SizedBox(height: constraint.maxHeight * .04),
-                          SizedBox(
-                              height: 48,
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                  onPressed: () => _goToSearch(),
-                                  child: const Text("Teruskan Bancian"))),
-                          SizedBox(height: constraint.maxHeight * .02),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      top: -(constraint.maxHeight * .12),
-                      child: const CheckIcon(),
-                    ),
-                  ],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        _goToSearch();
+      },
+      child: LayoutBuilder(builder: (context, constraint) {
+        return Scaffold(
+          appBar: CustomAppBar(
+            title: "Rekod",
+            onPressedBack: () => _goToSearch(),
+          ),
+          backgroundColor: Colors.white,
+          body: Padding(
+            padding: EdgeInsets.symmetric(
+                // vertical: constraint.maxHeight * .15,
+                horizontal: 16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Image.asset(
+                  AppImages.successGreen.path,
+                  height: constraint.maxHeight * .2,
+                  // width: constraint.maxWidth * .4,
                 ),
-              ),
-            );
-          }),
-        ),
-      ),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Column(
+                    children: [
+                      SizedBox(height: constraint.maxHeight * .04),
+                      Text("Bancian Berjaya!",
+                          textAlign: TextAlign.center,
+                          style: appTextStyle(size: 28)),
+                      SizedBox(height: 10),
+                      Text(
+                        "Bancian Telah Berjaya Direkodkan",
+                        textAlign: TextAlign.center,
+                        style: appTextStyle(size: 18),
+                      ),
+                      // _listileWidget(
+                      //     icon: Icons.description,
+                      //     title: "Lampiran",
+                      //     isChecked: context
+                      //         .read<BancianBloc>()
+                      //         .isLampiranSuccess),
+                      // _listileWidget(
+                      //     icon: Icons.fingerprint,
+                      //     title: "Cap jari",
+                      //     isChecked: widget.isVerify),
+                      SizedBox(height: constraint.maxHeight * .2),
+                      SizedBox(
+                          height: 48,
+                          width: double.infinity,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  shape: StadiumBorder()),
+                              onPressed: () => _goToSearch(),
+                              child: const Text("Kembali Banci"))),
+                      SizedBox(height: constraint.maxHeight * .06),
+                    ],
+                  ),
+                ),
+                // Positioned(
+                //   top: -(constraint.maxHeight * .12),
+                //   child: const CheckIcon(),
+                // ),
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 
@@ -104,15 +104,15 @@ class _BancianResultState extends State<BancianResult> {
     Navigator.popUntil(context, ModalRoute.withName(RoutesName.activitySearch));
   }
 
-  ListTile _listileWidget(
-      {IconData? icon, required String title, required bool isChecked}) {
-    return ListTile(
-      leading: icon != null ? Icon(icon) : null,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      title: Text(title),
-      trailing: isChecked
-          ? const Icon(Icons.check_circle, color: Colors.green)
-          : const Icon(Icons.error, color: Colors.amber),
-    );
-  }
+  // ListTile _listileWidget(
+  //     {IconData? icon, required String title, required bool isChecked}) {
+  //   return ListTile(
+  //     leading: icon != null ? Icon(icon) : null,
+  //     contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+  //     title: Text(title),
+  //     trailing: isChecked
+  //         ? const Icon(Icons.check_circle, color: Colors.green)
+  //         : const Icon(Icons.error, color: Colors.amber),
+  //   );
+  // }
 }

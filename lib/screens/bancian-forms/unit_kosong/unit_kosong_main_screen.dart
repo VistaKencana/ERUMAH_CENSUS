@@ -55,9 +55,8 @@ class _UnitKosongMainScreenState extends State<UnitKosongMainScreen> {
   Future<void> _onPop() async {
     if (_isNewForm()) {
       CustomAlertDialog(
-        title: "Berhenti banci?",
-        subtitle:
-            "Adakah anda akan berhenti membuat bancian untuk bukan pemilik?",
+        title: "Hentikan bancian?",
+        subtitle: "Anda pasti mahu menghentikan bancian untuk bukan pemilik?",
         colorBtnLabel: "Ya",
         onColorBtn: () {
           Navigator.pop(context);
@@ -72,7 +71,7 @@ class _UnitKosongMainScreenState extends State<UnitKosongMainScreen> {
 
     if (!mounted) return;
     CustomAlertDialog(
-      title: "Berhenti banci",
+      title: "Hentikan bancian",
       subtitle: "Adakah anda akan berhenti membuat bancian?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
@@ -179,7 +178,7 @@ class _UnitKosongMainScreenState extends State<UnitKosongMainScreen> {
                                                     backgroundColor: Colors.red,
                                                     foregroundColor:
                                                         Colors.white),
-                                                child: Text("Teruskan")),
+                                                child: Text("Sahkan")),
                                           ),
                                           SizedBox(
                                             width: double.infinity,
@@ -433,7 +432,7 @@ class _UnitKosongMainScreenState extends State<UnitKosongMainScreen> {
                           if (value == null || value.isEmpty) return '';
                           return null;
                         },
-                        hintText: "Sila tulis catatan",
+                        hintText: "Masukkan catatan anda di sini",
                         contentPadding: const EdgeInsets.only(
                             top: 10, left: 10, right: 10, bottom: 10),
                       ),
@@ -463,7 +462,7 @@ class _UnitKosongMainScreenState extends State<UnitKosongMainScreen> {
             }
           },
           child: BottomBarButton(
-            title: "Selesai Bancian",
+            title: "Hantar & Tamat",
             onTap: () {
               setState(() {
                 statusData = statusData.copyWith(
@@ -483,9 +482,10 @@ class _UnitKosongMainScreenState extends State<UnitKosongMainScreen> {
                 return;
               } else {
                 CustomAlertDialog(
-                  title: "Peringatan !",
-                  subtitle: "Sila pastikan semua maklumat adalah betul",
-                  colorBtnLabel: "Teruskan",
+                  title: "Makluman",
+                  subtitle:
+                      "Sahkan bahawa semua maklumat yang diisi adalah tepat",
+                  colorBtnLabel: "Sahkan",
                   onColorBtn: () {
                     if (_isNewForm() &&
                         context.read<PenghuniBloc>().isNotOwnerisFilled() ==

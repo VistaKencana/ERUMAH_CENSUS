@@ -16,7 +16,7 @@ class CaptureCardScreen extends StatefulWidget {
 }
 
 class _CaptureCardScreenState extends State<CaptureCardScreen> {
-  final pCtrl = PageController(initialPage: 0);
+  final pCtrl = PageController(initialPage: 1);
   Uint8List? frontCard, backCard;
   @override
   void dispose() {
@@ -121,8 +121,7 @@ class _CaptureCardScreenState extends State<CaptureCardScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: _animateToNextPage,
-                    child: const Text("Teruskan")),
+                    onPressed: _animateToNextPage, child: const Text("Sahkan")),
               ),
             )
           ],

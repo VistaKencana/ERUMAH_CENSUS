@@ -122,7 +122,7 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
                     if (value == null || value.isEmpty) return '';
                     return null;
                   },
-                  hintText: "Sila tulis catatan",
+                  hintText: "Masukkan catatan anda di sini",
                   contentPadding: const EdgeInsets.only(
                       top: 10, left: 10, right: 10, bottom: 10),
                 ),
@@ -148,7 +148,7 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
           ),
         ),
         bottomNavigationBar: BottomBarButton(
-          title: "Selesai Bancian",
+          title: "Hantar & Tamat",
           backgroundColor: Colors.black87,
           onTap: () {
             setState(() {
@@ -164,9 +164,9 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
             }
 
             CustomAlertDialog(
-              title: "Peringatan !",
-              subtitle: "Sila pastikan semua maklumat adalah betul",
-              colorBtnLabel: "Teruskan",
+              title: "Makluman",
+              subtitle: "Sahkan bahawa semua maklumat yang diisi adalah tepat",
+              colorBtnLabel: "Sahkan",
               onColorBtn: () {
                 //Call API
                 context.read<SubrentProvider>().submitSubrent(data: statusData);

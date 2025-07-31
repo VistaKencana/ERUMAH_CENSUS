@@ -59,8 +59,8 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
 
   void _exitWarning() {
     CustomAlertDialog(
-      title: "Berhenti banci kedai?",
-      subtitle: "Adakah anda akan berhenti membuat bancian untuk kedai?",
+      title: "Hentikan bancian kedai?",
+      subtitle: "Anda pasti mahu menghentikan bancian untuk kedai?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
         Navigator.pop(context);
@@ -127,7 +127,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _textField(
-                              title: 'Nama Penuh',
+                              title: 'Nama Penghuni',
                               controller: nameCtrl,
                               // isMandatory: _isNewForm(),
                               // initialValue:

@@ -65,20 +65,33 @@ class FileDisplay extends StatelessWidget {
                           width: 80.h,
                           fit: BoxFit.fill,
                         )
-                      : Container(
-                          height: 80.h,
-                          width: 80.h,
-                          color: Colors.grey.withValues(alpha: .3),
-                          child: Icon(
-                            icon ?? Icons.camera_alt_rounded,
-                            size: 20,
-                            color: Colors.black45,
+                      : Expanded(
+                          child: Container(
+                            height: 80.h,
+                            // width: 80.h,
+                            color: Colors.grey.withValues(alpha: .1),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  icon ?? Icons.add_a_photo_rounded,
+                                  size: 20,
+                                  color: Colors.black45,
+                                ),
+                                const SizedBox(height: 4),
+                                Text("Ambil Gambar",
+                                    style: TextStyle(
+                                        fontSize: 12.sp,
+                                        color: Colors.black45)),
+                              ],
+                            ),
                           ),
                         ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Text(subtitle ?? "Ambil gambar"),
-                  )
+                  if (img != null)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(subtitle ?? "Ambil gambar"),
+                    )
                 ],
               ),
             )

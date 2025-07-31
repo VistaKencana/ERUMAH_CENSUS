@@ -115,7 +115,7 @@ class _SubrentFormState extends State<SubrentForm> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _textField(
-                            title: 'Nama Penuh',
+                            title: 'Nama Penghuni',
                             controller: nameCtrl,
                             isMandatory: _isNewForm(),
                             // initialValue:
@@ -393,8 +393,8 @@ class _SubrentFormState extends State<SubrentForm> {
   SizedBox _gap({double height = 10}) => SizedBox(height: height);
   void _exitWarning() {
     CustomAlertDialog(
-      title: "Berhenti banci penghuni?",
-      subtitle: "Adakah anda akan berhenti membuat bancian untuk penghuni?",
+      title: "Hentikan bancian penghuni?",
+      subtitle: "Anda pasti mahu menghentikan bancian untuk penghuni?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
         Navigator.pop(context);

@@ -105,8 +105,8 @@ class _PasanganModalState extends State<PasanganModal> {
 
   void _exitWarning() {
     CustomAlertDialog(
-      title: "Berhenti banci pasangan?",
-      subtitle: "Adakah anda akan berhenti membuat bancian untuk pasangan?",
+      title: "Hentikan bancian pasangan?",
+      subtitle: "Anda pasti mahu menghentikan bancian untuk pasangan?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
         Navigator.pop(context);
@@ -247,11 +247,16 @@ class _PasanganModalState extends State<PasanganModal> {
               child: Column(
                 children: [
                   _textField(
-                      title: 'Nama Penuh',
-                      controller: nameCtrl,
-                      isMandatory: _isNewForm(),
-                      width: double.infinity,
-                      readOnly: _isReadOnly()),
+                    title: 'No. IC',
+                    controller: icNoCtrl,
+                    keyboardType: TextInputType.number,
+                    isMandatory: _isNewForm(),
+                    width: double.infinity,
+                    readOnly: _isReadOnly(),
+                    validator: (value) {
+                      return Validator.validatePhoneNumber(value, length: 12);
+                    },
+                  ),
                   _gap(height: 14),
                   TwoColumnForm(
                     children: [
@@ -261,16 +266,11 @@ class _PasanganModalState extends State<PasanganModal> {
                       //   keyboardType: TextInputType.emailAddress,
                       // ),
                       _textField(
-                        title: 'No. IC',
-                        controller: icNoCtrl,
-                        keyboardType: TextInputType.number,
-                        isMandatory: _isNewForm(),
-                        readOnly: _isReadOnly(),
-                        validator: (value) {
-                          return Validator.validatePhoneNumber(value,
-                              length: 12);
-                        },
-                      ),
+                          title: 'Nama Penghuni',
+                          controller: nameCtrl,
+                          isMandatory: _isNewForm(),
+                          width: double.infinity,
+                          readOnly: _isReadOnly()),
                       _textField(
                         title: 'No Telefon Bimbit',
                         keyboardType: TextInputType.phone,
@@ -280,14 +280,14 @@ class _PasanganModalState extends State<PasanganModal> {
                               length: 10);
                         },
                       ),
+                      _dropdownJantina(),
                       _textField(
                           title: 'Umur',
                           controller: umurCtrl,
                           keyboardType: TextInputType.number,
                           readOnly: _isReadOnly()),
-                      _dropdownKesihatan(),
-                      _dropdownJantina(),
                       _dropdownBangsa(),
+                      _dropdownKesihatan(),
                       _textField(
                           title: 'Masih Hidup',
                           initialValue: "Ya",
@@ -732,6 +732,15 @@ class _PasanganModalState extends State<PasanganModal> {
           const SizedBox(height: 14),
           Column(
             children: [
+              const SizedBox(height: 10),
+              FileDisplay(
+                title: "Slip Gaji / Penyata KWSP",
+                isMandatory: true,
+                img: spouseData?.uploadIncome,
+                onPicture: (bytes) => setState(() => setState(() =>
+                    spouseData = spouseData!.copyWith(uploadIncome: bytes))),
+              ),
+              const SizedBox(height: 10),
               CustomFormField(
                 title: "Nama Majikan",
                 controller: namaMajikanCtrl,
@@ -761,14 +770,6 @@ class _PasanganModalState extends State<PasanganModal> {
               _textField(title: 'Bantuan Kewangan', controller: bantuanCtrl),
             ],
           ),
-          const SizedBox(height: 10),
-          FileDisplay(
-            title: "Slip Gaji / Penyata KWSP",
-            isMandatory: true,
-            img: spouseData?.uploadIncome,
-            onPicture: (bytes) => setState(() => setState(
-                () => spouseData = spouseData!.copyWith(uploadIncome: bytes))),
-          )
         ],
       ),
     );

@@ -24,7 +24,7 @@ class _TimeoutScreenState extends State<TimeoutScreen> {
 
   void _alertDialog() {
     CustomAlertDialog(
-      title: 'Berhenti Banci?',
+      title: 'Hentikan bancian?',
       subtitle: "Jika anda tekan 'Okay' anda akan kembali ke Log Masuk",
       colorBtnLabel: 'Okay',
       barrierDismissible: true,

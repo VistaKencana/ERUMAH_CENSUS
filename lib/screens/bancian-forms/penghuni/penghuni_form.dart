@@ -103,8 +103,8 @@ class _PenghuniFormState extends State<PenghuniForm> {
 
   void _exitWarning() {
     CustomAlertDialog(
-      title: "Berhenti banci penghuni?",
-      subtitle: "Adakah anda akan berhenti membuat bancian untuk penghuni?",
+      title: "Hentikan bancian penghuni?",
+      subtitle: "Anda pasti mahu menghentikan bancian untuk penghuni?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
         Navigator.pop(context);
@@ -214,34 +214,50 @@ class _PenghuniFormState extends State<PenghuniForm> {
                     ),
                     SectionContainer(
                       child: Column(
+                        children: [
+                          _headerTitle('Sijil Perkahwinan'),
+                          FileDisplay(
+                            img: ownerData!.uploadMarriageCert,
+                            subtitle: 'Sijil Perkahwinan',
+                            onPicture: (bytes) => setState(() => setState(() =>
+                                ownerData = ownerData!.copyWith(
+                                    uploadMarriageCert: bytes,
+                                    isChangeOnImage: true))),
+                          )
+                        ],
+                      ),
+                    ),
+                    SectionContainer(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _textField(
-                              title: 'Nama Penuh',
-                              controller: nameCtrl,
-                              isMandatory: _isNewForm(),
-                              // initialValue:
-                              //     _isNewForm() ? "" : ownerData?.name ?? "",
-                              width: double.infinity,
-                              readOnly: _isReadOnly()),
+                            title: 'No. IC',
+                            controller: icNoCtrl,
+                            width: double.infinity,
+                            isMandatory: _isNewForm(),
+                            keyboardType: TextInputType.number,
+                            readOnly: _isReadOnly(),
+                            validator: (value) {
+                              return Validator.validatePhoneNumber(value,
+                                  length: 12);
+                            },
+                          ),
                           _gap(),
                           TwoColumnForm(
                             children: [
                               _textField(
+                                  title: 'Nama Penghuni',
+                                  controller: nameCtrl,
+                                  isMandatory: _isNewForm(),
+                                  // initialValue:
+                                  //     _isNewForm() ? "" : ownerData?.name ?? "",
+
+                                  readOnly: _isReadOnly()),
+                              _textField(
                                   title: 'Bilangan Isi Rumah',
                                   keyboardType: TextInputType.number,
                                   controller: bilIsiRumahCtrl),
-                              _textField(
-                                title: 'No. IC',
-                                controller: icNoCtrl,
-                                isMandatory: _isNewForm(),
-                                keyboardType: TextInputType.number,
-                                readOnly: _isReadOnly(),
-                                validator: (value) {
-                                  return Validator.validatePhoneNumber(value,
-                                      length: 12);
-                                },
-                              ),
                               _textField(
                                 title: 'Emel',
                                 controller: emelCtrl,
@@ -250,11 +266,6 @@ class _PenghuniFormState extends State<PenghuniForm> {
                                   return Validator.validateEmail(value);
                                 },
                               ),
-                              _textField(
-                                  title: 'Umur',
-                                  controller: umurCtrl,
-                                  keyboardType: TextInputType.number,
-                                  readOnly: _isReadOnly()),
                               _textField(
                                 title: 'No Telefon Bimbit',
                                 controller: noTelCtrl,
@@ -265,10 +276,15 @@ class _PenghuniFormState extends State<PenghuniForm> {
                                       length: 10);
                                 },
                               ),
-                              _dropdownJantina(),
-                              _dropdownBangsa(),
+                              _textField(
+                                  title: 'Umur',
+                                  controller: umurCtrl,
+                                  keyboardType: TextInputType.number,
+                                  readOnly: _isReadOnly()),
                               _dropdownJenisPekerjaan(),
                               _dropdownStatusPerkahwinan(),
+                              _dropdownJantina(),
+                              _dropdownBangsa(),
                               _dropdownKesihatan(),
                             ],
                           ),
@@ -297,21 +313,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                         ],
                       ),
                     ),
-                    SectionContainer(
-                      child: Column(
-                        children: [
-                          _headerTitle('Sijil Perkahwinan'),
-                          FileDisplay(
-                            img: ownerData!.uploadMarriageCert,
-                            subtitle: 'Sijil Perkahwinan',
-                            onPicture: (bytes) => setState(() => setState(() =>
-                                ownerData = ownerData!.copyWith(
-                                    uploadMarriageCert: bytes,
-                                    isChangeOnImage: true))),
-                          )
-                        ],
-                      ),
-                    ),
+
                     SectionContainer(
                       child: Column(
                         children: [

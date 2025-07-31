@@ -87,7 +87,7 @@ class _PenghuniFormOldState extends State<PenghuniFormOld> {
                 child: TwoColumnForm(
                   children: [
                     _textField(
-                        title: 'Nama Penuh',
+                        title: 'Nama Penghuni',
                         initialValue: "Arif Aiman",
                         readOnly: _isReadOnly()),
                     _textField(title: 'Bilangan Isi Rumah', initialValue: "2"),

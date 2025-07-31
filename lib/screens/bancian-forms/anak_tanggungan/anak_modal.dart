@@ -87,8 +87,8 @@ class _AnakModalState extends State<AnakModal> {
 
   void _exitWarning() {
     CustomAlertDialog(
-      title: "Berhenti banci anak?",
-      subtitle: "Adakah anda akan berhenti membuat bancian untuk anak?",
+      title: "Hentikan bancian anak?",
+      subtitle: "Anda pasti mahu menghentikan bancian untuk anak?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
         Navigator.pop(context);
@@ -177,19 +177,19 @@ class _AnakModalState extends State<AnakModal> {
                                     //   controller: emelCtrl,
                                     //   keyboardType: TextInputType.emailAddress,
                                     // ),
+                                    _dropdownKesihatan(),
+                                    _dropdownBangsa(),
                                     _textField(
                                         title: 'Umur',
                                         controller: umurCtrl,
                                         keyboardType: TextInputType.number,
                                         readOnly: _isReadOnly()),
-                                    _dropdownKesihatan(),
                                     // _textField(
                                     //     title: 'No. Telefon Bimbit',
                                     //     controller: noTelCtrl,
                                     //     keyboardType: TextInputType.phone,
                                     //     readOnly: _isReadOnly()),
                                     _dropdownJantina(),
-                                    _dropdownBangsa(),
                                   ],
                                 ),
                                 _gap(height: 14),

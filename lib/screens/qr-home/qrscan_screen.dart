@@ -160,7 +160,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
                         //   },
                         // ),
                         // _roundedButton(
-                        //   title: "Teruskan",
+                        //   title: "Sahkan",
                         //   onTap: () async {
                         //     controller?.pauseCamera();
                         //     BancianInfosModal.show(context)

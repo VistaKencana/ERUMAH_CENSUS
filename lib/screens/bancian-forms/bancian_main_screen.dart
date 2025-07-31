@@ -59,9 +59,8 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
   Future<void> _onPop() async {
     if (_isNewForm()) {
       CustomAlertDialog(
-        title: "Berhenti banci?",
-        subtitle:
-            "Adakah anda akan berhenti membuat bancian untuk bukan pemilik?",
+        title: "Hentikan bancian?",
+        subtitle: "Anda pasti mahu menghentikan bancian untuk bukan pemilik?",
         colorBtnLabel: "Ya",
         onColorBtn: () {
           Navigator.pop(context);
@@ -76,7 +75,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
 
     if (!mounted) return;
     CustomAlertDialog(
-      title: "Berhenti banci",
+      title: "Hentikan bancian",
       subtitle: "Adakah anda akan berhenti membuat bancian?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
@@ -155,7 +154,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                                                     backgroundColor: Colors.red,
                                                     foregroundColor:
                                                         Colors.white),
-                                                child: Text("Teruskan")),
+                                                child: Text("Sahkan")),
                                           ),
                                           SizedBox(
                                             width: double.infinity,
@@ -193,6 +192,8 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
             child: Form(
               key: formKey,
               child: SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
                 physics: const BouncingScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -426,7 +427,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                               if (value == null || value.isEmpty) return '';
                               return null;
                             },
-                            hintText: "Sila tulis catatan",
+                            hintText: "Masukkan catatan anda di sini",
                             contentPadding: const EdgeInsets.only(
                                 top: 10, left: 10, right: 10, bottom: 10),
                           ),
@@ -456,7 +457,7 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
             }
           },
           child: BottomBarButton(
-            title: "Selesai Bancian",
+            title: "Hantar & Tamat",
             onTap: () {
               setState(() {
                 statusData = statusData.copyWith(
@@ -475,9 +476,10 @@ class _BancianMainScreenState extends State<BancianMainScreen> {
                 return;
               } else {
                 CustomAlertDialog(
-                  title: "Peringatan !",
-                  subtitle: "Sila pastikan semua maklumat adalah betul",
-                  colorBtnLabel: "Teruskan",
+                  title: "Makluman",
+                  subtitle:
+                      "Sahkan bahawa semua maklumat yang diisi adalah tepat",
+                  colorBtnLabel: "Sahkan",
                   onColorBtn: () {
                     if (_isNewForm() &&
                         context.read<PenghuniBloc>().isNotOwnerisFilled() ==

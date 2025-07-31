@@ -79,7 +79,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
       _button(onPressed: widget.onColorBtn, title: widget.colorBtnLabel),
       if (widget.dimmedBtnLabel != null)
         _button(
-            color: Colors.grey.shade500,
+            color: Colors.grey.shade200,
             onPressed: widget.onDimmedBtn,
             title: widget.dimmedBtnLabel ?? "-"),
     ];
@@ -108,7 +108,14 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: color),
             onPressed: onPressed,
-            child: Text(title)),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: (color?.computeLuminance() ?? .4) > 0.5
+                    ? Colors.black
+                    : Colors.white,
+              ),
+            )),
       ),
     ));
   }
