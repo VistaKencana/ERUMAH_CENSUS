@@ -52,45 +52,67 @@ class FileDisplay extends StatelessWidget {
                 onPicture(val);
               }
             },
-            child: Container(
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.midGrey.color),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 12),
-                      child: Text(subtitle ?? "Ambil gambar"),
-                    ),
-                  ),
-                  (img != null)
-                      ? Image.memory(
-                          img!,
-                          height: 80.h,
-                          width: 80.h,
-                          fit: BoxFit.fill,
-                        )
-                      : Container(
-                          height: 80.h,
-                          width: 80.h,
-                          color: Colors.grey.withValues(alpha: .3),
-                          child: Center(
-                            child: FaIcon(
-                              icon ?? FontAwesomeIcons.image,
-                              size: 20,
-                              color: Colors.black45,
-                            ),
+            child: DottedBorder(
+              options: RectDottedBorderOptions(
+                color: (img == null) ? Colors.grey : Colors.transparent,
+                padding: const EdgeInsets.all(4),
+                dashPattern: const [8, 4],
+              ),
+              child: Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.midGrey.color),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Row(
+                  children: [
+                    if (img != null)
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12),
+                          child: Text(subtitle ?? "Ambil gambar"),
+                        ),
+                      ),
+                    (img != null)
+                        ? Image.memory(
+                            img!,
+                            height: 80.h,
+                            width: 80.h,
+                            fit: BoxFit.fill,
                           )
+                        : Expanded(
+                            child: Container(
+                                height: 80.h,
+                                // width: 80.h,
+                                color: const Color(0xFFF7F6FB),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      FaIcon(
+                                        icon ?? FontAwesomeIcons.cameraRetro,
+                                        size: 20,
+                                        color: Colors.black45,
+                                      ),
+                                      Text(
+                                        "Ambil Gambar",
+                                        style: TextStyle(
+                                          color: Colors.black45,
+                                          fontSize: 12.sp,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
 
-                          // Icon(
-                          //   icon ?? Icons.camera_alt_rounded,
-                          //   size: 20,
-                          //   color: Colors.black45,
-                          // ),
+                                // Icon(
+                                //   icon ?? Icons.camera_alt_rounded,
+                                //   size: 20,
+                                //   color: Colors.black45,
+                                // ),
+                                ),
                           ),
-                ],
+                  ],
+                ),
               ),
             )
             // : dottedBorder(context),

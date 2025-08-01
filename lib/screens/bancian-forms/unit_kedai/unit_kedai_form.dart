@@ -59,8 +59,8 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
 
   void _exitWarning() {
     CustomAlertDialog(
-      title: "Berhenti banci kedai?",
-      subtitle: "Adakah anda akan berhenti membuat bancian untuk kedai?",
+      title: "Batalkan bancian kedai?",
+      subtitle: "Anda pasti mahu membatalkan bancian untuk kedai?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
         Navigator.pop(context);
@@ -228,7 +228,7 @@ class _UnitKedaiFormState extends State<UnitKedaiForm> {
                   });
                   _unitKedaiBloc.add(SavePemilikData(data: ownerData!));
                 },
-                title: "Simpan"),
+                title: "Simpan Maklumat"),
           ),
         ));
   }

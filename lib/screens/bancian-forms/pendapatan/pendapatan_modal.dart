@@ -48,7 +48,7 @@ class _PendapatanModalState extends State<PendapatanModal> {
               children: [_header(), formV2()],
             ),
             bottomNavigationBar: BottomBarButton(
-                onTap: () => Navigator.pop(context), title: "Simpan"),
+                onTap: () => Navigator.pop(context), title: "Simpan Maklumat"),
           ),
         );
       },

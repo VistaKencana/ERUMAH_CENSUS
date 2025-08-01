@@ -107,7 +107,7 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
                 // ),
                 _gap(),
                 //MARK: Rmark
-                _section("Catatan"),
+                _section("Nota Tambahan"),
                 CustomFormField(
                   maxLines: 3,
                   addBorder: true,
@@ -116,7 +116,7 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
                     if (value == null || value.isEmpty) return '';
                     return null;
                   },
-                  hintText: "Sila tulis catatan",
+                  hintText: "Masukkan sebarang nota di sini",
                   contentPadding: const EdgeInsets.only(
                       top: 10, left: 10, right: 10, bottom: 10),
                 ),
@@ -142,7 +142,7 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
           ),
         ),
         bottomNavigationBar: BottomBarButton(
-          title: "Selesai Bancian",
+          title: "Tamatkan Bancian",
           onTap: () {
             setState(() {
               statusData = statusData.copyWith(
@@ -159,8 +159,8 @@ class _SubrentMainScreenState extends State<SubrentMainScreen> {
             }
 
             CustomAlertDialog(
-              title: "Peringatan !",
-              subtitle: "Sila pastikan semua maklumat adalah betul",
+              title: "Semakan Diperlukan",
+              subtitle: "Periksa semula maklumat anda sebelum meneruskan",
               colorBtnLabel: "Teruskan",
               onColorBtn: () {
                 //Call API

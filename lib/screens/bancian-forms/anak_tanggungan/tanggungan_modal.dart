@@ -90,8 +90,8 @@ class _TanggunganModalState extends State<TanggunganModal> {
 
   void _exitWarning() {
     CustomAlertDialog(
-      title: "Berhenti banci tanggungan?",
-      subtitle: "Adakah anda akan berhenti membuat bancian untuk tanggungan?",
+      title: "Batalkan bancian tanggungan?",
+      subtitle: "Anda pasti mahu membatalkan bancian untuk tanggungan?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
         Navigator.pop(context);
@@ -273,7 +273,7 @@ class _TanggunganModalState extends State<TanggunganModal> {
                         _tanggunganBloc.add(AddOtherData(data: dependantData!));
                       }
                     },
-                    title: "Simpan"),
+                    title: "Simpan Maklumat"),
               ),
             ),
           );

@@ -104,8 +104,8 @@ class _PenghuniFormState extends State<PenghuniForm> {
 
   void _exitWarning() {
     CustomAlertDialog(
-      title: "Berhenti banci penghuni?",
-      subtitle: "Adakah anda akan berhenti membuat bancian untuk penghuni?",
+      title: "Batalkan bancian penghuni?",
+      subtitle: "Anda pasti mahu membatalkan bancian untuk penghuni?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
         Navigator.pop(context);
@@ -232,6 +232,14 @@ class _PenghuniFormState extends State<PenghuniForm> {
                                   keyboardType: TextInputType.number,
                                   controller: bilIsiRumahCtrl),
                               _textField(
+                                title: 'Emel',
+                                controller: emelCtrl,
+                                keyboardType: TextInputType.emailAddress,
+                                validator: (value) {
+                                  return Validator.validateEmail(value);
+                                },
+                              ),
+                              _textField(
                                 title: 'No. K.P',
                                 controller: icNoCtrl,
                                 isMandatory: _isNewForm(),
@@ -243,18 +251,12 @@ class _PenghuniFormState extends State<PenghuniForm> {
                                 },
                               ),
                               _textField(
-                                title: 'Emel',
-                                controller: emelCtrl,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: (value) {
-                                  return Validator.validateEmail(value);
-                                },
-                              ),
-                              _textField(
                                   title: 'Umur(Tahun)',
                                   controller: umurCtrl,
                                   keyboardType: TextInputType.number,
                                   readOnly: _isReadOnly()),
+                              _dropdownJantina(),
+                              _dropdownBangsa(),
                               _textField(
                                 title: 'No Telefon',
                                 controller: noTelCtrl,
@@ -265,11 +267,9 @@ class _PenghuniFormState extends State<PenghuniForm> {
                                       length: 10);
                                 },
                               ),
-                              _dropdownJantina(),
-                              _dropdownBangsa(),
                               _dropdownJenisPekerjaan(),
-                              _dropdownStatusPerkahwinan(),
                               _dropdownKesihatan(),
+                              _dropdownStatusPerkahwinan(),
                             ],
                           ),
                           _gap(),
@@ -301,6 +301,15 @@ class _PenghuniFormState extends State<PenghuniForm> {
                       border: Border.all(color: Colors.black12),
                       child: Column(
                         children: [
+                          _headerTitle('Maklumat Pendapatan'),
+                          maklumatPendapatan(),
+                        ],
+                      ),
+                    ),
+                    SectionContainer(
+                      border: Border.all(color: Colors.black12),
+                      child: Column(
+                        children: [
                           _headerTitle('Sijil Perkahwinan'),
                           FileDisplay(
                             img: ownerData!.uploadMarriageCert,
@@ -313,15 +322,6 @@ class _PenghuniFormState extends State<PenghuniForm> {
                         ],
                       ),
                     ),
-                    SectionContainer(
-                      border: Border.all(color: Colors.black12),
-                      child: Column(
-                        children: [
-                          _headerTitle('Maklumat Pendapatan'),
-                          maklumatPendapatan(),
-                        ],
-                      ),
-                    )
                   ],
                 ),
               ),
@@ -350,7 +350,7 @@ class _PenghuniFormState extends State<PenghuniForm> {
                   _penghuniBloc.add(SavePenghuniData(data: ownerData!));
                 }
               },
-              title: "Simpan"),
+              title: "Simpan Maklumat"),
         ),
       ),
     );

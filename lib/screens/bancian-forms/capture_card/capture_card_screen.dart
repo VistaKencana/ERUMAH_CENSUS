@@ -16,7 +16,7 @@ class CaptureCardScreen extends StatefulWidget {
 }
 
 class _CaptureCardScreenState extends State<CaptureCardScreen> {
-  final pCtrl = PageController(initialPage: 0);
+  final pCtrl = PageController(initialPage: 1);
   Uint8List? frontCard, backCard;
   @override
   void dispose() {

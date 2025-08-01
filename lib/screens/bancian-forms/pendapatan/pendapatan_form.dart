@@ -44,7 +44,7 @@ class _PendapatanFormState extends State<PendapatanForm> {
           ),
         ),
         bottomNavigationBar: BottomBarButton(
-            onTap: () => Navigator.pop(context), title: "Simpan"),
+            onTap: () => Navigator.pop(context), title: "Simpan Maklumat"),
       ),
     );
   }

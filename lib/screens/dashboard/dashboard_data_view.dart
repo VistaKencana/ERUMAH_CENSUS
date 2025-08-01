@@ -83,7 +83,7 @@ class _DashboardDataViewState extends State<DashboardDataView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                "Catatan",
+                                "Nota Tambahan",
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               Text(stringPlaceholder(

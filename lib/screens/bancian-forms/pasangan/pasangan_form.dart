@@ -1,9 +1,9 @@
-import 'package:eperumahan_bancian/config/constants/app_colors.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/capture_card/capture_card_screen.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/bloc/pasangan_bloc.dart';
 import 'package:eperumahan_bancian/screens/bancian-forms/pasangan/pasangan_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../../components/bottombar_button.dart';
@@ -35,7 +35,7 @@ class _PasanganFormState extends State<PasanganForm> {
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Column(
             children: [
-              ListTile(
+              GestureDetector(
                 onTap: () {
                   Navigator.push(
                       context,
@@ -48,20 +48,33 @@ class _PasanganFormState extends State<PasanganForm> {
                           }),
                           type: PageTransitionType.bottomToTop));
                 },
-                contentPadding: const EdgeInsets.all(12),
-                leading: Container(
-                  decoration: BoxDecoration(
-                      color: AppColors.primary.color,
-                      shape: BoxShape.circle,
-                      border: Border.all()),
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                ),
-                title: const Text("Tambah pasangan"),
+                child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.black26),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.black54)),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.black54,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        const Text(
+                          "Tambah pasangan",
+                          style: TextStyle(color: Colors.black54),
+                        ),
+                      ],
+                    )),
               ),
-              const Divider(height: 0),
               BlocBuilder<PasanganBloc, PasanganState>(
                 builder: (context, state) {
                   if (state is PasanganLoaded) {
@@ -80,36 +93,56 @@ class _PasanganFormState extends State<PasanganForm> {
           ),
         ),
       ),
-      bottomNavigationBar:
-          BottomBarButton(onTap: () => Navigator.pop(context), title: "Simpan"),
+      bottomNavigationBar: BottomBarButton(
+          onTap: () => Navigator.pop(context), title: "Simpan Maklumat"),
     );
   }
 
-  Column _pasanganTile({required SpouseInputModel data, required int index}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        ListTile(
-          onTap: () {
-            _pasanganBloc.selectPasangan(data, index);
-            const PasanganModal(
-              isNewForm: false,
-            ).show(context);
-          },
-          contentPadding: const EdgeInsets.all(12),
-          leading: const CircleAvatar(
-            child: Icon(Icons.person),
-          ),
-          title: Text("Pasangan ${index + 1}"),
-          subtitle: Text(data.name ?? ""),
+  Widget _pasanganTile({required SpouseInputModel data, required int index}) {
+    return GestureDetector(
+      onTap: () {
+        _pasanganBloc.selectPasangan(data, index);
+        const PasanganModal(
+          isNewForm: false,
+        ).show(context);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.black26),
         ),
-        const Divider(
-          height: 0,
-          indent: 30,
-          color: Colors.black12,
-          endIndent: 10,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      FaIcon(FontAwesomeIcons.user, size: 20),
+                      const SizedBox(width: 8),
+                      Text("Pasangan ${index + 1}",
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Text(data.name ?? ""),
+                  SizedBox(height: 4),
+                  Text(data.icNo ?? ""),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios, size: 16),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

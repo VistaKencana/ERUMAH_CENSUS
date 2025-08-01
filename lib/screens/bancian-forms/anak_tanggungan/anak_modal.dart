@@ -87,8 +87,8 @@ class _AnakModalState extends State<AnakModal> {
 
   void _exitWarning() {
     CustomAlertDialog(
-      title: "Berhenti banci anak?",
-      subtitle: "Adakah anda akan berhenti membuat bancian untuk anak?",
+      title: "Batalkan bancian anak?",
+      subtitle: "Anda pasti mahu membatalkan bancian untuk anak?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
         Navigator.pop(context);
@@ -273,7 +273,7 @@ class _AnakModalState extends State<AnakModal> {
                         _tanggunganBloc.add(AddChildData(data: dependantData!));
                       }
                     },
-                    title: "Simpan"),
+                    title: "Simpan Maklumat"),
               ),
             ),
           );

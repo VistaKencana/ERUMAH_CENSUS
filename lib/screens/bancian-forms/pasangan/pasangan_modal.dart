@@ -105,8 +105,8 @@ class _PasanganModalState extends State<PasanganModal> {
 
   void _exitWarning() {
     CustomAlertDialog(
-      title: "Berhenti banci pasangan?",
-      subtitle: "Adakah anda akan berhenti membuat bancian untuk pasangan?",
+      title: "Batalkan bancian pasangan?",
+      subtitle: "Anda pasti mahu membatalkan bancian untuk pasangan?",
       colorBtnLabel: "Ya",
       onColorBtn: () {
         Navigator.pop(context);
@@ -195,7 +195,7 @@ class _PasanganModalState extends State<PasanganModal> {
                             .add(AddNewPasanganData(data: spouseData!));
                       }
                     },
-                    title: "Simpan"),
+                    title: "Simpan Maklumat"),
               ),
             );
           },
@@ -260,6 +260,16 @@ class _PasanganModalState extends State<PasanganModal> {
                       //   controller: emelCtrl,
                       //   keyboardType: TextInputType.emailAddress,
                       // ),
+
+                      _textField(
+                        title: 'No Telefon',
+                        keyboardType: TextInputType.phone,
+                        controller: noTelCtrl,
+                        validator: (value) {
+                          return Validator.validatePhoneNumber(value,
+                              length: 10);
+                        },
+                      ),
                       _textField(
                         title: 'No. K.P',
                         controller: icNoCtrl,
@@ -272,22 +282,13 @@ class _PasanganModalState extends State<PasanganModal> {
                         },
                       ),
                       _textField(
-                        title: 'No Telefon',
-                        keyboardType: TextInputType.phone,
-                        controller: noTelCtrl,
-                        validator: (value) {
-                          return Validator.validatePhoneNumber(value,
-                              length: 10);
-                        },
-                      ),
-                      _textField(
                           title: 'Umur(Tahun)',
                           controller: umurCtrl,
                           keyboardType: TextInputType.number,
                           readOnly: _isReadOnly()),
-                      _dropdownKesihatan(),
-                      _dropdownJantina(),
                       _dropdownBangsa(),
+                      _dropdownKesihatan(),
+
                       _textField(
                           title: 'Masih Hidup',
                           initialValue: "Ya",
@@ -315,6 +316,7 @@ class _PasanganModalState extends State<PasanganModal> {
                                   setState(() {});
                                 }).show(context);
                           }),
+                      _dropdownJantina(),
                       _dropdownJenisPekerjaan(),
                     ],
                   ),

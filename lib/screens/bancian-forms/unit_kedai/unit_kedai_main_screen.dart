@@ -55,8 +55,7 @@ class _UnitKedaiMainScreenState extends State<UnitKedaiMainScreen> {
     if (_isNewForm()) {
       CustomAlertDialog(
         title: "Berhenti banci?",
-        subtitle:
-            "Adakah anda akan berhenti membuat bancian untuk bukan pemilik?",
+        subtitle: "Anda pasti mahu membatalkan bancian untuk bukan pemilik?",
         colorBtnLabel: "Ya",
         onColorBtn: () {
           Navigator.pop(context);
@@ -490,7 +489,7 @@ class _UnitKedaiMainScreenState extends State<UnitKedaiMainScreen> {
                         //   },
                         // ),
 
-                        _section("Catatan"),
+                        _section("Nota Tambahan"),
                         CustomFormField(
                           maxLines: 3,
                           addBorder: true,
@@ -499,7 +498,7 @@ class _UnitKedaiMainScreenState extends State<UnitKedaiMainScreen> {
                             if (value == null || value.isEmpty) return '';
                             return null;
                           },
-                          hintText: "Sila tulis catatan",
+                          hintText: "Masukkan sebarang nota di sini",
                           contentPadding: const EdgeInsets.only(
                               top: 10, left: 10, right: 10, bottom: 10),
                         ),
@@ -527,7 +526,7 @@ class _UnitKedaiMainScreenState extends State<UnitKedaiMainScreen> {
               }
             },
             child: BottomBarButton(
-              title: "Selesai Bancian",
+              title: "Tamatkan Bancian",
               onTap: () {
                 setState(() {
                   statusData = statusData.copyWith(
@@ -547,8 +546,8 @@ class _UnitKedaiMainScreenState extends State<UnitKedaiMainScreen> {
                   return;
                 } else {
                   CustomAlertDialog(
-                    title: "Peringatan !",
-                    subtitle: "Sila pastikan semua maklumat adalah betul",
+                    title: "Semakan Diperlukan",
+                    subtitle: "Periksa semula maklumat anda sebelum meneruskan",
                     colorBtnLabel: "Teruskan",
                     onColorBtn: () {
                       if (_isNewForm() &&

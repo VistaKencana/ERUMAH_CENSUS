@@ -129,8 +129,8 @@ class _PenghuniFormOldState extends State<PenghuniFormOld> {
           ),
         ),
       ),
-      bottomNavigationBar:
-          BottomBarButton(onTap: () => Navigator.pop(context), title: "Simpan"),
+      bottomNavigationBar: BottomBarButton(
+          onTap: () => Navigator.pop(context), title: "Simpan Maklumat"),
     );
   }
 

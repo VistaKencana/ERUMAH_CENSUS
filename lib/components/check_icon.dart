@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CheckIcon extends StatelessWidget {
+  final Color color;
+
   const CheckIcon({
     super.key,
+    this.color = const Color(0xFF0446F3),
   });
-
-  final blueColor = const Color(0xFF0446F3);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class CheckIcon extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-          shape: BoxShape.circle, color: blueColor.withValues(alpha: 0.25)),
+          shape: BoxShape.circle, color: color.withValues(alpha: 0.25)),
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -27,8 +28,8 @@ class CheckIcon extends StatelessWidget {
           ),
           Icon(
             Icons.check_circle_rounded,
-            size: size.width * .3,
-            color: blueColor,
+            size: size.width * .4,
+            color: color,
           ),
         ],
       ),
