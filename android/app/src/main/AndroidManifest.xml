@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Existing permissions -->
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -9,20 +9,10 @@
     <uses-feature android:name="android.hardware.usb.host" android:required="true" />
     <uses-permission android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
     <uses-permission android:name="android.permission.USB_PERMISSION" />
-
     <application
         android:label="ePerumahan Bancian(C)"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <!-- ✅ USB Broadcast Receiver with exported -->
-        <receiver
-            android:name=".usb.UsbReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-                <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />
-            </intent-filter>
-        </receiver>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -50,10 +40,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>    
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

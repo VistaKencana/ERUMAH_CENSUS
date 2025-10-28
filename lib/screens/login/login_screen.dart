@@ -38,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
           EasyLoading.dismiss().then((val) => Navigator.pop(context));
         } else if (state is AuthLoginError) {
           EasyLoading.dismiss();
+          debugPrint(state.msg);
           CustomFlushbar.of(context).showFailed(msg: state.msg);
         }
       },
